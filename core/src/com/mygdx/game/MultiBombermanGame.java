@@ -119,7 +119,7 @@ public class MultiBombermanGame extends Game {
 				values.add(pixmap.getPixel(x, y));
 			}
 		}
-		System.out.println("values : ");
-		values.stream().forEach(v -> System.out.println(String.format("0x%08X", v)));
+		//System.out.println("values : ");
+		//values.stream().forEach(v -> System.out.println(String.format("0x%08X", v)));
 	}
 }

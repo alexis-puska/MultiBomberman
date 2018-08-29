@@ -37,8 +37,9 @@ public class NetworkService {
 			BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
 			String ip = in.readLine();
 			String[] ips = ip.split(", ");
-			Gdx.app.log("NetworkService", String.format("external ip : %s", ips[0]));
-			Gdx.app.log("NetworkService", String.format("internet ip : %s", ips[1]));
+			for(int i = 0;i<ips.length;i++) {
+				Gdx.app.log("NetworkService", String.format("external ip : %s", ips[i]));
+			}
 		} catch (IOException ex) {
 			Gdx.app.error("NetworkService", "Error getting ip from : ");
 		}
