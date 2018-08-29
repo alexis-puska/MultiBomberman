@@ -1,7 +1,8 @@
 apply plugin: "java"
 
 sourceCompatibility = 1.6
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = [ "src" ]
+sourceSets.main.resources.srcDirs = ["../common/assets" ]
 
 project.ext.mainClassName = "com.mygdx.game.editor.EditorLauncher"
 project.ext.assetsDir = new File("../common/assets");

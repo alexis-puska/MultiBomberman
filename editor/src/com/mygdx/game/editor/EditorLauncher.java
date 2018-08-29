@@ -1,6 +1,8 @@
 package com.mygdx.game.editor;
 
 import java.awt.BorderLayout;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 
@@ -10,8 +12,10 @@ public class EditorLauncher extends JFrame {
 
 	private static final long serialVersionUID = -3272449442566277297L;
 
+	private Locale locale;
+	private ResourceBundle message;
+	
 	public static void main(String[] args) {
-
 		String lang = "fr";
 		EditorLauncher editorLauncher;
 		if (args != null && args.length > 0) {
@@ -21,13 +25,12 @@ public class EditorLauncher extends JFrame {
 		}
 		editorLauncher = new EditorLauncher(lang);
 		editorLauncher.Launch();
-
 	}
 
 	public EditorLauncher(String lang) {
-		// this.locale = Locale.forLanguageTag(lang);
-		// this.message = ResourceBundle.getBundle("i18n/Message", locale);
-
+		 this.locale = Locale.forLanguageTag(lang);
+		 this.message = ResourceBundle.getBundle("i18n/Message", locale);
+		 System.out.println("message : "+ message.getString("currentLevel.border"));
 	}
 
 	public void Launch() {
