@@ -1,4 +1,4 @@
-package com.mygdx.service.dto.sprite;
+package com.mygdx.dto.sprite;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,11 +13,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpriteFile implements Serializable {
+public class CharacterSpriteFile implements Serializable {
 
     private static final long serialVersionUID = -8772069448741457644L;
 
-    private String file;
+    private List<CharacterFile> characterFiles;
     private List<Sprite> area;
 
 }

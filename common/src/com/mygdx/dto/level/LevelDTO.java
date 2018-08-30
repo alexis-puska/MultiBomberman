@@ -1,4 +1,4 @@
-package com.mygdx.service.dto.level;
+package com.mygdx.dto.level;
 
 import java.io.Serializable;
 import java.util.List;

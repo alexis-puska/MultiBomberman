@@ -1,0 +1,148 @@
+{
+	"spriteFile" : [	
+		{
+			"file": "sprite_shadow",
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "shadow"}
+			]
+		}
+	],
+	"louisColors":[
+		{"color":"GOLD",
+			"change":[
+				{"oldColor":"0x0051b5ff", "newColor":"0xe8b000ff"},
+				{"oldColor":"0x00a2ffff", "newColor":"0xf8d000ff"}
+			]
+		},
+		{"color":"GREEN",
+			"change":[
+				{"oldColor":"0x0051b5ff", "newColor":"0xd050d0ff"},
+				{"oldColor":"0x00a2ffff", "newColor":"0xf878f8ff"}
+			]
+		},
+		{"color":"PINK",
+			"change":[
+				{"oldColor":"0x0051b5ff", "newColor":"0x00b010ff"},
+				{"oldColor":"0x00a2ffff", "newColor":"0x00f830ff"}
+			]
+		},
+		{"color":"BROWN",
+			"change":[
+				{"oldColor":"0x0051b5ff", "newColor":"0x684040ff"},
+				{"oldColor":"0x00a2ffff", "newColor":"0x906868ff"}
+			]
+		}
+	],
+	"characterColor": [
+		{"color":"GREY",
+			"change":[
+				{"oldColor":"0xf8f8f8ff", "newColor":"0x707070ff"},
+				{"oldColor":"0xa0a0a0ff", "newColor":"0x303030ff"},
+				{"oldColor":"0xf8a020ff", "newColor":"0xf8a020ff"},
+				{"oldColor":"0x0058e8ff", "newColor":"0x505050ff"},
+				{"oldColor":"0x00b018ff", "newColor":"0xC0C0C0ff"},
+				{"oldColor":"0xe82050ff", "newColor":"0xE01898ff"}
+			]
+		},{"color":"RED",
+			"change":[
+				{"oldColor":"0xf8f8f8ff", "newColor":"0xC00000ff"},
+				{"oldColor":"0xa0a0a0ff", "newColor":"0x800000ff"},
+				{"oldColor":"0xf8a020ff", "newColor":"0xf8a020ff"},
+				{"oldColor":"0x0058e8ff", "newColor":"0xC00000ff"},
+				{"oldColor":"0x00b018ff", "newColor":"0xC0C0C0ff"},
+				{"oldColor":"0xe82050ff", "newColor":"0x30A060ff"}
+			]
+		},{"color":"BLUE",
+			"change":[
+				{"oldColor":"0xf8f8f8ff", "newColor":"0x0058C0ff"},
+				{"oldColor":"0xa0a0a0ff", "newColor":"0x004080ff"},
+				{"oldColor":"0xf8a020ff", "newColor":"0xf8a020ff"},
+				{"oldColor":"0x0058e8ff", "newColor":"0x0058C0ff"},
+				{"oldColor":"0x00b018ff", "newColor":"0x50C0C0ff"},
+				{"oldColor":"0xe82050ff", "newColor":"0xE01898ff"}
+			]
+		},{"color":"GREEN",
+			"change":[
+				{"oldColor":"0xf8f8f8ff", "newColor":"0x10C020ff"},
+				{"oldColor":"0xa0a0a0ff", "newColor":"0x009010ff"},
+				{"oldColor":"0xf8a020ff", "newColor":"0xf8a020ff"},
+				{"oldColor":"0x0058e8ff", "newColor":"0x10C020ff"},
+				{"oldColor":"0x00b018ff", "newColor":"0xB0D050ff"},
+				{"oldColor":"0xe82050ff", "newColor":"0xE01898ff"}
+			]
+		},{"color":"GOLD",
+			"change":[
+				{"oldColor":"0xf8f8f8ff", "newColor":"0xF8E000ff"},
+				{"oldColor":"0xa0a0a0ff", "newColor":"0xB0A000ff"},
+				{"oldColor":"0xf8a020ff", "newColor":"0xf8a020ff"},
+				{"oldColor":"0x0058e8ff", "newColor":"0xE8B020ff"},
+				{"oldColor":"0x00b018ff", "newColor":"0x00B018ff"},
+				{"oldColor":"0xe82050ff", "newColor":"0xD06800ff"}
+			]
+		},{"color":"BROWN",
+			"change":[
+				{"oldColor":"0xf8f8f8ff", "newColor":"0xB05040ff"},
+				{"oldColor":"0xa0a0a0ff", "newColor":"0x800010ff"},
+				{"oldColor":"0xf8a020ff", "newColor":"0xf8a020ff"},
+				{"oldColor":"0x0058e8ff", "newColor":"0xB0B0B0ff"},
+				{"oldColor":"0x00b018ff", "newColor":"0xB0B0B0ff"},
+				{"oldColor":"0xe82050ff", "newColor":"0xF8B000ff"}
+			]
+		}
+	],
+	"louis" : {
+		"file": "sprite_louis.png",
+		"area": [
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_LEFT"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_UP"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_RIGHT"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_DOWN"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "JUMP_LEFT"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "JUMP_UP"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "JUMP_RIGHT"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "JUMP_DOWN"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "BURN"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "VICTORY"},
+			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "INSIDE_TROLLEY"}
+		]
+	},
+	"character" :[
+		{
+			"files": [
+				{"file":"sprite_bomberman_barbar.png", "character":"BARBAR"},
+				{"file":"sprite_bomberman_chan.png", "character":"CHAN"},
+				{"file":"sprite_bomberman_cossak.png", "character":"COSSAK"},
+				{"file":"sprite_bomberman_kid.png", "character":"KID"},
+				{"file":"sprite_bomberman_mexican.png", "character":"MEXICAN"},
+				{"file":"sprite_bomberman_pretty.png", "character":"PRETTY"},
+				{"file":"sprite_bomberman_punk.png", "character":"PUNK"},
+				{"file":"sprite_bomberman.png", "character":"BOMBERMAN"}
+			],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_LEFT"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_UP"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_RIGHT"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_DOWN"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_LEFT"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_UP"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_RIGHT"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_DOWN"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "CARRY_WALK_LEFT"},
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "CARRY_WALK_UP"},
+                {"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "CARRY_WALK_RIGHT"},
+	        	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "CARRY_WALK_DOWN"},
+	        	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "THROW_BOMBE_LEFT"},
+	        	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "THROW_BOMBE_UP"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "THROW_BOMBE_RIGHT"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "THROW_BOMBE_DOWN"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "VICTORY"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_VICTORY"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ANGRY"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "BURN"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "INSIDE_TROLLEY"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "SCORE_HAPPY"},
+	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "SCORE_CRY"}
+			]
+		}      
+	]          
+}              

@@ -1,4 +1,4 @@
-package com.mygdx.service.dto.sprite;
+package com.mygdx.dto.sprite;
 
 import java.io.Serializable;
 

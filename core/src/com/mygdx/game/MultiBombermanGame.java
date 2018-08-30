@@ -55,8 +55,6 @@ public class MultiBombermanGame extends Game {
 
 		// this.setScreen(new SplashScreen(this));
 		img = new Texture(Gdx.files.internal("sprite/characters/sprite_bomberman.png"));
-		networkService = new NetworkService();
-
 	}
 
 	@Override
