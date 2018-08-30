@@ -9,7 +9,7 @@ public class Constante {
 
 	
 	public static final int NETWORK_PORT = 7777;
-	public static final int NETWORK_WAIT_TIME = 1000;
+	public static final int NETWORK_WAIT_TIME = 20;
 	public static final String NETWORK_IP_SERVICE = "http://checkip.amazonaws.com";
 	public static final boolean NETWORK_IP_SPLIT = true;
 	public static final int NETWORK_EXTERNAL_IP_POSITION = 0;

@@ -29,6 +29,7 @@ public class NetworkService {
 	public NetworkService() {
 		getIp();
 		initServer();
+		openPortWithUpnp();
 	}
 
 	public void getIp() {
