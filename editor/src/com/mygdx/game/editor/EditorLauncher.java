@@ -14,7 +14,7 @@ public class EditorLauncher extends JFrame {
 
 	private Locale locale;
 	private ResourceBundle message;
-	
+
 	public static void main(String[] args) {
 		String lang = "fr";
 		EditorLauncher editorLauncher;
@@ -28,9 +28,9 @@ public class EditorLauncher extends JFrame {
 	}
 
 	public EditorLauncher(String lang) {
-		 this.locale = Locale.forLanguageTag(lang);
-		 this.message = ResourceBundle.getBundle("i18n/Message", locale);
-		 System.out.println("message : "+ message.getString("currentLevel.border"));
+		this.locale = Locale.forLanguageTag(lang);
+		this.message = ResourceBundle.getBundle("i18n/Message", locale);
+		System.out.println("message " + lang + " : " + message.getString("currentLevel.border"));
 	}
 
 	public void Launch() {
