@@ -1,0 +1,41 @@
+{
+	"levels": {
+		"id": 1,
+		"name": "classic",
+		"variante": [{
+			"id": 1,
+			"name": "",
+			"description": "",
+			"bombe": 1,
+			"strenght": 6,
+			"bonus": [1, 2, 3, 4, 5],
+			"fillWithBrick": true,
+			"backgroundTextureName": "",
+			"backgroundTextureIndex": 1,
+			"hole": [
+				{"x":1,"y":2}
+			],
+			"rail": [
+				{"x":1,"y":2,"next":1,"previous":1,"nextAlt":1}
+			],
+			"interrupter": [
+				{"x":1,"y":2}
+			],
+			"mine": [
+				{"x":1,"y":2}
+			],
+			"trolley": [
+				{"x":1,"y":2}
+			],
+			"teleporter": [
+				{"x":1,"y":2}
+			],
+			"texture": [
+				{"x":1,"y":2}
+			],
+			"wall": [
+				{"x":1,"y":2}
+			]
+		}]
+	}
+}
