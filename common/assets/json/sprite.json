@@ -98,7 +98,7 @@
 		},{
 			"files": ["sprite/level/sky.png"],
 			"area": [
-				{"x": 0,   "y": 0,   "nx": 3, "ny": 1, "n": 3, "sx": 48, "sy": 54, "r": false, "animation": "SKY"}
+				{"x": 0,   "y": 0,   "nx": 3, "ny": 1, "n": 3, "sx": 54, "sy": 48, "r": false, "animation": "SKY"}
 			]
 		},{
 			"files": ["sprite/level/level.png"],

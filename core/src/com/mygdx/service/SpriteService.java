@@ -93,16 +93,12 @@ public class SpriteService {
 	 * @param spriteFileContent the json file read from application asset
 	 */
 	private void initSprite(SpriteFileContent spriteFileContent) {
-		int nbSprite = 0;
-		int nbSpriteFile = 0;
-		// Load common sprite
 		List<SpriteFile> spriteFiles = spriteFileContent.getSpriteFile();
 		for (SpriteFile spriteFile : spriteFiles) {
 			List<String> spritesFilename = spriteFile.getFiles();
 			for (String spriteFilename : spritesFilename) {
 				Texture texture = new Texture(Gdx.files.internal(spriteFilename));
 				List<Sprite> area = spriteFile.getArea();
-				nbSpriteFile = 0;
 				for (Sprite sprite : area) {
 					int idx = 0;
 					SpriteEnum animation = sprite.getAnimation();
@@ -112,8 +108,6 @@ public class SpriteService {
 							regions[idx] = new TextureRegion(texture, sprite.getX() + (k * sprite.getSx()),
 									sprite.getY() + (l * sprite.getSy()), sprite.getSx(), sprite.getSy());
 							idx++;
-							nbSprite++;
-							nbSpriteFile++;
 							if (idx >= sprite.getN()) {
 								break;
 							}
@@ -125,10 +119,8 @@ public class SpriteService {
 						sprites.put(animation, regions);
 					}
 				}
-				Gdx.app.log("SpriteService", "Nb sprites loaded for : " + spriteFilename + " " + nbSpriteFile);
 			}
 		}
-		Gdx.app.log("SpriteService", "Nb sprites loaded : " + nbSprite);
 	}
 
 	/**
@@ -137,13 +129,10 @@ public class SpriteService {
 	 * @param spriteFileContent the json file read from application asset
 	 */
 	private void initLouisSprite(SpriteFileContent spriteFileContent) {
-		int nbSprite = 0;
-		int nbSpriteFile = 0;
 		LouisSpriteFile louisSpriteFile = spriteFileContent.getLouis();
 		List<String> louisFilenames = louisSpriteFile.getFiles();
 		for (String louisFilename : louisFilenames) {
 			List<SpriteLouis> area = louisSpriteFile.getArea();
-			nbSpriteFile = 0;
 			LouisColorEnum[] louisColors = LouisColorEnum.values();
 			int i = 0;
 			for (i = 0; i < louisColors.length; i++) {
@@ -163,8 +152,6 @@ public class SpriteService {
 							regions[idx] = new TextureRegion(texture, sprite.getX() + (k * sprite.getSx()),
 									sprite.getY() + (l * sprite.getSy()), sprite.getSx(), sprite.getSy());
 							idx++;
-							nbSprite++;
-							nbSpriteFile++;
 							if (idx >= sprite.getN()) {
 								break;
 							}
@@ -178,12 +165,7 @@ public class SpriteService {
 					}
 				}
 				louisSprites.put(louisColors[i], louisSpriteTextureMap);
-				Gdx.app.log("SpriteService",
-						"sprites load for \"" + louisColors[i] + " player\" : " + nbSpriteFile + " sprites");
-				nbSpriteFile = 0;
 			}
-			Gdx.app.log("SpriteService",
-					"sprites load for \"Player\" : " + louisFilename + ", " + nbSprite + " sprites");
 		}
 	}
 
@@ -193,12 +175,10 @@ public class SpriteService {
 	 * @param spriteFileContent the json file read from application asset
 	 */
 	private void initPlayerSprite(SpriteFileContent spriteFileContent) {
-		int nbSprite = 0;
 		CharacterSpriteFile characterSprite = spriteFileContent.getCharacter();
 		List<CharacterFile> characterFiles = characterSprite.getFiles();
 		for (CharacterFile characterFile : characterFiles) {
 			CharacterEnum characterEnum = characterFile.getCharacter();
-			int nbSpriteFile = 0;
 			CharacterColorEnum[] characterColors = CharacterColorEnum.values();
 			Map<CharacterColorEnum, Map<CharacterSpriteEnum, TextureRegion[]>> characterColorMap = new HashMap<>();
 			int i = 0;
@@ -220,8 +200,6 @@ public class SpriteService {
 							regions[idx] = new TextureRegion(texture, sprite.getX() + (k * sprite.getSx()),
 									sprite.getY() + (l * sprite.getSy()), sprite.getSx(), sprite.getSy());
 							idx++;
-							nbSprite++;
-							nbSpriteFile++;
 							if (idx >= sprite.getN()) {
 								break;
 							}
@@ -235,13 +213,7 @@ public class SpriteService {
 				}
 				characterColorMap.put(characterColors[i], characterMap);
 				playerSprites.put(characterEnum, characterColorMap);
-				Gdx.app.log("SpriteService",
-						"sprites load for \"" + characterColors[i] + " player\" : " + nbSpriteFile + " sprites");
-				nbSpriteFile = 0;
 			}
-			Gdx.app.log("SpriteService",
-					"sprites load for \"player\" : " + characterFile.getFile() + ", " + nbSprite + " sprites");
-			nbSprite = 0;
 		}
 	}
 
@@ -282,10 +254,11 @@ public class SpriteService {
 	}
 
 	public int getAnimationSize(CharacterSpriteEnum characterSpriteEnum) {
-		TextureRegion[] t = playerSprites.get(CharacterEnum.BOMBERMAN).get(CharacterColorEnum.BLUE).get(characterSpriteEnum);
+		TextureRegion[] t = playerSprites.get(CharacterEnum.BOMBERMAN).get(CharacterColorEnum.BLUE)
+				.get(characterSpriteEnum);
 		return t.length;
 	}
-	
+
 	public int getAnimationSize(LouisSpriteEnum louisSpriteEnum) {
 		TextureRegion[] t = louisSprites.get(LouisColorEnum.NONE).get(louisSpriteEnum);
 		return t.length;
@@ -293,7 +266,8 @@ public class SpriteService {
 
 	/**
 	 * Change color for player texture
-	 * @param img original texture
+	 * 
+	 * @param img   original texture
 	 * @param color the desired color
 	 * @return modified texture
 	 */
@@ -326,7 +300,8 @@ public class SpriteService {
 
 	/**
 	 * Change color for Louis texture
-	 * @param img original texture
+	 * 
+	 * @param img   original texture
 	 * @param color the desired color
 	 * @return modified texture
 	 */
@@ -359,6 +334,7 @@ public class SpriteService {
 
 	/**
 	 * Print pixel values inside a pixmap texture
+	 * 
 	 * @param pixmap the pixmap
 	 */
 	@SuppressWarnings("unused")

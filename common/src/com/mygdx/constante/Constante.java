@@ -7,7 +7,7 @@ public class Constante {
 	public static final boolean DEBUG = true;
 	public static final int LIBGDX_LOG_LEVEL = Application.LOG_INFO;
 
-	
+	public static final String NETWORK_APPLICATION_UPNP_NAME = "Multi Bomberman";
 	public static final int NETWORK_PORT = 7777;
 	public static final int NETWORK_WAIT_TIME = 20;
 	public static final String NETWORK_IP_SERVICE = "http://checkip.amazonaws.com";
