@@ -29,7 +29,7 @@ public class SplashScreen implements Screen {
 			// game.setScreen(new SelectionLangScreen(game));
 		}
 
-		TextureRegion textureRegionTitle = SpriteService.getInstance().getTexture(SpriteEnum.BACKGROUND, 0);
+		TextureRegion textureRegionTitle = SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0);
 		game.getBatch().begin();
 		DrawUtils.fillBackground(game.getBatch(), SpriteEnum.BACKGROUND);
 		game.getBatch().draw(textureRegionTitle, (420 / 2) - (textureRegionTitle.getRegionWidth() / 2),

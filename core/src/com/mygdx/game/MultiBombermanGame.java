@@ -8,12 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.constante.Constante;
-import com.mygdx.enumeration.CharacterColorEnum;
-import com.mygdx.enumeration.CharacterEnum;
-import com.mygdx.enumeration.CharacterSpriteEnum;
-import com.mygdx.enumeration.LouisColorEnum;
-import com.mygdx.enumeration.LouisSpriteEnum;
 import com.mygdx.enumeration.MusicEnum;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.service.NetworkService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
@@ -59,7 +55,7 @@ public class MultiBombermanGame extends Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		//batch.draw(SpriteService.getInstance().getLouisTexture(LouisSpriteEnum.WALK_LEFT, LouisColorEnum.GOLD, 0), 0, 0);
-		batch.draw(SpriteService.getInstance().getPlayerTexture(CharacterSpriteEnum.WALK_RIGHT, CharacterColorEnum.RED, CharacterEnum.PUNK, 0) ,0, 0);
+		batch.draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND,0),0, 0);
 		batch.end();
 	}
 

@@ -9,7 +9,7 @@ import com.mygdx.service.SpriteService;
 public class DrawUtils {
 
 	public static void fillBackground(SpriteBatch batch, SpriteEnum spriteEnum) {
-		TextureRegion textureRegionBackground = SpriteService.getInstance().getTexture(spriteEnum, 0);
+		TextureRegion textureRegionBackground = SpriteService.getInstance().getSprite(spriteEnum, 0);
 		int idx = 0;
 		int idy = 0;
 		while (idy < Constante.SCREEN_SIZE_Y) {

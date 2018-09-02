@@ -46,8 +46,8 @@ public class SpriteService {
 	private static SpriteService instance = new SpriteService();
 
 	private Map<SpriteEnum, TextureRegion[]> sprites;
-	private Map<CharacterEnum, Map<CharacterColorEnum, Map<CharacterSpriteEnum, TextureRegion[]>>> spritesPlayer;
-	private Map<LouisColorEnum, Map<LouisSpriteEnum, TextureRegion[]>> spritesLouis;
+	private Map<CharacterEnum, Map<CharacterColorEnum, Map<CharacterSpriteEnum, TextureRegion[]>>> playerSprites;
+	private Map<LouisColorEnum, Map<LouisSpriteEnum, TextureRegion[]>> louisSprites;
 	private FileHandle spriteJsonFile;
 	private final ObjectMapper objectMapper;
 
@@ -65,8 +65,8 @@ public class SpriteService {
 	public SpriteService() {
 		Gdx.app.log(SPRITE_SERVICE, "Init");
 		sprites = new HashMap<>();
-		spritesLouis = new HashMap<>();
-		spritesPlayer = new HashMap<>();
+		louisSprites = new HashMap<>();
+		playerSprites = new HashMap<>();
 		objectMapper = new ObjectMapper();
 		spriteJsonFile = Gdx.files.internal(SPRITE_JSON_FILE);
 		SpriteFileContent spriteFileContent = null;
@@ -82,14 +82,25 @@ public class SpriteService {
 		this.characterColors = spriteFileContent.getCharactersColors();
 		this.louisColors = spriteFileContent.getLouisColors();
 
+		initSprite(spriteFileContent);
+		initLouisSprite(spriteFileContent);
+		initPlayerSprite(spriteFileContent);
+	}
+
+	/**
+	 * Load common Sprite
+	 * 
+	 * @param spriteFileContent the json file read from application asset
+	 */
+	private void initSprite(SpriteFileContent spriteFileContent) {
 		int nbSprite = 0;
 		int nbSpriteFile = 0;
-
-		List<SpriteFile> spriteFileList = spriteFileContent.getSpriteFile();
-		for (SpriteFile spriteFile : spriteFileList) {
-			List<String> filesName = spriteFile.getFiles();
-			for (String filename : filesName) {
-				Texture texture = new Texture(Gdx.files.internal(filename));
+		// Load common sprite
+		List<SpriteFile> spriteFiles = spriteFileContent.getSpriteFile();
+		for (SpriteFile spriteFile : spriteFiles) {
+			List<String> spritesFilename = spriteFile.getFiles();
+			for (String spriteFilename : spritesFilename) {
+				Texture texture = new Texture(Gdx.files.internal(spriteFilename));
 				List<Sprite> area = spriteFile.getArea();
 				nbSpriteFile = 0;
 				for (Sprite sprite : area) {
@@ -114,29 +125,34 @@ public class SpriteService {
 						sprites.put(animation, regions);
 					}
 				}
-				Gdx.app.log("SpriteService", "Nb sprites loaded for : " + filename + " " + nbSpriteFile);
+				Gdx.app.log("SpriteService", "Nb sprites loaded for : " + spriteFilename + " " + nbSpriteFile);
 			}
 		}
 		Gdx.app.log("SpriteService", "Nb sprites loaded : " + nbSprite);
+	}
 
-		
-		nbSprite = 0;
-		nbSpriteFile = 0;
-		LouisSpriteFile louisSprite = spriteFileContent.getLouis();
-		List<String> filesName = louisSprite.getFiles();
-		for (String filename : filesName) {
-
-			List<SpriteLouis> area = louisSprite.getArea();
+	/**
+	 * Load Louis Sprite
+	 * 
+	 * @param spriteFileContent the json file read from application asset
+	 */
+	private void initLouisSprite(SpriteFileContent spriteFileContent) {
+		int nbSprite = 0;
+		int nbSpriteFile = 0;
+		LouisSpriteFile louisSpriteFile = spriteFileContent.getLouis();
+		List<String> louisFilenames = louisSpriteFile.getFiles();
+		for (String louisFilename : louisFilenames) {
+			List<SpriteLouis> area = louisSpriteFile.getArea();
 			nbSpriteFile = 0;
-			LouisColorEnum[] colors = LouisColorEnum.values();
+			LouisColorEnum[] louisColors = LouisColorEnum.values();
 			int i = 0;
-			for (i = 0; i < colors.length; i++) {
-				Map<LouisSpriteEnum, TextureRegion[]> LouisMap = new HashMap<>();
+			for (i = 0; i < louisColors.length; i++) {
+				Map<LouisSpriteEnum, TextureRegion[]> louisSpriteTextureMap = new HashMap<>();
 				Texture texture;
-				if (colors[i] == LouisColorEnum.NONE) {
-					texture = new Texture(Gdx.files.internal(filename));
+				if (louisColors[i] == LouisColorEnum.NONE) {
+					texture = new Texture(Gdx.files.internal(louisFilename));
 				} else {
-					texture = changeLouisColorTexture(new Texture(Gdx.files.internal(filename)), colors[i]);
+					texture = changeLouisColorTexture(new Texture(Gdx.files.internal(louisFilename)), louisColors[i]);
 				}
 				for (SpriteLouis sprite : area) {
 					int idx = 0;
@@ -154,36 +170,46 @@ public class SpriteService {
 							}
 						}
 					}
-					if (LouisMap.containsKey(animation)) {
-						LouisMap.put(animation, mergeTextureRegion(LouisMap.get(animation), regions));
+					if (louisSpriteTextureMap.containsKey(animation)) {
+						louisSpriteTextureMap.put(animation,
+								mergeTextureRegion(louisSpriteTextureMap.get(animation), regions));
 					} else {
-						LouisMap.put(animation, regions);
+						louisSpriteTextureMap.put(animation, regions);
 					}
 				}
-				spritesLouis.put(colors[i], LouisMap);
+				louisSprites.put(louisColors[i], louisSpriteTextureMap);
+				Gdx.app.log("SpriteService",
+						"sprites load for \"" + louisColors[i] + " player\" : " + nbSpriteFile + " sprites");
+				nbSpriteFile = 0;
 			}
-			Gdx.app.log("SpriteService", "Nb sprites loaded for : " + filename + " " + nbSpriteFile);
+			Gdx.app.log("SpriteService",
+					"sprites load for \"Player\" : " + louisFilename + ", " + nbSprite + " sprites");
 		}
-		Gdx.app.log("SpriteService", "Nb sprites loaded : " + nbSprite);
+	}
 
-		
-		nbSprite = 0;
-		nbSpriteFile = 0;
+	/**
+	 * Load Player Sprite
+	 * 
+	 * @param spriteFileContent the json file read from application asset
+	 */
+	private void initPlayerSprite(SpriteFileContent spriteFileContent) {
+		int nbSprite = 0;
 		CharacterSpriteFile characterSprite = spriteFileContent.getCharacter();
 		List<CharacterFile> characterFiles = characterSprite.getFiles();
 		for (CharacterFile characterFile : characterFiles) {
 			CharacterEnum characterEnum = characterFile.getCharacter();
-			nbSpriteFile = 0;
-			CharacterColorEnum[] colors = CharacterColorEnum.values();
+			int nbSpriteFile = 0;
+			CharacterColorEnum[] characterColors = CharacterColorEnum.values();
 			Map<CharacterColorEnum, Map<CharacterSpriteEnum, TextureRegion[]>> characterColorMap = new HashMap<>();
 			int i = 0;
-			for (i = 0; i < colors.length; i++) {
+			for (i = 0; i < characterColors.length; i++) {
 				Map<CharacterSpriteEnum, TextureRegion[]> characterMap = new HashMap<>();
 				Texture texture;
-				if (colors[i] == CharacterColorEnum.NONE) {
+				if (characterColors[i] == CharacterColorEnum.NONE) {
 					texture = new Texture(Gdx.files.internal(characterFile.getFile()));
 				} else {
-					texture = changeCharacterColorTexture(new Texture(Gdx.files.internal(characterFile.getFile())), colors[i]);
+					texture = changeCharacterColorTexture(new Texture(Gdx.files.internal(characterFile.getFile())),
+							characterColors[i]);
 				}
 				for (SpriteCharacter sprite : characterSprite.getArea()) {
 					int idx = 0;
@@ -207,18 +233,16 @@ public class SpriteService {
 						characterMap.put(animation, regions);
 					}
 				}
-				characterColorMap.put(colors[i], characterMap);
+				characterColorMap.put(characterColors[i], characterMap);
+				playerSprites.put(characterEnum, characterColorMap);
+				Gdx.app.log("SpriteService",
+						"sprites load for \"" + characterColors[i] + " player\" : " + nbSpriteFile + " sprites");
+				nbSpriteFile = 0;
 			}
-			spritesPlayer.put(characterEnum, characterColorMap);
-			
+			Gdx.app.log("SpriteService",
+					"sprites load for \"player\" : " + characterFile.getFile() + ", " + nbSprite + " sprites");
+			nbSprite = 0;
 		}
-		Gdx.app.log("SpriteService", "Nb sprites loaded : " + nbSprite);
-
-		
-		
-		
-		
-		
 	}
 
 	private TextureRegion[] mergeTextureRegion(TextureRegion[] textureRegions, TextureRegion[] regions) {
@@ -236,18 +260,19 @@ public class SpriteService {
 		return merged;
 	}
 
-	public TextureRegion getTexture(SpriteEnum spriteEnum, int idx) {
+	public TextureRegion getSprite(SpriteEnum spriteEnum, int idx) {
 		TextureRegion[] t = sprites.get(spriteEnum);
 		return t[idx];
 	}
-	
-	public TextureRegion getLouisTexture(LouisSpriteEnum spriteEnum, LouisColorEnum colorEnum, int idx) {
-		TextureRegion[] t = spritesLouis.get(colorEnum).get(spriteEnum);
+
+	public TextureRegion getSprite(LouisSpriteEnum spriteEnum, LouisColorEnum colorEnum, int idx) {
+		TextureRegion[] t = louisSprites.get(colorEnum).get(spriteEnum);
 		return t[idx];
 	}
-	
-	public TextureRegion getPlayerTexture(CharacterSpriteEnum spriteEnum, CharacterColorEnum colorEnum, CharacterEnum characterEnum, int idx) {
-		TextureRegion[] t = spritesPlayer.get(characterEnum).get(colorEnum).get(spriteEnum);
+
+	public TextureRegion getSprite(CharacterSpriteEnum spriteEnum, CharacterColorEnum colorEnum,
+			CharacterEnum characterEnum, int idx) {
+		TextureRegion[] t = playerSprites.get(characterEnum).get(colorEnum).get(spriteEnum);
 		return t[idx];
 	}
 
@@ -256,11 +281,23 @@ public class SpriteService {
 		return t.length;
 	}
 
-	public TextureRegion[] getTexture(SpriteEnum spriteEnum) {
-		return sprites.get(spriteEnum);
+	public int getAnimationSize(CharacterSpriteEnum characterSpriteEnum) {
+		TextureRegion[] t = playerSprites.get(CharacterEnum.BOMBERMAN).get(CharacterColorEnum.BLUE).get(characterSpriteEnum);
+		return t.length;
+	}
+	
+	public int getAnimationSize(LouisSpriteEnum louisSpriteEnum) {
+		TextureRegion[] t = louisSprites.get(LouisColorEnum.NONE).get(louisSpriteEnum);
+		return t.length;
 	}
 
-	public Texture changeCharacterColorTexture(Texture img, CharacterColorEnum color) {
+	/**
+	 * Change color for player texture
+	 * @param img original texture
+	 * @param color the desired color
+	 * @return modified texture
+	 */
+	private Texture changeCharacterColorTexture(Texture img, CharacterColorEnum color) {
 		if (!img.getTextureData().isPrepared()) {
 			img.getTextureData().prepare();
 		}
@@ -287,7 +324,13 @@ public class SpriteService {
 		return tex;
 	}
 
-	public Texture changeLouisColorTexture(Texture img, LouisColorEnum color) {
+	/**
+	 * Change color for Louis texture
+	 * @param img original texture
+	 * @param color the desired color
+	 * @return modified texture
+	 */
+	private Texture changeLouisColorTexture(Texture img, LouisColorEnum color) {
 		if (!img.getTextureData().isPrepared()) {
 			img.getTextureData().prepare();
 		}
@@ -314,7 +357,12 @@ public class SpriteService {
 		return tex;
 	}
 
-	public void printPixelInsideTexture(Pixmap pixmap) {
+	/**
+	 * Print pixel values inside a pixmap texture
+	 * @param pixmap the pixmap
+	 */
+	@SuppressWarnings("unused")
+	private void printPixelInsideTexture(Pixmap pixmap) {
 		Set<Integer> values = new HashSet<>();
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
@@ -324,82 +372,4 @@ public class SpriteService {
 		System.out.println("values : ");
 		values.stream().forEach(v -> System.out.println(String.format("0x%08X", v)));
 	}
-	/*
-	 * #define nbShadowAreaSprite 4
-	 * 
-	 * #define nbFrameWater 2 #define nbSpritePlayerX 9 #define nbSpritePlayerY 7
-	 * #define spritePlayerSizeWidth 30 #define spritePlayerSizeHeight 42 #define
-	 * nbColorPlayer 7 //#define nbPlayer 16 #define nbTypePlayer 8
-	 * 
-	 * #define nbSpriteLouisX 5 #define nbSpriteLouisY 7 #define
-	 * spriteLouisSizeWidth 30 #define spriteLouisSizeHeight 42 #define nbTypeLouis
-	 * 5
-	 * 
-	 * #define nbLevel 11 #define defaultSpriteSize 16
-	 * 
-	 * #define nbFireSpriteX 4 #define nbFireSpriteY 9 #define
-	 * smallSpriteFireSizeWidth 18 #define smallSpriteFireSizeHeight 16
-	 * 
-	 * #define nbBombeSpriteX 3 #define nbBombeSpriteY 4 #define nbBonusSpriteX 2
-	 * #define nbBonusSpriteY 8
-	 * 
-	 * #define nbPopBonusSpriteX 4 #define nbPopBonusSpriteY 1 #define
-	 * popBonusSpriteWidth 18 #define popBonusSpriteHeight 16
-	 * 
-	 * #define nbBurnBonusSpriteX 8 #define nbBurnBonusSpriteY 1 #define
-	 * burnBonusSpritewidth 30 #define burnBonusSpriteHeight 42
-	 * 
-	 * #define levelPreviewSizeWidth 128 #define levelPreviewSizeHeight 110 #define
-	 * nbLevelPreviewX 3 #define nbLevelPreviewY 4
-	 * 
-	 * 
-	 * #define nbSmallSpriteLevelX 5 #define nbSmallSpriteLevelY 8 #define
-	 * nbLargeSpriteLevelX 1 #define nbLargeSpriteLevelY 2 #define
-	 * smallSpriteLevelSizeWidth 18 #define smallSpriteLevelSizeHeight 16 #define
-	 * largeSpriteLevelSizeWidth 54 #define largeSpriteLevelSizeHeight 48 #define
-	 * burnWallStartSprite 22 #define suddenDeathWallSpriteIndex 16 #define
-	 * wallSpriteIndex 16 #define skyStartSpriteIndex 40
-	 * 
-	 * 
-	 * #define nbTrolleySpriteX 4 #define nbTrolleySpriteY 1 #define
-	 * trolleySpriteSizeWidth 30 #define trolleySpriteSizeHeight 42
-	 * 
-	 * #define nbSpaceShipSpriteX 2 #define nbSpaceShipSpriteY 4 #define
-	 * spaceShipSpriteSizeWidth 30 #define spaceShipSpriteSizeHeight 42
-	 * 
-	 * #define nbSpriteMineX 13 #define nbSpriteMineY 1 #define nbTeleporterSpriteX
-	 * 4 #define nbTeleporterSpriteY 1 #define nbHoleX 2 #define nbHoleY 1 #define
-	 * nbWaterOverlayX 2 #define nbWaterOverlayY 1 #define nbRailX 8 #define nbRailY
-	 * 1 #define nbButtonX 2 #define nbButtonY 1
-	 */
-//	{
-//		"levels": [{
-//				"id": 1,
-//				"description": "",
-//				"values": [{
-//					"id": 1,
-//					"description1": "",
-//					"description2": "",
-//					"start": [{
-//						"id": 1,
-//						"x": 1,
-//						"y": 2
-//					}],
-//					"texture": [{
-//						"id": 1,
-//						"x": 1,
-//						"y": 1
-//					}],
-//					"wall": [{
-//						"id": 1,
-//						"x": 1,
-//						"y": 1
-//					}]
-//
-//				}]
-//			}
-//
-//		]
-//	}
-
 }
