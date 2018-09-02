@@ -18,7 +18,7 @@ public class Constante {
 	public static final int SCREEN_SIZE_X = 640;
 	public static final int SCREEN_SIZE_Y = 360;
 	public static final int EDITOR_SIZE_X = 1200;
-	public static final int EDITOR_SIZE_Y = 900;
+	public static final int EDITOR_SIZE_Y = 800;
 
 	private Constante() {
 		// empty private constructor

@@ -16,19 +16,16 @@ import org.bitlet.weupnp.PortMappingEntry;
 import org.xml.sax.SAXException;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net.Protocol;
-import com.badlogic.gdx.net.ServerSocket;
-import com.badlogic.gdx.net.ServerSocketHints;
-import com.badlogic.gdx.net.Socket;
 import com.mygdx.constante.Constante;
+import com.mygdx.service.network.Server;
 
 public class NetworkService {
 
 	private final static String CLASS_NAME = "NetworkService";
+	private Server server;
 
 	public NetworkService() {
 		getIp();
-		initServer();
 		openPortWithUpnp();
 	}
 
@@ -38,33 +35,21 @@ public class NetworkService {
 			BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
 			String ip = in.readLine();
 			String[] ips = ip.split(", ");
-			for(int i = 0;i<ips.length;i++) {
+			for (int i = 0; i < ips.length; i++) {
 				Gdx.app.log("NetworkService", String.format("external ip : %s", ips[i]));
 			}
 		} catch (IOException ex) {
 			Gdx.app.error("NetworkService", "Error getting ip from : ");
 		}
-		System.out.println("end");
-
 	}
 
 	public void initServer() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				ServerSocketHints serverSocketHint = new ServerSocketHints();
-				serverSocketHint.acceptTimeout = 0;
-				serverSocketHint.reuseAddress = true;
-				ServerSocket serverSocket = null;
-				serverSocket = Gdx.net.newServerSocket(Protocol.TCP, 7777, serverSocketHint);
-				while (true) {
-					// Create a socket
-					Socket socket = serverSocket.accept(null);
-					NetworkConnexion nc = new NetworkConnexion(socket);
-					nc.start();
-				}
-			}
-		}).start();
+		server = new Server();
+		server.start();
+	}
+
+	public void stopServer() {
+		server.kill();
 	}
 
 	public void openPortWithUpnp() {

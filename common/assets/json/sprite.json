@@ -1,12 +1,177 @@
 {
-	"spriteFile" : [	
+	"spriteFile" : [
 		{
-			"file": "sprite_shadow",
+			"files": ["sprite/img_empty_background.png"],
 			"area": [
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "shadow"}
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 640, "sy": 360, "r": false, "animation": "BACKGROUND"}
+			]
+		},{
+			"files": ["sprite/img_menu_background.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 640, "sy": 360, "r": false, "animation": "BACKGROUND"}
+			]
+		},{
+			"files": ["sprite/img_splash_screen.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 640, "sy": 360, "r": false, "animation": "BACKGROUND"}
+			]
+		},{
+			"files": ["sprite/other/cursor.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 4, "ny": 1, "n": 4, "sx": 16, "sy": 16, "r": false, "animation": "CURSOR"}
+			]
+		},{
+			"files": ["sprite/other/sprite_space_ship.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 2, "ny": 4, "n": 8, "sx": 30, "sy": 42, "r": false, "animation": "SPACESHIP"}
+			]
+		},{
+			"files": ["sprite/other/sprite_trolley.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 4, "ny": 1, "n": 4, "sx": 30, "sy": 42, "r": false, "animation": "TROLLEY"}
+			]
+		},{
+			"files": ["sprite/other/sprite_misc.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 2, "ny": 8, "n": 15, "sx": 18, "sy": 16, "r": false, "animation": "BONUS"},
+				{"x": 32,  "y": 0,   "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE"},
+				{"x": 32,  "y": 16,  "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE_P"},
+				{"x": 32,  "y": 32,  "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE_D"},
+				{"x": 32,  "y": 48,  "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE_E"},
+				{"x": 80,  "y": 0,   "nx": 8, "ny": 1, "n": 8,  "sx": 30, "sy": 42, "r": false, "animation": "BONUS_BURN"},
+				{"x": 80,  "y": 42,  "nx": 4, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "POP"},
+				{"x": 80,  "y": 64,  "nx": 8, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "MINE_C"},
+				{"x": 224, "y": 64,  "nx": 4, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "MINE_D"},
+				{"x": 296, "y": 64,  "nx": 1, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "MINE"},
+				{"x": 80,  "y": 80,  "nx": 8, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "RAIL"},
+				{"x": 224, "y": 80,  "nx": 2, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "BUTTON"},
+				{"x": 80,  "y": 96,  "nx": 2, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "HOLE"},
+				{"x": 116, "y": 96,  "nx": 2, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "UNDERWATER"},
+				{"x": 80,  "y": 112, "nx": 4, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "TELEPORTER"}
+			]
+		},{
+			"files": ["sprite/other/sprite_fire.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_CENTER"},
+				{"x": 0,   "y": 16,  "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_TOP_EXT"},
+				{"x": 0,   "y": 32,  "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_TOP"},
+				{"x": 0,   "y": 48,  "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_LEFT_EXT"},
+				{"x": 0,   "y": 64,  "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_LEFT"},
+				{"x": 0,   "y": 80,  "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_DOWN_EXT"},
+				{"x": 0,   "y": 96,  "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_DOWN"},
+				{"x": 0,   "y": 112, "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_RIGHT_EXT"},
+				{"x": 0,   "y": 128, "nx": 4, "ny": 1, "n": 4, "sx": 18, "sy": 16, "r": false, "animation": "FIRE_RIGHT"}
+			]
+		}
+		
+		,{
+			"files": ["sprite/level/sprite_level_view.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 3, "ny": 4, "n": 11, "sx": 128, "sy": 110, "r": false, "animation": "PREVIEW"}
+			]
+		},	
+		{
+			"files": ["sprite/level/blow.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL1_BLOW"},
+				{"x": 0,   "y": 16,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL2_BLOW"},
+				{"x": 0,   "y": 32,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL3_BLOW"},
+				{"x": 0,   "y": 48,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL4_BLOW"},
+				{"x": 0,   "y": 64,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL5_BLOW"},
+				{"x": 0,   "y": 80,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL6_BLOW"},
+				{"x": 0,   "y": 96,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL7_BLOW"},
+				{"x": 0,   "y": 112, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL8_BLOW"},
+				{"x": 0,   "y": 128, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL9_BLOW"},
+				{"x": 0,   "y": 144, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL10_BLOW"},
+				{"x": 108, "y": 0,   "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL1_BRICK"},
+				{"x": 108, "y": 16,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL2_BRICK"},
+				{"x": 108, "y": 32,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL3_BRICK"},
+				{"x": 108, "y": 48,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL4_BRICK"},
+				{"x": 108, "y": 64,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL5_BRICK"},
+				{"x": 108, "y": 80,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL6_BRICK"},
+				{"x": 108, "y": 96,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL7_BRICK"},
+				{"x": 108, "y": 112, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL8_BRICK"},
+				{"x": 108, "y": 128, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL9_BRICK"},
+				{"x": 108, "y": 144, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL10_BRICK"}
+				
+			]
+		},{
+			"files": ["sprite/level/sky.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 3, "ny": 1, "n": 3, "sx": 48, "sy": 54, "r": false, "animation": "SKY"}
+			]
+		},{
+			"files": ["sprite/level/level.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 4,  "ny": 1, "n": 4,  "sx": 18, "sy": 16, "r": false, "animation": "LEVEL1"},
+				{"x": 0,   "y": 16,  "nx": 11, "ny": 1, "n": 11, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL2"},
+				{"x": 0,   "y": 32,  "nx": 14, "ny": 1, "n": 14, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL3"},
+				{"x": 0,   "y": 48,  "nx": 12, "ny": 1, "n": 12, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL4"},
+				{"x": 0,   "y": 64,  "nx": 16, "ny": 1, "n": 16, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL5"},
+				{"x": 0,   "y": 80,  "nx": 24, "ny": 1, "n": 24, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL6"},
+				{"x": 0,   "y": 96,  "nx": 10, "ny": 1, "n": 10, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL7"},
+				{"x": 0,   "y": 112, "nx": 10, "ny": 1, "n": 10, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL8"},
+				{"x": 0,   "y": 128, "nx": 19, "ny": 1, "n": 19, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL9"},
+				{"x": 0,   "y": 144, "nx": 30, "ny": 1, "n": 30, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL10"},
+				{"x": 0,   "y": 160, "nx": 17, "ny": 1, "n": 17, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL11"}
 			]
 		}
 	],
+	"louis" : {
+		"files": ["sprite/characters/sprite_louis.png"],
+		"area": [
+			{"x": 0,   "y": 84,  "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "WALK_LEFT"},
+			{"x": 0,   "y": 42,  "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "WALK_UP"},
+			{"x": 0,   "y": 126, "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "WALK_RIGHT"},
+			{"x": 0,   "y": 0,   "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "WALK_DOWN"},
+			{"x": 30,  "y": 84,  "nx": 1, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "JUMP_LEFT"},
+			{"x": 30,  "y": 42,  "nx": 1, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "JUMP_UP"},
+			{"x": 30,  "y": 126, "nx": 1, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "JUMP_RIGHT"},
+			{"x": 30,  "y": 0,   "nx": 1, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "JUMP_DOWN"},
+			{"x": 0,   "y": 168, "nx": 4, "ny": 1, "n": 4, "sx": 30, "sy": 42, "r": false, "animation": "BURN"},
+			{"x": 120, "y": 168, "nx": 1, "ny": 1, "n": 1, "sx": 30, "sy": 42, "r": false, "animation": "VICTORY"},
+			{"x": 0,   "y": 210, "nx": 2, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "VICTORY"},
+			{"x": 60,  "y": 210, "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "INSIDE_TROLLEY"},
+			{"x": 0,   "y": 252, "nx": 5, "ny": 1, "n": 5, "sx": 30, "sy": 42, "r": false, "animation": "INSIDE_TROLLEY"}
+		]
+	},
+	"character" :{
+		"files": [
+			{"file":"sprite/characters/sprite_bomberman_barbar.png", "character":"BARBAR"},
+			{"file":"sprite/characters/sprite_bomberman_chan.png", "character":"CHAN"},
+			{"file":"sprite/characters/sprite_bomberman_cossak.png", "character":"COSSAK"},
+			{"file":"sprite/characters/sprite_bomberman_kid.png", "character":"KID"},
+			{"file":"sprite/characters/sprite_bomberman_mexican.png", "character":"MEXICAN"},
+			{"file":"sprite/characters/sprite_bomberman_pretty.png", "character":"PRETTY"},
+			{"file":"sprite/characters/sprite_bomberman_punk.png", "character":"PUNK"},
+			{"file":"sprite/characters/sprite_bomberman.png", "character":"BOMBERMAN"}
+		],
+		"area": [
+			{"x": 240, "y": 84,  "nx": 1, "ny": 1, "n": 1, "sx": 30, "sy": 42, "r": false, "animation": "ON_LOUIS_LEFT"},
+			{"x": 240, "y": 42,  "nx": 1, "ny": 1, "n": 1, "sx": 30, "sy": 42, "r": false, "animation": "ON_LOUIS_UP"},
+			{"x": 240, "y": 126, "nx": 1, "ny": 1, "n": 1, "sx": 30, "sy": 42, "r": false, "animation": "ON_LOUIS_RIGHT"},
+			{"x": 240, "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 30, "sy": 42, "r": false, "animation": "ON_LOUIS_DOWN"},
+			{"x": 0,   "y": 84,  "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "WALK_LEFT"},
+			{"x": 0,   "y": 42,  "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "WALK_UP"},
+			{"x": 0,   "y": 126, "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "WALK_RIGHT"},
+			{"x": 0,   "y": 0,   "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "WALK_DOWN"},
+			{"x": 90,  "y": 84,  "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "CARRY_WALK_LEFT"},
+			{"x": 90,  "y": 42,  "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "CARRY_WALK_UP"},
+            {"x": 90,  "y": 126, "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "CARRY_WALK_RIGHT"},
+        	{"x": 90,  "y": 0,   "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "CARRY_WALK_DOWN"},
+        	{"x": 180, "y": 84,  "nx": 2, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "THROW_BOMBE_LEFT"},
+        	{"x": 180, "y": 42,  "nx": 2, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "THROW_BOMBE_UP"},
+           	{"x": 180, "y": 126, "nx": 2, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "THROW_BOMBE_RIGHT"},
+           	{"x": 180, "y": 0,   "nx": 2, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "THROW_BOMBE_DOWN"},
+           	{"x": 0,   "y": 168, "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "VICTORY"},
+           	{"x": 180, "y": 168, "nx": 2, "ny": 1, "n": 2, "sx": 30, "sy": 42, "r": false, "animation": "ON_LOUIS_VICTORY"},
+           	{"x": 0,   "y": 210, "nx": 3, "ny": 1, "n": 3, "sx": 30, "sy": 42, "r": false, "animation": "ANGRY"},
+           	{"x": 0,   "y": 252, "nx": 7, "ny": 1, "n": 7, "sx": 30, "sy": 42, "r": false, "animation": "BURN"},
+           	{"x": 150, "y": 168, "nx": 4, "ny": 2, "n": 8, "sx": 30, "sy": 42, "r": false, "animation": "INSIDE_TROLLEY"},
+           	{"x": 90,  "y": 210, "nx": 1, "ny": 1, "n": 1, "sx": 18, "sy": 16, "r": false, "animation": "SCORE_HAPPY"},
+           	{"x": 120, "y": 210, "nx": 1, "ny": 1, "n": 1, "sx": 18, "sy": 16, "r": false, "animation": "SCORE_CRY"}
+		]
+	},
 	"louisColors":[
 		{"color":"GOLD",
 			"change":[
@@ -14,13 +179,13 @@
 				{"oldColor":"0x00a2ffff", "newColor":"0xf8d000ff"}
 			]
 		},
-		{"color":"GREEN",
+		{"color":"PINK",
 			"change":[
 				{"oldColor":"0x0051b5ff", "newColor":"0xd050d0ff"},
 				{"oldColor":"0x00a2ffff", "newColor":"0xf878f8ff"}
 			]
 		},
-		{"color":"PINK",
+		{"color":"GREEN",
 			"change":[
 				{"oldColor":"0x0051b5ff", "newColor":"0x00b010ff"},
 				{"oldColor":"0x00a2ffff", "newColor":"0x00f830ff"}
@@ -33,7 +198,7 @@
 			]
 		}
 	],
-	"characterColor": [
+	"charactersColors": [
 		{"color":"GREY",
 			"change":[
 				{"oldColor":"0xf8f8f8ff", "newColor":"0x707070ff"},
@@ -89,60 +254,5 @@
 				{"oldColor":"0xe82050ff", "newColor":"0xF8B000ff"}
 			]
 		}
-	],
-	"louis" : {
-		"file": "sprite_louis.png",
-		"area": [
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_LEFT"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_UP"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_RIGHT"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_DOWN"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "JUMP_LEFT"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "JUMP_UP"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "JUMP_RIGHT"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "JUMP_DOWN"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "BURN"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "VICTORY"},
-			{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "INSIDE_TROLLEY"}
-		]
-	},
-	"character" :[
-		{
-			"files": [
-				{"file":"sprite_bomberman_barbar.png", "character":"BARBAR"},
-				{"file":"sprite_bomberman_chan.png", "character":"CHAN"},
-				{"file":"sprite_bomberman_cossak.png", "character":"COSSAK"},
-				{"file":"sprite_bomberman_kid.png", "character":"KID"},
-				{"file":"sprite_bomberman_mexican.png", "character":"MEXICAN"},
-				{"file":"sprite_bomberman_pretty.png", "character":"PRETTY"},
-				{"file":"sprite_bomberman_punk.png", "character":"PUNK"},
-				{"file":"sprite_bomberman.png", "character":"BOMBERMAN"}
-			],
-			"area": [
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_LEFT"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_UP"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_RIGHT"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_DOWN"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_LEFT"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_UP"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_RIGHT"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "WALK_DOWN"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "CARRY_WALK_LEFT"},
-				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "CARRY_WALK_UP"},
-                {"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "CARRY_WALK_RIGHT"},
-	        	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "CARRY_WALK_DOWN"},
-	        	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "THROW_BOMBE_LEFT"},
-	        	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "THROW_BOMBE_UP"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "THROW_BOMBE_RIGHT"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "THROW_BOMBE_DOWN"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "VICTORY"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ON_LOUIS_VICTORY"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "ANGRY"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "BURN"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "INSIDE_TROLLEY"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "SCORE_HAPPY"},
-	           	{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 128, "sy": 128, "r": false, "animation": "SCORE_CRY"}
-			]
-		}      
-	]          
+	]       
 }              

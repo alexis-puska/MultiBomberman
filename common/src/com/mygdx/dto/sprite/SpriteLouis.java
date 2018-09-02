@@ -2,7 +2,7 @@ package com.mygdx.dto.sprite;
 
 import java.io.Serializable;
 
-import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.enumeration.LouisSpriteEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Sprite implements Serializable {
+public class SpriteLouis implements Serializable {
 
     private static final long serialVersionUID = -8772069448741457644L;
 
@@ -24,7 +24,7 @@ public class Sprite implements Serializable {
     private int nx;
     private int sy;
     private int sx;
-    private SpriteEnum animation;
+    private LouisSpriteEnum animation;
     private String grp;
     private String r;
 }

@@ -12,11 +12,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CharacterSpriteFile implements Serializable {
+public class LouisSpriteFile implements Serializable {
 
 	private static final long serialVersionUID = -8772069448741457644L;
 
-	private List<CharacterFile> files;
-	private List<SpriteCharacter> area;
+	private List<String> files;
+	private List<SpriteLouis> area;
 
 }

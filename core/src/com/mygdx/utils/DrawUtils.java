@@ -3,12 +3,13 @@ package com.mygdx.utils;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.constante.Constante;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.service.SpriteService;
 
 public class DrawUtils {
 
-	public static void fillBackground(SpriteBatch batch, String name) {
-		TextureRegion textureRegionBackground = SpriteService.getInstance().getTexture(name, 0);
+	public static void fillBackground(SpriteBatch batch, SpriteEnum spriteEnum) {
+		TextureRegion textureRegionBackground = SpriteService.getInstance().getTexture(spriteEnum, 0);
 		int idx = 0;
 		int idy = 0;
 		while (idy < Constante.SCREEN_SIZE_Y) {

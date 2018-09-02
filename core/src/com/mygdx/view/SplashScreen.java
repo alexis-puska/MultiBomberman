@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.constante.Constante;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 import com.mygdx.utils.DrawUtils;
@@ -28,9 +29,9 @@ public class SplashScreen implements Screen {
 			// game.setScreen(new SelectionLangScreen(game));
 		}
 
-		TextureRegion textureRegionTitle = SpriteService.getInstance().getTexture("menu_title", 0);
+		TextureRegion textureRegionTitle = SpriteService.getInstance().getTexture(SpriteEnum.BACKGROUND, 0);
 		game.getBatch().begin();
-		DrawUtils.fillBackground(game.getBatch(), "menu_background_1");
+		DrawUtils.fillBackground(game.getBatch(), SpriteEnum.BACKGROUND);
 		game.getBatch().draw(textureRegionTitle, (420 / 2) - (textureRegionTitle.getRegionWidth() / 2),
 				(Constante.SCREEN_SIZE_Y / 2));
 		game.getBatch().end();
