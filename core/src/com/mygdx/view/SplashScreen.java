@@ -27,7 +27,7 @@ public class SplashScreen implements Screen {
 		}
 
 		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
+		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
 		game.getBatch().end();
 
 	}
