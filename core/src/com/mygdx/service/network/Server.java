@@ -5,13 +5,14 @@ import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.service.NetworkConnexion;
 
 public class Server extends Thread {
 
 	private ServerSocket serverSocket;
 	private static boolean status;
-	
+
 	@Override
 	public void run() {
 		status = true;
@@ -22,19 +23,24 @@ public class Server extends Thread {
 		System.out.println("start serveur");
 		while (status) {
 			// Create a socket
-			Socket socket = serverSocket.accept(null);
-			NetworkConnexion nc = new NetworkConnexion(socket);
-			nc.start();
+			try {
+				Socket socket = serverSocket.accept(null);
+				NetworkConnexion nc = new NetworkConnexion(socket);
+				nc.start();
+			} catch (GdxRuntimeException ex) {
+				Gdx.app.log("Server", "GDX Runtime exception : arret du serveur");
+			}
 		}
 	}
 
 	public void kill() {
 		status = false;
-		serverSocket.dispose();
+		if (serverSocket != null) {
+			serverSocket.dispose();
+		}
 	}
-	
+
 	public boolean isStarted() {
 		return status;
 	}
-
 }

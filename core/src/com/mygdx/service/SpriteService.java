@@ -236,7 +236,7 @@ public class SpriteService {
 		TextureRegion[] t = sprites.get(spriteEnum);
 		return t[idx];
 	}
-
+	
 	public TextureRegion getSprite(LouisSpriteEnum spriteEnum, LouisColorEnum colorEnum, int idx) {
 		TextureRegion[] t = louisSprites.get(colorEnum).get(spriteEnum);
 		return t[idx];

@@ -10,24 +10,28 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.Cursor;
+import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
 
 public class LangueScreen implements Screen {
 
-	final MultiBombermanGame game;
+	private final MultiBombermanGame game;
+	private final Cursor cursor;
+	private final GlyphLayout layout;
+	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
-	private GlyphLayout layout;
-	private ShapeRenderer shapeRenderer;
 
 	public LangueScreen(final MultiBombermanGame game) {
 		this.game = game;
+		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		initFont();
-
 	}
 
 	@Override
@@ -50,6 +54,18 @@ public class LangueScreen implements Screen {
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 1), 400, 120);
 		layout.setText(font, MessageService.getInstance().getMessage("menu.lang.title"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 200);
+		switch (Context.getLocale()) {
+		case ENGLISH:
+			cursor.updateCursorPosition(430, 90);
+			break;
+		case FRENCH:
+			cursor.updateCursorPosition(198, 90);
+			break;
+		default:
+			cursor.updateCursorPosition(198, 90);
+			break;
+		}
+		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}
 
@@ -61,6 +77,32 @@ public class LangueScreen implements Screen {
 		if (game.getMenuInputProcessor().pressPrevious()) {
 			game.getScreen().dispose();
 			game.setScreen(new SplashScreen(game));
+		}
+		if (game.getMenuInputProcessor().pressLeft()) {
+			switch (Context.getLocale()) {
+			case ENGLISH:
+				Context.setLocale(LocaleEnum.FRENCH);
+				break;
+			case FRENCH:
+				Context.setLocale(LocaleEnum.ENGLISH);
+				break;
+			default:
+				Context.setLocale(LocaleEnum.ENGLISH);
+				break;
+			}
+		}
+		if (game.getMenuInputProcessor().pressRight()) {
+			switch (Context.getLocale()) {
+			case ENGLISH:
+				Context.setLocale(LocaleEnum.FRENCH);
+				break;
+			case FRENCH:
+				Context.setLocale(LocaleEnum.ENGLISH);
+				break;
+			default:
+				Context.setLocale(LocaleEnum.ENGLISH);
+				break;
+			}
 		}
 	}
 
@@ -95,8 +137,7 @@ public class LangueScreen implements Screen {
 	}
 
 	public void initFont() {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
-				Gdx.files.internal("font/font_gbboot.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/font_gbboot.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 14;
 		parameter.borderWidth = 0f;
@@ -105,5 +146,4 @@ public class LangueScreen implements Screen {
 		font = generator.generateFont(parameter);
 		generator.dispose();
 	}
-
 }
