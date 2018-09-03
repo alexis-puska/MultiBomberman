@@ -1,7 +1,9 @@
 package com.mygdx.service.input_processor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.constante.Constante;
 
 public class MenuInputProcessor implements InputProcessor {
 
@@ -14,6 +16,9 @@ public class MenuInputProcessor implements InputProcessor {
 	private boolean valide;
 	private boolean previous;
 	private boolean next;
+	private boolean ctrl;
+
+	private boolean fullscreen;
 
 	/***************************
 	 * --- KEYBOARD PART ---
@@ -41,6 +46,15 @@ public class MenuInputProcessor implements InputProcessor {
 			break;
 		case Keys.RIGHT:
 			right = true;
+			break;
+		case Keys.CONTROL_LEFT:
+		case Keys.CONTROL_RIGHT:
+			ctrl = true;
+			break;
+		case Keys.F:
+			if (ctrl) {
+				toogleScreen();
+			}
 			break;
 		default:
 		}
@@ -71,6 +85,10 @@ public class MenuInputProcessor implements InputProcessor {
 			break;
 		case Keys.RIGHT:
 			right = false;
+			break;
+		case Keys.CONTROL_LEFT:
+		case Keys.CONTROL_RIGHT:
+			ctrl = false;
 			break;
 		default:
 		}
@@ -193,5 +211,17 @@ public class MenuInputProcessor implements InputProcessor {
 		valide = false;
 		previous = false;
 		next = false;
+	}
+
+	private void toogleScreen() {
+		if (!fullscreen) {
+			Gdx.app.log("SCREEN SIZE :", Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
+			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+			fullscreen = true;
+		} else {
+			Gdx.graphics.setWindowedMode(Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y);
+			fullscreen = false;
+		}
+		ctrl = false;
 	}
 }

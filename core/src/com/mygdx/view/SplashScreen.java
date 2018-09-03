@@ -23,7 +23,7 @@ public class SplashScreen implements Screen {
 
 		if (game.getMenuInputProcessor().pressNext()) {
 			game.getScreen().dispose();
-			game.setScreen(new MainScreen(game));
+			game.setScreen(new LangueScreen(game));
 		}
 
 		game.getBatch().begin();

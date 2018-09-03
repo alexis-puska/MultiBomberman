@@ -1,5 +1,13 @@
 {
 	"spriteFile" : [
+	
+	
+		{
+			"files": ["sprite/other/sprite_flag.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 1, "ny": 2, "n": 2, "sx": 75, "sy": 50, "r": false, "animation": "FLAG"}
+			]
+		},
 		{
 			"files": ["sprite/img_empty_background.png"],
 			"area": [

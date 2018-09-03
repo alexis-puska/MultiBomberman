@@ -19,7 +19,7 @@ public class NetworkService {
 	public NetworkService() {
 		getIp();
 		upnpService = new UpnpService();
-		upnpService.openPortWithUpnp();
+		//upnpService.openPortWithUpnp();
 	}
 
 	public void getIp() {
@@ -42,7 +42,7 @@ public class NetworkService {
 	}
 
 	public void stopServer() {
-		upnpService.closePortWithUpnp();
+		//upnpService.closePortWithUpnp();
 		server.kill();
 	}
 }

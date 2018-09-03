@@ -7,11 +7,11 @@ import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
-public class MainScreen implements Screen {
+public class RulesScreen implements Screen {
 
 	final MultiBombermanGame game;
 
-	public MainScreen(final MultiBombermanGame game) {
+	public RulesScreen(final MultiBombermanGame game) {
 		this.game = game;
 	}
 
@@ -22,15 +22,14 @@ public class MainScreen implements Screen {
 		game.getScreenCamera().update();
 
 		if (game.getMenuInputProcessor().pressNext()) {
-			//game.getScreen().dispose();
-			// game.setScreen(new SelectionLangScreen(game));
-		}if (game.getMenuInputProcessor().pressPrevious()) {
 			game.getScreen().dispose();
-			game.setScreen(new LangueScreen(game));
+			game.setScreen(new MainScreen(game));
 		}
+
 		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1),0, 0);
+		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
 		game.getBatch().end();
+
 	}
 
 	@Override
