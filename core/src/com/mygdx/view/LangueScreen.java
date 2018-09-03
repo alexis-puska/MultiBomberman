@@ -44,6 +44,7 @@ public class LangueScreen implements Screen {
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(100, 75, 440, 150);
