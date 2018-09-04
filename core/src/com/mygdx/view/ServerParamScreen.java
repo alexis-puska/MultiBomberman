@@ -42,6 +42,7 @@ public class ServerParamScreen implements Screen {
 		game.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
@@ -55,9 +56,10 @@ public class ServerParamScreen implements Screen {
 
 	private void treatInput() {
 		if (game.getMenuInputProcessor().pressNext()) {
-			game.getNetworkService().initServer();
-			game.getScreen().dispose();
-			game.setScreen(new WaitConnexionScreen(game));
+			if (game.getNetworkService().initServer()) {
+				game.getScreen().dispose();
+				game.setScreen(new WaitConnexionScreen(game));
+			}
 		}
 		if (game.getMenuInputProcessor().pressPrevious()) {
 			game.getScreen().dispose();

@@ -43,6 +43,8 @@ public class PlayerTypeScreen implements Screen {
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
+
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
@@ -62,10 +64,11 @@ public class PlayerTypeScreen implements Screen {
 		}
 		if (game.getMenuInputProcessor().pressPrevious()) {
 			if (Context.getGameMode() == GameModeEnum.SERVER) {
+				game.getNetworkService().stopServer();
 				game.setScreen(new ServerParamScreen(game));
 			} else if (Context.getGameMode() == GameModeEnum.CLIENT) {
 				game.setScreen(new ClientConnexionScreen(game));
-			}else if (Context.getGameMode() == GameModeEnum.LOCAL) {
+			} else if (Context.getGameMode() == GameModeEnum.LOCAL) {
 				game.setScreen(new MainScreen(game));
 			}
 		}

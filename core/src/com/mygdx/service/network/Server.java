@@ -46,12 +46,17 @@ public class Server extends Thread {
 		return status;
 	}
 
-	public void init() {
+	public void init() throws ServerPortAlreadyInUseException{
 		status = true;
 		ncl = new ArrayList<>();
 		ServerSocketHints serverSocketHint = new ServerSocketHints();
 		serverSocketHint.acceptTimeout = 0;
 		serverSocketHint.reuseAddress = true;
-		serverSocket = Gdx.net.newServerSocket(Protocol.TCP, 7777, serverSocketHint);
+		try {
+			serverSocket = Gdx.net.newServerSocket(Protocol.TCP, 7777, serverSocketHint);
+		}catch ( GdxRuntimeException ex) {
+			throw new ServerPortAlreadyInUseException();
+		}
+		
 	}
 }

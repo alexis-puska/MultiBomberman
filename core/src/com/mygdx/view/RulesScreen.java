@@ -42,6 +42,8 @@ public class RulesScreen implements Screen {
 		game.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
+		
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();

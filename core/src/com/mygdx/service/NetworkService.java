@@ -8,6 +8,7 @@ import java.net.URL;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.constante.Constante;
 import com.mygdx.service.network.Server;
+import com.mygdx.service.network.ServerPortAlreadyInUseException;
 import com.mygdx.service.network.UpnpService;
 
 public class NetworkService {
@@ -15,11 +16,12 @@ public class NetworkService {
 	private final static String CLASS_NAME = "NetworkService";
 	private Server server;
 	private UpnpService upnpService;
+	private String externalIp;
+	
 
 	public NetworkService() {
 		getIp();
 		upnpService = new UpnpService();
-		// upnpService.openPortWithUpnp();
 	}
 
 	public void getIp() {
@@ -36,14 +38,21 @@ public class NetworkService {
 		}
 	}
 
-	public void initServer() {
+	public boolean initServer() {
 		server = new Server();
-		server.init();
-		server.start();
+		try {
+			server.init();
+			server.start();
+//			upnpService.openPortWithUpnp();
+		} catch (ServerPortAlreadyInUseException ex) {
+			Gdx.app.log("", "Serveur KO");
+			return false;
+		}
+		return true;
 	}
 
 	public void stopServer() {
-		// upnpService.closePortWithUpnp();
+//		upnpService.closePortWithUpnp();
 		server.kill();
 	}
 }
