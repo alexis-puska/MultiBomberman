@@ -46,7 +46,7 @@ public class MainScreen implements Screen {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
-		shapeRenderer.rect(100, 10, 440, 210);
+		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
@@ -82,11 +82,24 @@ public class MainScreen implements Screen {
 	private void treatInput() {
 		if (game.getMenuInputProcessor().pressNext()) {
 			game.getScreen().dispose();
-			game.setScreen(new MainScreen(game));
+			switch (Context.getGameMode()) {
+			case LOCAL:
+				game.setScreen(new PlayerTypeScreen(game));
+				break;
+			case SERVER:
+				game.setScreen(new ServerParamScreen(game));
+				break;
+			case CLIENT:
+				game.setScreen(new ClientConnexionScreen(game));
+				break;
+			default:
+				game.setScreen(new PlayerTypeScreen(game));
+				break;
+			}
 		}
 		if (game.getMenuInputProcessor().pressPrevious()) {
 			game.getScreen().dispose();
-			game.setScreen(new SplashScreen(game));
+			game.setScreen(new LangueScreen(game));
 		}
 		if (game.getMenuInputProcessor().pressRight()) {
 			switch (Context.getGameMode()) {

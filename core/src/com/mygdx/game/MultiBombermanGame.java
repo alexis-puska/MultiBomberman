@@ -30,7 +30,6 @@ public class MultiBombermanGame extends Game {
 	public void create() {
 		Gdx.app.setLogLevel(Constante.LIBGDX_LOG_LEVEL);
 		networkService = new NetworkService();
-		networkService.initServer();
 		SpriteService.getInstance();
 
 		/****************************************
@@ -51,9 +50,6 @@ public class MultiBombermanGame extends Game {
 
 	@Override
 	public void dispose() {
-		networkService.stopServer();
 		batch.dispose();
-
 	}
-
 }

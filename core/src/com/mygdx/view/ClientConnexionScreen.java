@@ -11,14 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
-import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
-import com.mygdx.service.Context;
-import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
 
-public class LangueScreen implements Screen {
+public class ClientConnexionScreen implements Screen {
 
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
@@ -26,7 +23,7 @@ public class LangueScreen implements Screen {
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
 
-	public LangueScreen(final MultiBombermanGame game) {
+	public ClientConnexionScreen(final MultiBombermanGame game) {
 		this.game = game;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
@@ -44,28 +41,14 @@ public class LangueScreen implements Screen {
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 0), 165, 100);
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 1), 400, 100);
-		layout.setText(font, MessageService.getInstance().getMessage("menu.lang.title"));
+		layout.setText(font, "connexion to server");
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
-		switch (Context.getLocale()) {
-		case ENGLISH:
-			cursor.updateCursorPosition(430, 70);
-			break;
-		case FRENCH:
-			cursor.updateCursorPosition(198, 70);
-			break;
-		default:
-			cursor.updateCursorPosition(198, 70);
-			break;
-		}
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}
@@ -73,37 +56,11 @@ public class LangueScreen implements Screen {
 	private void treatInput() {
 		if (game.getMenuInputProcessor().pressNext()) {
 			game.getScreen().dispose();
-			game.setScreen(new MainScreen(game));
+			game.setScreen(new WaitConnexionScreen(game));
 		}
 		if (game.getMenuInputProcessor().pressPrevious()) {
 			game.getScreen().dispose();
-			game.setScreen(new SplashScreen(game));
-		}
-		if (game.getMenuInputProcessor().pressLeft()) {
-			switch (Context.getLocale()) {
-			case ENGLISH:
-				Context.setLocale(LocaleEnum.FRENCH);
-				break;
-			case FRENCH:
-				Context.setLocale(LocaleEnum.ENGLISH);
-				break;
-			default:
-				Context.setLocale(LocaleEnum.ENGLISH);
-				break;
-			}
-		}
-		if (game.getMenuInputProcessor().pressRight()) {
-			switch (Context.getLocale()) {
-			case ENGLISH:
-				Context.setLocale(LocaleEnum.FRENCH);
-				break;
-			case FRENCH:
-				Context.setLocale(LocaleEnum.ENGLISH);
-				break;
-			default:
-				Context.setLocale(LocaleEnum.ENGLISH);
-				break;
-			}
+			game.setScreen(new MainScreen(game));
 		}
 	}
 
@@ -147,4 +104,6 @@ public class LangueScreen implements Screen {
 		font = generator.generateFont(parameter);
 		generator.dispose();
 	}
+
+
 }
