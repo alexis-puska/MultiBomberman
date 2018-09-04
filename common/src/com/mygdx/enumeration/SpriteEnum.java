@@ -2,6 +2,7 @@ package com.mygdx.enumeration;
 
 public enum SpriteEnum {
 	BACKGROUND,
+	NETWORK,
 	FLAG,
 	CURSOR,
 	SPACESHIP,
