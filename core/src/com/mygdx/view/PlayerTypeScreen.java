@@ -11,25 +11,36 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
+import com.mygdx.domain.PlayerDefinition;
 import com.mygdx.enumeration.GameModeEnum;
+import com.mygdx.enumeration.PlayerTypeEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
 
 public class PlayerTypeScreen implements Screen {
+
+	private final static int START_X = 100;
+	private final static int START_Y = 170;
+	private final static int NB_COL = 4;
+	private final static int COL_SIZE = 120;
+	private final static int ROW_SIZE = 30;
 
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
+	private int cursorPosition;
 
 	public PlayerTypeScreen(final MultiBombermanGame game) {
 		this.game = game;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
+		this.cursorPosition = 0;
 		initFont();
 	}
 
@@ -39,6 +50,7 @@ public class PlayerTypeScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
 		treatInput();
+		updateCursorPosition();
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
@@ -51,8 +63,17 @@ public class PlayerTypeScreen implements Screen {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
-		layout.setText(font, "type de joueur");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.player.configuration"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < 4; i++) {
+				int pos = i + j * 4;
+				layout.setText(font, MessageService.getInstance().getMessage("game.menu.player") + pos + " : "
+						+ Context.playerType.get(pos).getPlayerType().toString());
+				font.draw(game.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
+			}
+		}
+
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}
@@ -66,10 +87,55 @@ public class PlayerTypeScreen implements Screen {
 			if (Context.gameMode == GameModeEnum.SERVER) {
 				game.getNetworkService().stopServer();
 				game.setScreen(new ServerParamScreen(game));
-			} else if (Context.gameMode == GameModeEnum.CLIENT) {
-				game.setScreen(new ClientConnexionScreen(game));
 			} else if (Context.gameMode == GameModeEnum.LOCAL) {
 				game.setScreen(new MainScreen(game));
+			}
+		}
+
+		if (game.getMenuInputProcessor().pressValide()) {
+			PlayerDefinition def = Context.playerType.get(cursorPosition);
+			PlayerTypeEnum newPlayerType = PlayerTypeEnum.HUMAN;
+			switch (def.getPlayerType()) {
+			case CPU:
+				newPlayerType = PlayerTypeEnum.HUMAN;
+				break;
+			case HUMAN:
+				if (Context.gameMode == GameModeEnum.SERVER) {
+					newPlayerType = PlayerTypeEnum.NET;
+				} else {
+					newPlayerType = PlayerTypeEnum.CPU;
+				}
+				break;
+			case NET:
+				newPlayerType = PlayerTypeEnum.CPU;
+				break;
+			}
+			def.setPlayerType(newPlayerType);
+			Context.playerType.put(cursorPosition, def);
+		}
+
+		if (game.getMenuInputProcessor().pressLeft()) {
+			cursorPosition--;
+			if (cursorPosition < 0) {
+				cursorPosition = 15;
+			}
+		}
+		if (game.getMenuInputProcessor().pressRight()) {
+			cursorPosition++;
+			if (cursorPosition > 15) {
+				cursorPosition = 0;
+			}
+		}
+		if (game.getMenuInputProcessor().pressUp()) {
+			cursorPosition -= 4;
+			if (cursorPosition < 0) {
+				cursorPosition = 16 + cursorPosition;
+			}
+		}
+		if (game.getMenuInputProcessor().pressDown()) {
+			cursorPosition += 4;
+			if (cursorPosition > 15) {
+				cursorPosition = cursorPosition - 16;
 			}
 		}
 	}
@@ -113,5 +179,11 @@ public class PlayerTypeScreen implements Screen {
 		parameter.color = new Color(255, 0, 0, 255);
 		font = generator.generateFont(parameter);
 		generator.dispose();
+	}
+
+	private void updateCursorPosition() {
+		int col = cursorPosition % NB_COL;
+		int row = cursorPosition / NB_COL;
+		cursor.updateCursorPosition((START_X + (col * COL_SIZE)) - 20, (START_Y - (row * ROW_SIZE)) - 15);
 	}
 }

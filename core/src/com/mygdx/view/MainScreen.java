@@ -54,13 +54,13 @@ public class MainScreen implements Screen {
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 0), 110, 70);
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 1), 252, 70);
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 2), 394, 70);
-		layout.setText(font, MessageService.getInstance().getMessage("menu.network"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
-		layout.setText(font, MessageService.getInstance().getMessage("menu.network.local"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.local"));
 		font.draw(game.getBatch(), layout, 176 - (layout.width / 2), 62);
-		layout.setText(font, MessageService.getInstance().getMessage("menu.network.server"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.server"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 62);
-		layout.setText(font, MessageService.getInstance().getMessage("menu.network.client"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.client"));
 		font.draw(game.getBatch(), layout, 460 - (layout.width / 2), 62);
 		switch (Context.gameMode) {
 		case LOCAL:

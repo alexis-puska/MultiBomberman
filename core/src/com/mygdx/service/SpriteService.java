@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -52,6 +53,7 @@ public class SpriteService {
 	private final ObjectMapper objectMapper;
 
 	private List<CharacterColorFile> characterColors;
+	private Map<CharacterColorEnum, Color> characterMainColor;
 	private List<LouisColorFile> louisColors;
 
 	/************************
@@ -67,6 +69,7 @@ public class SpriteService {
 		sprites = new HashMap<>();
 		louisSprites = new HashMap<>();
 		playerSprites = new HashMap<>();
+		characterMainColor = new HashMap<>();
 		objectMapper = new ObjectMapper();
 		spriteJsonFile = Gdx.files.internal(SPRITE_JSON_FILE);
 		SpriteFileContent spriteFileContent = null;
@@ -79,8 +82,14 @@ public class SpriteService {
 		} catch (IOException e) {
 			Gdx.app.error(SPRITE_SERVICE, "IOException : ", e);
 		}
+
 		this.characterColors = spriteFileContent.getCharactersColors();
 		this.louisColors = spriteFileContent.getLouisColors();
+
+		characterColors.stream().forEach(ccf -> {
+			Long colorValue = Long.decode(ccf.getTextColor());
+			characterMainColor.put(ccf.getColor(), new Color(colorValue.intValue()));
+		});
 
 		initSprite(spriteFileContent);
 		initLouisSprite(spriteFileContent);
@@ -90,7 +99,8 @@ public class SpriteService {
 	/**
 	 * Load common Sprite
 	 * 
-	 * @param spriteFileContent the json file read from application asset
+	 * @param spriteFileContent
+	 *            the json file read from application asset
 	 */
 	private void initSprite(SpriteFileContent spriteFileContent) {
 		List<SpriteFile> spriteFiles = spriteFileContent.getSpriteFile();
@@ -126,7 +136,8 @@ public class SpriteService {
 	/**
 	 * Load Louis Sprite
 	 * 
-	 * @param spriteFileContent the json file read from application asset
+	 * @param spriteFileContent
+	 *            the json file read from application asset
 	 */
 	private void initLouisSprite(SpriteFileContent spriteFileContent) {
 		LouisSpriteFile louisSpriteFile = spriteFileContent.getLouis();
@@ -172,7 +183,8 @@ public class SpriteService {
 	/**
 	 * Load Player Sprite
 	 * 
-	 * @param spriteFileContent the json file read from application asset
+	 * @param spriteFileContent
+	 *            the json file read from application asset
 	 */
 	private void initPlayerSprite(SpriteFileContent spriteFileContent) {
 		CharacterSpriteFile characterSprite = spriteFileContent.getCharacter();
@@ -232,11 +244,15 @@ public class SpriteService {
 		return merged;
 	}
 
+	public Color getCharacterTextColor(CharacterColorEnum color) {
+		return characterMainColor.get(color);
+	}
+
 	public TextureRegion getSprite(SpriteEnum spriteEnum, int idx) {
 		TextureRegion[] t = sprites.get(spriteEnum);
 		return t[idx];
 	}
-	
+
 	public TextureRegion getSprite(LouisSpriteEnum spriteEnum, LouisColorEnum colorEnum, int idx) {
 		TextureRegion[] t = louisSprites.get(colorEnum).get(spriteEnum);
 		return t[idx];
@@ -267,8 +283,10 @@ public class SpriteService {
 	/**
 	 * Change color for player texture
 	 * 
-	 * @param img   original texture
-	 * @param color the desired color
+	 * @param img
+	 *            original texture
+	 * @param color
+	 *            the desired color
 	 * @return modified texture
 	 */
 	private Texture changeCharacterColorTexture(Texture img, CharacterColorEnum color) {
@@ -301,8 +319,10 @@ public class SpriteService {
 	/**
 	 * Change color for Louis texture
 	 * 
-	 * @param img   original texture
-	 * @param color the desired color
+	 * @param img
+	 *            original texture
+	 * @param color
+	 *            the desired color
 	 * @return modified texture
 	 */
 	private Texture changeLouisColorTexture(Texture img, LouisColorEnum color) {
@@ -335,7 +355,8 @@ public class SpriteService {
 	/**
 	 * Print pixel values inside a pixmap texture
 	 * 
-	 * @param pixmap the pixmap
+	 * @param pixmap
+	 *            the pixmap
 	 */
 	@SuppressWarnings("unused")
 	private void printPixelInsideTexture(Pixmap pixmap) {

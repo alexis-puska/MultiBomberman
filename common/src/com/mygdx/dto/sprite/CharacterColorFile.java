@@ -20,4 +20,5 @@ public class CharacterColorFile implements Serializable {
 
 	private CharacterColorEnum color;
 	private List<ColorMapFile> change;
+	private String textColor;
 }

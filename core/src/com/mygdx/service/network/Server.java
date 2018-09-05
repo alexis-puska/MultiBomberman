@@ -9,6 +9,7 @@ import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.mygdx.service.Context;
 import com.mygdx.service.NetworkConnexion;
 
 public class Server extends Thread {
@@ -53,7 +54,7 @@ public class Server extends Thread {
 		serverSocketHint.acceptTimeout = 0;
 		serverSocketHint.reuseAddress = true;
 		try {
-			serverSocket = Gdx.net.newServerSocket(Protocol.TCP, 7777, serverSocketHint);
+			serverSocket = Gdx.net.newServerSocket(Protocol.TCP, Context.port, serverSocketHint);
 		}catch ( GdxRuntimeException ex) {
 			throw new ServerPortAlreadyInUseException();
 		}

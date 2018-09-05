@@ -213,6 +213,7 @@
 	],
 	"charactersColors": [
 		{"color":"GREY",
+			"textColor":"0x707070ff",
 			"change":[
 				{"oldColor":"0xf8f8f8ff", "newColor":"0x707070ff"},
 				{"oldColor":"0xa0a0a0ff", "newColor":"0x303030ff"},
@@ -222,6 +223,7 @@
 				{"oldColor":"0xe82050ff", "newColor":"0xE01898ff"}
 			]
 		},{"color":"RED",
+			"textColor":"0xC00000ff",
 			"change":[
 				{"oldColor":"0xf8f8f8ff", "newColor":"0xC00000ff"},
 				{"oldColor":"0xa0a0a0ff", "newColor":"0x800000ff"},
@@ -231,6 +233,7 @@
 				{"oldColor":"0xe82050ff", "newColor":"0x30A060ff"}
 			]
 		},{"color":"BLUE",
+			"textColor":"0x0058C0ff",
 			"change":[
 				{"oldColor":"0xf8f8f8ff", "newColor":"0x0058C0ff"},
 				{"oldColor":"0xa0a0a0ff", "newColor":"0x004080ff"},
@@ -240,6 +243,7 @@
 				{"oldColor":"0xe82050ff", "newColor":"0xE01898ff"}
 			]
 		},{"color":"GREEN",
+			"textColor":"0x10C020ff",
 			"change":[
 				{"oldColor":"0xf8f8f8ff", "newColor":"0x10C020ff"},
 				{"oldColor":"0xa0a0a0ff", "newColor":"0x009010ff"},
@@ -249,8 +253,9 @@
 				{"oldColor":"0xe82050ff", "newColor":"0xE01898ff"}
 			]
 		},{"color":"GOLD",
+			"textColor":"0x10C020ff",
 			"change":[
-				{"oldColor":"0xf8f8f8ff", "newColor":"0xF8E000ff"},
+				{"oldColor":"0xf8f8f8ff", "newColor":"0x10C020ff"},
 				{"oldColor":"0xa0a0a0ff", "newColor":"0xB0A000ff"},
 				{"oldColor":"0xf8a020ff", "newColor":"0xf8a020ff"},
 				{"oldColor":"0x0058e8ff", "newColor":"0xE8B020ff"},
@@ -258,6 +263,7 @@
 				{"oldColor":"0xe82050ff", "newColor":"0xD06800ff"}
 			]
 		},{"color":"BROWN",
+			"textColor":"0xB05040ff",
 			"change":[
 				{"oldColor":"0xf8f8f8ff", "newColor":"0xB05040ff"},
 				{"oldColor":"0xa0a0a0ff", "newColor":"0x800010ff"},

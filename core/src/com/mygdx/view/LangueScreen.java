@@ -53,7 +53,7 @@ public class LangueScreen implements Screen {
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 0), 165, 100);
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 1), 400, 100);
-		layout.setText(font, MessageService.getInstance().getMessage("menu.lang.title"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.lang.title"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		switch (Context.locale) {
 		case ENGLISH:

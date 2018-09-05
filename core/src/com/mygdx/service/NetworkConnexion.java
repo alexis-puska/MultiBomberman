@@ -15,6 +15,7 @@ public class NetworkConnexion extends Thread {
 	private static boolean status;
 
 	public NetworkConnexion(Socket socket) {
+		status = true;
 		this.socket = socket;
 		this.remoteAddress = socket.getRemoteAddress();
 		Gdx.app.log("NetworkConnexion", String.format("new client connexion : %s", remoteAddress));

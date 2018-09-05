@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.constante.Constante;
 import com.mygdx.enumeration.MusicEnum;
+import com.mygdx.service.Context;
 import com.mygdx.service.NetworkService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
@@ -28,6 +29,7 @@ public class MultiBombermanGame extends Game {
 
 	@Override
 	public void create() {
+		Context.resetContext();
 		Gdx.app.setLogLevel(Constante.LIBGDX_LOG_LEVEL);
 		networkService = new NetworkService();
 		SpriteService.getInstance();

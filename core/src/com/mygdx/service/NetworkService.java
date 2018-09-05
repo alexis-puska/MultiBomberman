@@ -18,12 +18,15 @@ public class NetworkService {
 	private final static String CLASS_NAME = "NetworkService";
 	private Server server;
 	private UpnpService upnpService;
+	
 	private String externalIp;
 	private String hostName;
 	private String internetIp;
+	
 
 	public NetworkService() {
 		upnpService = new UpnpService();
+		Context.port = Constante.NETWORK_PORT;
 		retrieveIp();
 	}
 
@@ -73,4 +76,17 @@ public class NetworkService {
 		Gdx.app.log(CLASS_NAME, "IP Address:- " + externalIp);
 		Gdx.app.log(CLASS_NAME, "Host Name:- " + hostName);
 	}
+
+	public String getExternalIp() {
+		return externalIp;
+	}
+
+	public String getHostName() {
+		return hostName;
+	}
+
+	public String getInternetIp() {
+		return internetIp;
+	}
+	
 }
