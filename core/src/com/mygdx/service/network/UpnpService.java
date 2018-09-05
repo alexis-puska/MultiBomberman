@@ -39,13 +39,10 @@ public class UpnpService {
 				return;
 			}
 			InetAddress localAddress = gatewayDevice.getLocalAddress();
-			Gdx.app.log(CLASS_NAME, "Using local address: " + localAddress);
 			String externalIPAddress = gatewayDevice.getExternalIPAddress();
-			Gdx.app.log(CLASS_NAME, "External address: " + externalIPAddress);
-			Gdx.app.log(CLASS_NAME, "Attempting to map port : " + Constante.NETWORK_PORT);
+			Gdx.app.log(CLASS_NAME, "Using local address: " + localAddress + ", External address: " + externalIPAddress
+					+ ", Attempting to map port : " + Constante.NETWORK_PORT);
 			PortMappingEntry portMapping = new PortMappingEntry();
-			Gdx.app.log(CLASS_NAME,
-					"Querying device to see if mapping for port " + Constante.NETWORK_PORT + " already exists");
 			if (gatewayDevice.getSpecificPortMappingEntry(Constante.NETWORK_PORT, "TCP", portMapping)) {
 				Gdx.app.log(CLASS_NAME, "Port was already mapped. Aborting test.");
 			} else {
@@ -53,12 +50,10 @@ public class UpnpService {
 				if (!gatewayDevice.addPortMapping(Constante.NETWORK_PORT, Constante.NETWORK_PORT,
 						localAddress.getHostAddress(), "TCP", Constante.NETWORK_APPLICATION_UPNP_NAME)) {
 					Gdx.app.log(CLASS_NAME, "Port mapping attempt failed");
-					Gdx.app.log(CLASS_NAME, "Test FAILED");
 				} else {
 					Gdx.app.log(CLASS_NAME, "Mapping successful !!!");
 				}
 			}
-
 		} catch (SocketException e) {
 			Gdx.app.log(CLASS_NAME, "SocketException : " + e.getMessage());
 		} catch (UnknownHostException e) {
@@ -73,18 +68,16 @@ public class UpnpService {
 	}
 
 	public void closePortWithUpnp() {
-		Gdx.app.log(CLASS_NAME, "Stopping weupnp");
-
-		try {
-			gatewayDevice.deletePortMapping(Constante.NETWORK_PORT, "TCP");
-		} catch (IOException e) {
-			Gdx.app.log(CLASS_NAME, "IOException : " + e.getMessage());
-		} catch (SAXException e) {
-			Gdx.app.log(CLASS_NAME, "SAXException : " + e.getMessage());
+		if (gatewayDevice != null) {
+			Gdx.app.log(CLASS_NAME, "Stopping weupnp");
+			try {
+				gatewayDevice.deletePortMapping(Constante.NETWORK_PORT, "TCP");
+			} catch (IOException e) {
+				Gdx.app.log(CLASS_NAME, "IOException : " + e.getMessage());
+			} catch (SAXException e) {
+				Gdx.app.log(CLASS_NAME, "SAXException : " + e.getMessage());
+			}
+			Gdx.app.log(CLASS_NAME, "Port mapping removed");
 		}
-
-		Gdx.app.log(CLASS_NAME, "Port mapping removed");
-		Gdx.app.log(CLASS_NAME, "Test SUCCESSFUL");
 	}
-
 }

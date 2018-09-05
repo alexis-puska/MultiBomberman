@@ -45,7 +45,7 @@ public class WaitConnexionScreen implements Screen {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
-		
+
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
@@ -64,10 +64,10 @@ public class WaitConnexionScreen implements Screen {
 		}
 		if (game.getMenuInputProcessor().pressPrevious()) {
 			game.getScreen().dispose();
-			if (Context.getGameMode() == GameModeEnum.SERVER) {
+			if (Context.gameMode == GameModeEnum.SERVER) {
 				game.getNetworkService().stopServer();
 				game.setScreen(new ServerParamScreen(game));
-			} else if (Context.getGameMode() == GameModeEnum.CLIENT) {
+			} else if (Context.gameMode == GameModeEnum.CLIENT) {
 				game.setScreen(new ClientConnexionScreen(game));
 			}
 		}

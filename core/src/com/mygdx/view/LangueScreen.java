@@ -55,7 +55,7 @@ public class LangueScreen implements Screen {
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 1), 400, 100);
 		layout.setText(font, MessageService.getInstance().getMessage("menu.lang.title"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
-		switch (Context.getLocale()) {
+		switch (Context.locale) {
 		case ENGLISH:
 			cursor.updateCursorPosition(430, 70);
 			break;
@@ -80,28 +80,28 @@ public class LangueScreen implements Screen {
 			game.setScreen(new SplashScreen(game));
 		}
 		if (game.getMenuInputProcessor().pressLeft()) {
-			switch (Context.getLocale()) {
+			switch (Context.locale) {
 			case ENGLISH:
-				Context.setLocale(LocaleEnum.FRENCH);
+				Context.locale = LocaleEnum.FRENCH;
 				break;
 			case FRENCH:
-				Context.setLocale(LocaleEnum.ENGLISH);
+				Context.locale = LocaleEnum.ENGLISH;
 				break;
 			default:
-				Context.setLocale(LocaleEnum.ENGLISH);
+				Context.locale = LocaleEnum.ENGLISH;
 				break;
 			}
 		}
 		if (game.getMenuInputProcessor().pressRight()) {
-			switch (Context.getLocale()) {
+			switch (Context.locale) {
 			case ENGLISH:
-				Context.setLocale(LocaleEnum.FRENCH);
+				Context.locale = LocaleEnum.FRENCH;
 				break;
 			case FRENCH:
-				Context.setLocale(LocaleEnum.ENGLISH);
+				Context.locale = LocaleEnum.ENGLISH;
 				break;
 			default:
-				Context.setLocale(LocaleEnum.ENGLISH);
+				Context.locale = LocaleEnum.ENGLISH;
 				break;
 			}
 		}

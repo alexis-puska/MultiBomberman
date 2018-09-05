@@ -62,7 +62,7 @@ public class MainScreen implements Screen {
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 62);
 		layout.setText(font, MessageService.getInstance().getMessage("menu.network.client"));
 		font.draw(game.getBatch(), layout, 460 - (layout.width / 2), 62);
-		switch (Context.getGameMode()) {
+		switch (Context.gameMode) {
 		case LOCAL:
 			cursor.updateCursorPosition(166, 20);
 			break;
@@ -83,7 +83,7 @@ public class MainScreen implements Screen {
 	private void treatInput() {
 		if (game.getMenuInputProcessor().pressNext()) {
 			game.getScreen().dispose();
-			switch (Context.getGameMode()) {
+			switch (Context.gameMode) {
 			case LOCAL:
 				game.setScreen(new PlayerTypeScreen(game));
 				break;
@@ -103,35 +103,35 @@ public class MainScreen implements Screen {
 			game.setScreen(new LangueScreen(game));
 		}
 		if (game.getMenuInputProcessor().pressRight()) {
-			switch (Context.getGameMode()) {
+			switch (Context.gameMode) {
 			case LOCAL:
-				Context.setGameMode(GameModeEnum.SERVER);
+				Context.gameMode = GameModeEnum.SERVER;
 				break;
 			case SERVER:
-				Context.setGameMode(GameModeEnum.CLIENT);
+				Context.gameMode = GameModeEnum.CLIENT;
 				break;
 			case CLIENT:
-				Context.setGameMode(GameModeEnum.LOCAL);
+				Context.gameMode = GameModeEnum.LOCAL;
 				break;
 			default:
-				Context.setGameMode(GameModeEnum.LOCAL);
+				Context.gameMode = GameModeEnum.LOCAL;
 				break;
 
 			}
 		}
 		if (game.getMenuInputProcessor().pressLeft()) {
-			switch (Context.getGameMode()) {
+			switch (Context.gameMode) {
 			case LOCAL:
-				Context.setGameMode(GameModeEnum.CLIENT);
+				Context.gameMode = GameModeEnum.CLIENT;
 				break;
 			case SERVER:
-				Context.setGameMode(GameModeEnum.LOCAL);
+				Context.gameMode = GameModeEnum.LOCAL;
 				break;
 			case CLIENT:
-				Context.setGameMode(GameModeEnum.SERVER);
+				Context.gameMode = GameModeEnum.SERVER;
 				break;
 			default:
-				Context.setGameMode(GameModeEnum.LOCAL);
+				Context.gameMode = GameModeEnum.LOCAL;
 				break;
 			}
 		}

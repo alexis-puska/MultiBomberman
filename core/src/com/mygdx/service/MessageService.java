@@ -24,7 +24,7 @@ public class MessageService {
 	private MessageService() {
 		Gdx.app.log("MessageService", "Init");
 		baseFileHandle = Gdx.files.internal("i18n/message");
-		currentLocale = Context.getLocale();
+		currentLocale = Context.locale;
 		message = I18NBundle.createBundle(baseFileHandle, new Locale(currentLocale.getCode()));
 	}
 
@@ -32,8 +32,8 @@ public class MessageService {
 	 * Update Locale if the context change
 	 */
 	private void checkLocaleChange() {
-		if (Context.getLocale() != currentLocale) {
-			currentLocale = Context.getLocale();
+		if (Context.locale != currentLocale) {
+			currentLocale = Context.locale;
 			message = I18NBundle.createBundle(baseFileHandle, new Locale(currentLocale.getCode()));
 		}
 	}

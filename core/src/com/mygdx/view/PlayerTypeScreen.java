@@ -63,12 +63,12 @@ public class PlayerTypeScreen implements Screen {
 			game.setScreen(new SkinScreen(game));
 		}
 		if (game.getMenuInputProcessor().pressPrevious()) {
-			if (Context.getGameMode() == GameModeEnum.SERVER) {
+			if (Context.gameMode == GameModeEnum.SERVER) {
 				game.getNetworkService().stopServer();
 				game.setScreen(new ServerParamScreen(game));
-			} else if (Context.getGameMode() == GameModeEnum.CLIENT) {
+			} else if (Context.gameMode == GameModeEnum.CLIENT) {
 				game.setScreen(new ClientConnexionScreen(game));
-			} else if (Context.getGameMode() == GameModeEnum.LOCAL) {
+			} else if (Context.gameMode == GameModeEnum.LOCAL) {
 				game.setScreen(new MainScreen(game));
 			}
 		}
