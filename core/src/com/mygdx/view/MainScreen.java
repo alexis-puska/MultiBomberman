@@ -17,8 +17,9 @@ import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
+import com.mygdx.service.input_processor.MenuListener;
 
-public class MainScreen implements Screen {
+public class MainScreen implements Screen, MenuListener {
 
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
@@ -31,6 +32,8 @@ public class MainScreen implements Screen {
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
+		this.game.getMenuInputProcessor().changeMenuListeners(this);
+		this.game.getControllerAdapteur().changeMenuListeners(this);
 		initFont();
 	}
 
@@ -39,7 +42,6 @@ public class MainScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
-		treatInput();
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
@@ -78,63 +80,6 @@ public class MainScreen implements Screen {
 		}
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
-	}
-
-	private void treatInput() {
-		if (game.getMenuInputProcessor().pressNext()) {
-			game.getScreen().dispose();
-			switch (Context.gameMode) {
-			case LOCAL:
-				game.setScreen(new PlayerTypeScreen(game));
-				break;
-			case SERVER:
-				game.setScreen(new ServerParamScreen(game));
-				break;
-			case CLIENT:
-				game.setScreen(new ClientConnexionScreen(game));
-				break;
-			default:
-				game.setScreen(new PlayerTypeScreen(game));
-				break;
-			}
-		}
-		if (game.getMenuInputProcessor().pressPrevious()) {
-			game.getScreen().dispose();
-			game.setScreen(new LangueScreen(game));
-		}
-		if (game.getMenuInputProcessor().pressRight()) {
-			switch (Context.gameMode) {
-			case LOCAL:
-				Context.gameMode = GameModeEnum.SERVER;
-				break;
-			case SERVER:
-				Context.gameMode = GameModeEnum.CLIENT;
-				break;
-			case CLIENT:
-				Context.gameMode = GameModeEnum.LOCAL;
-				break;
-			default:
-				Context.gameMode = GameModeEnum.LOCAL;
-				break;
-
-			}
-		}
-		if (game.getMenuInputProcessor().pressLeft()) {
-			switch (Context.gameMode) {
-			case LOCAL:
-				Context.gameMode = GameModeEnum.CLIENT;
-				break;
-			case SERVER:
-				Context.gameMode = GameModeEnum.LOCAL;
-				break;
-			case CLIENT:
-				Context.gameMode = GameModeEnum.SERVER;
-				break;
-			default:
-				Context.gameMode = GameModeEnum.LOCAL;
-				break;
-			}
-		}
 	}
 
 	@Override
@@ -178,4 +123,82 @@ public class MainScreen implements Screen {
 		generator.dispose();
 	}
 
+	@Override
+	public void pressStart() {
+		game.getScreen().dispose();
+		switch (Context.gameMode) {
+		case LOCAL:
+			game.setScreen(new PlayerTypeScreen(game));
+			break;
+		case SERVER:
+			game.setScreen(new ServerParamScreen(game));
+			break;
+		case CLIENT:
+			game.setScreen(new ClientConnexionScreen(game));
+			break;
+		default:
+			game.setScreen(new PlayerTypeScreen(game));
+			break;
+		}
+	}
+
+	@Override
+	public void pressSelect() {
+		game.getScreen().dispose();
+		game.setScreen(new LangueScreen(game));
+	}
+
+	@Override
+	public void pressValide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressUp() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressDown() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressLeft() {
+		switch (Context.gameMode) {
+		case LOCAL:
+			Context.gameMode = GameModeEnum.CLIENT;
+			break;
+		case SERVER:
+			Context.gameMode = GameModeEnum.LOCAL;
+			break;
+		case CLIENT:
+			Context.gameMode = GameModeEnum.SERVER;
+			break;
+		default:
+			Context.gameMode = GameModeEnum.LOCAL;
+			break;
+		}
+	}
+
+	@Override
+	public void pressRight() {
+		switch (Context.gameMode) {
+		case LOCAL:
+			Context.gameMode = GameModeEnum.SERVER;
+			break;
+		case SERVER:
+			Context.gameMode = GameModeEnum.CLIENT;
+			break;
+		case CLIENT:
+			Context.gameMode = GameModeEnum.LOCAL;
+			break;
+		default:
+			Context.gameMode = GameModeEnum.LOCAL;
+			break;
+		}
+	}
 }

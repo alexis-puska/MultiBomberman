@@ -16,13 +16,14 @@ import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
+import com.mygdx.service.input_processor.MenuListener;
 
-public class ServerParamScreen implements Screen {
+public class ServerParamScreen implements Screen, MenuListener {
 
 	private static final int COLUMN1 = 40;
 	private static final int COLUMN2 = 310;
 	private static final int COLUMN3 = 340;
-	
+
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
@@ -35,6 +36,8 @@ public class ServerParamScreen implements Screen {
 		this.cursor = new Cursor(COLUMN2, 180);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
+		this.game.getMenuInputProcessor().changeMenuListeners(this);
+		this.game.getControllerAdapteur().changeMenuListeners(this);
 		initFont();
 	}
 
@@ -43,7 +46,6 @@ public class ServerParamScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
-		treatInput();
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
@@ -106,94 +108,6 @@ public class ServerParamScreen implements Screen {
 		game.getBatch().end();
 	}
 
-	private void treatInput() {
-		if (game.getMenuInputProcessor().pressNext()) {
-			if (game.getNetworkService().initServer()) {
-				game.getScreen().dispose();
-				game.setScreen(new WaitConnexionScreen(game));
-			}
-		}
-		if (game.getMenuInputProcessor().pressPrevious()) {
-			game.getScreen().dispose();
-			game.setScreen(new MainScreen(game));
-		}
-		if (game.getMenuInputProcessor().pressUp()) {
-			cursorPosition--;
-			if (cursorPosition < 0) {
-				cursorPosition = 0;
-			}
-		}
-		if (game.getMenuInputProcessor().pressDown()) {
-			cursorPosition++;
-			if (cursorPosition > 3) {
-				cursorPosition = 3;
-			}
-		}
-		if (game.getMenuInputProcessor().pressLeft()) {
-			switch (cursorPosition) {
-			case 0:
-				Context.externalPlayer--;
-				if (Context.externalPlayer < 0) {
-					Context.externalPlayer = 0;
-				}
-				break;
-			case 1:
-				Context.localPlayer--;
-				if (Context.localPlayer < 0) {
-					Context.localPlayer = 0;
-				}
-				break;
-			case 2:
-				Context.port--;
-				if (Context.port < 0) {
-					Context.port = 0;
-				}
-				break;
-			case 3:
-				if (Context.useUpnp) {
-					Context.useUpnp = false;
-				} else {
-					Context.useUpnp = true;
-				}
-				break;
-			}
-		}
-		if (game.getMenuInputProcessor().pressRight()) {
-			switch (cursorPosition) {
-			case 0:
-				if (Context.localPlayer + Context.externalPlayer < 16) {
-					Context.externalPlayer++;
-					if (Context.externalPlayer > 16) {
-						Context.externalPlayer = 16;
-					}
-				}
-				break;
-			case 1:
-				if (Context.localPlayer + Context.externalPlayer < 16) {
-					Context.localPlayer++;
-					if (Context.localPlayer > 16) {
-						Context.localPlayer = 16;
-					}
-				}
-				break;
-			case 2:
-				Context.port++;
-				if (Context.port > 65535) {
-					Context.port = 65535;
-				}
-				break;
-			case 3:
-				if (Context.useUpnp) {
-					Context.useUpnp = false;
-				} else {
-					Context.useUpnp = true;
-				}
-				break;
-			}
-		}
-
-	}
-
 	@Override
 	public void show() {
 		// unused method
@@ -233,6 +147,109 @@ public class ServerParamScreen implements Screen {
 		parameter.color = new Color(255, 0, 0, 255);
 		font = generator.generateFont(parameter);
 		generator.dispose();
+	}
+
+	@Override
+	public void pressStart() {
+		if (game.getNetworkService().initServer()) {
+			game.getScreen().dispose();
+			game.setScreen(new WaitConnexionScreen(game));
+		}
+	}
+
+	@Override
+	public void pressSelect() {
+		game.getScreen().dispose();
+		game.setScreen(new MainScreen(game));
+	}
+
+	@Override
+	public void pressValide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressUp() {
+		cursorPosition--;
+		if (cursorPosition < 0) {
+			cursorPosition = 0;
+		}
+	}
+
+	@Override
+	public void pressDown() {
+		cursorPosition++;
+		if (cursorPosition > 3) {
+			cursorPosition = 3;
+		}
+	}
+
+	@Override
+	public void pressLeft() {
+		switch (cursorPosition) {
+		case 0:
+			Context.externalPlayer--;
+			if (Context.externalPlayer < 0) {
+				Context.externalPlayer = 0;
+			}
+			break;
+		case 1:
+			Context.localPlayer--;
+			if (Context.localPlayer < 0) {
+				Context.localPlayer = 0;
+			}
+			break;
+		case 2:
+			Context.port--;
+			if (Context.port < 0) {
+				Context.port = 0;
+			}
+			break;
+		case 3:
+			if (Context.useUpnp) {
+				Context.useUpnp = false;
+			} else {
+				Context.useUpnp = true;
+			}
+			break;
+		}
+	}
+
+	@Override
+	public void pressRight() {
+		switch (cursorPosition) {
+		case 0:
+			if (Context.localPlayer + Context.externalPlayer < 16) {
+				Context.externalPlayer++;
+				if (Context.externalPlayer > 16) {
+					Context.externalPlayer = 16;
+				}
+			}
+			break;
+		case 1:
+			if (Context.localPlayer + Context.externalPlayer < 16) {
+				Context.localPlayer++;
+				if (Context.localPlayer > 16) {
+					Context.localPlayer = 16;
+				}
+			}
+			break;
+		case 2:
+			Context.port++;
+			if (Context.port > 65535) {
+				Context.port = 65535;
+			}
+			break;
+		case 3:
+			if (Context.useUpnp) {
+				Context.useUpnp = false;
+			} else {
+				Context.useUpnp = true;
+			}
+			break;
+		}
+
 	}
 
 }

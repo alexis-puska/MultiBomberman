@@ -19,8 +19,9 @@ import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
+import com.mygdx.service.input_processor.MenuListener;
 
-public class PlayerTypeScreen implements Screen {
+public class PlayerTypeScreen implements Screen, MenuListener {
 
 	private final static int START_X = 100;
 	private final static int START_Y = 170;
@@ -41,6 +42,8 @@ public class PlayerTypeScreen implements Screen {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.cursorPosition = 0;
+		this.game.getMenuInputProcessor().changeMenuListeners(this);
+		this.game.getControllerAdapteur().changeMenuListeners(this);
 		initFont();
 	}
 
@@ -49,7 +52,6 @@ public class PlayerTypeScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
-		treatInput();
 		updateCursorPosition();
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
@@ -76,68 +78,6 @@ public class PlayerTypeScreen implements Screen {
 
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
-	}
-
-	private void treatInput() {
-		if (game.getMenuInputProcessor().pressNext()) {
-			game.getScreen().dispose();
-			game.setScreen(new SkinScreen(game));
-		}
-		if (game.getMenuInputProcessor().pressPrevious()) {
-			if (Context.gameMode == GameModeEnum.SERVER) {
-				game.getNetworkService().stopServer();
-				game.setScreen(new ServerParamScreen(game));
-			} else if (Context.gameMode == GameModeEnum.LOCAL) {
-				game.setScreen(new MainScreen(game));
-			}
-		}
-
-		if (game.getMenuInputProcessor().pressValide()) {
-			PlayerDefinition def = Context.playerType.get(cursorPosition);
-			PlayerTypeEnum newPlayerType = PlayerTypeEnum.HUMAN;
-			switch (def.getPlayerType()) {
-			case CPU:
-				newPlayerType = PlayerTypeEnum.HUMAN;
-				break;
-			case HUMAN:
-				if (Context.gameMode == GameModeEnum.SERVER) {
-					newPlayerType = PlayerTypeEnum.NET;
-				} else {
-					newPlayerType = PlayerTypeEnum.CPU;
-				}
-				break;
-			case NET:
-				newPlayerType = PlayerTypeEnum.CPU;
-				break;
-			}
-			def.setPlayerType(newPlayerType);
-			Context.playerType.put(cursorPosition, def);
-		}
-
-		if (game.getMenuInputProcessor().pressLeft()) {
-			cursorPosition--;
-			if (cursorPosition < 0) {
-				cursorPosition = 15;
-			}
-		}
-		if (game.getMenuInputProcessor().pressRight()) {
-			cursorPosition++;
-			if (cursorPosition > 15) {
-				cursorPosition = 0;
-			}
-		}
-		if (game.getMenuInputProcessor().pressUp()) {
-			cursorPosition -= 4;
-			if (cursorPosition < 0) {
-				cursorPosition = 16 + cursorPosition;
-			}
-		}
-		if (game.getMenuInputProcessor().pressDown()) {
-			cursorPosition += 4;
-			if (cursorPosition > 15) {
-				cursorPosition = cursorPosition - 16;
-			}
-		}
 	}
 
 	@Override
@@ -185,5 +125,76 @@ public class PlayerTypeScreen implements Screen {
 		int col = cursorPosition % NB_COL;
 		int row = cursorPosition / NB_COL;
 		cursor.updateCursorPosition((START_X + (col * COL_SIZE)) - 20, (START_Y - (row * ROW_SIZE)) - 15);
+	}
+
+	@Override
+	public void pressStart() {
+		game.getScreen().dispose();
+		game.setScreen(new SkinScreen(game));
+	}
+
+	@Override
+	public void pressSelect() {
+		if (Context.gameMode == GameModeEnum.SERVER) {
+			game.getNetworkService().stopServer();
+			game.setScreen(new ServerParamScreen(game));
+		} else if (Context.gameMode == GameModeEnum.LOCAL) {
+			game.setScreen(new MainScreen(game));
+		}
+	}
+
+	@Override
+	public void pressValide() {
+		PlayerDefinition def = Context.playerType.get(cursorPosition);
+		PlayerTypeEnum newPlayerType = PlayerTypeEnum.HUMAN;
+		switch (def.getPlayerType()) {
+		case CPU:
+			newPlayerType = PlayerTypeEnum.HUMAN;
+			break;
+		case HUMAN:
+			if (Context.gameMode == GameModeEnum.SERVER) {
+				newPlayerType = PlayerTypeEnum.NET;
+			} else {
+				newPlayerType = PlayerTypeEnum.CPU;
+			}
+			break;
+		case NET:
+			newPlayerType = PlayerTypeEnum.CPU;
+			break;
+		}
+		def.setPlayerType(newPlayerType);
+		Context.playerType.put(cursorPosition, def);
+	}
+
+	@Override
+	public void pressUp() {
+		cursorPosition -= 4;
+		if (cursorPosition < 0) {
+			cursorPosition = 16 + cursorPosition;
+		}
+	}
+
+	@Override
+	public void pressDown() {
+		cursorPosition += 4;
+		if (cursorPosition > 15) {
+			cursorPosition = cursorPosition - 16;
+		}
+	}
+
+	@Override
+	public void pressLeft() {
+		cursorPosition--;
+		if (cursorPosition < 0) {
+			cursorPosition = 15;
+		}
+	}
+
+	@Override
+	public void pressRight() {
+		cursorPosition++;
+		if (cursorPosition > 15) {
+			cursorPosition = 0;
+		}
 	}
 }

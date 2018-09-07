@@ -6,13 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
+import com.mygdx.service.input_processor.MenuListener;
 
-public class SplashScreen implements Screen {
+public class SplashScreen implements MenuListener, Screen {
 
 	final MultiBombermanGame game;
 
 	public SplashScreen(final MultiBombermanGame game) {
 		this.game = game;
+		this.game.getMenuInputProcessor().changeMenuListeners(this);
+		this.game.getControllerAdapteur().changeMenuListeners(this);
 	}
 
 	@Override
@@ -20,16 +23,9 @@ public class SplashScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
-
-		if (game.getMenuInputProcessor().pressNext()) {
-			game.getScreen().dispose();
-			game.setScreen(new LangueScreen(game));
-		}
-
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
 		game.getBatch().end();
-
 	}
 
 	@Override
@@ -62,4 +58,45 @@ public class SplashScreen implements Screen {
 		// unused method
 	}
 
+	@Override
+	public void pressStart() {
+		game.getScreen().dispose();
+		game.setScreen(new LangueScreen(game));
+	}
+
+	@Override
+	public void pressSelect() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressValide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressUp() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressDown() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressLeft() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressRight() {
+		// TODO Auto-generated method stub
+
+	}
 }

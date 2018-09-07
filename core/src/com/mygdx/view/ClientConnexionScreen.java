@@ -14,8 +14,9 @@ import com.mygdx.domain.Cursor;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
+import com.mygdx.service.input_processor.MenuListener;
 
-public class ClientConnexionScreen implements Screen {
+public class ClientConnexionScreen implements Screen, MenuListener{
 
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
@@ -28,6 +29,8 @@ public class ClientConnexionScreen implements Screen {
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
+		this.game.getMenuInputProcessor().changeMenuListeners(this);
+		this.game.getControllerAdapteur().changeMenuListeners(this);
 		initFont();
 	}
 
@@ -36,7 +39,6 @@ public class ClientConnexionScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
-		treatInput();
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
@@ -54,16 +56,7 @@ public class ClientConnexionScreen implements Screen {
 		game.getBatch().end();
 	}
 
-	private void treatInput() {
-		if (game.getMenuInputProcessor().pressNext()) {
-			game.getScreen().dispose();
-			game.setScreen(new WaitConnexionScreen(game));
-		}
-		if (game.getMenuInputProcessor().pressPrevious()) {
-			game.getScreen().dispose();
-			game.setScreen(new MainScreen(game));
-		}
-	}
+	
 
 	@Override
 	public void show() {
@@ -106,5 +99,41 @@ public class ClientConnexionScreen implements Screen {
 		generator.dispose();
 	}
 
+	@Override
+	public void pressStart() {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void pressSelect() {
+		game.getScreen().dispose();
+		game.setScreen(new MainScreen(game));
+	}
+
+	@Override
+	public void pressValide() {
+		game.getScreen().dispose();
+		game.setScreen(new WaitConnexionScreen(game));
+	}
+
+	@Override
+	public void pressUp() {
+		// unused method
+	}
+
+	@Override
+	public void pressDown() {
+		// unused method
+	}
+
+	@Override
+	public void pressLeft() {
+		// unused method
+	}
+
+	@Override
+	public void pressRight() {
+		// unused method
+	}
 }

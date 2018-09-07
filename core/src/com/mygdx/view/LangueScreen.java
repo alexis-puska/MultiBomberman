@@ -17,8 +17,9 @@ import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
+import com.mygdx.service.input_processor.MenuListener;
 
-public class LangueScreen implements Screen {
+public class LangueScreen implements Screen, MenuListener {
 
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
@@ -31,6 +32,8 @@ public class LangueScreen implements Screen {
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
+		this.game.getMenuInputProcessor().changeMenuListeners(this);
+		this.game.getControllerAdapteur().changeMenuListeners(this);
 		initFont();
 	}
 
@@ -39,7 +42,6 @@ public class LangueScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
-		treatInput();
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
@@ -68,43 +70,6 @@ public class LangueScreen implements Screen {
 		}
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
-	}
-
-	private void treatInput() {
-		if (game.getMenuInputProcessor().pressNext()) {
-			game.getScreen().dispose();
-			game.setScreen(new MainScreen(game));
-		}
-		if (game.getMenuInputProcessor().pressPrevious()) {
-			game.getScreen().dispose();
-			game.setScreen(new SplashScreen(game));
-		}
-		if (game.getMenuInputProcessor().pressLeft()) {
-			switch (Context.locale) {
-			case ENGLISH:
-				Context.locale = LocaleEnum.FRENCH;
-				break;
-			case FRENCH:
-				Context.locale = LocaleEnum.ENGLISH;
-				break;
-			default:
-				Context.locale = LocaleEnum.ENGLISH;
-				break;
-			}
-		}
-		if (game.getMenuInputProcessor().pressRight()) {
-			switch (Context.locale) {
-			case ENGLISH:
-				Context.locale = LocaleEnum.FRENCH;
-				break;
-			case FRENCH:
-				Context.locale = LocaleEnum.ENGLISH;
-				break;
-			default:
-				Context.locale = LocaleEnum.ENGLISH;
-				break;
-			}
-		}
 	}
 
 	@Override
@@ -146,5 +111,65 @@ public class LangueScreen implements Screen {
 		parameter.color = new Color(255, 0, 0, 255);
 		font = generator.generateFont(parameter);
 		generator.dispose();
+	}
+
+	@Override
+	public void pressStart() {
+		game.getScreen().dispose();
+		game.setScreen(new MainScreen(game));
+	}
+
+	@Override
+	public void pressSelect() {
+		game.getScreen().dispose();
+		game.setScreen(new SplashScreen(game));
+	}
+
+	@Override
+	public void pressValide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressUp() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressDown() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressLeft() {
+		switch (Context.locale) {
+		case ENGLISH:
+			Context.locale = LocaleEnum.FRENCH;
+			break;
+		case FRENCH:
+			Context.locale = LocaleEnum.ENGLISH;
+			break;
+		default:
+			Context.locale = LocaleEnum.ENGLISH;
+			break;
+		}
+	}
+
+	@Override
+	public void pressRight() {
+		switch (Context.locale) {
+		case ENGLISH:
+			Context.locale = LocaleEnum.FRENCH;
+			break;
+		case FRENCH:
+			Context.locale = LocaleEnum.ENGLISH;
+			break;
+		default:
+			Context.locale = LocaleEnum.ENGLISH;
+			break;
+		}
 	}
 }

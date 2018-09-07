@@ -14,8 +14,9 @@ import com.mygdx.domain.Cursor;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
+import com.mygdx.service.input_processor.MenuListener;
 
-public class RulesScreen implements Screen {
+public class RulesScreen implements Screen, MenuListener {
 
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
@@ -28,6 +29,8 @@ public class RulesScreen implements Screen {
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
+		this.game.getMenuInputProcessor().changeMenuListeners(this);
+		this.game.getControllerAdapteur().changeMenuListeners(this);
 		initFont();
 	}
 
@@ -36,14 +39,13 @@ public class RulesScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
-		treatInput();
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
 		game.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
-		
+
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
@@ -53,17 +55,6 @@ public class RulesScreen implements Screen {
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
-	}
-
-	private void treatInput() {
-		if (game.getMenuInputProcessor().pressNext()) {
-			game.getScreen().dispose();
-			game.setScreen(new LevelScreen(game));
-		}
-		if (game.getMenuInputProcessor().pressPrevious()) {
-			game.getScreen().dispose();
-			game.setScreen(new SkinScreen(game));
-		}
 	}
 
 	@Override
@@ -105,6 +96,48 @@ public class RulesScreen implements Screen {
 		parameter.color = new Color(255, 0, 0, 255);
 		font = generator.generateFont(parameter);
 		generator.dispose();
+	}
+
+	@Override
+	public void pressStart() {
+		game.getScreen().dispose();
+		game.setScreen(new LevelScreen(game));
+	}
+
+	@Override
+	public void pressSelect() {
+		game.getScreen().dispose();
+		game.setScreen(new SkinScreen(game));
+	}
+
+	@Override
+	public void pressValide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressUp() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressDown() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressLeft() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressRight() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
