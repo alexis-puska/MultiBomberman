@@ -1,27 +1,28 @@
 package com.mygdx.service.input_processor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
 
-public class ControllerAdapteur implements ControllerListener {
+import lombok.Getter;
+
+@Getter
+public class ControllerAdapter implements ControllerListener {
 
 	private MenuListener menuListener;
 	private Controller controller;
+	private final boolean first;
 
-	public ControllerAdapteur(Controller controller) {
+	public ControllerAdapter(final Controller controller, boolean first) {
 		this.controller = controller;
-	}
-
-	public ControllerAdapteur() {
-	}
-
-	public void setController(Controller controller) {
-		this.controller = controller;
+		this.first = first;
+		this.controller.addListener(this);
 	}
 
 	public void changeMenuListeners(MenuListener listener) {
+		Gdx.app.log("Controller adapter ", "class : " + listener.getClass().getName());
 		this.menuListener = listener;
 	}
 
@@ -90,7 +91,7 @@ public class ControllerAdapteur implements ControllerListener {
 	@Override
 	public boolean povMoved(Controller controller, int povCode, PovDirection value) {
 		if (this.menuListener != null) {
-			if (this.controller != null && this.controller.equals(controller) && povCode == 0) {
+			if (this.controller != null && this.controller.equals(controller)) {
 				switch (value) {
 				case center:
 					break;
@@ -143,6 +144,10 @@ public class ControllerAdapteur implements ControllerListener {
 	@Override
 	public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
 		return false;
+	}
+
+	public void setController(final Controller controller) {
+		this.controller = controller;
 	}
 
 }

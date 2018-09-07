@@ -15,7 +15,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 	public ClientViewScreen(final MultiBombermanGame game) {
 		this.game = game;
 		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapteur().changeMenuListeners(this);
+		this.game.getControllerAdapter().changeMenuListeners(this);
 	}
 
 	@Override

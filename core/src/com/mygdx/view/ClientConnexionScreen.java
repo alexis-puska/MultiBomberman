@@ -30,7 +30,7 @@ public class ClientConnexionScreen implements Screen, MenuListener{
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapteur().changeMenuListeners(this);
+		this.game.getControllerAdapter().changeMenuListeners(this);
 		initFont();
 	}
 

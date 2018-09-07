@@ -43,7 +43,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 		this.shapeRenderer = new ShapeRenderer();
 		this.cursorPosition = 0;
 		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapteur().changeMenuListeners(this);
+		this.game.getControllerAdapter().changeMenuListeners(this);
 		initFont();
 	}
 
