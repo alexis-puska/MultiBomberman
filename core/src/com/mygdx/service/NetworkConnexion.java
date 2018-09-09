@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.net.Socket;
 
 public class NetworkConnexion extends Thread {
@@ -14,13 +15,16 @@ public class NetworkConnexion extends Thread {
 	private final String remoteAddress;
 	private static boolean status;
 
+	private PlayerService playerService;
+	private int player;
+
 	public NetworkConnexion(Socket socket) {
 		status = true;
 		this.socket = socket;
 		this.remoteAddress = socket.getRemoteAddress();
 		Gdx.app.log("NetworkConnexion", String.format("new client connexion : %s", remoteAddress));
 	}
-	
+
 	public void close() {
 		Gdx.app.log("NetworkConnexion", String.format("fermeture connexion de : %s", remoteAddress));
 		socket.dispose();
@@ -41,7 +45,7 @@ public class NetworkConnexion extends Thread {
 					break;
 				}
 				Gdx.app.log("NetworkConnexion", String.format("recu de %s : %s", remoteAddress, received));
-
+				decode(received);
 				if (received.equals("end")) {
 					Gdx.app.log("NetworkConnexion", String.format("Deconnection de : %s", remoteAddress));
 					socket.dispose();
@@ -52,5 +56,9 @@ public class NetworkConnexion extends Thread {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void decode(String received) {
+		playerService.move(this, 0, PovDirection.center);
 	}
 }

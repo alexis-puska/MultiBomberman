@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.constante.Constante;
+import com.mygdx.view.SkinScreen;
 
 public class MenuInputProcessor implements InputProcessor {
 
@@ -21,44 +22,56 @@ public class MenuInputProcessor implements InputProcessor {
 	 ***************************/
 	@Override
 	public boolean keyDown(int keycode) {
-
 		if (menuListener != null) {
-			switch (keycode) {
-			case Keys.ENTER:
-				this.menuListener.pressStart();
-				break;
-			case Keys.SPACE:
-				this.menuListener.pressValide();
-				break;
-			case Keys.SHIFT_RIGHT:
-				this.menuListener.pressSelect();
-				break;
-			case Keys.UP:
-				this.menuListener.pressUp();
-				break;
-			case Keys.DOWN:
-				this.menuListener.pressDown();
-				break;
-			case Keys.LEFT:
-				this.menuListener.pressLeft();
-				break;
-			case Keys.RIGHT:
-				this.menuListener.pressRight();
-				break;
-			case Keys.CONTROL_LEFT:
-			case Keys.CONTROL_RIGHT:
-				ctrl = true;
-				break;
-			case Keys.F:
-				if (ctrl) {
-					toogleScreen();
-				}
-				break;
-			default:
+			if (!menuListener.getClass().isInstance(SkinScreen.class)) {
+				switch (keycode) {
+				case Keys.ENTER:
+					this.menuListener.pressStart();
+					break;
+				case Keys.SPACE:
+					this.menuListener.pressValide();
+					break;
+				case Keys.SHIFT_RIGHT:
+					this.menuListener.pressSelect();
+					break;
+				case Keys.UP:
+					this.menuListener.pressUp();
+					break;
+				case Keys.DOWN:
+					this.menuListener.pressDown();
+					break;
+				case Keys.LEFT:
+					this.menuListener.pressLeft();
+					break;
+				case Keys.RIGHT:
+					this.menuListener.pressRight();
+					break;
+				case Keys.CONTROL_LEFT:
+				case Keys.CONTROL_RIGHT:
+					ctrl = true;
+					break;
+				case Keys.F:
+					if (ctrl) {
+						toogleScreen();
+					}
+					break;
+				default:
 
+				}
+			} else if (menuListener.getClass().isInstance(SkinScreen.class)) {
+				Gdx.app.log("ControllerAdapter", "SkinScreen specifique code");
+				switch (keycode) {
+				case Keys.UP:
+					break;
+				case Keys.DOWN:
+					break;
+				case Keys.LEFT:
+					break;
+				case Keys.RIGHT:
+					break;
+				}
 			}
 		}
-
 		return false;
 	}
 

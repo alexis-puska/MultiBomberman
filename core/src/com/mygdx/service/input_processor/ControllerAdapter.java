@@ -1,28 +1,29 @@
 package com.mygdx.service.input_processor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.domain.Player;
+import com.mygdx.view.SkinScreen;
 
-import lombok.Getter;
-
-@Getter
 public class ControllerAdapter implements ControllerListener {
 
 	private MenuListener menuListener;
-	private Controller controller;
-	private final boolean first;
+	private Array<Controller> controllers;
+	private Map<Controller, ControlEventListener> mapControl;
 
-	public ControllerAdapter(final Controller controller, boolean first) {
-		this.controller = controller;
-		this.first = first;
-		this.controller.addListener(this);
+	public ControllerAdapter(final Array<Controller> controllers) {
+		this.controllers = controllers;
+		this.mapControl = new HashMap<>();
 	}
 
 	public void changeMenuListeners(MenuListener listener) {
-		Gdx.app.log("Controller adapter ", "class : " + listener.getClass().getName());
 		this.menuListener = listener;
 	}
 
@@ -39,39 +40,22 @@ public class ControllerAdapter implements ControllerListener {
 	@Override
 	public boolean buttonDown(Controller controller, int buttonCode) {
 		if (this.menuListener != null) {
-
-			if (this.controller != null && this.controller.equals(controller)) {
-				switch (buttonCode) {
-				case 0:
-					menuListener.pressValide();
-					break;
-				case 1:
-					menuListener.pressValide();
-					break;
-				case 2:
-					break;
-				case 3:
-					break;
-				case 4:
-					break;
-				case 5:
-					break;
-				case 6:
-					break;
-				case 7:
-					break;
-				case 8:
-					menuListener.pressSelect();
-					break;
-				case 9:
-					menuListener.pressStart();
-					break;
-				case 10:
-					break;
-				case 11:
-					break;
-				case 12:
-					break;
+			if (this.controllers != null) {
+				if (this.controllers.first().equals(controller)) {
+					switch (buttonCode) {
+					case 0:
+						menuListener.pressValide();
+						break;
+					case 1:
+						menuListener.pressValide();
+						break;
+					case 8:
+						menuListener.pressSelect();
+						break;
+					case 9:
+						menuListener.pressStart();
+						break;
+					}
 				}
 			}
 		}
@@ -91,7 +75,7 @@ public class ControllerAdapter implements ControllerListener {
 	@Override
 	public boolean povMoved(Controller controller, int povCode, PovDirection value) {
 		if (this.menuListener != null) {
-			if (this.controller != null && this.controller.equals(controller)) {
+			if (this.controllers != null && this.controllers.first().equals(controller)) {
 				switch (value) {
 				case center:
 					break;
@@ -127,6 +111,13 @@ public class ControllerAdapter implements ControllerListener {
 					break;
 				}
 			}
+			if (menuListener.getClass().isInstance(SkinScreen.class)) {
+				Gdx.app.log("ControllerAdapter", "SkinScreen specifique code");
+			}
+		}
+		if (mapControl.containsKey(controller)) {
+			ControlEventListener listener = mapControl.get(controller);
+			listener.move(value);
 		}
 		return false;
 	}
@@ -146,8 +137,8 @@ public class ControllerAdapter implements ControllerListener {
 		return false;
 	}
 
-	public void setController(final Controller controller) {
-		this.controller = controller;
+	public void addPlayer(Player player) {
+		mapControl.put(controllers.first(), player);
 	}
 
 }

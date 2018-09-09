@@ -9,8 +9,8 @@ import java.net.UnknownHostException;
 
 import com.badlogic.gdx.Gdx;
 import com.mygdx.constante.Constante;
+import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.service.network.Server;
-import com.mygdx.service.network.ServerPortAlreadyInUseException;
 import com.mygdx.service.network.UpnpService;
 
 public class NetworkService {
@@ -18,11 +18,10 @@ public class NetworkService {
 	private final static String CLASS_NAME = "NetworkService";
 	private Server server;
 	private UpnpService upnpService;
-	
+
 	private String externalIp;
 	private String hostName;
 	private String internetIp;
-	
 
 	public NetworkService() {
 		upnpService = new UpnpService();
@@ -88,5 +87,5 @@ public class NetworkService {
 	public String getInternetIp() {
 		return internetIp;
 	}
-	
+
 }

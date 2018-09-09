@@ -71,7 +71,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
 				layout.setText(font, MessageService.getInstance().getMessage("game.menu.player") + pos + " : "
-						+ Context.playerType.get(pos).getPlayerType().toString());
+						+ Context.playerType[pos].getPlayerType().toString());
 				font.draw(game.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
 			}
 		}
@@ -145,7 +145,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-		PlayerDefinition def = Context.playerType.get(cursorPosition);
+		PlayerDefinition def = Context.playerType[cursorPosition];
 		PlayerTypeEnum newPlayerType = PlayerTypeEnum.HUMAN;
 		switch (def.getPlayerType()) {
 		case CPU:
@@ -163,7 +163,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 			break;
 		}
 		def.setPlayerType(newPlayerType);
-		Context.playerType.put(cursorPosition, def);
+		Context.playerType[cursorPosition] = def;
 	}
 
 	@Override

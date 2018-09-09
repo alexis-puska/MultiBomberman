@@ -55,9 +55,7 @@ public class MultiBombermanGame extends Game {
 		Gdx.input.setInputProcessor(menuInputProcessor);
 
 		Array<Controller> controllers = Controllers.getControllers();
-		if (controllers != null && controllers.size > 0) {
-			controllerAdapter = new ControllerAdapter(controllers.first(), true);
-		}
+		controllerAdapter = new ControllerAdapter(controllers);
 		this.setScreen(new SplashScreen(this));
 	}
 
@@ -72,17 +70,10 @@ public class MultiBombermanGame extends Game {
 			public void run() {
 				try {
 					Thread.sleep(1000);
-					Array<Controller> controllers = Controllers.getControllers();
-					controllers.forEach(c->{
-						c.removeListener(controllerAdapter);
-					});
-					if (controllers != null && controllers.size > 0) {
-						controllerAdapter.setController(controllers.first());
-						controllers.first().addListener(controllerAdapter);
-					}
+					Controllers.clearListeners();
+					Controllers.addListener(controllerAdapter);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Gdx.app.error("MultiBomberman", "Resize thread error");
 				}
 			};
 		}).start();
