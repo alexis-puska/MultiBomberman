@@ -15,6 +15,7 @@ import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.input_processor.ControlEventListener;
+import com.mygdx.service.network.server.NetworkConnexion;
 import com.mygdx.view.GameScreen;
 import com.mygdx.view.SkinScreen;
 

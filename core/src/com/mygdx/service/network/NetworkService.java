@@ -1,4 +1,4 @@
-package com.mygdx.service;
+package com.mygdx.service.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,17 +8,23 @@ import java.net.URL;
 import java.net.UnknownHostException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net.Protocol;
+import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.net.SocketHints;
 import com.mygdx.constante.Constante;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.game.MultiBombermanGame;
-import com.mygdx.service.network.Server;
-import com.mygdx.service.network.UpnpService;
+import com.mygdx.service.Context;
+import com.mygdx.service.network.client.Client;
+import com.mygdx.service.network.server.Server;
+import com.mygdx.service.network.server.UpnpService;
 
 public class NetworkService {
 
 	private final static String CLASS_NAME = "NetworkService";
 	private final MultiBombermanGame game;
 	private Server server;
+	private Socket client;
 	private UpnpService upnpService;
 
 	private String externalIp;
@@ -32,6 +38,9 @@ public class NetworkService {
 		retrieveIp();
 	}
 
+	/***********************************
+	 * ----- Server part -----
+	 ***********************************/
 	public boolean initServer() {
 		server = new Server(game);
 		try {
@@ -54,6 +63,23 @@ public class NetworkService {
 		server.kill();
 	}
 
+	/***********************************
+	 * ----- client part -----
+	 ***********************************/
+	public void connectToServer(int port, String ip) {
+		SocketHints socketHints = new SocketHints();
+		socketHints.connectTimeout = 1000;
+		this.client = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
+		if (client.isConnected()) {
+			Gdx.app.log("NetworkService", "connected !");
+			Client client = new Client(game, this.client);
+			client.start();
+		}
+	}
+
+	/***********************************
+	 * ----- other -----
+	 ***********************************/
 	private void retrieveIp() {
 		try {
 			URL whatismyip = new URL(Constante.NETWORK_IP_SERVICE);

@@ -1,4 +1,4 @@
-package com.mygdx.service.network;
+package com.mygdx.service.network.server;
 
 import java.io.IOException;
 import java.net.InetAddress;

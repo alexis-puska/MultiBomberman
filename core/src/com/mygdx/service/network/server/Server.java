@@ -1,6 +1,7 @@
-package com.mygdx.service.network;
+package com.mygdx.service.network.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
-import com.mygdx.service.NetworkConnexion;
 
 public class Server extends Thread {
 
@@ -60,6 +60,7 @@ public class Server extends Thread {
 	public void init() throws ServerPortAlreadyInUseException {
 		status = true;
 		temporaryConnexion = new ArrayList<>();
+		valideConnexion = new HashMap<>();
 		ServerSocketHints serverSocketHint = new ServerSocketHints();
 		serverSocketHint.acceptTimeout = 0;
 		serverSocketHint.reuseAddress = true;

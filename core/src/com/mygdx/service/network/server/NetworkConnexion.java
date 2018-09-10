@@ -1,4 +1,4 @@
-package com.mygdx.service;
+package com.mygdx.service.network.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.net.Socket;
 import com.mygdx.game.MultiBombermanGame;
-import com.mygdx.service.network.Server;
+import com.mygdx.service.PlayerService;
 
 public class NetworkConnexion extends Thread {
 

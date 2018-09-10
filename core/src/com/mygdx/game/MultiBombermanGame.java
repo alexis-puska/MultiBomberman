@@ -21,12 +21,12 @@ import com.mygdx.constante.Constante;
 import com.mygdx.dto.MultiBombermanDTO;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.service.Context;
-import com.mygdx.service.NetworkService;
 import com.mygdx.service.PlayerService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControllerAdapter;
 import com.mygdx.service.input_processor.MenuInputProcessor;
+import com.mygdx.service.network.NetworkService;
 import com.mygdx.view.SplashScreen;
 
 import lombok.Getter;
@@ -66,7 +66,7 @@ public class MultiBombermanGame extends Game {
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(screenCamera.combined);
 
-		SoundService.getInstance().playMusic(MusicEnum.MENU);
+		//SoundService.getInstance().playMusic(MusicEnum.MENU);
 		menuInputProcessor = new MenuInputProcessor();
 		Gdx.input.setInputProcessor(menuInputProcessor);
 
