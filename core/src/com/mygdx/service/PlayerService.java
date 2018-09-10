@@ -53,7 +53,7 @@ public class PlayerService {
 		definitionControllerMapping = new HashMap<>();
 		localController = new HashMap<>();
 		List<NetworkConnexion> lnc = game.getNetworkService().getServer().getNcl();
-		//TODO init map to redirect correct event to player
+		// TODO init map to redirect correct event to player
 
 	}
 
@@ -125,6 +125,12 @@ public class PlayerService {
 				case west:
 					definitions[idx].setCharacter(CharacterEnum.previous(definitions[idx].getCharacter()));
 					break;
+				}
+				for (int i = 0; i < 16; i++) {
+					if (definitions[i] != null) {
+						Gdx.app.log("definition : ", "" + definitions[i].getCharacter().toString() + " "
+								+ definitions[i].getColor().toString());
+					}
 				}
 			}
 		}
