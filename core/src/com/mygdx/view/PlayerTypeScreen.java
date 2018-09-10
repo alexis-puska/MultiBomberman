@@ -11,9 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
-import com.mygdx.domain.PlayerDefinition;
 import com.mygdx.enumeration.GameModeEnum;
-import com.mygdx.enumeration.PlayerTypeEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
@@ -71,7 +69,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
 				layout.setText(font, MessageService.getInstance().getMessage("game.menu.player") + pos + " : "
-						+ Context.playerType[pos].getPlayerType().toString());
+						+ game.getPlayerService().getPlayerType(pos));
 				font.draw(game.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
 			}
 		}
@@ -145,25 +143,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-		PlayerDefinition def = Context.playerType[cursorPosition];
-		PlayerTypeEnum newPlayerType = PlayerTypeEnum.HUMAN;
-		switch (def.getPlayerType()) {
-		case CPU:
-			newPlayerType = PlayerTypeEnum.HUMAN;
-			break;
-		case HUMAN:
-			if (Context.gameMode == GameModeEnum.SERVER) {
-				newPlayerType = PlayerTypeEnum.NET;
-			} else {
-				newPlayerType = PlayerTypeEnum.CPU;
-			}
-			break;
-		case NET:
-			newPlayerType = PlayerTypeEnum.CPU;
-			break;
-		}
-		def.setPlayerType(newPlayerType);
-		Context.playerType[cursorPosition] = def;
+		game.getPlayerService().incPlayerType(cursorPosition);
 	}
 
 	@Override

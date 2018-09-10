@@ -10,12 +10,14 @@ import java.net.UnknownHostException;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.constante.Constante;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
+import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.network.Server;
 import com.mygdx.service.network.UpnpService;
 
 public class NetworkService {
 
 	private final static String CLASS_NAME = "NetworkService";
+	private final MultiBombermanGame game;
 	private Server server;
 	private UpnpService upnpService;
 
@@ -23,14 +25,15 @@ public class NetworkService {
 	private String hostName;
 	private String internetIp;
 
-	public NetworkService() {
+	public NetworkService(final MultiBombermanGame game) {
+		this.game = game;
 		upnpService = new UpnpService();
 		Context.port = Constante.NETWORK_PORT;
 		retrieveIp();
 	}
 
 	public boolean initServer() {
-		server = new Server();
+		server = new Server(game);
 		try {
 			server.init();
 			server.start();
@@ -86,6 +89,10 @@ public class NetworkService {
 
 	public String getInternetIp() {
 		return internetIp;
+	}
+
+	public Server getServer() {
+		return server;
 	}
 
 }

@@ -18,7 +18,7 @@ public class PlayerDefinition {
 	public PlayerDefinition(int position, PlayerTypeEnum playerType) {
 		this.position = position;
 		this.playerType = playerType;
-		this.color = CharacterColorEnum.NONE;
+		this.color = CharacterColorEnum.random();
 		this.character = CharacterEnum.random();
 	}
 

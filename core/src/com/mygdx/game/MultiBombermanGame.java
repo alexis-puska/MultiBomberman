@@ -1,18 +1,28 @@
 package com.mygdx.game;
 
+import java.io.IOException;
+import java.util.UUID;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
+import com.mygdx.dto.MultiBombermanDTO;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.service.Context;
 import com.mygdx.service.NetworkService;
+import com.mygdx.service.PlayerService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControllerAdapter;
@@ -25,7 +35,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MultiBombermanGame extends Game {
+
+	private final static String LOG_NAME = "MultiBombermanGame";
+
 	private NetworkService networkService;
+	private PlayerService playerService;
 	private SpriteBatch batch;
 	private OrthographicCamera screenCamera;
 	private Viewport viewport;
@@ -35,8 +49,10 @@ public class MultiBombermanGame extends Game {
 	@Override
 	public void create() {
 		Context.resetContext();
+		retrieveGUID();
 		Gdx.app.setLogLevel(Constante.LIBGDX_LOG_LEVEL);
-		networkService = new NetworkService();
+		networkService = new NetworkService(this);
+		playerService = new PlayerService(this);
 		SpriteService.getInstance();
 
 		/****************************************
@@ -59,6 +75,46 @@ public class MultiBombermanGame extends Game {
 		this.setScreen(new SplashScreen(this));
 	}
 
+	private void retrieveGUID() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		FileHandle multiBombermanJson = Gdx.files.local("MultiBomberman.json");
+		if (multiBombermanJson.exists()) {
+			MultiBombermanDTO multiBomberman;
+			try {
+				multiBomberman = objectMapper.readValue(multiBombermanJson.read(), MultiBombermanDTO.class);
+				Context.guid = multiBomberman.getUUID();
+			} catch (JsonParseException e) {
+				Gdx.app.error(LOG_NAME, "JsonParseException : ", e);
+				initGUID(objectMapper);
+			} catch (JsonMappingException e) {
+				Gdx.app.error(LOG_NAME, "JsonMappingException : ", e);
+				initGUID(objectMapper);
+			} catch (IOException e) {
+				Gdx.app.error(LOG_NAME, "IOException : ", e);
+			}
+		} else {
+			initGUID(objectMapper);
+		}
+	}
+
+	private void initGUID(ObjectMapper objectMapper) {
+		String guid = UUID.randomUUID().toString();
+		FileHandle multiBombermanJson = Gdx.files.local("MultiBomberman.json");
+		if (multiBombermanJson.exists()) {
+			multiBombermanJson.delete();
+		}
+		MultiBombermanDTO multiBomberman = new MultiBombermanDTO();
+		multiBomberman.setUUID(guid);
+		String json;
+		try {
+			json = objectMapper.writeValueAsString(multiBomberman);
+			multiBombermanJson.writeString(json, false);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		Context.guid = guid;
+	}
+
 	@Override
 	public void dispose() {
 		batch.dispose();
@@ -69,7 +125,7 @@ public class MultiBombermanGame extends Game {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(500);
 					Controllers.clearListeners();
 					Controllers.addListener(controllerAdapter);
 				} catch (InterruptedException e) {

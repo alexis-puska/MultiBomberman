@@ -111,9 +111,6 @@ public class ControllerAdapter implements ControllerListener {
 					break;
 				}
 			}
-			if (menuListener.getClass().isInstance(SkinScreen.class)) {
-				Gdx.app.log("ControllerAdapter", "SkinScreen specifique code");
-			}
 		}
 		if (mapControl.containsKey(controller)) {
 			ControlEventListener listener = mapControl.get(controller);
