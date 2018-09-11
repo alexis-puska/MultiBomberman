@@ -13,10 +13,13 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.service.Context;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
+import com.mygdx.service.network.NetworkService;
+import com.mygdx.service.network.server.Server;
 
-public class ClientConnexionScreen implements Screen, MenuListener{
+public class ClientConnexionScreen implements Screen, MenuListener {
 
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
@@ -55,8 +58,6 @@ public class ClientConnexionScreen implements Screen, MenuListener{
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}
-
-	
 
 	@Override
 	public void show() {
@@ -101,8 +102,10 @@ public class ClientConnexionScreen implements Screen, MenuListener{
 
 	@Override
 	public void pressStart() {
-		// TODO Auto-generated method stub
-		
+		if (game.getNetworkService().connectToServer(Context.port, "127.0.0.1")) {
+			game.getScreen().dispose();
+			game.setScreen(new ClientViewScreen(game));
+		}
 	}
 
 	@Override

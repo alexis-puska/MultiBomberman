@@ -44,8 +44,8 @@ public class PlayerService {
 	}
 
 	/**
-	 * Une fois que l'utilisateur principale a définit si un utilisateur est
-	 * CPU/HUMAN/NONE/NET, on effectue le câblage avec les différents controller
+	 * Une fois que l'utilisateur principale a definit si un utilisateur est
+	 * CPU/HUMAN/NONE/NET, on effectue le cablage avec les differents controller
 	 * local/distant disponible. Instanciation des differentes map.
 	 */
 	public void validePlayerType() {

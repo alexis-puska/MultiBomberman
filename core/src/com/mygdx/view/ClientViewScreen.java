@@ -20,6 +20,10 @@ public class ClientViewScreen implements Screen, MenuListener {
 
 	@Override
 	public void render(float delta) {
+		if(!game.getNetworkService().getClient().isStatus()) {
+			game.getScreen().dispose();
+			game.setScreen(new MainScreen(game));
+		}
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
@@ -66,12 +70,14 @@ public class ClientViewScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
+		game.getNetworkService().disconnectFromServer();
+		game.getScreen().dispose();
+		game.setScreen(new ClientConnexionScreen(game));
 	}
 
 	@Override
 	public void pressValide() {
-		game.getScreen().dispose();
-		game.setScreen(new MainScreen(game));
+
 	}
 
 	@Override

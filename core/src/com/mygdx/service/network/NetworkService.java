@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.constante.Constante;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.game.MultiBombermanGame;
@@ -24,7 +25,7 @@ public class NetworkService {
 	private final static String CLASS_NAME = "NetworkService";
 	private final MultiBombermanGame game;
 	private Server server;
-	private Socket client;
+	private Client client;
 	private UpnpService upnpService;
 
 	private String externalIp;
@@ -66,15 +67,26 @@ public class NetworkService {
 	/***********************************
 	 * ----- client part -----
 	 ***********************************/
-	public void connectToServer(int port, String ip) {
+	public boolean connectToServer(int port, String ip) {
 		SocketHints socketHints = new SocketHints();
 		socketHints.connectTimeout = 1000;
-		this.client = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
-		if (client.isConnected()) {
-			Gdx.app.log("NetworkService", "connected !");
-			Client client = new Client(game, this.client);
-			client.start();
+		try {
+			Socket client = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
+			if (client.isConnected()) {
+				Gdx.app.log("NetworkService", "connected !");
+				this.client = new Client(game, client);
+				this.client.start();
+				return true;
+			}
+		} catch (GdxRuntimeException ex) {
+			Gdx.app.log("CONNECT TO SERVER", "ERROR");
+			return false;
 		}
+		return false;
+	}
+
+	public void disconnectFromServer() {
+		this.client.kill();
 	}
 
 	/***********************************
@@ -119,6 +131,10 @@ public class NetworkService {
 
 	public Server getServer() {
 		return server;
+	}
+	
+	public Client getClient() {
+		return client;
 	}
 
 }

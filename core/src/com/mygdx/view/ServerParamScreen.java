@@ -152,7 +152,6 @@ public class ServerParamScreen implements Screen, MenuListener {
 	@Override
 	public void pressStart() {
 		if (game.getNetworkService().initServer()) {
-			game.getNetworkService().connectToServer(Context.port, "127.0.0.1");
 			game.getScreen().dispose();
 			game.setScreen(new WaitConnexionScreen(game));
 		}
