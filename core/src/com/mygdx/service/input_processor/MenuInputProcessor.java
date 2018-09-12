@@ -3,15 +3,23 @@ package com.mygdx.service.input_processor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.Constante;
+import com.mygdx.service.PlayerService;
+import com.mygdx.view.GameScreen;
 import com.mygdx.view.SkinScreen;
 
 public class MenuInputProcessor implements InputProcessor {
 
 	private MenuListener menuListener;
+	private PlayerService playerService;
 
 	private boolean fullscreen;
 	private boolean ctrl;
+
+	public MenuInputProcessor(PlayerService playerService) {
+		this.playerService = playerService;
+	}
 
 	public void changeMenuListeners(MenuListener listener) {
 		this.menuListener = listener;
@@ -23,7 +31,72 @@ public class MenuInputProcessor implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		if (menuListener != null) {
-			if (!menuListener.getClass().isInstance(SkinScreen.class)) {
+			if (menuListener.getClass().isInstance(SkinScreen.class)) {
+				Gdx.app.log("ControllerAdapter", "SkinScreen specifique code");
+				switch (keycode) {
+				case Keys.ENTER:
+					this.menuListener.pressStart();
+					break;
+				case Keys.SPACE:
+					this.menuListener.pressValide();
+					break;
+				case Keys.SHIFT_RIGHT:
+					this.menuListener.pressSelect();
+					break;
+				case Keys.UP:
+					this.playerService.move(PovDirection.north);
+					break;
+				case Keys.DOWN:
+					this.playerService.move(PovDirection.south);
+					break;
+				case Keys.LEFT:
+					this.playerService.move(PovDirection.west);
+					break;
+				case Keys.RIGHT:
+					this.playerService.move(PovDirection.east);
+					break;
+				}
+			} else if (menuListener.getClass().isInstance(GameScreen.class)) {
+				Gdx.app.log("ControllerAdapter", "SkinScreen specifique code");
+				switch (keycode) {
+				case Keys.ENTER:
+					this.menuListener.pressStart();
+					break;
+				case Keys.X:
+					this.playerService.dropBombe();
+					break;
+				case Keys.W:
+					this.playerService.throwBombe();
+					break;
+				case Keys.A:
+					this.playerService.speedUp();
+					break;
+				case Keys.Z:
+					this.playerService.speedUp();
+					break;
+				case Keys.Q:
+					this.playerService.speedUp();
+					break;
+				case Keys.S:
+					this.playerService.speedUp();
+					break;
+				case Keys.SHIFT_RIGHT:
+					this.menuListener.pressSelect();
+					break;
+				case Keys.UP:
+					this.playerService.move(PovDirection.north);
+					break;
+				case Keys.DOWN:
+					this.playerService.move(PovDirection.south);
+					break;
+				case Keys.LEFT:
+					this.playerService.move(PovDirection.west);
+					break;
+				case Keys.RIGHT:
+					this.playerService.move(PovDirection.east);
+					break;
+				}
+			} else {
 				switch (keycode) {
 				case Keys.ENTER:
 					this.menuListener.pressStart();
@@ -58,18 +131,6 @@ public class MenuInputProcessor implements InputProcessor {
 				default:
 
 				}
-			} else if (menuListener.getClass().isInstance(SkinScreen.class)) {
-				Gdx.app.log("ControllerAdapter", "SkinScreen specifique code");
-				switch (keycode) {
-				case Keys.UP:
-					break;
-				case Keys.DOWN:
-					break;
-				case Keys.LEFT:
-					break;
-				case Keys.RIGHT:
-					break;
-				}
 			}
 		}
 		return false;
@@ -84,6 +145,25 @@ public class MenuInputProcessor implements InputProcessor {
 			break;
 		default:
 		}
+
+		if (menuListener.getClass().isInstance(GameScreen.class)) {
+			Gdx.app.log("ControllerAdapter", "SkinScreen specifique code");
+			switch (keycode) {
+			case Keys.A:
+				this.playerService.speedDown();
+				break;
+			case Keys.Z:
+				this.playerService.speedDown();
+				break;
+			case Keys.Q:
+				this.playerService.speedDown();
+				break;
+			case Keys.S:
+				this.playerService.speedDown();
+				break;
+			}
+		}
+
 		return false;
 	}
 

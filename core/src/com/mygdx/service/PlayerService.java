@@ -27,16 +27,21 @@ public class PlayerService {
 
 	private final MultiBombermanGame game;
 
-	private Map<NetworkConnexion, Map<Integer, ControlEventListener>> networkController;
-	private Map<Controller, ControlEventListener> localController;
+	private Map<Integer, ControlEventListener> controlEventListeners;
+
+	private Map<NetworkConnexion, Map<Integer, Integer>> networkController;
+	private Map<Controller, Integer> localController;
 
 	private Map<NetworkConnexion, Map<Integer, Integer>> definitionNetworkMapping;
 	private Map<Controller, Integer> definitionControllerMapping;
 	private PlayerDefinition[] definitions;
 
+	private int firstHumanIdx;
+
 	public PlayerService(MultiBombermanGame game) {
 		this.game = game;
 		definitions = new PlayerDefinition[16];
+		firstHumanIdx = 0;
 		definitions[0] = new PlayerDefinition(0, PlayerTypeEnum.HUMAN);
 		for (int i = 1; i < 16; i++) {
 			definitions[i] = new PlayerDefinition(0, PlayerTypeEnum.CPU);
@@ -87,15 +92,15 @@ public class PlayerService {
 	/**************************************
 	 * --- NETWORK CONTROLLER ---
 	 **************************************/
-	public void move(NetworkConnexion networkConnextion, int index, PovDirection direction) {
+	public void move(NetworkConnexion networkConnexion, int index, PovDirection direction) {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
-				Gdx.app.log("ControllerAdapter", "SkinScreen specifique code");
-				if (networkController.containsKey(networkConnextion)) {
-					networkController.get(networkConnextion).get(index).move(direction);
+				Gdx.app.log("ControllerAdapter", "GameScreen specifique code");
+				if (networkController.containsKey(networkConnexion)) {
+					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).move(direction);
 				}
 			} else if (game.getScreen().getClass().isInstance(SkinScreen.class)) {
-				int idx = definitionNetworkMapping.get(networkConnextion).get(index);
+				int idx = definitionNetworkMapping.get(networkConnexion).get(index);
 				switch (direction) {
 				case center:
 					break;
@@ -141,7 +146,7 @@ public class PlayerService {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
 				if (networkController.containsKey(networkConnexion)) {
-					this.networkController.get(networkConnexion).get(index).dropBombe();
+					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).dropBombe();
 				}
 			}
 		}
@@ -151,7 +156,7 @@ public class PlayerService {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
 				if (networkController.containsKey(networkConnexion)) {
-					this.networkController.get(networkConnexion).get(index).throwBombe();
+					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).throwBombe();
 				}
 			}
 		}
@@ -161,7 +166,7 @@ public class PlayerService {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
 				if (networkController.containsKey(networkConnexion)) {
-					this.networkController.get(networkConnexion).get(index).speedUp();
+					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).speedUp();
 				}
 			}
 		}
@@ -171,7 +176,7 @@ public class PlayerService {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
 				if (networkController.containsKey(networkConnexion)) {
-					this.networkController.get(networkConnexion).get(index).speedDown();
+					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).speedDown();
 				}
 			}
 		}
@@ -180,33 +185,145 @@ public class PlayerService {
 	/**************************************
 	 * --- LOCAL CONTROLLER ---
 	 **************************************/
+
 	public void move(Controller controller, PovDirection direction) {
 		if (this.localController != null) {
-			this.localController.get(controller).move(direction);
+			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+				controlEventListeners.get(this.localController.get(controller)).move(direction);
+			} else if (game.getScreen().getClass().isInstance(SkinScreen.class)) {
+				int idx = definitionControllerMapping.get(controller);
+				switch (direction) {
+				case center:
+					break;
+				case east:
+					definitions[idx].setCharacter(CharacterEnum.next(definitions[idx].getCharacter()));
+					break;
+				case north:
+					definitions[idx].setColor(CharacterColorEnum.previous(definitions[idx].getColor()));
+					break;
+				case northEast:
+					definitions[idx].setColor(CharacterColorEnum.previous(definitions[idx].getColor()));
+					definitions[idx].setColor(CharacterColorEnum.next(definitions[idx].getColor()));
+					break;
+				case northWest:
+					definitions[idx].setColor(CharacterColorEnum.previous(definitions[idx].getColor()));
+					definitions[idx].setCharacter(CharacterEnum.previous(definitions[idx].getCharacter()));
+					break;
+				case south:
+					definitions[idx].setColor(CharacterColorEnum.next(definitions[idx].getColor()));
+					break;
+				case southEast:
+					definitions[idx].setColor(CharacterColorEnum.next(definitions[idx].getColor()));
+					break;
+				case southWest:
+					definitions[idx].setColor(CharacterColorEnum.next(definitions[idx].getColor()));
+					definitions[idx].setCharacter(CharacterEnum.previous(definitions[idx].getCharacter()));
+					break;
+				case west:
+					definitions[idx].setCharacter(CharacterEnum.previous(definitions[idx].getCharacter()));
+					break;
+				}
+				for (int i = 0; i < 16; i++) {
+					if (definitions[i] != null) {
+						Gdx.app.log("definition : ", "" + definitions[i].getCharacter().toString() + " "
+								+ definitions[i].getColor().toString());
+					}
+				}
+			}
 		}
 	}
 
 	public void dropBombe(Controller controller) {
 		if (this.localController != null) {
-			this.localController.get(controller).dropBombe();
+			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+				controlEventListeners.get(this.localController.get(controller)).dropBombe();
+			}
 		}
 	}
 
 	public void throwBombe(Controller controller) {
 		if (this.localController != null) {
-			this.localController.get(controller).throwBombe();
+			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+				controlEventListeners.get(this.localController.get(controller)).throwBombe();
+			}
 		}
 	}
 
 	public void speedUp(Controller controller) {
 		if (this.localController != null) {
-			this.localController.get(controller).speedUp();
+			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+				controlEventListeners.get(this.localController.get(controller)).speedUp();
+			}
 		}
 	}
 
 	public void speedDown(Controller controller) {
 		if (this.localController != null) {
-			this.localController.get(controller).speedDown();
+			if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+				controlEventListeners.get(this.localController.get(controller)).speedDown();
+			}
+		}
+	}
+
+	/************************************************
+	 * 
+	 * -------Keyboard first human mapping -------
+	 * 
+	 ************************************************/
+	public void move(PovDirection direction) {
+		if (game.getScreen().getClass().isInstance(SkinScreen.class)) {
+			if (firstHumanIdx != -1) {
+				switch (direction) {
+				case east:
+					definitions[firstHumanIdx]
+							.setCharacter(CharacterEnum.next(definitions[firstHumanIdx].getCharacter()));
+					break;
+				case north:
+					definitions[firstHumanIdx]
+							.setColor(CharacterColorEnum.previous(definitions[firstHumanIdx].getColor()));
+					break;
+				case south:
+					definitions[firstHumanIdx].setColor(CharacterColorEnum.next(definitions[firstHumanIdx].getColor()));
+					break;
+				case west:
+					definitions[firstHumanIdx]
+							.setCharacter(CharacterEnum.previous(definitions[firstHumanIdx].getCharacter()));
+					break;
+				case center:
+				case northEast:
+				case northWest:
+				case southEast:
+				case southWest:
+				default:
+					break;
+				}
+			}
+		} else if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+			controlEventListeners.get(firstHumanIdx).move(direction);
+		}
+	}
+
+	public void dropBombe() {
+		if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+			controlEventListeners.get(firstHumanIdx).dropBombe();
+		}
+	}
+
+	public void throwBombe() {
+		if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+			controlEventListeners.get(firstHumanIdx).throwBombe();
+		}
+	}
+
+	public void speedUp() {
+		if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+			controlEventListeners.get(firstHumanIdx).speedUp();
+		}
+	}
+
+	public void speedDown() {
+		if (game.getScreen().getClass().isInstance(GameScreen.class)) {
+			controlEventListeners.get(firstHumanIdx).speedDown();
 		}
 	}
 }

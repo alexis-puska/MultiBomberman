@@ -63,6 +63,7 @@ public class NetworkConnexion extends Thread {
 					status = false;
 					break;
 				}
+				decode(received);
 
 				if (status == true) {
 
@@ -75,7 +76,6 @@ public class NetworkConnexion extends Thread {
 	}
 
 	private void decode(String received) {
-
 		playerService.move(this, 0, PovDirection.center);
 	}
 }
