@@ -4,15 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.net.Socket;
-import com.mygdx.game.MultiBombermanGame;
 
 public class Client extends Thread {
 
-	private MultiBombermanGame game;
 	private boolean status;
 	private Socket client;
 	private BufferedReader bufferReader;
@@ -20,13 +17,11 @@ public class Client extends Thread {
 
 	private String receive;
 
-	public Client(final MultiBombermanGame game, Socket client) {
+	public Client(Socket client) {
 		this.client = client;
-		this.game = game;
 		this.status = true;
 		outputStream = client.getOutputStream();
 		bufferReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
 	}
 
 	@Override
@@ -57,17 +52,21 @@ public class Client extends Thread {
 
 	}
 
-	public void send(byte[] exp) {
+	/**
+	 * Send button event to server
+	 * 
+	 * @param buffer
+	 *            value of button pressed by an controller
+	 */
+	public void send(byte[] buffer) {
 		if (status) {
 			try {
-				outputStream.write(exp);
+				outputStream.write(buffer);
 			} catch (IOException e) {
 				Gdx.app.log("Client", "IOException send");
 			}
 		}
 	}
-	
-	
 
 	public void kill() {
 		status = false;
@@ -78,4 +77,7 @@ public class Client extends Thread {
 		return status;
 	}
 
+	public String getReceive() {
+		return receive;
+	}
 }

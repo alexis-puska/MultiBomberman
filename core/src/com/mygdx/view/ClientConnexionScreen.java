@@ -16,8 +16,6 @@ import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
-import com.mygdx.service.network.NetworkService;
-import com.mygdx.service.network.server.Server;
 
 public class ClientConnexionScreen implements Screen, MenuListener {
 

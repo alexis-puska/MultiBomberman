@@ -74,7 +74,7 @@ public class NetworkService {
 			Socket client = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
 			if (client.isConnected()) {
 				Gdx.app.log("NetworkService", "connected !");
-				this.client = new Client(game, client);
+				this.client = new Client(client);
 				this.client.start();
 				return true;
 			}
@@ -132,7 +132,7 @@ public class NetworkService {
 	public Server getServer() {
 		return server;
 	}
-	
+
 	public Client getClient() {
 		return client;
 	}
