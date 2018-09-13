@@ -29,8 +29,7 @@ public class RulesScreen implements Screen, MenuListener {
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapter().changeMenuListeners(this);
+		this.game.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 

@@ -5,18 +5,16 @@ import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.service.PlayerService;
 
 public class ControllerAdapter implements ControllerListener {
 
-	private MenuListener menuListener;
+	private PlayerService playerService;
 	private Array<Controller> controllers;
 
-	public ControllerAdapter(final Array<Controller> controllers) {
+	public ControllerAdapter(final Array<Controller> controllers, PlayerService playerService) {
 		this.controllers = controllers;
-	}
-
-	public void changeMenuListeners(MenuListener listener) {
-		this.menuListener = listener;
+		this.playerService = playerService;
 	}
 
 	@Override
@@ -31,31 +29,48 @@ public class ControllerAdapter implements ControllerListener {
 
 	@Override
 	public boolean buttonDown(Controller controller, int buttonCode) {
-		if (this.menuListener != null) {
-			if (this.controllers != null) {
-				if (this.controllers.first().equals(controller)) {
-					switch (buttonCode) {
-					case 0:
-						menuListener.pressValide();
-						break;
-					case 1:
-						menuListener.pressValide();
-						break;
-					case 8:
-						menuListener.pressSelect();
-						break;
-					case 9:
-						menuListener.pressStart();
-						break;
-					}
-				}
+
+		switch (buttonCode) {
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+			playerService.speedUp(controller);
+			break;
+		case 0:
+			if (controller == controllers.first()) {
+				playerService.pressValide(controller);
 			}
+			playerService.dropBombe(controller);
+			break;
+		case 1:
+			if (controller == controllers.first()) {
+				playerService.pressValide(controller);
+			}
+			playerService.throwBombe(controller);
+			break;
+		case 2:
+			break;
+		case 8:
+			playerService.pressSelect(controller);
+			break;
+		case 9:
+			playerService.pressStart(controller);
+			break;
 		}
+
 		return false;
 	}
 
 	@Override
 	public boolean buttonUp(Controller controller, int buttonCode) {
+		switch (buttonCode) {
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+			playerService.speedDown(controller);
+		}
 		return false;
 	}
 
@@ -66,44 +81,7 @@ public class ControllerAdapter implements ControllerListener {
 
 	@Override
 	public boolean povMoved(Controller controller, int povCode, PovDirection value) {
-		if (this.menuListener != null) {
-			if (this.controllers != null && this.controllers.first().equals(controller)) {
-				switch (value) {
-				case center:
-					break;
-				case east:
-					menuListener.pressRight();
-					break;
-				case north:
-					menuListener.pressUp();
-					break;
-				case northEast:
-					menuListener.pressUp();
-					menuListener.pressRight();
-					break;
-				case northWest:
-					menuListener.pressUp();
-					menuListener.pressLeft();
-					break;
-				case south:
-					menuListener.pressDown();
-					break;
-				case southEast:
-					menuListener.pressDown();
-					menuListener.pressRight();
-					break;
-				case southWest:
-					menuListener.pressDown();
-					menuListener.pressLeft();
-					break;
-				case west:
-					menuListener.pressLeft();
-					break;
-				default:
-					break;
-				}
-			}
-		}
+		playerService.move(controller, value);
 		return false;
 	}
 

@@ -32,8 +32,7 @@ public class MainScreen implements Screen, MenuListener {
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapter().changeMenuListeners(this);
+		this.game.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 
@@ -131,7 +130,7 @@ public class MainScreen implements Screen, MenuListener {
 			game.setScreen(new PlayerTypeScreen(game));
 			break;
 		case SERVER:
-			game.setScreen(new ServerParamScreen(game));
+			game.setScreen(new PlayerTypeScreen(game));
 			break;
 		case CLIENT:
 			game.setScreen(new ClientConnexionScreen(game));

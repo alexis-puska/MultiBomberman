@@ -30,8 +30,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapter().changeMenuListeners(this);
+		this.game.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 
@@ -100,6 +99,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		game.getPlayerService().initControllerMap();
 		if (game.getNetworkService().connectToServer(Context.port, "127.0.0.1")) {
 			game.getScreen().dispose();
 			game.setScreen(new ClientViewScreen(game));

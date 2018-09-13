@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.SocketException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
@@ -32,6 +33,10 @@ public class NetworkConnexion extends Thread {
 		this.socket = socket;
 		this.server = server;
 		this.game = game;
+		
+		//TODO to remove after network protocole up !
+		this.player = 1;
+		
 		this.playerService = game.getPlayerService();
 		this.remoteAddress = socket.getRemoteAddress();
 		Gdx.app.log("NetworkConnexion", String.format("new client connexion : %s", remoteAddress));
@@ -48,34 +53,39 @@ public class NetworkConnexion extends Thread {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 		while (status) {
+
+			String received = null;
 			try {
-				String received = buffer.readLine();
-				out.println(received);
-				if (received == null) {
-					Gdx.app.log("NetworkConnexion", String.format("Deconnection brutale de : %s", remoteAddress));
-					status = false;
-					break;
-				}
-				Gdx.app.log("NetworkConnexion", String.format("recu de %s : %s", remoteAddress, received));
-				if (received.equals("end")) {
-					Gdx.app.log("NetworkConnexion", String.format("Deconnection de : %s", remoteAddress));
-					socket.dispose();
-					status = false;
-					break;
-				}
-				decode(received);
-
-				if (status == true) {
-
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
+				received = buffer.readLine();
+			} catch (IOException ez) {
+				ez.printStackTrace();
 			}
+			out.println(received);
+			if (received == null) {
+				Gdx.app.log("NetworkConnexion", String.format("Deconnection brutale de : %s", remoteAddress));
+				status = false;
+				break;
+			}
+			
+			if (received.equals("end")) {
+				Gdx.app.log("NetworkConnexion", String.format("Deconnection de : %s", remoteAddress));
+				socket.dispose();
+				status = false;
+				break;
+			}
+			decode(received);
+			if (status == true) {
+			}
+
 		}
 	}
 
 	private void decode(String received) {
-		playerService.move(this, 0, PovDirection.center);
+		Gdx.app.log("NetworkConnexion", String.format("recu de %s : %s", remoteAddress, received));
+		playerService.move(this, 0, PovDirection.east);
+	}
+
+	public int getPlayer() {
+		return player;
 	}
 }

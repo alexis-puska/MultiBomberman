@@ -31,8 +31,7 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapter().changeMenuListeners(this);
+		this.game.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 
@@ -102,8 +101,9 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		game.getPlayerService().valideNetWorkPlayerType();
 		game.getScreen().dispose();
-		game.setScreen(new PlayerTypeScreen(game));
+		game.setScreen(new SkinScreen(game));
 	}
 
 	@Override

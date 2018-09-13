@@ -40,8 +40,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.cursorPosition = 0;
-		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapter().changeMenuListeners(this);
+		this.game.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 
@@ -127,18 +126,19 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
-		game.getScreen().dispose();
-		game.setScreen(new SkinScreen(game));
+		if (Context.gameMode == GameModeEnum.SERVER) {
+			game.getScreen().dispose();
+			game.setScreen(new ServerParamScreen(game));
+		}else if(Context.gameMode == GameModeEnum.LOCAL) {
+			game.getPlayerService().validePlayerType();
+			game.getScreen().dispose();
+			game.setScreen(new SkinScreen(game));
+		}
 	}
 
 	@Override
 	public void pressSelect() {
-		if (Context.gameMode == GameModeEnum.SERVER) {
-			game.getNetworkService().stopServer();
-			game.setScreen(new ServerParamScreen(game));
-		} else if (Context.gameMode == GameModeEnum.LOCAL) {
-			game.setScreen(new MainScreen(game));
-		}
+		game.setScreen(new MainScreen(game));
 	}
 
 	@Override

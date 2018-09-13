@@ -36,8 +36,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 		this.cursor = new Cursor(COLUMN2, 180);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapter().changeMenuListeners(this);
+		this.game.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 
@@ -160,7 +159,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 	@Override
 	public void pressSelect() {
 		game.getScreen().dispose();
-		game.setScreen(new MainScreen(game));
+		game.setScreen(new PlayerTypeScreen(game));
 	}
 
 	@Override

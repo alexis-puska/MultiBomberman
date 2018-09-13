@@ -65,12 +65,13 @@ public class MultiBombermanGame extends Game {
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(screenCamera.combined);
 
+		Array<Controller> controllers = Controllers.getControllers();
+		controllerAdapter = new ControllerAdapter(controllers, playerService);
+
 		// SoundService.getInstance().playMusic(MusicEnum.MENU);
 		menuInputProcessor = new MenuInputProcessor(playerService);
 		Gdx.input.setInputProcessor(menuInputProcessor);
 
-		Array<Controller> controllers = Controllers.getControllers();
-		controllerAdapter = new ControllerAdapter(controllers);
 		this.setScreen(new SplashScreen(this));
 	}
 

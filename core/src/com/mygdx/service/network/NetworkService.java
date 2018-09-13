@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -137,4 +138,35 @@ public class NetworkService {
 		return client;
 	}
 
+	
+	
+	public void sendDirection(Integer integer, PovDirection direction) {
+		if(this.client != null && this.client.isStatus()) {
+			this.client.send("Direction\n".getBytes());
+		}
+	}
+
+	public void sendDropBombe(Integer integer) {
+		if(this.client != null && this.client.isStatus()) {
+			this.client.send("DropBombe\n".getBytes());
+		}
+	}
+
+	public void sendSpeedUp(Integer integer) {
+		if(this.client != null && this.client.isStatus()) {
+			this.client.send("SPEEDUP\n".getBytes());
+		}
+	}
+
+	public void sendSpeedDown(Integer integer) {
+		if(this.client != null && this.client.isStatus()) {
+			this.client.send("Speed Down\n".getBytes());
+		}
+	}
+
+	public void sendThrowBombe(Integer integer) {
+		if(this.client != null && this.client.isStatus()) {
+			this.client.send("Throw Bombe\n".getBytes());
+		}
+	}
 }

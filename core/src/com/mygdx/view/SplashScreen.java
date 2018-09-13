@@ -14,8 +14,7 @@ public class SplashScreen implements MenuListener, Screen {
 
 	public SplashScreen(final MultiBombermanGame game) {
 		this.game = game;
-		this.game.getMenuInputProcessor().changeMenuListeners(this);
-		this.game.getControllerAdapter().changeMenuListeners(this);
+		this.game.getPlayerService().setMenuListener(this);
 	}
 
 	@Override

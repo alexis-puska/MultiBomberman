@@ -22,4 +22,28 @@ public class PlayerDefinition {
 		this.character = CharacterEnum.random();
 	}
 
+	public void incPlayerType(boolean network) {
+		this.playerType = PlayerTypeEnum.next(this.playerType, network);
+	}
+
+	public void decPlayerType(boolean network) {
+		this.playerType = PlayerTypeEnum.previous(this.playerType, network);
+	}
+
+	public void incCharacter() {
+		this.character = CharacterEnum.next(this.character);
+	}
+
+	public void decCharacter() {
+		this.character = CharacterEnum.previous(this.character);
+	}
+
+	public void incCharacterColor() {
+		this.color = CharacterColorEnum.next(this.color);
+	}
+
+	public void decCharacterColor() {
+		this.color = CharacterColorEnum.previous(this.color);
+	}
+
 }
