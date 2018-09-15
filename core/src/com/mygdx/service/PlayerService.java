@@ -12,6 +12,8 @@ import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.PlayerDefinition;
+import com.mygdx.enumeration.CharacterColorEnum;
+import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
 import com.mygdx.game.MultiBombermanGame;
@@ -35,7 +37,7 @@ public class PlayerService {
 
 	// map pour rediriger l'evenement d'un controller distant vers la definition ou
 	// un joueur
-	private Map<NetworkConnexion, Map<Integer, Integer>> networkController;
+	private Map<String, Map<Integer, Integer>> networkController;
 
 	// map pour rediriger l'evenement d'nu controller local vers la definition ou un
 	// joueur
@@ -72,17 +74,18 @@ public class PlayerService {
 	 */
 	public void validePlayerType() {
 		localController = new HashMap<>();
-
 		Array<Controller> controllers = Controllers.getControllers();
 		int controllerIndex = 0;
-		for (Entry<Integer, PlayerDefinition> entry : definitions.entrySet()) {
-			PlayerDefinition definition = entry.getValue();
-			if (definition.getPlayerType() == PlayerTypeEnum.HUMAN) {
-				if (controllers.get(controllerIndex) != null) {
-					localController.put(controllers.get(controllerIndex), entry.getKey());
-					controllerIndex++;
-					if (controllerIndex >= controllers.size) {
-						break;
+		if (controllers.size != 0) {
+			for (Entry<Integer, PlayerDefinition> entry : definitions.entrySet()) {
+				PlayerDefinition definition = entry.getValue();
+				if (definition.getPlayerType() == PlayerTypeEnum.HUMAN) {
+					if (controllers.get(controllerIndex) != null) {
+						localController.put(controllers.get(controllerIndex), entry.getKey());
+						controllerIndex++;
+						if (controllerIndex >= controllers.size) {
+							break;
+						}
 					}
 				}
 			}
@@ -102,7 +105,7 @@ public class PlayerService {
 	public void valideNetWorkPlayerType() {
 		validePlayerType();
 		networkController = new HashMap<>();
-		List<NetworkConnexion> lnc = game.getNetworkService().getServer().getNcl();
+		List<NetworkConnexion> lnc = game.getNetworkService().getServer().getConnexions();
 		int indexDefinition = 0;
 		for (NetworkConnexion nc : lnc) {
 			Map<Integer, Integer> networkConnexionMapping = new HashMap<>();
@@ -116,7 +119,7 @@ public class PlayerService {
 					indexDefinition++;
 				}
 			}
-			networkController.put(nc, networkConnexionMapping);
+			networkController.put(nc.getGuid(), networkConnexionMapping);
 		}
 		Gdx.app.log("mapping network done", "DONE");
 	}
@@ -139,16 +142,16 @@ public class PlayerService {
 		}
 	}
 
-	public String getPlayerType(int index) {
-		return definitions.get(index).getPlayerType().toString();
+	public PlayerTypeEnum getPlayerType(int index) {
+		return definitions.get(index).getPlayerType();
 	}
 
-	public String getPlayerCharacter(int index) {
-		return definitions.get(index).getCharacter().toString();
+	public CharacterEnum getPlayerCharacter(int index) {
+		return definitions.get(index).getCharacter();
 	}
 
-	public String getPlayerColor(int index) {
-		return definitions.get(index).getColor().toString();
+	public CharacterColorEnum getPlayerColor(int index) {
+		return definitions.get(index).getColor();
 	}
 
 	public List<Player> generatePlayer() {
@@ -158,44 +161,44 @@ public class PlayerService {
 	/**************************************
 	 * --- NETWORK CONTROLLER ---
 	 **************************************/
-	public void move(NetworkConnexion networkConnexion, int index, PovDirection direction) {
+	public void move(String guid, int index, PovDirection direction) {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass() == GameScreen.class) {
 				Gdx.app.log("ControllerAdapter", "GameScreen specifique code");
-				if (networkController.containsKey(networkConnexion)) {
-					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).move(direction);
+				if (networkController.containsKey(guid)) {
+					controlEventListeners.get(this.networkController.get(guid).get(index)).move(direction);
 				}
 			} else if (game.getScreen().getClass() == SkinScreen.class) {
 				switch (direction) {
 				case center:
 					break;
 				case east:
-					definitions.get(networkController.get(networkConnexion).get(index)).incCharacter();
+					definitions.get(networkController.get(guid).get(index)).incCharacter();
 					break;
 				case north:
-					definitions.get(networkController.get(networkConnexion).get(index)).incCharacterColor();
+					definitions.get(networkController.get(guid).get(index)).incCharacterColor();
 					break;
 				case northEast:
-					definitions.get(networkController.get(networkConnexion).get(index)).incCharacterColor();
-					definitions.get(networkController.get(networkConnexion).get(index)).incCharacter();
+					definitions.get(networkController.get(guid).get(index)).incCharacterColor();
+					definitions.get(networkController.get(guid).get(index)).incCharacter();
 					break;
 				case northWest:
-					definitions.get(networkController.get(networkConnexion).get(index)).incCharacterColor();
-					definitions.get(networkController.get(networkConnexion).get(index)).decCharacter();
+					definitions.get(networkController.get(guid).get(index)).incCharacterColor();
+					definitions.get(networkController.get(guid).get(index)).decCharacter();
 					break;
 				case south:
-					definitions.get(networkController.get(networkConnexion).get(index)).decCharacterColor();
+					definitions.get(networkController.get(guid).get(index)).decCharacterColor();
 					break;
 				case southEast:
-					definitions.get(networkController.get(networkConnexion).get(index)).decCharacterColor();
-					definitions.get(networkController.get(networkConnexion).get(index)).incCharacter();
+					definitions.get(networkController.get(guid).get(index)).decCharacterColor();
+					definitions.get(networkController.get(guid).get(index)).incCharacter();
 					break;
 				case southWest:
-					definitions.get(networkController.get(networkConnexion).get(index)).decCharacterColor();
-					definitions.get(networkController.get(networkConnexion).get(index)).decCharacter();
+					definitions.get(networkController.get(guid).get(index)).decCharacterColor();
+					definitions.get(networkController.get(guid).get(index)).decCharacter();
 					break;
 				case west:
-					definitions.get(networkController.get(networkConnexion).get(index)).decCharacter();
+					definitions.get(networkController.get(guid).get(index)).decCharacter();
 					break;
 				}
 			}
@@ -204,41 +207,41 @@ public class PlayerService {
 		}
 	}
 
-	public void dropBombe(NetworkConnexion networkConnexion, int index) {
+	public void dropBombe(String guid, int index) {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass() == GameScreen.class) {
-				if (networkController.containsKey(networkConnexion)) {
-					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).dropBombe();
+				if (networkController.containsKey(guid)) {
+					controlEventListeners.get(this.networkController.get(guid).get(index)).dropBombe();
 				}
 			}
 		}
 	}
 
-	public void throwBombe(NetworkConnexion networkConnexion, int index) {
+	public void throwBombe(String guid, int index) {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass() == GameScreen.class) {
-				if (networkController.containsKey(networkConnexion)) {
-					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).throwBombe();
+				if (networkController.containsKey(guid)) {
+					controlEventListeners.get(this.networkController.get(guid).get(index)).throwBombe();
 				}
 			}
 		}
 	}
 
-	public void speedUp(NetworkConnexion networkConnexion, int index) {
+	public void speedUp(String guid, int index) {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass() == GameScreen.class) {
-				if (networkController.containsKey(networkConnexion)) {
-					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).speedUp();
+				if (networkController.containsKey(guid)) {
+					controlEventListeners.get(this.networkController.get(guid).get(index)).speedUp();
 				}
 			}
 		}
 	}
 
-	public void speedDown(NetworkConnexion networkConnexion, int index) {
+	public void speedDown(String guid, int index) {
 		if (this.networkController != null) {
 			if (game.getScreen().getClass() == GameScreen.class) {
-				if (networkController.containsKey(networkConnexion)) {
-					controlEventListeners.get(this.networkController.get(networkConnexion).get(index)).speedDown();
+				if (networkController.containsKey(guid)) {
+					controlEventListeners.get(this.networkController.get(guid).get(index)).speedDown();
 				}
 			}
 		}

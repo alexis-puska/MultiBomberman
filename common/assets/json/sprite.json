@@ -255,7 +255,7 @@
 		},{"color":"GOLD",
 			"textColor":"0x10C020ff",
 			"change":[
-				{"oldColor":"0xf8f8f8ff", "newColor":"0x10C020ff"},
+				{"oldColor":"0xf8f8f8ff", "newColor":"0xf8e000ff"},
 				{"oldColor":"0xa0a0a0ff", "newColor":"0xB0A000ff"},
 				{"oldColor":"0xf8a020ff", "newColor":"0xf8a020ff"},
 				{"oldColor":"0x0058e8ff", "newColor":"0xE8B020ff"},

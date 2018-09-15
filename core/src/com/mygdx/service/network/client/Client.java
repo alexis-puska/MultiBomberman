@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.net.Socket;
 
 public class Client extends Thread {
@@ -53,8 +52,6 @@ public class Client extends Thread {
 
 	}
 
-	
-
 	public void kill() {
 		status = false;
 		this.client.dispose();
@@ -68,12 +65,10 @@ public class Client extends Thread {
 		return receive;
 	}
 
-	
 	/**
 	 * Send button event to server
 	 * 
-	 * @param buffer
-	 *            value of button pressed by an controller
+	 * @param buffer value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
 		if (status) {
@@ -84,6 +79,5 @@ public class Client extends Thread {
 			}
 		}
 	}
-	
-	
+
 }

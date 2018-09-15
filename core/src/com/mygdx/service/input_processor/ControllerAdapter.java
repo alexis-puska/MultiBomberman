@@ -19,17 +19,14 @@ public class ControllerAdapter implements ControllerListener {
 
 	@Override
 	public void connected(Controller controller) {
-
 	}
 
 	@Override
 	public void disconnected(Controller controller) {
-
 	}
 
 	@Override
 	public boolean buttonDown(Controller controller, int buttonCode) {
-
 		switch (buttonCode) {
 		case 4:
 		case 5:
@@ -58,7 +55,6 @@ public class ControllerAdapter implements ControllerListener {
 			playerService.pressStart(controller);
 			break;
 		}
-
 		return false;
 	}
 

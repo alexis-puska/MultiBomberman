@@ -1,0 +1,12 @@
+language: java
+sudo: false
+
+addons:
+  sonarcloud:
+    organization: alexis-puska-github
+    token:
+      secure: ${SONAR_TOKEN}
+
+script: 
+    - gradle assemble
+    - sonar-scanner

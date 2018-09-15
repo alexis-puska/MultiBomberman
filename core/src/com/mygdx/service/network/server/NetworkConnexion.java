@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.SocketException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
@@ -14,7 +13,6 @@ import com.mygdx.service.PlayerService;
 
 public class NetworkConnexion extends Thread {
 
-	private final MultiBombermanGame game;
 	private final Socket socket;
 	private final Server server;
 	private PlayerService playerService;
@@ -32,11 +30,10 @@ public class NetworkConnexion extends Thread {
 		status = true;
 		this.socket = socket;
 		this.server = server;
-		this.game = game;
-		
-		//TODO to remove after network protocole up !
+
+		// TODO to remove after network protocole up !
 		this.player = 1;
-		
+
 		this.playerService = game.getPlayerService();
 		this.remoteAddress = socket.getRemoteAddress();
 		Gdx.app.log("NetworkConnexion", String.format("new client connexion : %s", remoteAddress));
@@ -66,7 +63,7 @@ public class NetworkConnexion extends Thread {
 				status = false;
 				break;
 			}
-			
+
 			if (received.equals("end")) {
 				Gdx.app.log("NetworkConnexion", String.format("Deconnection de : %s", remoteAddress));
 				socket.dispose();
@@ -76,16 +73,28 @@ public class NetworkConnexion extends Thread {
 			decode(received);
 			if (status == true) {
 			}
-
 		}
 	}
 
 	private void decode(String received) {
 		Gdx.app.log("NetworkConnexion", String.format("recu de %s : %s", remoteAddress, received));
-		playerService.move(this, 0, PovDirection.east);
+		playerService.move(this.guid, 0, PovDirection.east);
+	}
+
+	private boolean decodeFirstStep(String receive) {
+		
+		
+		
+		
+		return false;
 	}
 
 	public int getPlayer() {
 		return player;
 	}
+
+	public String getGuid() {
+		return guid;
+	}
+
 }

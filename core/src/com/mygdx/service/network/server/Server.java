@@ -1,9 +1,7 @@
 package com.mygdx.service.network.server;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
@@ -19,8 +17,7 @@ public class Server extends Thread {
 
 	private final MultiBombermanGame game;
 	private ServerSocket serverSocket;
-	private List<NetworkConnexion> temporaryConnexion;
-	private Map<String, NetworkConnexion> valideConnexion;
+	private List<NetworkConnexion> connexions;
 	private static boolean status;
 
 	public Server(final MultiBombermanGame game) {
@@ -36,7 +33,7 @@ public class Server extends Thread {
 				Socket socket = serverSocket.accept(null);
 				NetworkConnexion nc = new NetworkConnexion(socket, this, game);
 				nc.start();
-				temporaryConnexion.add(nc);
+				connexions.add(nc);
 			} catch (GdxRuntimeException ex) {
 				Gdx.app.log("Server", "GDX Runtime exception : arret du serveur");
 			}
@@ -45,8 +42,7 @@ public class Server extends Thread {
 
 	public void kill() {
 		status = false;
-		temporaryConnexion.stream().forEach(nc -> nc.close());
-		valideConnexion.entrySet().stream().forEach(nc -> nc.getValue().close());
+		connexions.stream().forEach(nc -> nc.close());
 		if (serverSocket != null) {
 			Gdx.app.log("Server", "close server");
 			serverSocket.dispose();
@@ -59,8 +55,7 @@ public class Server extends Thread {
 
 	public void init() throws ServerPortAlreadyInUseException {
 		status = true;
-		temporaryConnexion = new ArrayList<>();
-		valideConnexion = new HashMap<>();
+		connexions = new ArrayList<>();
 		ServerSocketHints serverSocketHint = new ServerSocketHints();
 		serverSocketHint.acceptTimeout = 0;
 		serverSocketHint.reuseAddress = true;
@@ -72,7 +67,7 @@ public class Server extends Thread {
 
 	}
 
-	public List<NetworkConnexion> getNcl() {
-		return temporaryConnexion;
+	public List<NetworkConnexion> getConnexions() {
+		return connexions;
 	}
 }
