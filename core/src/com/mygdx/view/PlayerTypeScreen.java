@@ -21,11 +21,11 @@ import com.mygdx.service.input_processor.MenuListener;
 
 public class PlayerTypeScreen implements Screen, MenuListener {
 
-	private final static int START_X = 100;
-	private final static int START_Y = 170;
-	private final static int NB_COL = 4;
-	private final static int COL_SIZE = 120;
-	private final static int ROW_SIZE = 30;
+	private static final int START_X = 100;
+	private static final int START_Y = 170;
+	private static final int NB_COL = 4;
+	private static final int COL_SIZE = 120;
+	private static final int ROW_SIZE = 30;
 
 	private final MultiBombermanGame game;
 	private final Cursor cursor;

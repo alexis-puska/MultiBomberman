@@ -18,7 +18,7 @@ import com.mygdx.service.Context;
 
 public class UpnpService {
 
-	private final static String CLASS_NAME = "UpnpService";
+	private static final String CLASS_NAME = "UpnpService";
 	private final GatewayDiscover gatewayDiscover;
 	private GatewayDevice gatewayDevice;
 

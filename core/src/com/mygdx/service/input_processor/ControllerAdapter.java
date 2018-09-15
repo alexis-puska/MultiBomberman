@@ -19,10 +19,12 @@ public class ControllerAdapter implements ControllerListener {
 
 	@Override
 	public void connected(Controller controller) {
+		//Unused method
 	}
 
 	@Override
 	public void disconnected(Controller controller) {
+		//Unused method
 	}
 
 	@Override

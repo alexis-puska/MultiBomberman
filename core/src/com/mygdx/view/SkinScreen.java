@@ -21,10 +21,10 @@ import com.mygdx.service.input_processor.MenuListener;
 
 public class SkinScreen implements Screen, MenuListener {
 
-	private final static int START_X = 70;
-	private final static int START_Y = 170;
-	private final static int COL_SIZE = 140;
-	private final static int ROW_SIZE = 40;
+	private static final int START_X = 70;
+	private static final int START_Y = 170;
+	private static final int COL_SIZE = 140;
+	private static final int ROW_SIZE = 40;
 
 	private final MultiBombermanGame game;
 	private final GlyphLayout layout;

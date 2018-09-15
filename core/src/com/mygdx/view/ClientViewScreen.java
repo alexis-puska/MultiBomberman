@@ -76,7 +76,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-
+		//Unused method
 	}
 
 	@Override

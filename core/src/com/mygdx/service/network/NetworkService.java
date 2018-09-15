@@ -23,7 +23,7 @@ import com.mygdx.service.network.server.UpnpService;
 
 public class NetworkService {
 
-	private final static String CLASS_NAME = "NetworkService";
+	private static final String CLASS_NAME = "NetworkService";
 	private final MultiBombermanGame game;
 	private Server server;
 	private Client client;

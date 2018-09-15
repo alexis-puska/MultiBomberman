@@ -35,7 +35,7 @@ import lombok.Setter;
 @Setter
 public class MultiBombermanGame extends Game {
 
-	private final static String LOG_NAME = "MultiBombermanGame";
+	private static final String LOG_NAME = "MultiBombermanGame";
 
 	private NetworkService networkService;
 	private PlayerService playerService;
