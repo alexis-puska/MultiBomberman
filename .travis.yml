@@ -5,7 +5,7 @@ addons:
   sonarcloud:
     organization: alexis-puska-github
     token:
-      secure: ${SONAR_TOKEN}
+      secure: f0c4ab7df67193be203c807a78181f04a53a2a8f
 
 script: 
     - gradle assemble
