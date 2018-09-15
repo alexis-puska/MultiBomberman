@@ -128,8 +128,8 @@ public class MultiBombermanGame extends Game {
 			Controllers.addListener(controllerAdapter);
 		} catch (InterruptedException e) {
 			Gdx.app.error("MultiBomberman", "Resize thread error");
+			Thread.currentThread().interrupt();
 		}
-		Thread.currentThread().interrupt();
 	}
 
 	public void changeScreen() {
