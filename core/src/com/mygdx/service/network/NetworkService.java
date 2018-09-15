@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
@@ -94,24 +94,24 @@ public class NetworkService {
 	 * ----- other -----
 	 ***********************************/
 	private void retrieveIp() {
+		URL whatismyip;
 		try {
-			URL whatismyip = new URL(Constante.NETWORK_IP_SERVICE);
-			BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
-			String ip = in.readLine();
-			String[] ips = ip.split(", ");
-			if (ips.length > 0) {
-				internetIp = ips[ips.length - 1];
+			whatismyip = new URL(Constante.NETWORK_IP_SERVICE);
+			try (BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()))) {
+				String ip = in.readLine();
+				String[] ips = ip.split(", ");
+				if (ips.length > 0) {
+					internetIp = ips[ips.length - 1];
+				}
+				InetAddress inetAddress = InetAddress.getLocalHost();
+				externalIp = inetAddress.getHostAddress();
+				hostName = inetAddress.getHostName();
+			} catch (IOException ex) {
+				Gdx.app.error(CLASS_NAME, "Error getting internet ip from : " + Constante.NETWORK_IP_SERVICE);
 			}
-		} catch (IOException ex) {
-			Gdx.app.error(CLASS_NAME, "Error getting internet ip from : " + Constante.NETWORK_IP_SERVICE);
-		}
-		try {
-			InetAddress inetAddress = InetAddress.getLocalHost();
-			externalIp = inetAddress.getHostAddress();
-			hostName = inetAddress.getHostName();
+		} catch (MalformedURLException e1) {
+			Gdx.app.log(CLASS_NAME, "MalformedURLException : " + e1.getMessage());
 
-		} catch (UnknownHostException e) {
-			Gdx.app.error(CLASS_NAME, "Error getting network info");
 		}
 		Gdx.app.log(CLASS_NAME, "IP internet:- " + internetIp);
 		Gdx.app.log(CLASS_NAME, "IP Address:- " + externalIp);
@@ -138,34 +138,32 @@ public class NetworkService {
 		return client;
 	}
 
-	
-	
 	public void sendDirection(Integer integer, PovDirection direction) {
-		if(this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus()) {
 			this.client.send("Direction\n".getBytes());
 		}
 	}
 
 	public void sendDropBombe(Integer integer) {
-		if(this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus()) {
 			this.client.send("DropBombe\n".getBytes());
 		}
 	}
 
 	public void sendSpeedUp(Integer integer) {
-		if(this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus()) {
 			this.client.send("SPEEDUP\n".getBytes());
 		}
 	}
 
 	public void sendSpeedDown(Integer integer) {
-		if(this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus()) {
 			this.client.send("Speed Down\n".getBytes());
 		}
 	}
 
 	public void sendThrowBombe(Integer integer) {
-		if(this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus()) {
 			this.client.send("Throw Bombe\n".getBytes());
 		}
 	}
