@@ -75,15 +75,17 @@ public class SpriteService {
 		SpriteFileContent spriteFileContent = null;
 		try {
 			spriteFileContent = objectMapper.readValue(spriteJsonFile.read(), SpriteFileContent.class);
-			this.characterColors = spriteFileContent.getCharactersColors();
-			this.louisColors = spriteFileContent.getLouisColors();
-			characterColors.stream().forEach(ccf -> {
-				Long colorValue = Long.decode(ccf.getTextColor());
-				characterMainColor.put(ccf.getColor(), new Color(colorValue.intValue()));
-			});
-			initSprite(spriteFileContent);
-			initLouisSprite(spriteFileContent);
-			initPlayerSprite(spriteFileContent);
+			if (spriteFileContent != null) {
+				this.characterColors = spriteFileContent.getCharactersColors();
+				this.louisColors = spriteFileContent.getLouisColors();
+				characterColors.stream().forEach(ccf -> {
+					Long colorValue = Long.decode(ccf.getTextColor());
+					characterMainColor.put(ccf.getColor(), new Color(colorValue.intValue()));
+				});
+				initSprite(spriteFileContent);
+				initLouisSprite(spriteFileContent);
+				initPlayerSprite(spriteFileContent);
+			}
 		} catch (JsonParseException e) {
 			Gdx.app.error(SPRITE_SERVICE, "JsonParseException : ", e);
 		} catch (JsonMappingException e) {
