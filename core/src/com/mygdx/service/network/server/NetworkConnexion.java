@@ -47,33 +47,40 @@ public class NetworkConnexion extends Thread {
 
 	@Override
 	public void run() {
-		BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-		while (status) {
+		try (BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+			try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+				while (status) {
 
-			String received = null;
-			try {
-				received = buffer.readLine();
-			} catch (IOException ez) {
-				ez.printStackTrace();
-			}
-			out.println(received);
-			if (received == null) {
-				Gdx.app.log("NetworkConnexion", String.format("Deconnection brutale de : %s", remoteAddress));
-				status = false;
-				break;
-			}
+					String received = null;
+					try {
+						received = buffer.readLine();
+					} catch (IOException ez) {
+						ez.printStackTrace();
+					}
+					out.println(received);
+					if (received == null) {
+						Gdx.app.log("NetworkConnexion", String.format("Deconnection brutale de : %s", remoteAddress));
+						status = false;
+						break;
+					}
 
-			if (received.equals("end")) {
-				Gdx.app.log("NetworkConnexion", String.format("Deconnection de : %s", remoteAddress));
-				socket.dispose();
-				status = false;
-				break;
+					if (received.equals("end")) {
+						Gdx.app.log("NetworkConnexion", String.format("Deconnection de : %s", remoteAddress));
+						socket.dispose();
+						status = false;
+						break;
+					}
+					decode(received);
+					if (status == true) {
+					}
+				}
+			} catch (Exception e) {
+				Gdx.app.log("Exception", e.getMessage());
 			}
-			decode(received);
-			if (status == true) {
-			}
+		} catch (Exception e) {
+			Gdx.app.log("Exception", e.getMessage());
 		}
+
 	}
 
 	private void decode(String received) {
@@ -82,10 +89,7 @@ public class NetworkConnexion extends Thread {
 	}
 
 	private boolean decodeFirstStep(String receive) {
-		
-		
-		
-		
+
 		return false;
 	}
 
