@@ -109,10 +109,10 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 	@Override
 	public void pressSelect() {
 		game.getScreen().dispose();
-		if (Context.gameMode == GameModeEnum.SERVER) {
+		if (Context.getGameMode() == GameModeEnum.SERVER) {
 			game.getNetworkService().stopServer();
 			game.setScreen(new ServerParamScreen(game));
-		} else if (Context.gameMode == GameModeEnum.CLIENT) {
+		} else if (Context.getGameMode() == GameModeEnum.CLIENT) {
 			game.setScreen(new ClientConnexionScreen(game));
 		}
 	}

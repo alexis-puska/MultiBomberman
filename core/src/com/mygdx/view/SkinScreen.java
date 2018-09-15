@@ -118,10 +118,10 @@ public class SkinScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
-		if (Context.gameMode == GameModeEnum.LOCAL) {
+		if (Context.getGameMode() == GameModeEnum.LOCAL) {
 			game.getScreen().dispose();
 			game.setScreen(new PlayerTypeScreen(game));
-		} else if (Context.gameMode == GameModeEnum.SERVER) {
+		} else if (Context.getGameMode() == GameModeEnum.SERVER) {
 			game.getScreen().dispose();
 			game.setScreen(new WaitConnexionScreen(game));
 		}

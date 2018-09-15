@@ -126,10 +126,10 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
-		if (Context.gameMode == GameModeEnum.SERVER) {
+		if (Context.getGameMode() == GameModeEnum.SERVER) {
 			game.getScreen().dispose();
 			game.setScreen(new ServerParamScreen(game));
-		}else if(Context.gameMode == GameModeEnum.LOCAL) {
+		}else if(Context.getGameMode() == GameModeEnum.LOCAL) {
 			game.getPlayerService().validePlayerType();
 			game.getScreen().dispose();
 			game.setScreen(new SkinScreen(game));

@@ -55,7 +55,7 @@ public class NetworkConnexion extends Thread {
 					try {
 						received = buffer.readLine();
 					} catch (IOException ez) {
-						ez.printStackTrace();
+						Gdx.app.log("", ez.getMessage());
 					}
 					out.println(received);
 					if (received == null) {

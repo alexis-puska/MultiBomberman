@@ -73,13 +73,13 @@ public class ServerParamScreen implements Screen, MenuListener {
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.server.ip.internet"));
 		font.draw(game.getBatch(), layout, COLUMN1, 70);
 
-		layout.setText(font, Integer.toString(Context.externalPlayer));
+		layout.setText(font, Integer.toString(Context.getExternalPlayer()));
 		font.draw(game.getBatch(), layout, COLUMN3, 190);
-		layout.setText(font, Integer.toString(Context.localPlayer));
+		layout.setText(font, Integer.toString(Context.getLocalPlayer()));
 		font.draw(game.getBatch(), layout, COLUMN3, 170);
-		layout.setText(font, Integer.toString(Context.port));
+		layout.setText(font, Integer.toString(Context.getPort()));
 		font.draw(game.getBatch(), layout, COLUMN3, 150);
-		layout.setText(font, Context.useUpnp ? MessageService.getInstance().getMessage("game.menu.yes")
+		layout.setText(font, Context.isUseUpnp() ? MessageService.getInstance().getMessage("game.menu.yes")
 				: MessageService.getInstance().getMessage("game.menu.no"));
 		font.draw(game.getBatch(), layout, COLUMN3, 130);
 		layout.setText(font, game.getNetworkService().getExternalIp());
@@ -188,28 +188,28 @@ public class ServerParamScreen implements Screen, MenuListener {
 	public void pressLeft() {
 		switch (cursorPosition) {
 		case 0:
-			Context.externalPlayer--;
-			if (Context.externalPlayer < 0) {
-				Context.externalPlayer = 0;
+			Context.setExternalPlayer(Context.getExternalPlayer()-1);
+			if (Context.getExternalPlayer() < 0) {
+				Context.setExternalPlayer(0);
 			}
 			break;
 		case 1:
-			Context.localPlayer--;
-			if (Context.localPlayer < 0) {
-				Context.localPlayer = 0;
+			Context.setLocalPlayer(Context.getLocalPlayer()-1);
+			if (Context.getLocalPlayer() < 0) {
+				Context.setLocalPlayer(0);
 			}
 			break;
 		case 2:
-			Context.port--;
-			if (Context.port < 0) {
-				Context.port = 0;
+			Context.setPort(Context.getPort()-1);
+			if (Context.getPort() < 0) {
+				Context.setPort(0);
 			}
 			break;
 		case 3:
-			if (Context.useUpnp) {
-				Context.useUpnp = false;
+			if (Context.isUseUpnp()) {
+				Context.setUseUpnp(false);
 			} else {
-				Context.useUpnp = true;
+				Context.setUseUpnp(true);
 			}
 			break;
 		}
@@ -219,32 +219,32 @@ public class ServerParamScreen implements Screen, MenuListener {
 	public void pressRight() {
 		switch (cursorPosition) {
 		case 0:
-			if (Context.localPlayer + Context.externalPlayer < 16) {
-				Context.externalPlayer++;
-				if (Context.externalPlayer > 16) {
-					Context.externalPlayer = 16;
+			if (Context.getLocalPlayer() + Context.getExternalPlayer() < 16) {
+				Context.setExternalPlayer(Context.getExternalPlayer()+1);
+				if (Context.getExternalPlayer() > 16) {
+					Context.setExternalPlayer(16);
 				}
 			}
 			break;
 		case 1:
-			if (Context.localPlayer + Context.externalPlayer < 16) {
-				Context.localPlayer++;
-				if (Context.localPlayer > 16) {
-					Context.localPlayer = 16;
+			if (Context.getLocalPlayer() + Context.getExternalPlayer() < 16) {
+				Context.setLocalPlayer(Context.getLocalPlayer()+1);
+				if (Context.getLocalPlayer() > 16) {
+					Context.setLocalPlayer(16);
 				}
 			}
 			break;
 		case 2:
-			Context.port++;
-			if (Context.port > 65535) {
-				Context.port = 65535;
+			Context.setPort(Context.getPort() + 1);
+			if (Context.getPort() > 65535) {
+				Context.setPort(65535);
 			}
 			break;
 		case 3:
-			if (Context.useUpnp) {
-				Context.useUpnp = false;
+			if (Context.isUseUpnp()) {
+				Context.setUseUpnp(false);
 			} else {
-				Context.useUpnp = true;
+				Context.setUseUpnp(true);
 			}
 			break;
 		}

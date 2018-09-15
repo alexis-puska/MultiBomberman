@@ -63,7 +63,7 @@ public class MainScreen implements Screen, MenuListener {
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 62);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.client"));
 		font.draw(game.getBatch(), layout, 460 - (layout.width / 2), 62);
-		switch (Context.gameMode) {
+		switch (Context.getGameMode()) {
 		case LOCAL:
 			cursor.updateCursorPosition(166, 20);
 			break;
@@ -125,7 +125,7 @@ public class MainScreen implements Screen, MenuListener {
 	@Override
 	public void pressStart() {
 		game.getScreen().dispose();
-		switch (Context.gameMode) {
+		switch (Context.getGameMode()) {
 		case LOCAL:
 			game.setScreen(new PlayerTypeScreen(game));
 			break;
@@ -167,36 +167,36 @@ public class MainScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressLeft() {
-		switch (Context.gameMode) {
+		switch (Context.getGameMode()) {
 		case LOCAL:
-			Context.gameMode = GameModeEnum.CLIENT;
+			Context.setGameMode(GameModeEnum.CLIENT);
 			break;
 		case SERVER:
-			Context.gameMode = GameModeEnum.LOCAL;
+			Context.setGameMode(GameModeEnum.LOCAL);
 			break;
 		case CLIENT:
-			Context.gameMode = GameModeEnum.SERVER;
+			Context.setGameMode(GameModeEnum.SERVER);
 			break;
 		default:
-			Context.gameMode = GameModeEnum.LOCAL;
+			Context.setGameMode(GameModeEnum.LOCAL);
 			break;
 		}
 	}
 
 	@Override
 	public void pressRight() {
-		switch (Context.gameMode) {
+		switch (Context.getGameMode()) {
 		case LOCAL:
-			Context.gameMode = GameModeEnum.SERVER;
+			Context.setGameMode(GameModeEnum.SERVER);
 			break;
 		case SERVER:
-			Context.gameMode = GameModeEnum.CLIENT;
+			Context.setGameMode(GameModeEnum.CLIENT);
 			break;
 		case CLIENT:
-			Context.gameMode = GameModeEnum.LOCAL;
+			Context.setGameMode(GameModeEnum.LOCAL);
 			break;
 		default:
-			Context.gameMode = GameModeEnum.LOCAL;
+			Context.setGameMode(GameModeEnum.LOCAL);
 			break;
 		}
 	}

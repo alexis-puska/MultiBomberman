@@ -82,7 +82,7 @@ public class MultiBombermanGame extends Game {
 			MultiBombermanDTO multiBomberman;
 			try {
 				multiBomberman = objectMapper.readValue(multiBombermanJson.read(), MultiBombermanDTO.class);
-				Context.guid = multiBomberman.getUUID();
+				Context.setGuid(multiBomberman.getUUID());
 			} catch (JsonParseException e) {
 				Gdx.app.error(LOG_NAME, "JsonParseException : ", e);
 				initGUID(objectMapper);
@@ -112,7 +112,7 @@ public class MultiBombermanGame extends Game {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		Context.guid = guid;
+		Context.setGuid(guid);
 	}
 
 	@Override
@@ -122,17 +122,14 @@ public class MultiBombermanGame extends Game {
 
 	public void resize(int width, int height) {
 		Gdx.app.log("MULTI", "RESIZE");
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					Thread.sleep(500);
-					Controllers.clearListeners();
-					Controllers.addListener(controllerAdapter);
-				} catch (InterruptedException e) {
-					Gdx.app.error("MultiBomberman", "Resize thread error");
-				}
-			};
-		}).start();
+		try {
+			Thread.sleep(500);
+			Controllers.clearListeners();
+			Controllers.addListener(controllerAdapter);
+		} catch (InterruptedException e) {
+			Gdx.app.error("MultiBomberman", "Resize thread error");
+		}
+
 	}
 
 	public void changeScreen() {

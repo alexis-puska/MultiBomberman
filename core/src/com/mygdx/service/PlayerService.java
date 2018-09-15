@@ -130,7 +130,7 @@ public class PlayerService {
 			definitions.get(index).setPlayerType(PlayerTypeEnum.HUMAN);
 			break;
 		case HUMAN:
-			if (Context.gameMode == GameModeEnum.SERVER) {
+			if (Context.getGameMode() == GameModeEnum.SERVER) {
 				definitions.get(index).setPlayerType(PlayerTypeEnum.NET);
 			} else {
 				definitions.get(index).setPlayerType(PlayerTypeEnum.CPU);
@@ -288,7 +288,7 @@ public class PlayerService {
 			}
 		} else if (game.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
-			// Expedition evenement à distance
+			// Expedition evenement ï¿½ distance
 			game.getNetworkService().sendDirection(controllerToIndex.get(controller), direction);
 		} else {
 			if (Controllers.getControllers().first() != null
@@ -328,7 +328,7 @@ public class PlayerService {
 			}
 		} else if (game.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
-			// Expedition evenement à distance
+			// Expedition evenement ï¿½ distance
 			game.getNetworkService().sendDropBombe(controllerToIndex.get(controller));
 		}
 	}
@@ -340,7 +340,7 @@ public class PlayerService {
 			}
 		} else if (game.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
-			// Expedition evenement à distance
+			// Expedition evenement ï¿½ distance
 			game.getNetworkService().sendThrowBombe(controllerToIndex.get(controller));
 		}
 	}
@@ -352,7 +352,7 @@ public class PlayerService {
 			}
 		} else if (game.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
-			// Expedition evenement à distance
+			// Expedition evenement ï¿½ distance
 			game.getNetworkService().sendSpeedUp(controllerToIndex.get(controller));
 		}
 	}
@@ -364,7 +364,7 @@ public class PlayerService {
 			}
 		} else if (game.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
-			// Expedition evenement à distance
+			// Expedition evenement ï¿½ distance
 			game.getNetworkService().sendSpeedDown(controllerToIndex.get(controller));
 		}
 	}

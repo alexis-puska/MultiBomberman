@@ -60,7 +60,7 @@ public class Server extends Thread {
 		serverSocketHint.acceptTimeout = 0;
 		serverSocketHint.reuseAddress = true;
 		try {
-			serverSocket = Gdx.net.newServerSocket(Protocol.TCP, Context.port, serverSocketHint);
+			serverSocket = Gdx.net.newServerSocket(Protocol.TCP, Context.getPort(), serverSocketHint);
 		} catch (GdxRuntimeException ex) {
 			throw new ServerPortAlreadyInUseException();
 		}

@@ -42,13 +42,13 @@ public class UpnpService {
 			InetAddress localAddress = gatewayDevice.getLocalAddress();
 			String externalIPAddress = gatewayDevice.getExternalIPAddress();
 			Gdx.app.log(CLASS_NAME, "Using local address: " + localAddress + ", External address: " + externalIPAddress
-					+ ", Attempting to map port : " + Context.port);
+					+ ", Attempting to map port : " + Context.getPort());
 			PortMappingEntry portMapping = new PortMappingEntry();
-			if (gatewayDevice.getSpecificPortMappingEntry(Context.port, "TCP", portMapping)) {
+			if (gatewayDevice.getSpecificPortMappingEntry(Context.getPort(), "TCP", portMapping)) {
 				Gdx.app.log(CLASS_NAME, "Port was already mapped. Aborting test.");
 			} else {
 				Gdx.app.log(CLASS_NAME, "Sending port mapping request");
-				if (!gatewayDevice.addPortMapping(Context.port, Context.port,
+				if (!gatewayDevice.addPortMapping(Context.getPort(), Context.getPort(),
 						localAddress.getHostAddress(), "TCP", Constante.NETWORK_APPLICATION_UPNP_NAME)) {
 					Gdx.app.log(CLASS_NAME, "Port mapping attempt failed");
 				} else {
@@ -72,7 +72,7 @@ public class UpnpService {
 		if (gatewayDevice != null) {
 			Gdx.app.log(CLASS_NAME, "Stopping weupnp");
 			try {
-				gatewayDevice.deletePortMapping(Context.port, "TCP");
+				gatewayDevice.deletePortMapping(Context.getPort(), "TCP");
 			} catch (IOException e) {
 				Gdx.app.log(CLASS_NAME, "IOException : " + e.getMessage());
 			} catch (SAXException e) {

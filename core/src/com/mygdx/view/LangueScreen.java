@@ -56,7 +56,7 @@ public class LangueScreen implements Screen, MenuListener {
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 1), 400, 100);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.lang.title"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
-		switch (Context.locale) {
+		switch (Context.getLocale()) {
 		case ENGLISH:
 			cursor.updateCursorPosition(430, 70);
 			break;
@@ -144,30 +144,30 @@ public class LangueScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressLeft() {
-		switch (Context.locale) {
+		switch (Context.getLocale()) {
 		case ENGLISH:
-			Context.locale = LocaleEnum.FRENCH;
+			Context.setLocale(LocaleEnum.FRENCH);
 			break;
 		case FRENCH:
-			Context.locale = LocaleEnum.ENGLISH;
+			Context.setLocale(LocaleEnum.ENGLISH);
 			break;
 		default:
-			Context.locale = LocaleEnum.ENGLISH;
+			Context.setLocale(LocaleEnum.ENGLISH);
 			break;
 		}
 	}
 
 	@Override
 	public void pressRight() {
-		switch (Context.locale) {
+		switch (Context.getLocale()) {
 		case ENGLISH:
-			Context.locale = LocaleEnum.FRENCH;
+			Context.setLocale(LocaleEnum.FRENCH);
 			break;
 		case FRENCH:
-			Context.locale = LocaleEnum.ENGLISH;
+			Context.setLocale(LocaleEnum.ENGLISH);
 			break;
 		default:
-			Context.locale = LocaleEnum.ENGLISH;
+			Context.setLocale(LocaleEnum.ENGLISH);
 			break;
 		}
 	}

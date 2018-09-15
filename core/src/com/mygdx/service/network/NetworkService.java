@@ -36,7 +36,7 @@ public class NetworkService {
 	public NetworkService(final MultiBombermanGame game) {
 		this.game = game;
 		upnpService = new UpnpService();
-		Context.port = Constante.NETWORK_PORT;
+		Context.setPort(Constante.NETWORK_PORT);
 		retrieveIp();
 	}
 
@@ -48,7 +48,7 @@ public class NetworkService {
 		try {
 			server.init();
 			server.start();
-			if (Context.useUpnp) {
+			if (Context.isUseUpnp()) {
 				upnpService.openPortWithUpnp();
 			}
 		} catch (ServerPortAlreadyInUseException ex) {
@@ -59,7 +59,7 @@ public class NetworkService {
 	}
 
 	public void stopServer() {
-		if (Context.useUpnp) {
+		if (Context.isUseUpnp()) {
 			upnpService.closePortWithUpnp();
 		}
 		server.kill();
