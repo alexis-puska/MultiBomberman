@@ -82,7 +82,7 @@ public class MultiBombermanGame extends Game {
 			MultiBombermanDTO multiBomberman;
 			try {
 				multiBomberman = objectMapper.readValue(multiBombermanJson.read(), MultiBombermanDTO.class);
-				Context.setGuid(multiBomberman.getUUID());
+				Context.setGuid(multiBomberman.getUuid());
 			} catch (JsonParseException e) {
 				Gdx.app.error(LOG_NAME, "JsonParseException : ", e);
 				initGUID(objectMapper);
@@ -104,7 +104,7 @@ public class MultiBombermanGame extends Game {
 			multiBombermanJson.delete();
 		}
 		MultiBombermanDTO multiBomberman = new MultiBombermanDTO();
-		multiBomberman.setUUID(guid);
+		multiBomberman.setUuid(guid);
 		String json;
 		try {
 			json = objectMapper.writeValueAsString(multiBomberman);

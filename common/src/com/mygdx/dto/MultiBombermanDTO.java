@@ -15,5 +15,5 @@ public class MultiBombermanDTO implements Serializable {
 
 	private static final long serialVersionUID = 7928820470631451745L;
 
-	private String UUID;
+	private String uuid;
 }

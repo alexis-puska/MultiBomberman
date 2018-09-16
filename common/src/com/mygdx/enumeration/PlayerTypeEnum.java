@@ -16,10 +16,8 @@ public enum PlayerTypeEnum {
 		if ((val.ordinal() - 1) < 0) {
 			v = values()[values().length - 1];
 		}
-		if (!network && v == PlayerTypeEnum.NET) {
-			if ((v.ordinal() - 1) < 0) {
-				v = values()[values().length - 1];
-			}
+		if (!network && v == PlayerTypeEnum.NET && (v.ordinal() - 1) < 0) {
+			v = values()[values().length - 1];
 		}
 		return v;
 	}

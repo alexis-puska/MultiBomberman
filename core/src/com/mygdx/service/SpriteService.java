@@ -357,7 +357,7 @@ public class SpriteService {
 				values.add(pixmap.getPixel(x, y));
 			}
 		}
-		System.out.println("values : ");
-		values.stream().forEach(v -> System.out.println(String.format("0x%08X", v)));
+		Gdx.app.log("", "values : ");
+		values.stream().forEach(v -> Gdx.app.log("", String.format("0x%08X", v)));
 	}
 }

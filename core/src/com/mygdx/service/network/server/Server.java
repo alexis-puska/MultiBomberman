@@ -18,7 +18,7 @@ public class Server extends Thread {
 	private final MultiBombermanGame game;
 	private ServerSocket serverSocket;
 	private List<NetworkConnexion> connexions;
-	private static boolean status;
+	private boolean status;
 
 	public Server(final MultiBombermanGame game) {
 		this.game = game;
@@ -26,7 +26,7 @@ public class Server extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("start serveur");
+		Gdx.app.log("", "start serveur");
 		while (status) {
 			// Create a socket
 			try {

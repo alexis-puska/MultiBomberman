@@ -19,7 +19,7 @@ public class NetworkConnexion extends Thread {
 	private final String remoteAddress;
 
 	// active
-	private static boolean status;
+	private boolean status;
 
 	// guid of client
 	private String guid;
@@ -33,6 +33,7 @@ public class NetworkConnexion extends Thread {
 
 		// TODO to remove after network protocole up !
 		this.player = 1;
+		this.status = true;
 
 		this.playerService = game.getPlayerService();
 		this.remoteAddress = socket.getRemoteAddress();
@@ -42,13 +43,13 @@ public class NetworkConnexion extends Thread {
 	public void close() {
 		Gdx.app.log("NetworkConnexion", String.format("fermeture connexion de : %s", remoteAddress));
 		socket.dispose();
-		status = false;
 	}
 
 	@Override
 	public void run() {
 		try (BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+
 			while (status) {
 
 				String received = null;

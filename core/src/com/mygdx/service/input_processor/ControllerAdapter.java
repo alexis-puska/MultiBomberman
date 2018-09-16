@@ -19,12 +19,12 @@ public class ControllerAdapter implements ControllerListener {
 
 	@Override
 	public void connected(Controller controller) {
-		//Unused method
+		// Unused method
 	}
 
 	@Override
 	public void disconnected(Controller controller) {
-		//Unused method
+		// Unused method
 	}
 
 	@Override
@@ -56,6 +56,7 @@ public class ControllerAdapter implements ControllerListener {
 		case 9:
 			playerService.pressStart(controller);
 			break;
+		default:
 		}
 		return false;
 	}
@@ -68,6 +69,7 @@ public class ControllerAdapter implements ControllerListener {
 		case 6:
 		case 7:
 			playerService.speedDown(controller);
+		default:
 		}
 		return false;
 	}

@@ -101,6 +101,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 		case 3:
 			cursor.updateCursorPosition(COLUMN2, 120);
 			break;
+		default:
 		}
 
 		cursor.draw(game.getBatch());
@@ -188,19 +189,19 @@ public class ServerParamScreen implements Screen, MenuListener {
 	public void pressLeft() {
 		switch (cursorPosition) {
 		case 0:
-			Context.setExternalPlayer(Context.getExternalPlayer()-1);
+			Context.setExternalPlayer(Context.getExternalPlayer() - 1);
 			if (Context.getExternalPlayer() < 0) {
 				Context.setExternalPlayer(0);
 			}
 			break;
 		case 1:
-			Context.setLocalPlayer(Context.getLocalPlayer()-1);
+			Context.setLocalPlayer(Context.getLocalPlayer() - 1);
 			if (Context.getLocalPlayer() < 0) {
 				Context.setLocalPlayer(0);
 			}
 			break;
 		case 2:
-			Context.setPort(Context.getPort()-1);
+			Context.setPort(Context.getPort() - 1);
 			if (Context.getPort() < 0) {
 				Context.setPort(0);
 			}
@@ -212,6 +213,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 				Context.setUseUpnp(true);
 			}
 			break;
+		default:
 		}
 	}
 
@@ -220,7 +222,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 		switch (cursorPosition) {
 		case 0:
 			if (Context.getLocalPlayer() + Context.getExternalPlayer() < 16) {
-				Context.setExternalPlayer(Context.getExternalPlayer()+1);
+				Context.setExternalPlayer(Context.getExternalPlayer() + 1);
 				if (Context.getExternalPlayer() > 16) {
 					Context.setExternalPlayer(16);
 				}
@@ -228,7 +230,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 			break;
 		case 1:
 			if (Context.getLocalPlayer() + Context.getExternalPlayer() < 16) {
-				Context.setLocalPlayer(Context.getLocalPlayer()+1);
+				Context.setLocalPlayer(Context.getLocalPlayer() + 1);
 				if (Context.getLocalPlayer() > 16) {
 					Context.setLocalPlayer(16);
 				}
@@ -247,8 +249,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 				Context.setUseUpnp(true);
 			}
 			break;
+		default:
 		}
-
 	}
-
 }

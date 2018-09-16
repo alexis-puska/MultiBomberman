@@ -26,7 +26,7 @@ public class Client extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("start client");
+		Gdx.app.log("", "start client");
 		while (status) {
 			try {
 				String line = bufferReader.readLine();

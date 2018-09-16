@@ -97,6 +97,7 @@ public class MenuInputProcessor implements InputProcessor {
 		case Keys.S:
 			this.playerService.speedDown();
 			break;
+		default:
 		}
 		return false;
 	}
