@@ -49,9 +49,7 @@ public class NetworkConnexion extends Thread {
 	public void run() {
 		try (BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-
 			while (status) {
-
 				String received = null;
 				try {
 					received = buffer.readLine();
@@ -64,7 +62,6 @@ public class NetworkConnexion extends Thread {
 					status = false;
 					break;
 				}
-
 				if (received.equals("end")) {
 					Gdx.app.log("NetworkConnexion", String.format("Deconnection de : %s", remoteAddress));
 					socket.dispose();
@@ -72,14 +69,10 @@ public class NetworkConnexion extends Thread {
 					break;
 				}
 				decode(received);
-				if (status == true) {
-				}
 			}
-
 		} catch (Exception e) {
 			Gdx.app.log("Exception", e.getMessage());
 		}
-
 	}
 
 	private void decode(String received) {
@@ -88,7 +81,6 @@ public class NetworkConnexion extends Thread {
 	}
 
 	private boolean decodeFirstStep(String receive) {
-
 		return false;
 	}
 
@@ -99,5 +91,4 @@ public class NetworkConnexion extends Thread {
 	public String getGuid() {
 		return guid;
 	}
-
 }

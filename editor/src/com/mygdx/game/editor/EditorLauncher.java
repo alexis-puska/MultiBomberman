@@ -18,7 +18,7 @@ public class EditorLauncher extends JFrame {
 	public static void main(String[] args) {
 		String lang = "fr";
 		EditorLauncher editorLauncher;
-		if (args != null && args.length > 0 && args[0].equals("fr") || args[0].equals("en")) {
+		if (args != null && args.length > 0 && (args[0].equals("fr") || args[0].equals("en"))) {
 			lang = args[0];
 		}
 		editorLauncher = new EditorLauncher(lang);

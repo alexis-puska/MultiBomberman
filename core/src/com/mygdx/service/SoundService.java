@@ -91,9 +91,6 @@ public class SoundService {
 			musicBattle.setLooping(true);
 			break;
 		case MENU:
-			musicMenu.play();
-			musicMenu.setLooping(true);
-			break;
 		default:
 			musicMenu.play();
 			musicMenu.setLooping(true);
@@ -111,9 +108,7 @@ public class SoundService {
 	 *******************/
 	public void playSound(SoundEnum soundEnum) {
 		switch (soundEnum) {
-		case BIP:
-			soundBip.play();
-			break;
+		
 		case BOUNCE:
 			soundBouncd.play();
 			break;
@@ -156,6 +151,7 @@ public class SoundService {
 		case VALIDE:
 			soundValide.play();
 			break;
+		case BIP:
 		default:
 			soundBip.play();
 		}
