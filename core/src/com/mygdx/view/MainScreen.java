@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
-import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
@@ -167,37 +166,11 @@ public class MainScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressLeft() {
-		switch (Context.getGameMode()) {
-		case LOCAL:
-			Context.setGameMode(GameModeEnum.CLIENT);
-			break;
-		case SERVER:
-			Context.setGameMode(GameModeEnum.LOCAL);
-			break;
-		case CLIENT:
-			Context.setGameMode(GameModeEnum.SERVER);
-			break;
-		default:
-			Context.setGameMode(GameModeEnum.LOCAL);
-			break;
-		}
+		Context.decGameMode();
 	}
 
 	@Override
 	public void pressRight() {
-		switch (Context.getGameMode()) {
-		case LOCAL:
-			Context.setGameMode(GameModeEnum.SERVER);
-			break;
-		case SERVER:
-			Context.setGameMode(GameModeEnum.CLIENT);
-			break;
-		case CLIENT:
-			Context.setGameMode(GameModeEnum.LOCAL);
-			break;
-		default:
-			Context.setGameMode(GameModeEnum.LOCAL);
-			break;
-		}
+		Context.incGameMode();
 	}
 }

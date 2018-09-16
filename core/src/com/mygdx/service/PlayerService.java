@@ -124,21 +124,7 @@ public class PlayerService {
 	}
 
 	public void incPlayerType(int index) {
-		switch (definitions.get(index).getPlayerType()) {
-		case CPU:
-			definitions.get(index).setPlayerType(PlayerTypeEnum.HUMAN);
-			break;
-		case HUMAN:
-			if (Context.getGameMode() == GameModeEnum.SERVER) {
-				definitions.get(index).setPlayerType(PlayerTypeEnum.NET);
-			} else {
-				definitions.get(index).setPlayerType(PlayerTypeEnum.CPU);
-			}
-			break;
-		case NET:
-			definitions.get(index).setPlayerType(PlayerTypeEnum.CPU);
-			break;
-		}
+		definitions.get(index).incPlayerType(Context.getGameMode() == GameModeEnum.SERVER);
 	}
 
 	public PlayerTypeEnum getPlayerType(int index) {

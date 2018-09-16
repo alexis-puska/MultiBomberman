@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
-import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
@@ -144,31 +143,11 @@ public class LangueScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressLeft() {
-		switch (Context.getLocale()) {
-		case ENGLISH:
-			Context.setLocale(LocaleEnum.FRENCH);
-			break;
-		case FRENCH:
-			Context.setLocale(LocaleEnum.ENGLISH);
-			break;
-		default:
-			Context.setLocale(LocaleEnum.ENGLISH);
-			break;
-		}
+		Context.decLocale();
 	}
 
 	@Override
 	public void pressRight() {
-		switch (Context.getLocale()) {
-		case ENGLISH:
-			Context.setLocale(LocaleEnum.FRENCH);
-			break;
-		case FRENCH:
-			Context.setLocale(LocaleEnum.ENGLISH);
-			break;
-		default:
-			Context.setLocale(LocaleEnum.ENGLISH);
-			break;
-		}
+		Context.incLocale();
 	}
 }

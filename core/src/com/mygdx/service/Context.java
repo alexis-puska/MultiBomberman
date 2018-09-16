@@ -4,11 +4,6 @@ import com.mygdx.constante.Constante;
 import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.LocaleEnum;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class Context {
 
 	private static String guid;
@@ -44,9 +39,9 @@ public class Context {
 		return locale;
 	}
 
-	public static void setLocale(LocaleEnum locale) {
-		Context.locale = locale;
-	}
+//	public static void setLocale(LocaleEnum locale) {
+//		Context.locale = locale;
+//	}
 
 	public static GameModeEnum getGameMode() {
 		return gameMode;
@@ -87,6 +82,20 @@ public class Context {
 	public static void setExternalPlayer(int externalPlayer) {
 		Context.externalPlayer = externalPlayer;
 	}
-	
-	
+
+	public static void decLocale() {
+		locale = LocaleEnum.previous(locale);
+	}
+
+	public static void incLocale() {
+		locale = LocaleEnum.next(locale);
+	}
+
+	public static void decGameMode() {
+		gameMode = GameModeEnum.previous(gameMode);
+	}
+
+	public static void incGameMode() {
+		gameMode = GameModeEnum.next(gameMode);
+	}
 }
