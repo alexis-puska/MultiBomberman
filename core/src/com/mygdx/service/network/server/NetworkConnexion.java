@@ -3,7 +3,7 @@ package com.mygdx.service.network.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
@@ -20,6 +20,8 @@ public class NetworkConnexion extends Thread {
 
 	// active
 	private boolean status;
+	private BufferedReader buffer;
+	private OutputStream out;
 
 	// guid of client
 	private String guid;
@@ -47,16 +49,12 @@ public class NetworkConnexion extends Thread {
 
 	@Override
 	public void run() {
-		try (BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+		try {
+			this.buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.out = socket.getOutputStream();
+			out.write("HELLO\r\n".getBytes());
 			while (status) {
-				String received = null;
-				try {
-					received = buffer.readLine();
-				} catch (IOException ez) {
-					Gdx.app.log("", ez.getMessage());
-				}
-				out.println(received);
+				String received = buffer.readLine();
 				if (received == null) {
 					Gdx.app.log("NetworkConnexion", String.format("Deconnection brutale de : %s", remoteAddress));
 					status = false;
@@ -70,6 +68,8 @@ public class NetworkConnexion extends Thread {
 				}
 				decode(received);
 			}
+		} catch (IOException ez) {
+			Gdx.app.log("", ez.getMessage());
 		} catch (Exception e) {
 			Gdx.app.log("Exception", e.getMessage());
 		}
