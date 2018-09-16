@@ -112,6 +112,7 @@ public class PlayerService {
 				while (indexDefinition < 16) {
 					if (definitions.get(indexDefinition).getPlayerType() == PlayerTypeEnum.NET) {
 						networkConnexionMapping.put(i, indexDefinition);
+						indexDefinition++;
 						break;
 					}
 					indexDefinition++;

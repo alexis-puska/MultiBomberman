@@ -7,6 +7,7 @@ import java.io.OutputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.net.Socket;
+import com.mygdx.service.Context;
 
 public class Client extends Thread {
 
@@ -16,10 +17,12 @@ public class Client extends Thread {
 	private OutputStream outputStream;
 
 	private String receive;
+	private boolean canSendEvent;
 
 	public Client(Socket client) {
 		this.client = client;
 		this.status = true;
+		this.canSendEvent = false;
 		outputStream = client.getOutputStream();
 		bufferReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 	}
@@ -36,6 +39,14 @@ public class Client extends Thread {
 					break;
 				}
 				Gdx.app.log("CLIENT", line);
+
+				if (line.startsWith("hello")) {
+					outputStream.write(("uuid:" + Context.getGuid() + "\n").getBytes());
+				}
+				if (line.startsWith("nbp")) {
+					outputStream.write("nbp:1\n".getBytes());
+				}
+
 				this.receive = line;
 			} catch (IOException e) {
 				status = false;
@@ -71,6 +82,7 @@ public class Client extends Thread {
 	 * @param buffer value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
+		Gdx.app.log("Client : ", buffer.toString());
 		if (status) {
 			try {
 				outputStream.write(buffer);

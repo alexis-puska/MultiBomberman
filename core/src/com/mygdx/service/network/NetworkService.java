@@ -140,31 +140,59 @@ public class NetworkService {
 
 	public void sendDirection(Integer integer, PovDirection direction) {
 		if (this.client != null && this.client.isStatus()) {
-			this.client.send("Direction\n".getBytes());
+
+			switch (direction) {
+			case center:
+				this.client.send(("event:" + integer + ":CENTER\n").getBytes());
+				break;
+			case east:
+				this.client.send(("event:" + integer + ":RIGHT\n").getBytes());
+				break;
+			case north:
+				this.client.send(("event:" + integer + ":UP\n").getBytes());
+				break;
+			case northEast:
+				break;
+			case northWest:
+				break;
+			case south:
+				this.client.send(("event:" + integer + ":DOWN\n").getBytes());
+				break;
+			case southEast:
+				break;
+			case southWest:
+				break;
+			case west:
+				this.client.send(("event:" + integer + ":LEFT\n").getBytes());
+				break;
+			default:
+				this.client.send(("event:" + integer + ":CENTER\n").getBytes());
+				break;
+			}
 		}
 	}
 
 	public void sendDropBombe(Integer integer) {
 		if (this.client != null && this.client.isStatus()) {
-			this.client.send("DropBombe\n".getBytes());
+			this.client.send(("event:" + integer + ":DROP\n").getBytes());
 		}
 	}
 
 	public void sendSpeedUp(Integer integer) {
 		if (this.client != null && this.client.isStatus()) {
-			this.client.send("SPEEDUP\n".getBytes());
+			this.client.send(("event:" + integer + ":SPEED_UP\n").getBytes());
 		}
 	}
 
 	public void sendSpeedDown(Integer integer) {
 		if (this.client != null && this.client.isStatus()) {
-			this.client.send("Speed Down\n".getBytes());
+			this.client.send(("event:" + integer + ":SPEED_DOWN\n").getBytes());
 		}
 	}
 
 	public void sendThrowBombe(Integer integer) {
 		if (this.client != null && this.client.isStatus()) {
-			this.client.send("Throw Bombe\n".getBytes());
+			this.client.send(("event:" + integer + ":THROW\n").getBytes());
 		}
 	}
 }
