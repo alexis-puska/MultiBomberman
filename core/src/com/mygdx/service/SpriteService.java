@@ -41,7 +41,7 @@ import com.mygdx.enumeration.SpriteEnum;
  */
 public class SpriteService {
 
-	private static final String SPRITE_SERVICE = "Sprite Service";
+	private static final String CLASS_NAME = "SpriteService.class";
 	private static final String SPRITE_JSON_FILE = "json/sprite.json";
 
 	private static SpriteService instance = new SpriteService();
@@ -65,7 +65,7 @@ public class SpriteService {
 	}
 
 	public SpriteService() {
-		Gdx.app.log(SPRITE_SERVICE, "Init");
+		Gdx.app.log(CLASS_NAME, "Init");
 		sprites = new HashMap<>();
 		louisSprites = new HashMap<>();
 		playerSprites = new HashMap<>();
@@ -87,11 +87,11 @@ public class SpriteService {
 				initPlayerSprite(spriteFileContent);
 			}
 		} catch (JsonParseException e) {
-			Gdx.app.error(SPRITE_SERVICE, "JsonParseException : ", e);
+			Gdx.app.error(CLASS_NAME, "JsonParseException : ", e);
 		} catch (JsonMappingException e) {
-			Gdx.app.error(SPRITE_SERVICE, "JsonMappingException : ", e);
+			Gdx.app.error(CLASS_NAME, "JsonMappingException : ", e);
 		} catch (IOException e) {
-			Gdx.app.error(SPRITE_SERVICE, "IOException : ", e);
+			Gdx.app.error(CLASS_NAME, "IOException : ", e);
 		}
 	}
 
@@ -357,7 +357,7 @@ public class SpriteService {
 				values.add(pixmap.getPixel(x, y));
 			}
 		}
-		Gdx.app.log("", "values : ");
-		values.stream().forEach(v -> Gdx.app.log("", String.format("0x%08X", v)));
+		Gdx.app.log(CLASS_NAME, "values : ");
+		values.stream().forEach(v -> Gdx.app.log(CLASS_NAME, String.format("0x%08X", v)));
 	}
 }

@@ -15,6 +15,8 @@ import com.mygdx.service.PlayerService;
 
 public class NetworkConnexion extends Thread {
 
+	private static final String CLASS_NAME = "NetworkConnexion.class";
+	
 	private final Socket socket;
 	private final Server server;
 	private PlayerService playerService;
@@ -129,9 +131,9 @@ public class NetworkConnexion extends Thread {
 				decode(received);
 			}
 		} catch (IOException ez) {
-			Gdx.app.log("", ez.getMessage());
+			Gdx.app.log(CLASS_NAME, ez.getMessage());
 		} catch (Exception e) {
-			Gdx.app.log("Exception", e.getMessage());
+			Gdx.app.log(CLASS_NAME, e.getMessage());
 		}
 	}
 

@@ -14,6 +14,8 @@ import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
 
 public class Server extends Thread {
+	
+	private static final String CLASS_NAME = "Server.class";
 
 	private final MultiBombermanGame game;
 	private ServerSocket serverSocket;
@@ -26,7 +28,7 @@ public class Server extends Thread {
 
 	@Override
 	public void run() {
-		Gdx.app.log("", "start serveur");
+		Gdx.app.log(CLASS_NAME, "start serveur");
 		while (status) {
 			// Create a socket
 			try {
@@ -44,7 +46,7 @@ public class Server extends Thread {
 		status = false;
 		connexions.stream().forEach(nc -> nc.close());
 		if (serverSocket != null) {
-			Gdx.app.log("Server", "close server");
+			Gdx.app.log(CLASS_NAME, "close server");
 			serverSocket.dispose();
 		}
 	}

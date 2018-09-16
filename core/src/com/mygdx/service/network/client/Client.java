@@ -11,6 +11,8 @@ import com.mygdx.service.Context;
 
 public class Client extends Thread {
 
+	private final static String CLASS_NAME = "Client.class";
+
 	private boolean status;
 	private Socket client;
 	private BufferedReader bufferReader;
@@ -29,7 +31,7 @@ public class Client extends Thread {
 
 	@Override
 	public void run() {
-		Gdx.app.log("", "start client");
+		Gdx.app.debug(CLASS_NAME, "start client");
 		while (status) {
 			try {
 				String line = bufferReader.readLine();
@@ -38,7 +40,7 @@ public class Client extends Thread {
 					this.status = false;
 					break;
 				}
-				Gdx.app.log("CLIENT", line);
+				Gdx.app.debug(CLASS_NAME, line);
 
 				if (line.startsWith("hello")) {
 					outputStream.write(("uuid:" + Context.getGuid() + "\n").getBytes());
@@ -50,7 +52,7 @@ public class Client extends Thread {
 				this.receive = line;
 			} catch (IOException e) {
 				status = false;
-				Gdx.app.log("Client", "IOException run 2");
+				Gdx.app.debug(CLASS_NAME, "IOException run 2");
 				break;
 			}
 		}
@@ -58,7 +60,7 @@ public class Client extends Thread {
 			this.bufferReader.close();
 			this.outputStream.close();
 		} catch (IOException e) {
-			Gdx.app.log("Client", "IOException run");
+			Gdx.app.debug(CLASS_NAME, "IOException run");
 		}
 
 	}
@@ -82,12 +84,11 @@ public class Client extends Thread {
 	 * @param buffer value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
-		Gdx.app.log("Client : ", buffer.toString());
 		if (status) {
 			try {
 				outputStream.write(buffer);
 			} catch (IOException e) {
-				Gdx.app.log("Client", "IOException send");
+				Gdx.app.debug(CLASS_NAME, "IOException send");
 			}
 		}
 	}

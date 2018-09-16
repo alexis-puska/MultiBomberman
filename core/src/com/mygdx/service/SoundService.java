@@ -13,6 +13,8 @@ import com.mygdx.enumeration.SoundEnum;
  */
 public class SoundService {
 
+	private static final String CLASS_NAME = "SoundService.class";
+
 	private static SoundService instance = new SoundService();
 
 	/*******************
@@ -42,7 +44,7 @@ public class SoundService {
 	private MusicEnum lastMusicPlayed;
 
 	public SoundService() {
-		Gdx.app.log("SoundService", "Init");
+		Gdx.app.log(CLASS_NAME, "Init");
 		/*******************
 		 * --- musique ---
 		 *******************/
@@ -108,7 +110,7 @@ public class SoundService {
 	 *******************/
 	public void playSound(SoundEnum soundEnum) {
 		switch (soundEnum) {
-		
+
 		case BOUNCE:
 			soundBouncd.play();
 			break;
