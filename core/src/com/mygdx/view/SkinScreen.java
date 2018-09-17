@@ -57,13 +57,16 @@ public class SkinScreen implements Screen, MenuListener {
 		game.getBatch().begin();
 		layout.setText(font, "skin screen");
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
-		for (int j = 0; j < 4; j++) { 
+		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
 				layout.setText(font, MessageService.getInstance().getMessage("game.menu.player") + pos + " : ");
 				font.draw(game.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
-				game.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, 
-						game.getPlayerService().getPlayerColor(pos), game.getPlayerService().getPlayerCharacter(pos),0), START_X + (i * COL_SIZE)+60, START_Y - (j * ROW_SIZE)-10);
+				game.getBatch()
+						.draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN,
+								game.getPlayerService().getPlayerColor(pos),
+								game.getPlayerService().getPlayerCharacter(pos), 0), START_X + (i * COL_SIZE) + 60,
+								START_Y - (j * ROW_SIZE) - 10);
 			}
 		}
 		game.getBatch().end();
@@ -123,6 +126,7 @@ public class SkinScreen implements Screen, MenuListener {
 			game.setScreen(new PlayerTypeScreen(game));
 		} else if (Context.getGameMode() == GameModeEnum.SERVER) {
 			game.getScreen().dispose();
+			game.getNetworkService().acceptConnexion(true);
 			game.setScreen(new WaitConnexionScreen(game));
 		}
 	}

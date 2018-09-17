@@ -6,7 +6,7 @@ import com.mygdx.enumeration.LocaleEnum;
 
 public class Context {
 
-	private static String guid;
+	private static String uuid;
 	private static LocaleEnum locale;
 	private static GameModeEnum gameMode;
 	private static boolean useUpnp = true;
@@ -27,12 +27,12 @@ public class Context {
 		externalPlayer = 0;
 	}
 
-	public static String getGuid() {
-		return guid;
+	public static String getUuid() {
+		return uuid;
 	}
 
-	public static void setGuid(String guid) {
-		Context.guid = guid;
+	public static void setUuid(String uuid) {
+		Context.uuid = uuid;
 	}
 
 	public static LocaleEnum getLocale() {

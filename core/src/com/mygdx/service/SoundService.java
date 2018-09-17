@@ -44,7 +44,7 @@ public class SoundService {
 	private MusicEnum lastMusicPlayed;
 
 	public SoundService() {
-		Gdx.app.log(CLASS_NAME, "Init");
+		Gdx.app.debug(CLASS_NAME, "Init");
 		/*******************
 		 * --- musique ---
 		 *******************/

@@ -65,7 +65,7 @@ public class SpriteService {
 	}
 
 	public SpriteService() {
-		Gdx.app.log(CLASS_NAME, "Init");
+		Gdx.app.debug(CLASS_NAME, "Init");
 		sprites = new HashMap<>();
 		louisSprites = new HashMap<>();
 		playerSprites = new HashMap<>();
@@ -357,7 +357,7 @@ public class SpriteService {
 				values.add(pixmap.getPixel(x, y));
 			}
 		}
-		Gdx.app.log(CLASS_NAME, "values : ");
-		values.stream().forEach(v -> Gdx.app.log(CLASS_NAME, String.format("0x%08X", v)));
+		Gdx.app.debug(CLASS_NAME, "values : ");
+		values.stream().forEach(v -> Gdx.app.debug(CLASS_NAME, String.format("0x%08X", v)));
 	}
 }

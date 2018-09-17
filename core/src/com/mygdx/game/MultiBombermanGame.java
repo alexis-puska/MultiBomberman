@@ -35,7 +35,7 @@ import lombok.Setter;
 @Setter
 public class MultiBombermanGame extends Game {
 
-	private static final String LOG_NAME = "MultiBombermanGame";
+	private static final String LOG_NAME = "MultiBombermanGame.class";
 
 	private NetworkService networkService;
 	private PlayerService playerService;
@@ -78,33 +78,33 @@ public class MultiBombermanGame extends Game {
 	private void retrieveGUID() {
 		ObjectMapper objectMapper = new ObjectMapper();
 		FileHandle multiBombermanJson = Gdx.files.local("MultiBomberman.json");
-		if (multiBombermanJson.exists()) {
-			MultiBombermanDTO multiBomberman;
-			try {
-				multiBomberman = objectMapper.readValue(multiBombermanJson.read(), MultiBombermanDTO.class);
-				Context.setGuid(multiBomberman.getUuid());
-			} catch (JsonParseException e) {
-				Gdx.app.error(LOG_NAME, "JsonParseException : ", e);
-				initGUID(objectMapper);
-			} catch (JsonMappingException e) {
-				Gdx.app.error(LOG_NAME, "JsonMappingException : ", e);
-				initGUID(objectMapper);
-			} catch (IOException e) {
-				Gdx.app.error(LOG_NAME, "IOException : ", e);
-			}
-		} else {
+//		if (multiBombermanJson.exists()) {
+//			MultiBombermanDTO multiBomberman;
+//			try {
+//				multiBomberman = objectMapper.readValue(multiBombermanJson.read(), MultiBombermanDTO.class);
+//				Context.setUuid(multiBomberman.getUuid());
+//			} catch (JsonParseException e) {
+//				Gdx.app.error(LOG_NAME, "JsonParseException : ", e);
+//				initGUID(objectMapper);
+//			} catch (JsonMappingException e) {
+//				Gdx.app.error(LOG_NAME, "JsonMappingException : ", e);
+//				initGUID(objectMapper);
+//			} catch (IOException e) {
+//				Gdx.app.error(LOG_NAME, "IOException : ", e);
+//			}
+//		} else {
 			initGUID(objectMapper);
-		}
+//		}
 	}
 
 	private void initGUID(ObjectMapper objectMapper) {
-		String guid = UUID.randomUUID().toString();
+		String uuid = UUID.randomUUID().toString();
 		FileHandle multiBombermanJson = Gdx.files.local("MultiBomberman.json");
 		if (multiBombermanJson.exists()) {
 			multiBombermanJson.delete();
 		}
 		MultiBombermanDTO multiBomberman = new MultiBombermanDTO();
-		multiBomberman.setUuid(guid);
+		multiBomberman.setUuid(uuid);
 		String json;
 		try {
 			json = objectMapper.writeValueAsString(multiBomberman);
@@ -112,7 +112,7 @@ public class MultiBombermanGame extends Game {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		Context.setGuid(guid);
+		Context.setUuid(uuid);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class MultiBombermanGame extends Game {
 	}
 
 	public void resize(int width, int height) {
-		Gdx.app.log("MULTI", "RESIZE");
+		Gdx.app.debug(LOG_NAME, "RESIZE");
 		try {
 			Thread.sleep(500);
 			Controllers.clearListeners();

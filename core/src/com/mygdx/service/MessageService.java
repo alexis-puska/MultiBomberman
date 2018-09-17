@@ -12,6 +12,8 @@ import com.mygdx.enumeration.LocaleEnum;
  */
 public class MessageService {
 
+	private static final String CLASS_NAME = "MessageService.class";
+	
 	private static MessageService instance;
 
 	private FileHandle baseFileHandle;
@@ -22,7 +24,7 @@ public class MessageService {
 	 * Init the service
 	 */
 	private MessageService() {
-		Gdx.app.log("MessageService", "Init");
+		Gdx.app.debug(CLASS_NAME, "Init");
 		baseFileHandle = Gdx.files.internal("i18n/message");
 		currentLocale = Context.getLocale();
 		message = I18NBundle.createBundle(baseFileHandle, new Locale(currentLocale.getCode()));

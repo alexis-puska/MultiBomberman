@@ -8,6 +8,8 @@ import com.mygdx.constante.Constante;
 import com.mygdx.service.PlayerService;
 
 public class MenuInputProcessor implements InputProcessor {
+	
+	private static final String LOG_NAME = "MenuInputProcessor.class";
 
 	private PlayerService playerService;
 
@@ -137,7 +139,7 @@ public class MenuInputProcessor implements InputProcessor {
 
 	private void toogleScreen() {
 		if (!fullscreen) {
-			Gdx.app.log("SCREEN SIZE :", Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
+			Gdx.app.debug(LOG_NAME, "toogle screen : "+Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
 			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 			fullscreen = true;
 		} else {

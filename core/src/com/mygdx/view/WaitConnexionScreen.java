@@ -102,6 +102,7 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 	@Override
 	public void pressStart() {
 		game.getPlayerService().valideNetWorkPlayerType();
+		game.getNetworkService().acceptConnexion(false);
 		game.getScreen().dispose();
 		game.setScreen(new SkinScreen(game));
 	}

@@ -27,58 +27,58 @@ public class UpnpService {
 	}
 
 	public void openPortWithUpnp() {
-		Gdx.app.log("Starting weupnp", "");
-		Gdx.app.log("Looking for Gateway Devices", "");
+		Gdx.app.debug(CLASS_NAME,"Starting weupnp");
+		Gdx.app.debug(CLASS_NAME, "Looking for Gateway Devices");
 		try {
 			gatewayDiscover.discover();
 			gatewayDevice = gatewayDiscover.getValidGateway();
 			if (null != gatewayDevice) {
-				Gdx.app.log(CLASS_NAME, "Found gateway device : " + gatewayDevice.getModelName() + " "
+				Gdx.app.debug(CLASS_NAME, "Found gateway device : " + gatewayDevice.getModelName() + " "
 						+ gatewayDevice.getModelDescription());
 			} else {
-				Gdx.app.log(CLASS_NAME, "No valid gateway device found.");
+				Gdx.app.debug(CLASS_NAME, "No valid gateway device found.");
 				return;
 			}
 			InetAddress localAddress = gatewayDevice.getLocalAddress();
 			String externalIPAddress = gatewayDevice.getExternalIPAddress();
-			Gdx.app.log(CLASS_NAME, "Using local address: " + localAddress + ", External address: " + externalIPAddress
+			Gdx.app.debug(CLASS_NAME, "Using local address: " + localAddress + ", External address: " + externalIPAddress
 					+ ", Attempting to map port : " + Context.getPort());
 			PortMappingEntry portMapping = new PortMappingEntry();
 			if (gatewayDevice.getSpecificPortMappingEntry(Context.getPort(), "TCP", portMapping)) {
-				Gdx.app.log(CLASS_NAME, "Port was already mapped. Aborting test.");
+				Gdx.app.debug(CLASS_NAME, "Port was already mapped. Aborting test.");
 			} else {
-				Gdx.app.log(CLASS_NAME, "Sending port mapping request");
+				Gdx.app.debug(CLASS_NAME, "Sending port mapping request");
 				if (!gatewayDevice.addPortMapping(Context.getPort(), Context.getPort(),
 						localAddress.getHostAddress(), "TCP", Constante.NETWORK_APPLICATION_UPNP_NAME)) {
-					Gdx.app.log(CLASS_NAME, "Port mapping attempt failed");
+					Gdx.app.debug(CLASS_NAME, "Port mapping attempt failed");
 				} else {
-					Gdx.app.log(CLASS_NAME, "Mapping successful !!!");
+					Gdx.app.debug(CLASS_NAME, "Mapping successful !!!");
 				}
 			}
 		} catch (SocketException e) {
-			Gdx.app.log(CLASS_NAME, "SocketException : " + e.getMessage());
+			Gdx.app.error(CLASS_NAME, "SocketException : " + e.getMessage());
 		} catch (UnknownHostException e) {
-			Gdx.app.log(CLASS_NAME, "UnknownHostException : " + e.getMessage());
+			Gdx.app.error(CLASS_NAME, "UnknownHostException : " + e.getMessage());
 		} catch (IOException e) {
-			Gdx.app.log(CLASS_NAME, "IOException : " + e.getMessage());
+			Gdx.app.error(CLASS_NAME, "IOException : " + e.getMessage());
 		} catch (SAXException e) {
-			Gdx.app.log(CLASS_NAME, "SAXException : " + e.getMessage());
+			Gdx.app.error(CLASS_NAME, "SAXException : " + e.getMessage());
 		} catch (ParserConfigurationException e) {
-			Gdx.app.log(CLASS_NAME, "ParserConfigurationException : " + e.getMessage());
+			Gdx.app.error(CLASS_NAME, "ParserConfigurationException : " + e.getMessage());
 		}
 	}
 
 	public void closePortWithUpnp() {
 		if (gatewayDevice != null) {
-			Gdx.app.log(CLASS_NAME, "Stopping weupnp");
+			Gdx.app.debug(CLASS_NAME, "Stopping weupnp");
 			try {
 				gatewayDevice.deletePortMapping(Context.getPort(), "TCP");
 			} catch (IOException e) {
-				Gdx.app.log(CLASS_NAME, "IOException : " + e.getMessage());
+				Gdx.app.error(CLASS_NAME, "IOException : " + e.getMessage());
 			} catch (SAXException e) {
-				Gdx.app.log(CLASS_NAME, "SAXException : " + e.getMessage());
+				Gdx.app.error(CLASS_NAME, "SAXException : " + e.getMessage());
 			}
-			Gdx.app.log(CLASS_NAME, "Port mapping removed");
+			Gdx.app.debug(CLASS_NAME, "Port mapping removed");
 		}
 	}
 }

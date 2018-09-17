@@ -36,19 +36,26 @@ public class Client extends Thread {
 			try {
 				String line = bufferReader.readLine();
 				if (line == null) {
-					Gdx.app.log("CLIENT", "buffer null connexion lost");
+					Gdx.app.log(CLASS_NAME, "buffer null connexion lost");
 					this.status = false;
 					break;
 				}
 				Gdx.app.debug(CLASS_NAME, line);
 
+				//request uuid by server
 				if (line.startsWith("hello")) {
-					outputStream.write(("uuid:" + Context.getGuid() + "\n").getBytes());
+					outputStream.write(("uuid:" + Context.getUuid() + "\n").getBytes());
 				}
 				if (line.startsWith("nbp")) {
 					outputStream.write("nbp:1\n".getBytes());
 				}
-
+				if(line.startsWith("event")) {
+					this.canSendEvent = true;
+				}
+				if(line.startsWith("welcome_back")) {
+					this.canSendEvent = true;
+				}
+				
 				this.receive = line;
 			} catch (IOException e) {
 				status = false;
@@ -84,7 +91,7 @@ public class Client extends Thread {
 	 * @param buffer value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
-		if (status) {
+		if (status && canSendEvent) {
 			try {
 				outputStream.write(buffer);
 			} catch (IOException e) {

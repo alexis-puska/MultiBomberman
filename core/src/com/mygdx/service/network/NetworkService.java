@@ -52,7 +52,7 @@ public class NetworkService {
 				upnpService.openPortWithUpnp();
 			}
 		} catch (ServerPortAlreadyInUseException ex) {
-			Gdx.app.log(CLASS_NAME, "Serveur KO");
+			Gdx.app.error(CLASS_NAME, "Serveur KO");
 			return false;
 		}
 		return true;
@@ -74,13 +74,13 @@ public class NetworkService {
 		try {
 			Socket client = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
 			if (client.isConnected()) {
-				Gdx.app.log("NetworkService", "connected !");
+				Gdx.app.debug(CLASS_NAME, "connected !");
 				this.client = new Client(client);
 				this.client.start();
 				return true;
 			}
 		} catch (GdxRuntimeException ex) {
-			Gdx.app.log("CONNECT TO SERVER", "ERROR");
+			Gdx.app.error(CLASS_NAME, "CONNECT TO SERVER ERROR");
 			return false;
 		}
 		return false;
@@ -110,12 +110,12 @@ public class NetworkService {
 				Gdx.app.error(CLASS_NAME, "Error getting internet ip from : " + Constante.NETWORK_IP_SERVICE);
 			}
 		} catch (MalformedURLException e1) {
-			Gdx.app.log(CLASS_NAME, "MalformedURLException : " + e1.getMessage());
+			Gdx.app.error(CLASS_NAME, "MalformedURLException : " + e1.getMessage());
 
 		}
-		Gdx.app.log(CLASS_NAME, "IP internet:- " + internetIp);
-		Gdx.app.log(CLASS_NAME, "IP Address:- " + externalIp);
-		Gdx.app.log(CLASS_NAME, "Host Name:- " + hostName);
+		Gdx.app.debug(CLASS_NAME, "IP internet:- " + internetIp);
+		Gdx.app.debug(CLASS_NAME, "IP Address:- " + externalIp);
+		Gdx.app.debug(CLASS_NAME, "Host Name:- " + hostName);
 	}
 
 	public String getExternalIp() {
@@ -136,6 +136,10 @@ public class NetworkService {
 
 	public Client getClient() {
 		return client;
+	}
+
+	public void acceptConnexion(boolean state) {
+		this.server.acceptConnexion(state);
 	}
 
 	public void sendDirection(Integer integer, PovDirection direction) {
@@ -195,4 +199,5 @@ public class NetworkService {
 			this.client.send(("event:" + integer + ":THROW\n").getBytes());
 		}
 	}
+
 }
