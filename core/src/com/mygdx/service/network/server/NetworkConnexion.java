@@ -25,7 +25,7 @@ public class NetworkConnexion extends Thread {
 
 	// active
 	private boolean status;
-	private BufferedReader buffer;
+
 	private OutputStream out;
 
 	// uuid of client
@@ -54,8 +54,7 @@ public class NetworkConnexion extends Thread {
 
 	@Override
 	public void run() {
-		try {
-			this.buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		try (BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 			this.out = socket.getOutputStream();
 
 			// init conversation with client
@@ -168,9 +167,9 @@ public class NetworkConnexion extends Thread {
 				decode(received);
 			}
 		} catch (IOException ez) {
-			Gdx.app.error(CLASS_NAME, "IOException : "+ez.getMessage());
+			Gdx.app.error(CLASS_NAME, "IOException : " + ez.getMessage());
 		} catch (Exception e) {
-			Gdx.app.error(CLASS_NAME, "Exception : "+e.getMessage());
+			Gdx.app.error(CLASS_NAME, "Exception : " + e.getMessage());
 		}
 	}
 
@@ -190,7 +189,7 @@ public class NetworkConnexion extends Thread {
 		try {
 			out.write(value);
 		} catch (IOException e) {
-			Gdx.app.error("CLASS_NAME", "IOException : "+e.getMessage());
+			Gdx.app.error("CLASS_NAME", "IOException : " + e.getMessage());
 		}
 	}
 }

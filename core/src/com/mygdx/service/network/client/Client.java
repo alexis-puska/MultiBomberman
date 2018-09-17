@@ -11,7 +11,7 @@ import com.mygdx.service.Context;
 
 public class Client extends Thread {
 
-	private final static String CLASS_NAME = "Client.class";
+	private static final String CLASS_NAME = "Client.class";
 
 	private boolean status;
 	private Socket client;
