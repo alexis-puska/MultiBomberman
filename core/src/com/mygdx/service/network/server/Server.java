@@ -51,7 +51,7 @@ public class Server extends Thread {
 
 	public void kill() {
 		status = false;
-		connexions.stream().forEach(nc -> nc.close());
+		connexions.stream().forEach(NetworkConnexion::close);
 		connexionsValide.entrySet().stream().forEach(e -> e.getValue().close());
 		if (serverSocket != null) {
 			Gdx.app.debug(CLASS_NAME, "close server");

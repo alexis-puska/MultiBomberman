@@ -38,31 +38,31 @@ public class Client extends Thread {
 				if (line == null) {
 					Gdx.app.log(CLASS_NAME, "buffer null connexion lost");
 					this.status = false;
-					
-				}
-				Gdx.app.debug(CLASS_NAME, line);
 
-				//request uuid by server
-				if (line.startsWith("hello")) {
-					outputStream.write(("uuid:" + Context.getUuid() + "\n").getBytes());
+				} else {
+					Gdx.app.debug(CLASS_NAME, line);
+					// request uuid by server
+					if (line.startsWith("hello")) {
+						outputStream.write(("uuid:" + Context.getUuid() + "\n").getBytes());
+					}
+					if (line.startsWith("nbp")) {
+						outputStream.write("nbp:1\n".getBytes());
+					}
+					if (line.startsWith("event")) {
+						this.canSendEvent = true;
+					}
+					if (line.startsWith("welcome_back")) {
+						this.canSendEvent = true;
+					}
+					if (line.startsWith("error")) {
+						Gdx.app.error(CLASS_NAME, line);
+					}
+					this.receive = line;
 				}
-				if (line.startsWith("nbp")) {
-					outputStream.write("nbp:1\n".getBytes());
-				}
-				if(line.startsWith("event")) {
-					this.canSendEvent = true;
-				}
-				if(line.startsWith("welcome_back")) {
-					this.canSendEvent = true;
-				}
-				if(line.startsWith("error")) {
-					Gdx.app.error(CLASS_NAME, line);
-				}
-				this.receive = line;
 			} catch (IOException e) {
 				status = false;
 				Gdx.app.debug(CLASS_NAME, "IOException run 2");
-				
+
 			}
 		}
 		try {
@@ -89,7 +89,8 @@ public class Client extends Thread {
 	/**
 	 * Send button event to server
 	 * 
-	 * @param buffer value of button pressed by an controller
+	 * @param buffer
+	 *            value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
 		if (status && canSendEvent) {

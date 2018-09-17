@@ -13,7 +13,7 @@ public class EditorLauncher extends JFrame {
 	private static final long serialVersionUID = -3272449442566277297L;
 
 	private Locale locale;
-	private ResourceBundle message;
+	private transient ResourceBundle message;
 
 	public static void main(String[] args) {
 		String lang = "fr";
@@ -22,16 +22,16 @@ public class EditorLauncher extends JFrame {
 			lang = args[0];
 		}
 		editorLauncher = new EditorLauncher(lang);
-		editorLauncher.Launch();
+		editorLauncher.launch();
 	}
 
 	public EditorLauncher(String lang) {
 		this.locale = Locale.forLanguageTag(lang);
 		this.message = ResourceBundle.getBundle("i18n/Message", locale);
-		System.out.println("message " + lang + " : " + message.getString("currentLevel.border"));
+		System.out.println("message " + lang + " : " + message.getString("editor.currentLevel.border"));
 	}
 
-	public void Launch() {
+	public void launch() {
 		this.getContentPane().setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
