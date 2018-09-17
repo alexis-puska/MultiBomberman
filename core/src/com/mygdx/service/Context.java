@@ -15,7 +15,7 @@ public class Context {
 	private static int externalPlayer;
 
 	private Context() {
-
+		//empty constructor
 	}
 
 	public static void resetContext() {
@@ -43,40 +43,78 @@ public class Context {
 		return gameMode;
 	}
 
-	public static void setGameMode(GameModeEnum gameMode) {
-		Context.gameMode = gameMode;
-	}
-
 	public static boolean isUseUpnp() {
 		return useUpnp;
 	}
 
-	public static void setUseUpnp(boolean useUpnp) {
-		Context.useUpnp = useUpnp;
+	public static void toogleUpnp() {
+		if (useUpnp) {
+			useUpnp = false;
+		} else {
+			useUpnp = true;
+		}
 	}
 
 	public static int getPort() {
 		return port;
 	}
 
-	public static void setPort(int port) {
-		Context.port = port;
+	public static void setPort(int networkPort) {
+		port = networkPort;
+	}
+
+	public static void incPort() {
+		port++;
+		if (port > 65535) {
+			port = 0;
+		}
+	}
+
+	public static void decPort() {
+		port--;
+		if (port < 1024) {
+			port = 65535;
+		}
 	}
 
 	public static int getLocalPlayer() {
 		return localPlayer;
 	}
 
-	public static void setLocalPlayer(int localPlayer) {
-		Context.localPlayer = localPlayer;
+	public static void incLocalPlayer() {
+		if (localPlayer + externalPlayer < 16) {
+			localPlayer++;
+			if (localPlayer > 16) {
+				localPlayer = 16;
+			}
+		}
+	}
+
+	public static void decLocalPlayer() {
+		localPlayer--;
+		if (localPlayer < 0) {
+			localPlayer = 0;
+		}
 	}
 
 	public static int getExternalPlayer() {
 		return externalPlayer;
 	}
 
-	public static void setExternalPlayer(int externalPlayer) {
-		Context.externalPlayer = externalPlayer;
+	public static void incExternalPlayer() {
+		if (localPlayer + externalPlayer < 16) {
+			externalPlayer++;
+			if (externalPlayer > 16) {
+				externalPlayer = 16;
+			}
+		}
+	}
+
+	public static void decExternalPlayer() {
+		externalPlayer--;
+		if (externalPlayer < 0) {
+			externalPlayer = 0;
+		}
 	}
 
 	public static void decLocale() {
@@ -94,4 +132,5 @@ public class Context {
 	public static void incGameMode() {
 		gameMode = GameModeEnum.next(gameMode);
 	}
+
 }

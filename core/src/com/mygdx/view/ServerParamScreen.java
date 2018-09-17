@@ -165,7 +165,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-		//unused method
+		// unused method
 	}
 
 	@Override
@@ -188,29 +188,16 @@ public class ServerParamScreen implements Screen, MenuListener {
 	public void pressLeft() {
 		switch (cursorPosition) {
 		case 0:
-			Context.setExternalPlayer(Context.getExternalPlayer() - 1);
-			if (Context.getExternalPlayer() < 0) {
-				Context.setExternalPlayer(0);
-			}
+			Context.decExternalPlayer();
 			break;
 		case 1:
-			Context.setLocalPlayer(Context.getLocalPlayer() - 1);
-			if (Context.getLocalPlayer() < 0) {
-				Context.setLocalPlayer(0);
-			}
+			Context.decLocalPlayer();
 			break;
 		case 2:
-			Context.setPort(Context.getPort() - 1);
-			if (Context.getPort() < 0) {
-				Context.setPort(0);
-			}
+			Context.decPort();
 			break;
 		case 3:
-			if (Context.isUseUpnp()) {
-				Context.setUseUpnp(false);
-			} else {
-				Context.setUseUpnp(true);
-			}
+			Context.toogleUpnp();
 			break;
 		default:
 		}
@@ -220,33 +207,16 @@ public class ServerParamScreen implements Screen, MenuListener {
 	public void pressRight() {
 		switch (cursorPosition) {
 		case 0:
-			if (Context.getLocalPlayer() + Context.getExternalPlayer() < 16) {
-				Context.setExternalPlayer(Context.getExternalPlayer() + 1);
-				if (Context.getExternalPlayer() > 16) {
-					Context.setExternalPlayer(16);
-				}
-			}
+			Context.incExternalPlayer();
 			break;
 		case 1:
-			if (Context.getLocalPlayer() + Context.getExternalPlayer() < 16) {
-				Context.setLocalPlayer(Context.getLocalPlayer() + 1);
-				if (Context.getLocalPlayer() > 16) {
-					Context.setLocalPlayer(16);
-				}
-			}
+			Context.incLocalPlayer();
 			break;
 		case 2:
-			Context.setPort(Context.getPort() + 1);
-			if (Context.getPort() > 65535) {
-				Context.setPort(65535);
-			}
+			Context.incPort();
 			break;
 		case 3:
-			if (Context.isUseUpnp()) {
-				Context.setUseUpnp(false);
-			} else {
-				Context.setUseUpnp(true);
-			}
+			Context.toogleUpnp();
 			break;
 		default:
 		}

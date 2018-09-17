@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.net.Socket;
 import com.mygdx.service.Context;
+import com.mygdx.view.ClientViewScreen;
 
 public class Client extends Thread {
 
@@ -17,8 +18,8 @@ public class Client extends Thread {
 	private Socket socket;
 	private BufferedReader bufferReader;
 	private OutputStream outputStream;
+	private ClientViewScreen viewScreen;
 
-	private String receive;
 	private boolean canSendEvent;
 
 	public Client(Socket socket) {
@@ -57,7 +58,11 @@ public class Client extends Thread {
 					if (line.startsWith("error")) {
 						Gdx.app.error(CLASS_NAME, line);
 					}
-					this.receive = line;
+					if (line.startsWith("draw")) {
+						if (viewScreen != null) {
+							viewScreen.receive(line);
+						}
+					}
 				}
 			} catch (IOException e) {
 				status = false;
@@ -82,8 +87,8 @@ public class Client extends Thread {
 		return status;
 	}
 
-	public String getReceive() {
-		return receive;
+	public void setViewScreen(ClientViewScreen viewScreen) {
+		this.viewScreen = viewScreen;
 	}
 
 	/**

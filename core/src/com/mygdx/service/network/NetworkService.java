@@ -20,6 +20,7 @@ import com.mygdx.service.Context;
 import com.mygdx.service.network.client.Client;
 import com.mygdx.service.network.server.Server;
 import com.mygdx.service.network.server.UpnpService;
+import com.mygdx.view.ClientViewScreen;
 
 public class NetworkService {
 
@@ -67,29 +68,8 @@ public class NetworkService {
 		server.kill();
 	}
 
-	/***********************************
-	 * ----- client part -----
-	 ***********************************/
-	public boolean connectToServer(int port, String ip) {
-		SocketHints socketHints = new SocketHints();
-		socketHints.connectTimeout = 1000;
-		try {
-			Socket clientSocket = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
-			if (clientSocket.isConnected()) {
-				Gdx.app.debug(CLASS_NAME, "connected !");
-				this.client = new Client(clientSocket);
-				this.client.start();
-				return true;
-			}
-		} catch (GdxRuntimeException ex) {
-			Gdx.app.error(CLASS_NAME, "CONNECT TO SERVER ERROR");
-			return false;
-		}
-		return false;
-	}
-
-	public void disconnectFromServer() {
-		this.client.kill();
+	public void sendToClient(String value) {
+		server.send((value+"\n").getBytes());
 	}
 
 	/***********************************
@@ -144,9 +124,37 @@ public class NetworkService {
 		this.server.acceptConnexion(state);
 	}
 
+	/***********************************
+	 * ----- client part -----
+	 ***********************************/
+	public boolean connectToServer(int port, String ip) {
+		SocketHints socketHints = new SocketHints();
+		socketHints.connectTimeout = 1000;
+		try {
+			Socket clientSocket = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
+			if (clientSocket.isConnected()) {
+				Gdx.app.debug(CLASS_NAME, "connected !");
+				this.client = new Client(clientSocket);
+				this.client.start();
+				return true;
+			}
+		} catch (GdxRuntimeException ex) {
+			Gdx.app.error(CLASS_NAME, "CONNECT TO SERVER ERROR");
+			return false;
+		}
+		return false;
+	}
+
+	public void disconnectFromServer() {
+		this.client.kill();
+	}
+
+	public void setClientViewScreen(ClientViewScreen viewScreen) {
+		this.client.setViewScreen(viewScreen);
+	}
+
 	public void sendDirection(Integer integer, PovDirection direction) {
 		if (this.client != null && this.client.isStatus()) {
-
 			switch (direction) {
 			case center:
 				this.client.send((EVENT + integer + ":CENTER\n").getBytes());
@@ -201,5 +209,4 @@ public class NetworkService {
 			this.client.send((EVENT + integer + ":THROW\n").getBytes());
 		}
 	}
-
 }

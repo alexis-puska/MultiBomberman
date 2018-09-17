@@ -10,16 +10,19 @@ import com.mygdx.service.input_processor.MenuListener;
 
 public class ClientViewScreen implements Screen, MenuListener {
 
+	private static final String CLASS_NAME = "ClientViewScreen.class";
+
 	final MultiBombermanGame game;
 
 	public ClientViewScreen(final MultiBombermanGame game) {
 		this.game = game;
 		this.game.getPlayerService().setMenuListener(this);
+		this.game.getNetworkService().setClientViewScreen(this);
 	}
 
 	@Override
 	public void render(float delta) {
-		if(!game.getNetworkService().getClient().isStatus()) {
+		if (!game.getNetworkService().getClient().isStatus()) {
 			game.getScreen().dispose();
 			game.setScreen(new MainScreen(game));
 		}
@@ -76,7 +79,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-		//Unused method
+		// Unused method
 	}
 
 	@Override
@@ -97,6 +100,10 @@ public class ClientViewScreen implements Screen, MenuListener {
 	@Override
 	public void pressRight() {
 		// unused method
+	}
+
+	public void receive(String line) {
+		Gdx.app.log(CLASS_NAME, "received : " + line);
 	}
 
 }

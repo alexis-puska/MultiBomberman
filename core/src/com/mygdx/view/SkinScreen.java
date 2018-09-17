@@ -36,6 +36,9 @@ public class SkinScreen implements Screen, MenuListener {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.game.getPlayerService().setMenuListener(this);
+		if (Context.getGameMode() == GameModeEnum.SERVER) {
+			game.getNetworkService().sendToClient("draw:test");
+		}
 		initFont();
 	}
 
