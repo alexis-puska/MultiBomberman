@@ -46,7 +46,6 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
-
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
@@ -54,6 +53,17 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 		game.getBatch().begin();
 		layout.setText(font, "Wait connexion");
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		
+		layout.setText(font, "NB client");
+		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 190);
+		layout.setText(font, "NB total human");
+		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 150);
+		
+		layout.setText(font, ""+game.getNetworkService().getServer().getConnexions().size());
+		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 170);
+		layout.setText(font, ""+game.getNetworkService().getServer().getPlayer());
+		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 130);
+		
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}
