@@ -39,10 +39,6 @@ public class Context {
 		return locale;
 	}
 
-//	public static void setLocale(LocaleEnum locale) {
-//		Context.locale = locale;
-//	}
-
 	public static GameModeEnum getGameMode() {
 		return gameMode;
 	}

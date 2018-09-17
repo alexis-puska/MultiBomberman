@@ -30,7 +30,6 @@ import com.mygdx.view.SkinScreen;
  *
  */
 public class PlayerService {
-	
 
 	private static final String CLASS_NAME = "PlayerService.class";
 
@@ -192,42 +191,35 @@ public class PlayerService {
 				}
 			}
 		} else {
-			Gdx.app.debug(CLASS_NAME," Map NULL");
+			Gdx.app.debug(CLASS_NAME, " Map NULL");
 		}
 	}
 
 	public void dropBombe(String uuid, int index) {
-		if (this.networkController != null) {
-			if (game.getScreen().getClass() == GameScreen.class && networkController.containsKey(uuid)) {
-				controlEventListeners.get(this.networkController.get(uuid).get(index)).dropBombe();
-			}
+		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+				&& networkController.containsKey(uuid)) {
+			controlEventListeners.get(this.networkController.get(uuid).get(index)).dropBombe();
 		}
 	}
 
 	public void throwBombe(String uuid, int index) {
-		if (this.networkController != null) {
-			if (game.getScreen().getClass() == GameScreen.class && networkController.containsKey(uuid)) {
-				controlEventListeners.get(this.networkController.get(uuid).get(index)).throwBombe();
-
-			}
+		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+				&& networkController.containsKey(uuid)) {
+			controlEventListeners.get(this.networkController.get(uuid).get(index)).throwBombe();
 		}
 	}
 
 	public void speedUp(String uuid, int index) {
-		if (this.networkController != null) {
-			if (game.getScreen().getClass() == GameScreen.class && networkController.containsKey(uuid)) {
-				controlEventListeners.get(this.networkController.get(uuid).get(index)).speedUp();
-
-			}
+		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+				&& networkController.containsKey(uuid)) {
+			controlEventListeners.get(this.networkController.get(uuid).get(index)).speedUp();
 		}
 	}
 
 	public void speedDown(String uuid, int index) {
-		if (this.networkController != null) {
-			if (game.getScreen().getClass() == GameScreen.class && networkController.containsKey(uuid)) {
-				controlEventListeners.get(this.networkController.get(uuid).get(index)).speedDown();
-
-			}
+		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+				&& networkController.containsKey(uuid)) {
+			controlEventListeners.get(this.networkController.get(uuid).get(index)).speedDown();
 		}
 	}
 

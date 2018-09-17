@@ -141,15 +141,15 @@ public class SpriteService {
 		List<String> louisFilenames = louisSpriteFile.getFiles();
 		for (String louisFilename : louisFilenames) {
 			List<SpriteLouis> area = louisSpriteFile.getArea();
-			LouisColorEnum[] louisColors = LouisColorEnum.values();
+			LouisColorEnum[] louisColorsEnum = LouisColorEnum.values();
 			int i = 0;
-			for (i = 0; i < louisColors.length; i++) {
+			for (i = 0; i < louisColorsEnum.length; i++) {
 				Map<LouisSpriteEnum, TextureRegion[]> louisSpriteTextureMap = new HashMap<>();
 				Texture texture;
-				if (louisColors[i] == LouisColorEnum.NONE) {
+				if (louisColorsEnum[i] == LouisColorEnum.NONE) {
 					texture = new Texture(Gdx.files.internal(louisFilename));
 				} else {
-					texture = changeLouisColorTexture(new Texture(Gdx.files.internal(louisFilename)), louisColors[i]);
+					texture = changeLouisColorTexture(new Texture(Gdx.files.internal(louisFilename)), louisColorsEnum[i]);
 				}
 				for (SpriteLouis sprite : area) {
 					int idx = 0;
@@ -172,7 +172,7 @@ public class SpriteService {
 						louisSpriteTextureMap.put(animation, regions);
 					}
 				}
-				louisSprites.put(louisColors[i], louisSpriteTextureMap);
+				louisSprites.put(louisColorsEnum[i], louisSpriteTextureMap);
 			}
 		}
 	}
@@ -187,17 +187,17 @@ public class SpriteService {
 		List<CharacterFile> characterFiles = characterSprite.getFiles();
 		for (CharacterFile characterFile : characterFiles) {
 			CharacterEnum characterEnum = characterFile.getCharacter();
-			CharacterColorEnum[] characterColors = CharacterColorEnum.values();
+			CharacterColorEnum[] characterColorsEnum = CharacterColorEnum.values();
 			Map<CharacterColorEnum, Map<CharacterSpriteEnum, TextureRegion[]>> characterColorMap = new HashMap<>();
 			int i = 0;
-			for (i = 0; i < characterColors.length; i++) {
+			for (i = 0; i < characterColorsEnum.length; i++) {
 				Map<CharacterSpriteEnum, TextureRegion[]> characterMap = new HashMap<>();
 				Texture texture;
-				if (characterColors[i] == CharacterColorEnum.NONE) {
+				if (characterColorsEnum[i] == CharacterColorEnum.NONE) {
 					texture = new Texture(Gdx.files.internal(characterFile.getFile()));
 				} else {
 					texture = changeCharacterColorTexture(new Texture(Gdx.files.internal(characterFile.getFile())),
-							characterColors[i]);
+							characterColorsEnum[i]);
 				}
 				for (SpriteCharacter sprite : characterSprite.getArea()) {
 					int idx = 0;
@@ -219,7 +219,7 @@ public class SpriteService {
 						characterMap.put(animation, regions);
 					}
 				}
-				characterColorMap.put(characterColors[i], characterMap);
+				characterColorMap.put(characterColorsEnum[i], characterMap);
 				playerSprites.put(characterEnum, characterColorMap);
 			}
 		}

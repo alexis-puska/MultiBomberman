@@ -69,100 +69,100 @@ public class NetworkConnexion extends Thread {
 						server.removePlayerDeconnexionBeforeValide(player);
 					}
 					status = false;
-					break;
-				}
 
-				// Reception UUID
-				if (received.startsWith("uuid:")) {
-					try {
-						UUID uuidObject = UUID.fromString(received.substring(5, received.length()));
-						this.uuid = uuidObject.toString();
-						Gdx.app.debug(CLASS_NAME, this.uuid);
+				} else {
 
-						// si accepte encore les connexion, demande nombre de joueur
-						if (server.isAcceptNewConnexion()) {
-							out.write("nbp\n".getBytes());
-						} else {
-							// verification si deja connecté avant
-							if (!server.connexionAlreadyExistBefore(this)) {
-								// si non on expédie l'erreur et on ferme la connexion
-								out.write("error_in_game\n".getBytes());
-								socket.dispose();
-								status = false;
+					// Reception UUID
+					if (received.startsWith("uuid:")) {
+						try {
+							UUID uuidObject = UUID.fromString(received.substring(5, received.length()));
+							this.uuid = uuidObject.toString();
+							Gdx.app.debug(CLASS_NAME, this.uuid);
+
+							// si accepte encore les connexion, demande nombre de joueur
+							if (server.isAcceptNewConnexion()) {
+								out.write("nbp\n".getBytes());
 							} else {
-								// si oui on écoute les evenements et autorise le client é les envoyé
-								out.write("event\n".getBytes());
+								// verification si deja connecté avant
+								if (!server.connexionAlreadyExistBefore(this)) {
+									// si non on expédie l'erreur et on ferme la connexion
+									out.write("error_in_game\n".getBytes());
+									socket.dispose();
+									status = false;
+								} else {
+									// si oui on écoute les evenements et autorise le client é les envoyé
+									out.write("event\n".getBytes());
+								}
 							}
+						} catch (IllegalArgumentException exception) {
+							Gdx.app.error(CLASS_NAME, "uuid check error");
 						}
-					} catch (IllegalArgumentException exception) {
-						Gdx.app.error(CLASS_NAME, "uuid check error");
+						Gdx.app.debug(CLASS_NAME, "uuid check OK");
 					}
-					Gdx.app.debug(CLASS_NAME, "uuid check OK");
-				}
 
-				// Réception nombre de joueur
-				if (received.startsWith("nbp:")) {
-					String[] part = received.split(":");
-					player = Integer.parseInt(part[1]);
-					if (server.getPlayer() + player <= Context.getExternalPlayer()) {
-						server.valideConnexion(this);
-						out.write("event\n".getBytes());
-					} else {
-						out.write("error_to_many_player\n".getBytes());
+					// Réception nombre de joueur
+					if (received.startsWith("nbp:")) {
+						String[] part = received.split(":");
+						player = Integer.parseInt(part[1]);
+						if (server.getPlayer() + player <= Context.getExternalPlayer()) {
+							server.valideConnexion(this);
+							out.write("event\n".getBytes());
+						} else {
+							out.write("error_to_many_player\n".getBytes());
+							socket.dispose();
+							status = false;
+						}
+					}
+
+					// Réception event controller / keyboard
+					if (received.startsWith("event:")) {
+						String[] part = received.split(":");
+						int controllerIndex = Integer.parseInt(part[1]);
+						String button = part[2];
+						switch (NetworkControllerEventEnum.valueOf(button)) {
+						case DOWN:
+							playerService.move(this.uuid, controllerIndex, PovDirection.south);
+							break;
+						case DROP:
+							playerService.dropBombe(this.uuid, controllerIndex);
+							break;
+						case LEFT:
+							playerService.move(this.uuid, controllerIndex, PovDirection.west);
+							break;
+						case RIGHT:
+							playerService.move(this.uuid, controllerIndex, PovDirection.east);
+							break;
+						case SELECT:
+							break;
+						case SPEED_DOWN:
+							playerService.speedDown(this.uuid, controllerIndex);
+							break;
+						case SPEED_UP:
+							playerService.speedUp(this.uuid, controllerIndex);
+							break;
+						case START:
+							break;
+						case THROW:
+							playerService.throwBombe(this.uuid, controllerIndex);
+							break;
+						case UP:
+							playerService.move(this.uuid, controllerIndex, PovDirection.north);
+							break;
+						default:
+							playerService.move(this.uuid, controllerIndex, PovDirection.center);
+							break;
+						}
+					}
+
+					// déconnexion
+					if (received.equals("end")) {
+						Gdx.app.debug(CLASS_NAME, String.format("Deconnection de : %s", remoteAddress));
+						if (server.isAcceptNewConnexion()) {
+							server.removePlayerDeconnexionBeforeValide(player);
+						}
 						socket.dispose();
 						status = false;
 					}
-				}
-
-				// Réception event controller / keyboard
-				if (received.startsWith("event:")) {
-					String[] part = received.split(":");
-					int controllerIndex = Integer.parseInt(part[1]);
-					String button = part[2];
-					switch (NetworkControllerEventEnum.valueOf(button)) {
-					case DOWN:
-						playerService.move(this.uuid, controllerIndex, PovDirection.south);
-						break;
-					case DROP:
-						playerService.dropBombe(this.uuid, controllerIndex);
-						break;
-					case LEFT:
-						playerService.move(this.uuid, controllerIndex, PovDirection.west);
-						break;
-					case RIGHT:
-						playerService.move(this.uuid, controllerIndex, PovDirection.east);
-						break;
-					case SELECT:
-						break;
-					case SPEED_DOWN:
-						playerService.speedDown(this.uuid, controllerIndex);
-						break;
-					case SPEED_UP:
-						playerService.speedUp(this.uuid, controllerIndex);
-						break;
-					case START:
-						break;
-					case THROW:
-						playerService.throwBombe(this.uuid, controllerIndex);
-						break;
-					case UP:
-						playerService.move(this.uuid, controllerIndex, PovDirection.north);
-						break;
-					default:
-						playerService.move(this.uuid, controllerIndex, PovDirection.center);
-						break;
-					}
-				}
-
-				// déconnexion
-				if (received.equals("end")) {
-					Gdx.app.debug(CLASS_NAME, String.format("Deconnection de : %s", remoteAddress));
-					if (server.isAcceptNewConnexion()) {
-						server.removePlayerDeconnexionBeforeValide(player);
-					}
-					socket.dispose();
-					status = false;
-					break;
 				}
 				decode(received);
 			}

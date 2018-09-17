@@ -19,8 +19,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
 import com.mygdx.dto.MultiBombermanDTO;
+import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.service.Context;
 import com.mygdx.service.PlayerService;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControllerAdapter;
 import com.mygdx.service.input_processor.MenuInputProcessor;
@@ -68,7 +70,7 @@ public class MultiBombermanGame extends Game {
 		Array<Controller> controllers = Controllers.getControllers();
 		controllerAdapter = new ControllerAdapter(controllers, playerService);
 
-		// SoundService.getInstance().playMusic(MusicEnum.MENU);
+		SoundService.getInstance().playMusic(MusicEnum.MENU);
 		menuInputProcessor = new MenuInputProcessor(playerService);
 		Gdx.input.setInputProcessor(menuInputProcessor);
 

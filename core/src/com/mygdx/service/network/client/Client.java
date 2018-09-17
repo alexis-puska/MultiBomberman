@@ -14,19 +14,19 @@ public class Client extends Thread {
 	private static final String CLASS_NAME = "Client.class";
 
 	private boolean status;
-	private Socket client;
+	private Socket socket;
 	private BufferedReader bufferReader;
 	private OutputStream outputStream;
 
 	private String receive;
 	private boolean canSendEvent;
 
-	public Client(Socket client) {
-		this.client = client;
+	public Client(Socket socket) {
+		this.socket = socket;
 		this.status = true;
 		this.canSendEvent = false;
-		outputStream = client.getOutputStream();
-		bufferReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+		outputStream = socket.getOutputStream();
+		bufferReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class Client extends Thread {
 				if (line == null) {
 					Gdx.app.log(CLASS_NAME, "buffer null connexion lost");
 					this.status = false;
-					break;
+					
 				}
 				Gdx.app.debug(CLASS_NAME, line);
 
@@ -62,7 +62,7 @@ public class Client extends Thread {
 			} catch (IOException e) {
 				status = false;
 				Gdx.app.debug(CLASS_NAME, "IOException run 2");
-				break;
+				
 			}
 		}
 		try {
@@ -75,7 +75,7 @@ public class Client extends Thread {
 
 	public void kill() {
 		status = false;
-		this.client.dispose();
+		this.socket.dispose();
 	}
 
 	public boolean isStatus() {

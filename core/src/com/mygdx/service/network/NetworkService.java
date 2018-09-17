@@ -65,6 +65,7 @@ public class NetworkService {
 		server.kill();
 	}
 
+	
 	/***********************************
 	 * ----- client part -----
 	 ***********************************/
@@ -72,10 +73,10 @@ public class NetworkService {
 		SocketHints socketHints = new SocketHints();
 		socketHints.connectTimeout = 1000;
 		try {
-			Socket client = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
-			if (client.isConnected()) {
+			Socket clientSocket = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
+			if (clientSocket.isConnected()) {
 				Gdx.app.debug(CLASS_NAME, "connected !");
-				this.client = new Client(client);
+				this.client = new Client(clientSocket);
 				this.client.start();
 				return true;
 			}
