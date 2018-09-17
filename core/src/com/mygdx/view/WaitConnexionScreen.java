@@ -85,7 +85,8 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void dispose() {
-		// unused method
+		shapeRenderer.dispose();
+		font.dispose();
 	}
 
 	public void initFont() {
@@ -120,27 +121,27 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressUp() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressDown() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressLeft() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressRight() {
-		//unused method
+		// unused method
 	}
 
 }

@@ -97,7 +97,8 @@ public class LangueScreen implements Screen, MenuListener {
 
 	@Override
 	public void dispose() {
-		// unused method
+		shapeRenderer.dispose();
+		font.dispose();
 	}
 
 	public void initFont() {
