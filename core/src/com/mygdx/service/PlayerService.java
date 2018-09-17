@@ -63,7 +63,6 @@ public class PlayerService {
 	public PlayerService(MultiBombermanGame game) {
 		this.game = game;
 		definitions = new HashMap<>();
-		firstHumanIdx = 0;
 		definitions.put(0, new PlayerDefinition(0, PlayerTypeEnum.HUMAN));
 		for (int i = 1; i < 16; i++) {
 			definitions.put(i, new PlayerDefinition(i, PlayerTypeEnum.CPU));
@@ -76,6 +75,7 @@ public class PlayerService {
 	 * local/distant disponible. Instanciation des differentes map.
 	 */
 	public void validePlayerType() {
+		firstHumanIdx = -1;
 		localController = new HashMap<>();
 		Array<Controller> controllers = Controllers.getControllers();
 		int controllerIndex = 0;
@@ -89,6 +89,13 @@ public class PlayerService {
 						break;
 					}
 				}
+			}
+		}
+		for (Entry<Integer, PlayerDefinition> entry : definitions.entrySet()) {
+			PlayerDefinition definition = entry.getValue();
+			if (definition.getPlayerType() == PlayerTypeEnum.HUMAN && firstHumanIdx == -1) {
+				firstHumanIdx = definition.getPosition();
+				break;
 			}
 		}
 	}

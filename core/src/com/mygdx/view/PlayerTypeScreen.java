@@ -31,7 +31,10 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
-	private BitmapFont font;
+	private BitmapFont fontRed;
+	private BitmapFont fontGold;
+	private BitmapFont fontGreen;
+	private BitmapFont fontBlue;
 	private int cursorPosition;
 
 	public PlayerTypeScreen(final MultiBombermanGame game) {
@@ -62,14 +65,39 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.player.configuration"));
-		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		layout.setText(fontRed, MessageService.getInstance().getMessage("game.menu.player.configuration"));
+		fontRed.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
-				layout.setText(font, MessageService.getInstance().getMessage("game.menu.player") + pos + " : "
-						+ game.getPlayerService().getPlayerType(pos));
-				font.draw(game.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
+				layout.setText(fontRed, MessageService.getInstance().getMessage("game.menu.player") + pos + " : ");
+				fontRed.draw(game.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
+			}
+		}
+
+		for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < 4; i++) {
+				int pos = i + j * 4;
+				switch (game.getPlayerService().getPlayerType(pos)) {
+				case CPU:
+					layout.setText(fontGreen, game.getPlayerService().getPlayerType(pos).toString());
+					fontGreen.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+					break;
+				case HUMAN:
+					layout.setText(fontBlue, game.getPlayerService().getPlayerType(pos).toString());
+					fontBlue.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+					break;
+				case NET:
+					layout.setText(fontGold, game.getPlayerService().getPlayerType(pos).toString());
+					fontGold.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+					break;
+				case NONE:
+				default:
+					layout.setText(fontRed, game.getPlayerService().getPlayerType(pos).toString());
+					fontRed.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+					break;
+				}
+
 			}
 		}
 
@@ -104,7 +132,11 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 
 	@Override
 	public void dispose() {
-		// unused method
+		shapeRenderer.dispose();
+		fontRed.dispose();
+		fontGreen.dispose();
+		fontGold.dispose();
+		fontBlue.dispose();
 	}
 
 	public void initFont() {
@@ -114,7 +146,16 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 		parameter.borderWidth = 0f;
 		parameter.borderColor = new Color(255, 0, 0, 255);
 		parameter.color = new Color(255, 0, 0, 255);
-		font = generator.generateFont(parameter);
+		fontRed = generator.generateFont(parameter);
+		parameter.borderColor = new Color(0.4f, 1, 1, 1);
+		parameter.color = new Color(0.4f, 255, 255, 255);
+		fontBlue = generator.generateFont(parameter);
+		parameter.borderColor = new Color(0, 255, 0, 255);
+		parameter.color = new Color(0, 255, 0, 255);
+		fontGreen = generator.generateFont(parameter);
+		parameter.borderColor = new Color(255, 255, 0, 255);
+		parameter.color = new Color(255, 255, 0, 255);
+		fontGold = generator.generateFont(parameter);
 		generator.dispose();
 	}
 
@@ -129,7 +170,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 		if (Context.getGameMode() == GameModeEnum.SERVER) {
 			game.getScreen().dispose();
 			game.setScreen(new ServerParamScreen(game));
-		}else if(Context.getGameMode() == GameModeEnum.LOCAL) {
+		} else if (Context.getGameMode() == GameModeEnum.LOCAL) {
 			game.getPlayerService().validePlayerType();
 			game.getScreen().dispose();
 			game.setScreen(new SkinScreen(game));
