@@ -13,9 +13,10 @@ public class Context {
 	private static int port;
 	private static int localPlayer;
 	private static int externalPlayer;
+	private static int ipPart[];
 
 	private Context() {
-		//empty constructor
+		// empty constructor
 	}
 
 	public static void resetContext() {
@@ -25,6 +26,7 @@ public class Context {
 		port = Constante.NETWORK_PORT;
 		localPlayer = 1;
 		externalPlayer = 0;
+		ipPart = new int[] { 127, 0, 0, 1 };
 	}
 
 	public static String getUuid() {
@@ -100,6 +102,10 @@ public class Context {
 	public static int getExternalPlayer() {
 		return externalPlayer;
 	}
+	
+	public static void setExternalPlayer(int eexternalPlayer) {
+		externalPlayer = eexternalPlayer;
+	}
 
 	public static void incExternalPlayer() {
 		if (localPlayer + externalPlayer < 16) {
@@ -133,4 +139,27 @@ public class Context {
 		gameMode = GameModeEnum.next(gameMode);
 	}
 
+	public static String getIp() {
+		return ipPart[0] + "." + ipPart[1] + "." + ipPart[2] + "." + ipPart[3];
+	}
+
+	public static void incIp(int idx, int val) {
+		ipPart[idx] += val;
+		if (ipPart[idx] > 255) {
+			ipPart[idx] = 255;
+		} else if (ipPart[0] < 0) {
+			ipPart[idx] = 0;
+		}
+	}
+
+	public static void decIp(int idx, int val) {
+		ipPart[idx] += val;
+		if (ipPart[idx] > 255) {
+			ipPart[idx] = 255;
+		} else if (ipPart[0] < 0) {
+			ipPart[idx] = 0;
+		}
+	}
+
+	
 }

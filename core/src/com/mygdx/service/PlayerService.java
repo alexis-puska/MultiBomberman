@@ -69,6 +69,27 @@ public class PlayerService {
 		}
 	}
 
+	public int getNbHumanPlayerFromDefinition() {
+		int nb = 0;
+		for(Entry<Integer, PlayerDefinition> definition : definitions.entrySet()) {
+			if(definition.getValue().getPlayerType() == PlayerTypeEnum.HUMAN) {
+				nb++;
+			}
+		}
+		return nb;
+	}
+	
+	public int getNbNetworkPlayerFromDefinition() {
+		int nb = 0;
+		for(Entry<Integer, PlayerDefinition> definition : definitions.entrySet()) {
+			if(definition.getValue().getPlayerType() == PlayerTypeEnum.NET) {
+				nb++;
+			}
+		}
+		return nb;
+	}
+	
+	
 	/**
 	 * Une fois que l'utilisateur principale a definit si un utilisateur est
 	 * CPU/HUMAN/NONE/NET, on effectue le cablage avec les differents controller

@@ -108,14 +108,7 @@ public class Server extends Thread {
 		return player;
 	}
 
-	public void removePlayerDeconnexionBeforeValide(int player) {
-		this.player -= player;
-	}
-
 	public void valideConnexion(NetworkConnexion networkConnexion) {
-		if (!connexionsValide.containsKey(networkConnexion.getUuid())) {
-			player += networkConnexion.getPlayer();
-		}
 		connexionsValide.put(networkConnexion.getUuid(), networkConnexion);
 		connexions.remove(networkConnexion);
 	}
@@ -124,5 +117,18 @@ public class Server extends Thread {
 		for (Entry<String, NetworkConnexion> valide : connexionsValide.entrySet()) {
 			valide.getValue().send(value);
 		}
+	}
+
+	public void updateConnexion() {
+		game.getPlayerService().getNbHumanPlayerFromDefinition();		
+		List<String> del = new ArrayList<>();
+		for (Entry<String, NetworkConnexion> valide : connexionsValide.entrySet()) {
+			if (!valide.getValue().isStatus()) {
+				del.add(valide.getKey());
+			} else {
+				player += valide.getValue().getPlayer();
+			}
+		}
+		del.parallelStream().forEach(d -> connexionsValide.remove(d));
 	}
 }

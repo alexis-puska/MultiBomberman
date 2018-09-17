@@ -37,6 +37,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.game.getPlayerService().setMenuListener(this);
+		Context.setExternalPlayer(game.getPlayerService().getNbNetworkPlayerFromDefinition());
 		initFont();
 	}
 

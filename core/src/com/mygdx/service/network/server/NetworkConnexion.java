@@ -38,10 +38,6 @@ public class NetworkConnexion extends Thread {
 		this.socket = socket;
 		this.server = server;
 
-		// TODO to remove after network protocole up !
-		this.player = 1;
-		
-
 		this.playerService = game.getPlayerService();
 		this.remoteAddress = socket.getRemoteAddress();
 		Gdx.app.debug(CLASS_NAME, String.format("new client connexion : %s", remoteAddress));
@@ -65,13 +61,8 @@ public class NetworkConnexion extends Thread {
 				// Perte de connexion
 				if (received == null) {
 					Gdx.app.error(CLASS_NAME, String.format("Deconnection brutale de : %s", remoteAddress));
-					if (server.isAcceptNewConnexion()) {
-						server.removePlayerDeconnexionBeforeValide(player);
-					}
 					status = false;
-
 				} else {
-
 					// Reception UUID
 					if (received.startsWith("uuid:")) {
 						try {
@@ -153,13 +144,9 @@ public class NetworkConnexion extends Thread {
 							break;
 						}
 					}
-
 					// déconnexion
 					if (received.equals("end")) {
 						Gdx.app.debug(CLASS_NAME, String.format("Deconnection de : %s", remoteAddress));
-						if (server.isAcceptNewConnexion()) {
-							server.removePlayerDeconnexionBeforeValide(player);
-						}
 						socket.dispose();
 						status = false;
 					}
@@ -183,6 +170,10 @@ public class NetworkConnexion extends Thread {
 
 	public String getUuid() {
 		return uuid;
+	}
+
+	public boolean isStatus() {
+		return status;
 	}
 
 	public void send(byte[] value) {

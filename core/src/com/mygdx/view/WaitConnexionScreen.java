@@ -59,6 +59,8 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 		layout.setText(font, "NB total human");
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 150);
 		
+		game.getNetworkService().getServer().updateConnexion();
+		
 		layout.setText(font, ""+game.getNetworkService().getServer().getConnexions().size());
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 170);
 		layout.setText(font, ""+game.getNetworkService().getServer().getPlayer());

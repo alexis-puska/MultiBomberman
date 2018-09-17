@@ -24,9 +24,11 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
+	private int cursorPos;
 
 	public ClientConnexionScreen(final MultiBombermanGame game) {
 		this.game = game;
+		this.cursorPos = 0;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
@@ -38,6 +40,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		updateCursor();
 		game.getScreenCamera().update();
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
@@ -101,7 +104,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	@Override
 	public void pressStart() {
 		game.getPlayerService().initControllerMap();
-		if (game.getNetworkService().connectToServer(Context.getPort(), "127.0.0.1")) {
+		if (game.getNetworkService().connectToServer(Context.getPort(), Context.getIp())) {
 			game.getScreen().dispose();
 			game.setScreen(new ClientViewScreen(game));
 		}
@@ -121,21 +124,195 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressUp() {
-		// unused method
+		switch (cursorPos) {
+		case 0:
+			break;
+		case 1:
+			cursorPos--;
+			break;
+		case 2:
+			Context.incIp(0, 100);
+			break;
+		case 3:
+			Context.incIp(0, 10);
+			break;
+		case 4:
+			Context.incIp(0, 1);
+			break;
+		case 5:
+			Context.incIp(1, 100);
+			break;
+		case 6:
+			Context.incIp(1, 10);
+			break;
+		case 7:
+			Context.incIp(1, 1);
+			break;
+		case 8:
+			Context.incIp(2, 100);
+			break;
+		case 9:
+			Context.incIp(2, 10);
+			break;
+		case 10:
+			Context.incIp(2, 1);
+			break;
+		case 11:
+			Context.incIp(3, 100);
+			break;
+		case 12:
+			Context.incIp(3, 10);
+			break;
+		case 13:
+			Context.incIp(3, 1);
+			break;
+		}
 	}
 
 	@Override
 	public void pressDown() {
-		// unused method
+		switch (cursorPos) {
+		case 0:
+			cursorPos++;
+			break;
+		case 1:
+			cursorPos++;
+			break;
+		case 2:
+			Context.decIp(0, 100);
+			break;
+		case 3:
+			Context.decIp(0, 10);
+			break;
+		case 4:
+			Context.decIp(0, 1);
+			break;
+		case 5:
+			Context.decIp(1, 100);
+			break;
+		case 6:
+			Context.decIp(1, 10);
+			break;
+		case 7:
+			Context.decIp(1, 1);
+			break;
+		case 8:
+			Context.decIp(2, 100);
+			break;
+		case 9:
+			Context.decIp(2, 10);
+			break;
+		case 10:
+			Context.decIp(2, 1);
+			break;
+		case 11:
+			Context.decIp(3, 100);
+			break;
+		case 12:
+			Context.decIp(3, 10);
+			break;
+		case 13:
+			Context.decIp(3, 1);
+			break;
+		}
 	}
 
 	@Override
 	public void pressLeft() {
-		// unused method
+		switch (cursorPos) {
+		case 0:
+			Context.decLocalPlayer();
+			break;
+		case 1:
+			Context.decPort();
+			break;
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+			cursorPos--;
+			break;
+		}
 	}
 
 	@Override
 	public void pressRight() {
-		// unused method
+		switch (cursorPos) {
+		case 0:
+			Context.incLocalPlayer();
+			break;
+		case 1:
+			Context.incPort();
+			break;
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+			cursorPos++;
+			break;
+		}
+	}
+
+	private void updateCursor() {
+		switch (cursorPos) {
+		case 0:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 1:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 2:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 3:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 4:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 5:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 6:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 7:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 8:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 9:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 10:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 11:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 12:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		case 13:
+			cursor.updateCursorPosition(100, 100);
+			break;
+		}
 	}
 }

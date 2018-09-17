@@ -47,7 +47,7 @@ public class Client extends Thread {
 						outputStream.write(("uuid:" + Context.getUuid() + "\n").getBytes());
 					}
 					if (line.startsWith("nbp")) {
-						outputStream.write("nbp:1\n".getBytes());
+						outputStream.write(("nbp:" + Context.getLocalPlayer() + "\n").getBytes());
 					}
 					if (line.startsWith("event")) {
 						this.canSendEvent = true;
@@ -94,8 +94,7 @@ public class Client extends Thread {
 	/**
 	 * Send button event to server
 	 * 
-	 * @param buffer
-	 *            value of button pressed by an controller
+	 * @param buffer value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
 		if (status && canSendEvent) {

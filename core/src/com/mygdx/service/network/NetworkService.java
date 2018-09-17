@@ -69,7 +69,7 @@ public class NetworkService {
 	}
 
 	public void sendToClient(String value) {
-		server.send((value+"\n").getBytes());
+		server.send((value + "\n").getBytes());
 	}
 
 	/***********************************
@@ -154,7 +154,7 @@ public class NetworkService {
 	}
 
 	public void sendDirection(Integer integer, PovDirection direction) {
-		if (this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			switch (direction) {
 			case center:
 				this.client.send((EVENT + integer + ":CENTER\n").getBytes());
@@ -165,16 +165,8 @@ public class NetworkService {
 			case north:
 				this.client.send((EVENT + integer + ":UP\n").getBytes());
 				break;
-			case northEast:
-				break;
-			case northWest:
-				break;
 			case south:
 				this.client.send((EVENT + integer + ":DOWN\n").getBytes());
-				break;
-			case southEast:
-				break;
-			case southWest:
 				break;
 			case west:
 				this.client.send((EVENT + integer + ":LEFT\n").getBytes());
@@ -182,30 +174,34 @@ public class NetworkService {
 			default:
 				this.client.send((EVENT + integer + ":CENTER\n").getBytes());
 				break;
+			case southEast:
+			case southWest:
+			case northEast:
+			case northWest:
 			}
 		}
 	}
 
 	public void sendDropBombe(Integer integer) {
-		if (this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":DROP\n").getBytes());
 		}
 	}
 
 	public void sendSpeedUp(Integer integer) {
-		if (this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":SPEED_UP\n").getBytes());
 		}
 	}
 
 	public void sendSpeedDown(Integer integer) {
-		if (this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":SPEED_DOWN\n").getBytes());
 		}
 	}
 
 	public void sendThrowBombe(Integer integer) {
-		if (this.client != null && this.client.isStatus()) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":THROW\n").getBytes());
 		}
 	}
