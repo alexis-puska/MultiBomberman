@@ -133,31 +133,26 @@ public class SkinScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressUp() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressDown() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressLeft() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressRight() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 }

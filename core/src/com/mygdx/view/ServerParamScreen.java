@@ -165,8 +165,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override

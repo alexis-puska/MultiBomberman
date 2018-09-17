@@ -55,7 +55,9 @@ public class Client extends Thread {
 				if(line.startsWith("welcome_back")) {
 					this.canSendEvent = true;
 				}
-				
+				if(line.startsWith("error")) {
+					Gdx.app.error(CLASS_NAME, line);
+				}
 				this.receive = line;
 			} catch (IOException e) {
 				status = false;
@@ -69,7 +71,6 @@ public class Client extends Thread {
 		} catch (IOException e) {
 			Gdx.app.debug(CLASS_NAME, "IOException run");
 		}
-
 	}
 
 	public void kill() {
@@ -99,5 +100,4 @@ public class Client extends Thread {
 			}
 		}
 	}
-
 }

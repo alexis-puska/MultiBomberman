@@ -65,37 +65,31 @@ public class SplashScreen implements MenuListener, Screen {
 
 	@Override
 	public void pressSelect() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressValide() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressUp() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressDown() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressLeft() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void pressRight() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 }

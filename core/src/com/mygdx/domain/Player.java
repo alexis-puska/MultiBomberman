@@ -10,32 +10,28 @@ public class Player implements ControlEventListener {
 
 	@Override
 	public void move(PovDirection value) {
-		// TODO Auto-generated method stub
+		//unused method
 		Gdx.app.debug(CLASS_NAME, "press move");
 	}
 
 	@Override
 	public void dropBombe() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void throwBombe() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void speedUp() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 	@Override
 	public void speedDown() {
-		// TODO Auto-generated method stub
-
+		//unused method
 	}
 
 }
