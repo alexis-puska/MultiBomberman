@@ -78,23 +78,23 @@ public class MultiBombermanGame extends Game {
 	private void retrieveGUID() {
 		ObjectMapper objectMapper = new ObjectMapper();
 		FileHandle multiBombermanJson = Gdx.files.local("MultiBomberman.json");
-//		if (multiBombermanJson.exists()) {
-//			MultiBombermanDTO multiBomberman;
-//			try {
-//				multiBomberman = objectMapper.readValue(multiBombermanJson.read(), MultiBombermanDTO.class);
-//				Context.setUuid(multiBomberman.getUuid());
-//			} catch (JsonParseException e) {
-//				Gdx.app.error(LOG_NAME, "JsonParseException : ", e);
-//				initGUID(objectMapper);
-//			} catch (JsonMappingException e) {
-//				Gdx.app.error(LOG_NAME, "JsonMappingException : ", e);
-//				initGUID(objectMapper);
-//			} catch (IOException e) {
-//				Gdx.app.error(LOG_NAME, "IOException : ", e);
-//			}
-//		} else {
+		if (multiBombermanJson.exists()) {
+			MultiBombermanDTO multiBomberman;
+			try {
+				multiBomberman = objectMapper.readValue(multiBombermanJson.read(), MultiBombermanDTO.class);
+				Context.setUuid(multiBomberman.getUuid());
+			} catch (JsonParseException e) {
+				Gdx.app.error(LOG_NAME, "JsonParseException : ", e);
+				initGUID(objectMapper);
+			} catch (JsonMappingException e) {
+				Gdx.app.error(LOG_NAME, "JsonMappingException : ", e);
+				initGUID(objectMapper);
+			} catch (IOException e) {
+				Gdx.app.error(LOG_NAME, "IOException : ", e);
+			}
+		} else {
 			initGUID(objectMapper);
-//		}
+		}
 	}
 
 	private void initGUID(ObjectMapper objectMapper) {
