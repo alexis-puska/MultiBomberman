@@ -102,7 +102,7 @@ public class Context {
 	public static int getExternalPlayer() {
 		return externalPlayer;
 	}
-	
+
 	public static void setExternalPlayer(int eexternalPlayer) {
 		externalPlayer = eexternalPlayer;
 	}
@@ -143,23 +143,38 @@ public class Context {
 		return ipPart[0] + "." + ipPart[1] + "." + ipPart[2] + "." + ipPart[3];
 	}
 
+	public static int extractIp(int part, int pos) {
+		int n = ipPart[part];
+		int u = n % 10;
+		int d = n / 10 % 10;
+		int c = n / 100 % 10;
+		switch (pos) {
+		case 0:
+			return u;
+		case 1:
+			return d;
+		default:
+		case 2:
+			return c;
+		}
+	}
+
 	public static void incIp(int idx, int val) {
 		ipPart[idx] += val;
 		if (ipPart[idx] > 255) {
 			ipPart[idx] = 255;
-		} else if (ipPart[0] < 0) {
+		} else if (ipPart[idx] < 0) {
 			ipPart[idx] = 0;
 		}
 	}
 
 	public static void decIp(int idx, int val) {
-		ipPart[idx] += val;
+		ipPart[idx] -= val;
 		if (ipPart[idx] > 255) {
 			ipPart[idx] = 255;
-		} else if (ipPart[0] < 0) {
+		} else if (ipPart[idx] < 0) {
 			ipPart[idx] = 0;
 		}
 	}
 
-	
 }

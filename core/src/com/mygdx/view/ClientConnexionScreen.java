@@ -24,6 +24,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
+	private BitmapFont largeFont;
 	private int cursorPos;
 
 	public ClientConnexionScreen(final MultiBombermanGame game) {
@@ -55,6 +56,31 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 		game.getBatch().begin();
 		layout.setText(font, "connexion to server");
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+
+		layout.setText(font, "Nb Player");
+		font.draw(game.getBatch(), layout, 200, 190);
+		layout.setText(font, "Port");
+		font.draw(game.getBatch(), layout, 200, 170);
+
+		layout.setText(font, "Ip");
+		font.draw(game.getBatch(), layout, 200, 150);
+
+		layout.setText(font, "" + Context.getLocalPlayer());
+		font.draw(game.getBatch(), layout, 400, 190);
+
+		layout.setText(font, "" + Context.getPort());
+		font.draw(game.getBatch(), layout, 400, 170);
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 2; j > -1; j--) {
+				layout.setText(largeFont, "" + Context.extractIp(i, j));
+				largeFont.draw(game.getBatch(), layout, 200 + (i * 80) - (j * 20), 110);
+			}
+		}
+		for (int i = 0; i < 3; i++) {
+			layout.setText(largeFont, ".");
+			largeFont.draw(game.getBatch(), layout, 225 + (i * 80), 110);
+		}
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}
@@ -88,6 +114,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	public void dispose() {
 		shapeRenderer.dispose();
 		font.dispose();
+		largeFont.dispose();
 	}
 
 	public void initFont() {
@@ -98,6 +125,11 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 		parameter.borderColor = new Color(255, 0, 0, 255);
 		parameter.color = new Color(255, 0, 0, 255);
 		font = generator.generateFont(parameter);
+		parameter.size = 24;
+		parameter.borderWidth = 0f;
+		parameter.borderColor = new Color(255, 0, 0, 255);
+		parameter.color = new Color(255, 0, 0, 255);
+		largeFont = generator.generateFont(parameter);
 		generator.dispose();
 	}
 
@@ -267,51 +299,54 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 			cursorPos++;
 			break;
 		}
+		if (cursorPos > 13) {
+			cursorPos = 13;
+		}
 	}
 
 	private void updateCursor() {
 		switch (cursorPos) {
 		case 0:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(370, 180);
 			break;
 		case 1:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(370, 160);
 			break;
 		case 2:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(160, 80);
 			break;
 		case 3:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(180, 80);
 			break;
 		case 4:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(200, 80);
 			break;
 		case 5:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(240, 80);
 			break;
 		case 6:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(260, 80);
 			break;
 		case 7:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(280, 80);
 			break;
 		case 8:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(320, 80);
 			break;
 		case 9:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(340, 80);
 			break;
 		case 10:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(360, 80);
 			break;
 		case 11:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(400, 80);
 			break;
 		case 12:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(420, 80);
 			break;
 		case 13:
-			cursor.updateCursorPosition(100, 100);
+			cursor.updateCursorPosition(440, 80);
 			break;
 		}
 	}

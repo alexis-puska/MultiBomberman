@@ -120,7 +120,7 @@ public class Server extends Thread {
 	}
 
 	public void updateConnexion() {
-		game.getPlayerService().getNbHumanPlayerFromDefinition();		
+		player = game.getPlayerService().getNbHumanPlayerFromDefinition();		
 		List<String> del = new ArrayList<>();
 		for (Entry<String, NetworkConnexion> valide : connexionsValide.entrySet()) {
 			if (!valide.getValue().isStatus()) {

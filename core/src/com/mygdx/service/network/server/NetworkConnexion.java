@@ -95,7 +95,7 @@ public class NetworkConnexion extends Thread {
 					if (received.startsWith("nbp:")) {
 						String[] part = received.split(":");
 						player = Integer.parseInt(part[1]);
-						if (server.getPlayer() + player <= Context.getExternalPlayer()) {
+						if (server.getPlayer() + player <= Context.getExternalPlayer()+Context.getLocalPlayer()) {
 							server.valideConnexion(this);
 							out.write("event\n".getBytes());
 						} else {
