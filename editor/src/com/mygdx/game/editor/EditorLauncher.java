@@ -12,7 +12,7 @@ public class EditorLauncher extends JFrame {
 
 	private static final long serialVersionUID = -3272449442566277297L;
 
-	private Locale locale;
+	private Locale localeLanguage;
 	private transient ResourceBundle message;
 
 	public static void main(String[] args) {
@@ -26,8 +26,8 @@ public class EditorLauncher extends JFrame {
 	}
 
 	public EditorLauncher(String lang) {
-		this.locale = Locale.forLanguageTag(lang);
-		this.message = ResourceBundle.getBundle("i18n/Message", locale);
+		this.localeLanguage = Locale.forLanguageTag(lang);
+		this.message = ResourceBundle.getBundle("i18n/Message", localeLanguage);
 		System.out.println("message " + lang + " : " + message.getString("editor.currentLevel.border"));
 	}
 

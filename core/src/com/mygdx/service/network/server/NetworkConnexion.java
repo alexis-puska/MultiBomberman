@@ -34,13 +34,13 @@ public class NetworkConnexion extends Thread {
 	private int player;
 
 	public NetworkConnexion(Socket socket, final Server server, final MultiBombermanGame game) {
-		status = true;
+		this.status = true;
 		this.socket = socket;
 		this.server = server;
 
 		// TODO to remove after network protocole up !
 		this.player = 1;
-		this.status = true;
+		
 
 		this.playerService = game.getPlayerService();
 		this.remoteAddress = socket.getRemoteAddress();
