@@ -157,6 +157,7 @@ public class NetworkService {
 			}
 		} catch (GdxRuntimeException ex) {
 			Gdx.app.error(CLASS_NAME, "CONNECT TO SERVER ERROR");
+			lastClientError = "serverUnreachable";
 			return false;
 		}
 		return false;
