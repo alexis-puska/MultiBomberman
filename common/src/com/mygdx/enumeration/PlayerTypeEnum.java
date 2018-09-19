@@ -1,7 +1,20 @@
 package com.mygdx.enumeration;
 
 public enum PlayerTypeEnum {
-	HUMAN, CPU, NET, NONE;
+	HUMAN("game.menu.player.type.human"), 
+	CPU("game.menu.player.type.cpu"), 
+	NET("game.menu.player.type.network"), 
+	NONE("game.menu.player.type.none");
+
+	private String key;
+
+	private PlayerTypeEnum(String key) {
+		this.key = key;
+	}
+
+	public String getKey() {
+		return key;
+	}
 
 	public static PlayerTypeEnum next(PlayerTypeEnum val, boolean network) {
 		PlayerTypeEnum v = values()[(val.ordinal() + 1) % values().length];

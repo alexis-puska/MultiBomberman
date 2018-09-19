@@ -13,6 +13,7 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -50,7 +51,7 @@ public class LevelScreen implements Screen, MenuListener {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
-		layout.setText(font, "level screen");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		cursor.draw(game.getBatch());
 		game.getBatch().end();

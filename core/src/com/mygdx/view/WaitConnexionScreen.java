@@ -15,6 +15,7 @@ import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -51,12 +52,12 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
-		layout.setText(font, "Wait connexion");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		
-		layout.setText(font, "NB client");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion.client"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 190);
-		layout.setText(font, "NB total human");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion.human"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 150);
 		
 		game.getNetworkService().getServer().updateConnexion();

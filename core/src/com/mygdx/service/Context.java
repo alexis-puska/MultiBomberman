@@ -3,17 +3,30 @@ package com.mygdx.service;
 import com.mygdx.constante.Constante;
 import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.LocaleEnum;
+import com.mygdx.enumeration.TimeEnum;
 
 public class Context {
 
 	private static String uuid;
+
+	// lang
 	private static LocaleEnum locale;
+
+	// mode
 	private static GameModeEnum gameMode;
+
+	// network
 	private static boolean useUpnp = true;
 	private static int port;
 	private static int localPlayer;
 	private static int externalPlayer;
 	private static int ipPart[];
+
+	// Rules
+	private static boolean suddenDeath;
+	private static boolean badBomber;
+	private static TimeEnum time;
+	private static int iaLevel;
 
 	private Context() {
 		// empty constructor
@@ -22,11 +35,14 @@ public class Context {
 	public static void resetContext() {
 		locale = LocaleEnum.FRENCH;
 		gameMode = GameModeEnum.LOCAL;
-		useUpnp = true;
+		useUpnp = Constante.NETWORK_USE_UPNP;
 		port = Constante.NETWORK_PORT;
-		localPlayer = 1;
-		externalPlayer = 0;
+		localPlayer = Constante.DEFAULT_LOCAL_PLAYER;
+		externalPlayer = Constante.DEFAULT_EXTERNAL_PLAYER;
 		ipPart = new int[] { 127, 0, 0, 1 };
+		time = Constante.DEFAULT_GAME_TIME;
+		suddenDeath = Constante.SUDDEN_DEATH;
+		badBomber = Constante.BAD_BOMBER;
 	}
 
 	public static String getUuid() {
@@ -84,10 +100,10 @@ public class Context {
 	}
 
 	public static void incLocalPlayer() {
-		if (localPlayer + externalPlayer < 16) {
+		if (localPlayer + externalPlayer < Constante.MAX_PLAYER) {
 			localPlayer++;
-			if (localPlayer > 16) {
-				localPlayer = 16;
+			if (localPlayer > Constante.MAX_PLAYER) {
+				localPlayer = Constante.MAX_PLAYER;
 			}
 		}
 	}
@@ -108,10 +124,10 @@ public class Context {
 	}
 
 	public static void incExternalPlayer() {
-		if (localPlayer + externalPlayer < 16) {
+		if (localPlayer + externalPlayer < Constante.MAX_PLAYER) {
 			externalPlayer++;
-			if (externalPlayer > 16) {
-				externalPlayer = 16;
+			if (externalPlayer > Constante.MAX_PLAYER) {
+				externalPlayer = Constante.MAX_PLAYER;
 			}
 		}
 	}
@@ -175,6 +191,60 @@ public class Context {
 		} else if (ipPart[idx] < 0) {
 			ipPart[idx] = 0;
 		}
+	}
+
+	public static void toogleSuddenDeath() {
+		if (suddenDeath) {
+			suddenDeath = false;
+		} else {
+			suddenDeath = true;
+		}
+	}
+
+	public static void toogleBadBomber() {
+		if (badBomber) {
+			badBomber = false;
+		} else {
+			badBomber = true;
+		}
+	}
+
+	public static void decIaLevel() {
+		iaLevel--;
+		if (iaLevel < Constante.MIN_IA_LEVEL) {
+			iaLevel = Constante.MAX_IA_LEVEL;
+		}
+	}
+
+	public static void incIaLevel() {
+		iaLevel++;
+		if (iaLevel > Constante.MAX_IA_LEVEL) {
+			iaLevel = Constante.MIN_IA_LEVEL;
+		}
+	}
+
+	public static void decTime() {
+		time = TimeEnum.previous(time);
+	}
+
+	public static void incTime() {
+		time = TimeEnum.next(time);
+	}
+
+	public static boolean isSuddenDeath() {
+		return suddenDeath;
+	}
+
+	public static boolean isBadBomber() {
+		return badBomber;
+	}
+
+	public static TimeEnum getTime() {
+		return time;
+	}
+
+	public static int getIaLevel() {
+		return iaLevel;
 	}
 
 }

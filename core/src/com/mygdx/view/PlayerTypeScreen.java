@@ -80,27 +80,29 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 				int pos = i + j * 4;
 				switch (game.getPlayerService().getPlayerType(pos)) {
 				case CPU:
-					layout.setText(fontGreen, game.getPlayerService().getPlayerType(pos).toString());
+					layout.setText(fontGreen, MessageService.getInstance()
+							.getMessage(game.getPlayerService().getPlayerType(pos).getKey()));
 					fontGreen.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
 					break;
 				case HUMAN:
-					layout.setText(fontBlue, game.getPlayerService().getPlayerType(pos).toString());
+					layout.setText(fontBlue, MessageService.getInstance()
+							.getMessage(game.getPlayerService().getPlayerType(pos).getKey()));
 					fontBlue.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
 					break;
 				case NET:
-					layout.setText(fontGold, game.getPlayerService().getPlayerType(pos).toString());
+					layout.setText(fontGold, MessageService.getInstance()
+							.getMessage(game.getPlayerService().getPlayerType(pos).getKey()));
 					fontGold.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
 					break;
 				case NONE:
 				default:
-					layout.setText(fontRed, game.getPlayerService().getPlayerType(pos).toString());
+					layout.setText(fontRed, MessageService.getInstance()
+							.getMessage(game.getPlayerService().getPlayerType(pos).getKey()));
 					fontRed.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
 					break;
 				}
-
 			}
 		}
-
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}

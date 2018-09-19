@@ -13,6 +13,8 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.service.Context;
+import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -22,6 +24,7 @@ public class RulesScreen implements Screen, MenuListener {
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
+	private int cursorPosition;
 	private BitmapFont font;
 
 	public RulesScreen(final MultiBombermanGame game) {
@@ -30,6 +33,7 @@ public class RulesScreen implements Screen, MenuListener {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.game.getPlayerService().setMenuListener(this);
+		this.cursorPosition = 0;
 		initFont();
 	}
 
@@ -50,10 +54,50 @@ public class RulesScreen implements Screen, MenuListener {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
-		layout.setText(font, "rules screen");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.suddenDeath"));
+		font.draw(game.getBatch(), layout, 200, 180);
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.badBomber"));
+		font.draw(game.getBatch(), layout, 200, 160);
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.iaLevel"));
+		font.draw(game.getBatch(), layout, 200, 140);
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.time"));
+		font.draw(game.getBatch(), layout, 200, 120);
+
+		layout.setText(font, Context.isSuddenDeath() ? MessageService.getInstance().getMessage("game.menu.yes")
+				: MessageService.getInstance().getMessage("game.menu.no"));
+		font.draw(game.getBatch(), layout, 350, 180);
+		layout.setText(font, Context.isBadBomber() ? MessageService.getInstance().getMessage("game.menu.yes")
+				: MessageService.getInstance().getMessage("game.menu.no"));
+		font.draw(game.getBatch(), layout, 350, 160);
+		layout.setText(font, Integer.toString(Context.getIaLevel()));
+		font.draw(game.getBatch(), layout, 350, 140);
+		layout.setText(font, MessageService.getInstance().getMessage(Context.getTime().getKey()));
+		font.draw(game.getBatch(), layout, 350, 120);
+
+		this.updateCursorPosition();
+
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
+	}
+
+	private void updateCursorPosition() {
+		switch (cursorPosition) {
+		case 0:
+			this.cursor.updateCursorPosition(180, 170);
+			break;
+		case 1:
+			this.cursor.updateCursorPosition(180, 150);
+			break;
+		case 2:
+			this.cursor.updateCursorPosition(180, 130);
+			break;
+		case 3:
+			this.cursor.updateCursorPosition(180, 110);
+			break;
+		}
 	}
 
 	@Override
@@ -112,27 +156,59 @@ public class RulesScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressValide() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressUp() {
-		//unused method
+		cursorPosition--;
+		if (cursorPosition < 0) {
+			cursorPosition = 0;
+		}
 	}
 
 	@Override
 	public void pressDown() {
-		//unused method
+		cursorPosition++;
+		if (cursorPosition > 3) {
+			cursorPosition = 3;
+		}
 	}
 
 	@Override
 	public void pressLeft() {
-		//unused method
+		switch (cursorPosition) {
+		case 0:
+			Context.toogleSuddenDeath();
+			break;
+		case 1:
+			Context.toogleBadBomber();
+			break;
+		case 2:
+			Context.decIaLevel();
+			break;
+		case 3:
+			Context.decTime();
+			break;
+		}
 	}
 
 	@Override
 	public void pressRight() {
-		//unused method
+		switch (cursorPosition) {
+		case 0:
+			Context.toogleSuddenDeath();
+			break;
+		case 1:
+			Context.toogleBadBomber();
+			break;
+		case 2:
+			Context.incIaLevel();
+			break;
+		case 3:
+			Context.incTime();
+			break;
+		}
 	}
 
 }

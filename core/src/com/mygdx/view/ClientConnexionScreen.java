@@ -14,6 +14,7 @@ import com.mygdx.domain.Cursor;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -54,15 +55,15 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
-		layout.setText(font, "connexion to server");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.clientConnexionScreen"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 
-		layout.setText(font, "Nb Player");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.clientConnexionScreen.player"));
 		font.draw(game.getBatch(), layout, 200, 190);
-		layout.setText(font, "Port");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.clientConnexionScreen.port"));
 		font.draw(game.getBatch(), layout, 200, 170);
 
-		layout.setText(font, "Ip");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.clientConnexionScreen.ip"));
 		font.draw(game.getBatch(), layout, 200, 150);
 
 		layout.setText(font, "" + Context.getLocalPlayer());
@@ -81,6 +82,13 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 			layout.setText(largeFont, ".");
 			largeFont.draw(game.getBatch(), layout, 225 + (i * 80), 110);
 		}
+
+		if (game.getNetworkService().getLastClientError() != null) {
+			layout.setText(font, MessageService.getInstance()
+					.getMessage("game.menu.clientConnexionScreen." + game.getNetworkService().getLastClientError()));
+			font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 50);
+		}
+
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}

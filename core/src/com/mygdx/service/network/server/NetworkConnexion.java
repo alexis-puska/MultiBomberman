@@ -77,7 +77,7 @@ public class NetworkConnexion extends Thread {
 								// verification si deja connecté avant
 								if (!server.connexionAlreadyExistBefore(this)) {
 									// si non on expédie l'erreur et on ferme la connexion
-									out.write("error_in_game\n".getBytes());
+									out.write("errorInGame\n".getBytes());
 									socket.dispose();
 									status = false;
 								} else {
@@ -99,7 +99,7 @@ public class NetworkConnexion extends Thread {
 							server.valideConnexion(this);
 							out.write("event\n".getBytes());
 						} else {
-							out.write("error_to_many_player\n".getBytes());
+							out.write("errorTooManyPlayer\n".getBytes());
 							socket.dispose();
 							status = false;
 						}

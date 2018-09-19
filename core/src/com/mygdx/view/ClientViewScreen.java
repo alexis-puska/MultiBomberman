@@ -24,7 +24,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		if (!game.getNetworkService().getClient().isStatus()) {
 			game.getScreen().dispose();
-			game.setScreen(new MainScreen(game));
+			game.setScreen(new ClientConnexionScreen(game));
 		}
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

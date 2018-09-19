@@ -35,6 +35,8 @@ public class NetworkService {
 	private String externalIp;
 	private String hostName;
 	private String internetIp;
+	
+	private String lastClientError;
 
 	public NetworkService(final MultiBombermanGame game) {
 		this.game = game;
@@ -120,6 +122,20 @@ public class NetworkService {
 		return client;
 	}
 
+	public String getLastClientError() {
+		return lastClientError;
+	}
+
+	public void resetLastClientError() {
+		this.lastClientError = null;
+	}
+	
+	public void setLastClientError(String lastClientError) {
+		if(this.lastClientError == null) {
+			this.lastClientError = lastClientError;
+		}
+	}
+
 	public void acceptConnexion(boolean state) {
 		this.server.acceptConnexion(state);
 	}
@@ -128,13 +144,14 @@ public class NetworkService {
 	 * ----- client part -----
 	 ***********************************/
 	public boolean connectToServer(int port, String ip) {
+		this.resetLastClientError();
 		SocketHints socketHints = new SocketHints();
 		socketHints.connectTimeout = 1000;
 		try {
 			Socket clientSocket = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
 			if (clientSocket.isConnected()) {
 				Gdx.app.debug(CLASS_NAME, "connected !");
-				this.client = new Client(clientSocket);
+				this.client = new Client(clientSocket, this);
 				this.client.start();
 				return true;
 			}

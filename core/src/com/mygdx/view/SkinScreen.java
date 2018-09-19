@@ -58,7 +58,7 @@ public class SkinScreen implements Screen, MenuListener {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		game.getBatch().begin();
-		layout.setText(font, "skin screen");
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.skinScreen"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
