@@ -204,6 +204,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 			Context.incIp(3, 10);
 			break;
 		case 13:
+		default:
 			Context.incIp(3, 1);
 			break;
 		}
@@ -252,6 +253,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 			Context.decIp(3, 10);
 			break;
 		case 13:
+		default:
 			Context.decIp(3, 1);
 			break;
 		}
@@ -278,6 +280,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 		case 11:
 		case 12:
 		case 13:
+		default:
 			cursorPos--;
 			break;
 		}
@@ -304,6 +307,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 		case 11:
 		case 12:
 		case 13:
+		default:
 			cursorPos++;
 			break;
 		}
@@ -354,6 +358,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 			cursor.updateCursorPosition(420, 80);
 			break;
 		case 13:
+		default:
 			cursor.updateCursorPosition(440, 80);
 			break;
 		}

@@ -35,7 +35,7 @@ public class NetworkService {
 	private String externalIp;
 	private String hostName;
 	private String internetIp;
-	
+
 	private String lastClientError;
 
 	public NetworkService(final MultiBombermanGame game) {
@@ -129,9 +129,9 @@ public class NetworkService {
 	public void resetLastClientError() {
 		this.lastClientError = null;
 	}
-	
+
 	public void setLastClientError(String lastClientError) {
-		if(this.lastClientError == null) {
+		if (this.lastClientError == null) {
 			this.lastClientError = lastClientError;
 		}
 	}
@@ -188,13 +188,15 @@ public class NetworkService {
 			case west:
 				this.client.send((EVENT + integer + ":LEFT\n").getBytes());
 				break;
-			default:
-				this.client.send((EVENT + integer + ":CENTER\n").getBytes());
-				break;
 			case southEast:
 			case southWest:
 			case northEast:
 			case northWest:
+				break;
+			default:
+				this.client.send((EVENT + integer + ":CENTER\n").getBytes());
+				break;
+
 			}
 		}
 	}

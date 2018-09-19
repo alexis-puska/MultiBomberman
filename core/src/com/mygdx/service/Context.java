@@ -27,6 +27,14 @@ public class Context {
 	private static boolean badBomber;
 	private static TimeEnum time;
 	private static int iaLevel;
+	
+	// Game
+	private static int bonus[];
+	private static int level;
+	private static int variante;
+	private static int bombe;
+	private static int strength;
+	
 
 	private Context() {
 		// empty constructor

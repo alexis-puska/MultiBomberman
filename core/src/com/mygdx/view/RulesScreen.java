@@ -95,6 +95,7 @@ public class RulesScreen implements Screen, MenuListener {
 			this.cursor.updateCursorPosition(180, 130);
 			break;
 		case 3:
+		default:
 			this.cursor.updateCursorPosition(180, 110);
 			break;
 		}
@@ -188,6 +189,7 @@ public class RulesScreen implements Screen, MenuListener {
 			Context.decIaLevel();
 			break;
 		case 3:
+		default:
 			Context.decTime();
 			break;
 		}
@@ -206,6 +208,7 @@ public class RulesScreen implements Screen, MenuListener {
 			Context.incIaLevel();
 			break;
 		case 3:
+		default:
 			Context.incTime();
 			break;
 		}
