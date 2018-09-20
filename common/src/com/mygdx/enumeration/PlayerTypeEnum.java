@@ -23,7 +23,7 @@ public enum PlayerTypeEnum {
 	}
 
 	public static PlayerTypeEnum previous(PlayerTypeEnum val, boolean network) {
-		PlayerTypeEnum v = val;
+		PlayerTypeEnum v;
 		if ((val.ordinal() - 1) < 0) {
 			v = values()[values().length - 1];
 		} else {
