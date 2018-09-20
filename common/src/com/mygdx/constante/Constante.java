@@ -33,6 +33,13 @@ public class Constante {
 	public static final int MAX_IA_LEVEL = 5;
 	public static final boolean SUDDEN_DEATH = false;
 	public static final boolean BAD_BOMBER = false;
+	public static final int MAX_BONUS = 13;
+	public static final int DEFAULT_BOMBE = 2;
+	public static final int MIN_BOMBE = 1;
+	public static final int MAX_BOMBE = 6;
+	public static final int DEFAULT_STRENGTH = 1;
+	public static final int MIN_STRENGTH = 1;
+	public static final int MAX_STRENGTH = 6;
 
 	private Constante() {
 		// empty private constructor

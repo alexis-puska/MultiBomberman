@@ -27,14 +27,10 @@ public class Context {
 	private static boolean badBomber;
 	private static TimeEnum time;
 	private static int iaLevel;
-	
+
 	// Game
-	private static int bonus[];
-	private static int level;
-	private static int variante;
 	private static int bombe;
 	private static int strength;
-	
 
 	private Context() {
 		// empty constructor
@@ -51,6 +47,9 @@ public class Context {
 		time = Constante.DEFAULT_GAME_TIME;
 		suddenDeath = Constante.SUDDEN_DEATH;
 		badBomber = Constante.BAD_BOMBER;
+
+		bombe = Constante.DEFAULT_BOMBE;
+		strength = Constante.DEFAULT_STRENGTH;
 	}
 
 	public static String getUuid() {
@@ -255,4 +254,31 @@ public class Context {
 		return iaLevel;
 	}
 
+	public static void decbombe() {
+		bombe--;
+		if (bombe < Constante.MIN_BOMBE) {
+			bombe = Constante.MAX_BOMBE;
+		}
+	}
+
+	public static void incBombe() {
+		bombe++;
+		if (bombe > Constante.MAX_BOMBE) {
+			bombe = Constante.MIN_BOMBE;
+		}
+	}
+
+	public static void decStrength() {
+		strength--;
+		if (strength < Constante.MIN_STRENGTH) {
+			strength = Constante.MAX_STRENGTH;
+		}
+	}
+
+	public static void incStrength() {
+		strength++;
+		if (strength > Constante.MAX_STRENGTH) {
+			strength = Constante.MIN_STRENGTH;
+		}
+	}
 }

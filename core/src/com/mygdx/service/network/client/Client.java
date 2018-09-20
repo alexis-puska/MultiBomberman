@@ -63,10 +63,8 @@ public class Client extends Thread {
 						this.networkService.setLastClientError(line);
 						Gdx.app.error(CLASS_NAME, line);
 					}
-					if (line.startsWith("draw")) {
-						if (viewScreen != null) {
-							viewScreen.receive(line);
-						}
+					if (line.startsWith("draw") && viewScreen != null) {
+						viewScreen.receive(line);
 					}
 				}
 			} catch (IOException e) {
