@@ -95,7 +95,7 @@ public class NetworkConnexion extends Thread {
 					if (received.startsWith("nbp:")) {
 						String[] part = received.split(":");
 						player = Integer.parseInt(part[1]);
-						if (server.getPlayer() + player <= Context.getExternalPlayer()+Context.getLocalPlayer()) {
+						if (server.getPlayer() + player <= Context.getExternalPlayer() + Context.getLocalPlayer()) {
 							server.valideConnexion(this);
 							out.write("event\n".getBytes());
 						} else {
@@ -114,9 +114,6 @@ public class NetworkConnexion extends Thread {
 						case DOWN:
 							playerService.move(this.uuid, controllerIndex, PovDirection.south);
 							break;
-						case DROP:
-							playerService.dropBombe(this.uuid, controllerIndex);
-							break;
 						case LEFT:
 							playerService.move(this.uuid, controllerIndex, PovDirection.west);
 							break;
@@ -124,20 +121,37 @@ public class NetworkConnexion extends Thread {
 							playerService.move(this.uuid, controllerIndex, PovDirection.east);
 							break;
 						case SELECT:
-							break;
-						case SPEED_DOWN:
-							playerService.speedDown(this.uuid, controllerIndex);
-							break;
-						case SPEED_UP:
-							playerService.speedUp(this.uuid, controllerIndex);
+							playerService.pressSelect(this.uuid, controllerIndex);
 							break;
 						case START:
-							break;
-						case THROW:
-							playerService.throwBombe(this.uuid, controllerIndex);
+							playerService.pressStart(this.uuid, controllerIndex);
 							break;
 						case UP:
 							playerService.move(this.uuid, controllerIndex, PovDirection.north);
+							break;
+						case A:
+							playerService.pressA(this.uuid, controllerIndex);
+							break;
+						case B:
+							playerService.pressB(this.uuid, controllerIndex);
+							break;
+						case PL:
+							playerService.pressL(this.uuid, controllerIndex);
+							break;
+						case PR:
+							playerService.pressR(this.uuid, controllerIndex);
+							break;
+						case RL:
+							playerService.releaseL(this.uuid, controllerIndex);
+							break;
+						case RR:
+							playerService.releaseR(this.uuid, controllerIndex);
+							break;
+						case X:
+							playerService.pressX(this.uuid, controllerIndex);
+							break;
+						case Y:
+							playerService.pressY(this.uuid, controllerIndex);
 							break;
 						default:
 							playerService.move(this.uuid, controllerIndex, PovDirection.center);

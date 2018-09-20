@@ -6,10 +6,14 @@ public enum NetworkControllerEventEnum {
 	UP,
 	DOWN,
 	CENTER,
-	THROW,
-	DROP,
 	SELECT,
 	START,
-	SPEED_UP,
-	SPEED_DOWN;
+	A,
+	B,
+	X,
+	Y,
+	PL,
+	PR,
+	RL,
+	RR;
 }

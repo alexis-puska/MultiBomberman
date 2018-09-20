@@ -148,7 +148,7 @@ public class MainScreen implements Screen, MenuListener {
 	}
 
 	@Override
-	public void pressValide() {
+	public void pressA() {
 		//unused method
 
 	}
@@ -173,5 +173,34 @@ public class MainScreen implements Screen, MenuListener {
 	@Override
 	public void pressRight() {
 		Context.incGameMode();
+	}
+
+	@Override
+	public void pressB() {
+		// unused method
+	}
+
+	@Override
+	public void pressX() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressY() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressL() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressR() {
+		//unused method
+		
 	}
 }

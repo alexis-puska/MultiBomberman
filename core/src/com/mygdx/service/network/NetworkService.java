@@ -202,27 +202,49 @@ public class NetworkService {
 		}
 	}
 
-	public void sendDropBombe(Integer integer) {
+	public void sendPressA(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
-			this.client.send((EVENT + integer + ":DROP\n").getBytes());
+			this.client.send((EVENT + integer + ":A\n").getBytes());
 		}
 	}
 
-	public void sendSpeedUp(Integer integer) {
+	public void sendPressB(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
-			this.client.send((EVENT + integer + ":SPEED_UP\n").getBytes());
+			this.client.send((EVENT + integer + ":B\n").getBytes());
 		}
 	}
-
-	public void sendSpeedDown(Integer integer) {
+	public void sendPressX(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
-			this.client.send((EVENT + integer + ":SPEED_DOWN\n").getBytes());
+			this.client.send((EVENT + integer + ":X\n").getBytes());
 		}
 	}
-
-	public void sendThrowBombe(Integer integer) {
+	public void sendPressY(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
-			this.client.send((EVENT + integer + ":THROW\n").getBytes());
+			this.client.send((EVENT + integer + ":Y\n").getBytes());
 		}
 	}
+	public void sendPressL(Integer integer) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
+			this.client.send((EVENT + integer + ":PL\n").getBytes());
+		}
+	}
+	
+	public void sendPressR(Integer integer) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
+			this.client.send((EVENT + integer + ":PR\n").getBytes());
+		}
+	}
+	
+	public void sendReleaseL(Integer integer) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
+			this.client.send((EVENT + integer + ":RL\n").getBytes());
+		}
+	}
+	
+	public void sendReleaseR(Integer integer) {
+		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
+			this.client.send((EVENT + integer + ":RR\n").getBytes());
+		}
+	}
+	
 }

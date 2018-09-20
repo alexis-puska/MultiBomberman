@@ -47,7 +47,7 @@ public class Context {
 		time = Constante.DEFAULT_GAME_TIME;
 		suddenDeath = Constante.SUDDEN_DEATH;
 		badBomber = Constante.BAD_BOMBER;
-
+		iaLevel = Constante.MIN_IA_LEVEL;
 		bombe = Constante.DEFAULT_BOMBE;
 		strength = Constante.DEFAULT_STRENGTH;
 	}

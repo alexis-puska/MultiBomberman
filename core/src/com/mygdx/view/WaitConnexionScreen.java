@@ -54,19 +54,19 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 		game.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
-		
+
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion.client"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 190);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion.human"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 150);
-		
+
 		game.getNetworkService().getServer().updateConnexion();
-		
-		layout.setText(font, ""+game.getNetworkService().getServer().getConnexions().size());
+
+		layout.setText(font, "" + game.getNetworkService().getServer().getConnexions().size());
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 170);
-		layout.setText(font, ""+game.getNetworkService().getServer().getPlayer());
+		layout.setText(font, "" + game.getNetworkService().getServer().getPlayer());
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 130);
-		
+
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}
@@ -133,11 +133,6 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 	}
 
 	@Override
-	public void pressValide() {
-		// unused method
-	}
-
-	@Override
 	public void pressUp() {
 		// unused method
 	}
@@ -154,6 +149,36 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressRight() {
+		// unused method
+	}
+
+	@Override
+	public void pressA() {
+		// unused method
+	}
+
+	@Override
+	public void pressB() {
+		// unused method
+	}
+
+	@Override
+	public void pressX() {
+		// unused method
+	}
+
+	@Override
+	public void pressY() {
+		// unused method
+	}
+
+	@Override
+	public void pressL() {
+		// unused method
+	}
+
+	@Override
+	public void pressR() {
 		// unused method
 	}
 

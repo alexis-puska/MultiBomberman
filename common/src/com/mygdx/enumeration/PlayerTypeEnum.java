@@ -1,9 +1,7 @@
 package com.mygdx.enumeration;
 
 public enum PlayerTypeEnum {
-	HUMAN("game.menu.player.type.human"), 
-	CPU("game.menu.player.type.cpu"), 
-	NET("game.menu.player.type.network"), 
+	HUMAN("game.menu.player.type.human"), CPU("game.menu.player.type.cpu"), NET("game.menu.player.type.network"),
 	NONE("game.menu.player.type.none");
 
 	private String key;
@@ -28,9 +26,15 @@ public enum PlayerTypeEnum {
 		PlayerTypeEnum v = val;
 		if ((val.ordinal() - 1) < 0) {
 			v = values()[values().length - 1];
+		} else {
+			v = values()[val.ordinal() - 1];
 		}
-		if (!network && v == PlayerTypeEnum.NET && (v.ordinal() - 1) < 0) {
-			v = values()[values().length - 1];
+		if (!network && v == PlayerTypeEnum.NET) {
+			if ((v.ordinal() - 1) < 0) {
+				v = values()[values().length - 1];
+			} else {
+				v = values()[v.ordinal() - 1];
+			}
 		}
 		return v;
 	}

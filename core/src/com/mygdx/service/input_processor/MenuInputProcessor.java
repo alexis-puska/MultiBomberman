@@ -8,7 +8,7 @@ import com.mygdx.constante.Constante;
 import com.mygdx.service.PlayerService;
 
 public class MenuInputProcessor implements InputProcessor {
-	
+
 	private static final String LOG_NAME = "MenuInputProcessor.class";
 
 	private PlayerService playerService;
@@ -30,9 +30,6 @@ public class MenuInputProcessor implements InputProcessor {
 		case Keys.ENTER:
 			this.playerService.pressStart();
 			break;
-		case Keys.SPACE:
-			this.playerService.pressValide();
-			break;
 		case Keys.SHIFT_RIGHT:
 			this.playerService.pressSelect();
 			break;
@@ -49,22 +46,22 @@ public class MenuInputProcessor implements InputProcessor {
 			this.playerService.move(PovDirection.east);
 			break;
 		case Keys.X:
-			this.playerService.dropBombe();
+			this.playerService.pressA();
 			break;
 		case Keys.W:
-			this.playerService.throwBombe();
+			this.playerService.pressB();
 			break;
 		case Keys.A:
-			this.playerService.speedUp();
+			this.playerService.pressL();
 			break;
 		case Keys.Z:
-			this.playerService.speedUp();
+			this.playerService.pressR();
 			break;
 		case Keys.Q:
-			this.playerService.speedUp();
+			this.playerService.pressX();
 			break;
 		case Keys.S:
-			this.playerService.speedUp();
+			this.playerService.pressY();
 			break;
 		case Keys.CONTROL_LEFT:
 		case Keys.CONTROL_RIGHT:
@@ -88,16 +85,10 @@ public class MenuInputProcessor implements InputProcessor {
 			ctrl = false;
 			break;
 		case Keys.A:
-			this.playerService.speedDown();
+			this.playerService.releaseL();
 			break;
 		case Keys.Z:
-			this.playerService.speedDown();
-			break;
-		case Keys.Q:
-			this.playerService.speedDown();
-			break;
-		case Keys.S:
-			this.playerService.speedDown();
+			this.playerService.releaseR();
 			break;
 		default:
 		}
@@ -139,7 +130,7 @@ public class MenuInputProcessor implements InputProcessor {
 
 	private void toogleScreen() {
 		if (!fullscreen) {
-			Gdx.app.debug(LOG_NAME, "toogle screen : "+Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
+			Gdx.app.debug(LOG_NAME, "toogle screen : " + Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
 			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 			fullscreen = true;
 		} else {

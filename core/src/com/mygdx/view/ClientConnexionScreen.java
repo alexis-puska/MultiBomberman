@@ -141,6 +141,54 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 		generator.dispose();
 	}
 
+	private void updateCursor() {
+		switch (cursorPos) {
+		case 0:
+			cursor.updateCursorPosition(370, 180);
+			break;
+		case 1:
+			cursor.updateCursorPosition(370, 160);
+			break;
+		case 2:
+			cursor.updateCursorPosition(160, 80);
+			break;
+		case 3:
+			cursor.updateCursorPosition(180, 80);
+			break;
+		case 4:
+			cursor.updateCursorPosition(200, 80);
+			break;
+		case 5:
+			cursor.updateCursorPosition(240, 80);
+			break;
+		case 6:
+			cursor.updateCursorPosition(260, 80);
+			break;
+		case 7:
+			cursor.updateCursorPosition(280, 80);
+			break;
+		case 8:
+			cursor.updateCursorPosition(320, 80);
+			break;
+		case 9:
+			cursor.updateCursorPosition(340, 80);
+			break;
+		case 10:
+			cursor.updateCursorPosition(360, 80);
+			break;
+		case 11:
+			cursor.updateCursorPosition(400, 80);
+			break;
+		case 12:
+			cursor.updateCursorPosition(420, 80);
+			break;
+		case 13:
+		default:
+			cursor.updateCursorPosition(440, 80);
+			break;
+		}
+	}
+
 	@Override
 	public void pressStart() {
 		game.getPlayerService().initControllerMap();
@@ -154,12 +202,6 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	public void pressSelect() {
 		game.getScreen().dispose();
 		game.setScreen(new MainScreen(game));
-	}
-
-	@Override
-	public void pressValide() {
-		game.getScreen().dispose();
-		game.setScreen(new WaitConnexionScreen(game));
 	}
 
 	@Override
@@ -316,51 +358,34 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 		}
 	}
 
-	private void updateCursor() {
-		switch (cursorPos) {
-		case 0:
-			cursor.updateCursorPosition(370, 180);
-			break;
-		case 1:
-			cursor.updateCursorPosition(370, 160);
-			break;
-		case 2:
-			cursor.updateCursorPosition(160, 80);
-			break;
-		case 3:
-			cursor.updateCursorPosition(180, 80);
-			break;
-		case 4:
-			cursor.updateCursorPosition(200, 80);
-			break;
-		case 5:
-			cursor.updateCursorPosition(240, 80);
-			break;
-		case 6:
-			cursor.updateCursorPosition(260, 80);
-			break;
-		case 7:
-			cursor.updateCursorPosition(280, 80);
-			break;
-		case 8:
-			cursor.updateCursorPosition(320, 80);
-			break;
-		case 9:
-			cursor.updateCursorPosition(340, 80);
-			break;
-		case 10:
-			cursor.updateCursorPosition(360, 80);
-			break;
-		case 11:
-			cursor.updateCursorPosition(400, 80);
-			break;
-		case 12:
-			cursor.updateCursorPosition(420, 80);
-			break;
-		case 13:
-		default:
-			cursor.updateCursorPosition(440, 80);
-			break;
-		}
+	@Override
+	public void pressA() {
+		//unused method
+	}
+
+	@Override
+	public void pressB() {
+		// unused method
+	}
+
+	@Override
+	public void pressX() {
+		//unused method
+	}
+
+	@Override
+	public void pressY() {
+		//unused method
+	}
+
+	@Override
+	public void pressL() {
+		//unused method
+
+	}
+
+	@Override
+	public void pressR() {
+		//unused method
 	}
 }

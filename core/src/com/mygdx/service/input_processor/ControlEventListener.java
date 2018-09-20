@@ -5,11 +5,24 @@ import com.badlogic.gdx.controllers.PovDirection;
 public interface ControlEventListener {
 	public void move(PovDirection value);
 
-	public void dropBombe();
+	public void pressStart();
 
-	public void throwBombe();
+	public void pressSelect();
 
-	public void speedUp();
+	public void pressA();
 
-	public void speedDown();
+	public void pressB();
+
+	public void pressX();
+
+	public void pressY();
+
+	public void pressL();
+
+	public void pressR();
+
+	public void releaseL();
+
+	public void releaseR();
+
 }

@@ -5,12 +5,10 @@ import java.util.UUID;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -65,8 +63,7 @@ public class MultiBombermanGame extends Game {
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(screenCamera.combined);
 
-		Array<Controller> controllers = Controllers.getControllers();
-		controllerAdapter = new ControllerAdapter(controllers, playerService);
+		controllerAdapter = new ControllerAdapter(playerService);
 
 		SoundService.getInstance().playMusic(MusicEnum.MENU);
 		menuInputProcessor = new MenuInputProcessor(playerService);

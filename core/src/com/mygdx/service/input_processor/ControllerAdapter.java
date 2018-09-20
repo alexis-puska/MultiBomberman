@@ -4,16 +4,13 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.service.PlayerService;
 
 public class ControllerAdapter implements ControllerListener {
 
 	private PlayerService playerService;
-	private Array<Controller> controllers;
 
-	public ControllerAdapter(final Array<Controller> controllers, PlayerService playerService) {
-		this.controllers = controllers;
+	public ControllerAdapter(PlayerService playerService) {
 		this.playerService = playerService;
 	}
 
@@ -30,25 +27,23 @@ public class ControllerAdapter implements ControllerListener {
 	@Override
 	public boolean buttonDown(Controller controller, int buttonCode) {
 		switch (buttonCode) {
-		case 4:
-		case 5:
 		case 6:
+			playerService.pressL(controller);
+			break;
 		case 7:
-			playerService.speedUp(controller);
+			playerService.pressR(controller);
 			break;
 		case 0:
-			if (controller == controllers.first()) {
-				playerService.pressValide(controller);
-			}
-			playerService.dropBombe(controller);
+			playerService.pressA(controller);
 			break;
 		case 1:
-			if (controller == controllers.first()) {
-				playerService.pressValide(controller);
-			}
-			playerService.throwBombe(controller);
+			playerService.pressB(controller);
 			break;
 		case 2:
+			playerService.pressX(controller);
+			break;
+		case 3:
+			playerService.pressY(controller);
 			break;
 		case 8:
 			playerService.pressSelect(controller);
@@ -64,11 +59,12 @@ public class ControllerAdapter implements ControllerListener {
 	@Override
 	public boolean buttonUp(Controller controller, int buttonCode) {
 		switch (buttonCode) {
-		case 4:
-		case 5:
 		case 6:
+			playerService.releaseL(controller);
+			break;
 		case 7:
-			playerService.speedDown(controller);
+			playerService.releaseR(controller);
+			break;
 		default:
 		}
 		return false;

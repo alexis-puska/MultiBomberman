@@ -185,8 +185,13 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 	}
 
 	@Override
-	public void pressValide() {
+	public void pressA() {
 		game.getPlayerService().incPlayerType(cursorPosition);
+	}
+	
+	@Override
+	public void pressB() {
+		game.getPlayerService().decPlayerType(cursorPosition);
 	}
 
 	@Override
@@ -219,5 +224,29 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 		if (cursorPosition > 15) {
 			cursorPosition = 0;
 		}
+	}
+
+	@Override
+	public void pressX() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressY() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressL() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressR() {
+		//unused method
+		
 	}
 }

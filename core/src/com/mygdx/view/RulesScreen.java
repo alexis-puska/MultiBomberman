@@ -20,6 +20,11 @@ import com.mygdx.service.input_processor.MenuListener;
 
 public class RulesScreen implements Screen, MenuListener {
 
+	private static final int COLUMN_START_X = 200;
+	private static final int COLUMN_SPACE = 200;
+	private static final int ROW_START_Y = 120;
+	private static final int ROW_SPACE = 20;
+
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
@@ -58,24 +63,24 @@ public class RulesScreen implements Screen, MenuListener {
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.suddenDeath"));
-		font.draw(game.getBatch(), layout, 200, 180);
+		font.draw(game.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 3));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.badBomber"));
-		font.draw(game.getBatch(), layout, 200, 160);
+		font.draw(game.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 2));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.iaLevel"));
-		font.draw(game.getBatch(), layout, 200, 140);
+		font.draw(game.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 1));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.time"));
-		font.draw(game.getBatch(), layout, 200, 120);
+		font.draw(game.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 0));
 
 		layout.setText(font, Context.isSuddenDeath() ? MessageService.getInstance().getMessage("game.menu.yes")
 				: MessageService.getInstance().getMessage("game.menu.no"));
-		font.draw(game.getBatch(), layout, 350, 180);
+		font.draw(game.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 3));
 		layout.setText(font, Context.isBadBomber() ? MessageService.getInstance().getMessage("game.menu.yes")
 				: MessageService.getInstance().getMessage("game.menu.no"));
-		font.draw(game.getBatch(), layout, 350, 160);
+		font.draw(game.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 2));
 		layout.setText(font, Integer.toString(Context.getIaLevel()));
-		font.draw(game.getBatch(), layout, 350, 140);
+		font.draw(game.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 1));
 		layout.setText(font, MessageService.getInstance().getMessage(Context.getTime().getKey()));
-		font.draw(game.getBatch(), layout, 350, 120);
+		font.draw(game.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 0));
 
 		this.updateCursorPosition();
 
@@ -86,17 +91,17 @@ public class RulesScreen implements Screen, MenuListener {
 	private void updateCursorPosition() {
 		switch (cursorPosition) {
 		case 0:
-			this.cursor.updateCursorPosition(180, 170);
+			this.cursor.updateCursorPosition(COLUMN_START_X - 20, ROW_START_Y + (ROW_SPACE * 3) - 10);
 			break;
 		case 1:
-			this.cursor.updateCursorPosition(180, 150);
+			this.cursor.updateCursorPosition(COLUMN_START_X - 20, ROW_START_Y + (ROW_SPACE * 2) - 10);
 			break;
 		case 2:
-			this.cursor.updateCursorPosition(180, 130);
+			this.cursor.updateCursorPosition(COLUMN_START_X - 20, ROW_START_Y + (ROW_SPACE * 1) - 10);
 			break;
 		case 3:
 		default:
-			this.cursor.updateCursorPosition(180, 110);
+			this.cursor.updateCursorPosition(COLUMN_START_X - 20, ROW_START_Y + (ROW_SPACE * 0) - 10);
 			break;
 		}
 	}
@@ -156,7 +161,7 @@ public class RulesScreen implements Screen, MenuListener {
 	}
 
 	@Override
-	public void pressValide() {
+	public void pressA() {
 		// unused method
 	}
 
@@ -212,6 +217,37 @@ public class RulesScreen implements Screen, MenuListener {
 			Context.incTime();
 			break;
 		}
+	}
+	
+
+
+	@Override
+	public void pressB() {
+		// unused method
+	}
+
+	@Override
+	public void pressX() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressY() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressL() {
+		//unused method
+		
+	}
+
+	@Override
+	public void pressR() {
+		//unused method
+		
 	}
 
 }

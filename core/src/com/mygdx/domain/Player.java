@@ -10,28 +10,68 @@ public class Player implements ControlEventListener {
 
 	@Override
 	public void move(PovDirection value) {
-		//unused method
+		// unused method
 		Gdx.app.debug(CLASS_NAME, "press move");
 	}
 
 	@Override
-	public void dropBombe() {
-		//unused method
+	public void pressStart() {
+		// unused method
+
 	}
 
 	@Override
-	public void throwBombe() {
-		//unused method
+	public void pressSelect() {
+		// unused method
+
 	}
 
 	@Override
-	public void speedUp() {
-		//unused method
+	public void pressA() {
+		// unused method
+
 	}
 
 	@Override
-	public void speedDown() {
-		//unused method
+	public void pressB() {
+		// unused method
+
+	}
+
+	@Override
+	public void pressX() {
+		// unused method
+
+	}
+
+	@Override
+	public void pressY() {
+		// unused method
+
+	}
+
+	@Override
+	public void pressL() {
+		// unused method
+
+	}
+
+	@Override
+	public void pressR() {
+		// unused method
+
+	}
+
+	@Override
+	public void releaseL() {
+		// unused method
+
+	}
+
+	@Override
+	public void releaseR() {
+		// unused method
+
 	}
 
 }
