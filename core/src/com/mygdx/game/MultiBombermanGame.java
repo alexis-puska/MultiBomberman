@@ -31,10 +31,8 @@ import com.mygdx.view.MainScreen;
 import com.mygdx.view.SplashScreen;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class MultiBombermanGame extends Game {
 
 	private static final String LOG_NAME = "MultiBombermanGame.class";
