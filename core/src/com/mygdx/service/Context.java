@@ -20,7 +20,7 @@ public class Context {
 	private static int port;
 	private static int localPlayer;
 	private static int externalPlayer;
-	private static int ipPart[];
+	private static int[] ipPart;
 
 	// Rules
 	private static boolean suddenDeath;
