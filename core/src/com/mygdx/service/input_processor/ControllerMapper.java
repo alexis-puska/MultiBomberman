@@ -52,6 +52,9 @@ public class ControllerMapper {
 	}
 
 	public ControllerButtonEnum getButton(Controller controller, int button) {
+
+		mappingButton.keySet().stream().forEach(n -> System.out.println(n));
+		System.out.println(controller.getName());
 		if (mappingButton.containsKey(controller.getName())
 				&& mappingButton.get(controller.getName()).containsKey(button)) {
 			return mappingButton.get(controller.getName()).get(button);

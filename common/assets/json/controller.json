@@ -28,6 +28,20 @@
 				{"button": 8,"mapped": "SELECT"},
 				{"button": 9,"mapped": "START"}
 			]
+		},{
+			"name": "Dual Trigger 3-in-1",
+			"buttons": [
+				{"button": 0,"mapped": "Y"},
+				{"button": 1,"mapped": "B"},
+				{"button": 2,"mapped": "A"},
+				{"button": 3,"mapped": "X"},
+				{"button": 4,"mapped": "L1"},
+				{"button": 5,"mapped": "R1"},
+				{"button": 6,"mapped": "L2"},
+				{"button": 7,"mapped": "R2"},
+				{"button": 8,"mapped": "SELECT"},
+				{"button": 9,"mapped": "START"}
+			]
 		}
 	]
 }
