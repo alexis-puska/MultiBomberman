@@ -23,6 +23,8 @@ public class VarianteDTO implements Serializable {
 	private int strenght;
 	private Integer[] bonus;
 	private boolean fillWithBrick;
+	private String backgroundTextureName;
+	private int backgroundTextureIndex;
 	private List<HoleDTO> hole;
 	private List<RailDTO> rail;
 	private List<SwitchDTO> interrupter;
@@ -32,6 +34,5 @@ public class VarianteDTO implements Serializable {
 
 	private List<CustomTextureDTO> texture;
 	private List<WallDTO> wall;
-	private String backgroundTextureName;
-	private int backgroundTextureIndex;
+	
 }

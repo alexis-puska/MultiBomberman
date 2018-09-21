@@ -19,6 +19,7 @@ import com.mygdx.constante.Constante;
 import com.mygdx.dto.MultiBombermanDTO;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.service.Context;
+import com.mygdx.service.LevelService;
 import com.mygdx.service.PlayerService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
@@ -37,6 +38,7 @@ public class MultiBombermanGame extends Game {
 
 	private NetworkService networkService;
 	private PlayerService playerService;
+	private LevelService levelService;
 	private SpriteBatch batch;
 	private OrthographicCamera screenCamera;
 	private Viewport viewport;
@@ -50,6 +52,7 @@ public class MultiBombermanGame extends Game {
 		Gdx.app.setLogLevel(Constante.LIBGDX_LOG_LEVEL);
 		networkService = new NetworkService(this);
 		playerService = new PlayerService(this);
+		levelService = new LevelService(this);
 		SpriteService.getInstance();
 
 		/****************************************

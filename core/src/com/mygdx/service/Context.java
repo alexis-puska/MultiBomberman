@@ -281,4 +281,14 @@ public class Context {
 			strength = Constante.MIN_STRENGTH;
 		}
 	}
+
+	public static int getBombe() {
+		return bombe;
+	}
+
+	public static int getStrength() {
+		return strength;
+	}
+	
+	
 }

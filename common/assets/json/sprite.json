@@ -46,7 +46,7 @@
 		},{
 			"files": ["sprite/other/sprite_misc.png"],
 			"area": [
-				{"x": 0,   "y": 0,   "nx": 2, "ny": 8, "n": 15, "sx": 18, "sy": 16, "r": false, "animation": "BONUS"},
+				{"x": 0,   "y": 0,   "nx": 2, "ny": 8, "n": 15, "sx": 16, "sy": 16, "r": false, "animation": "BONUS"},
 				{"x": 32,  "y": 0,   "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE"},
 				{"x": 32,  "y": 16,  "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE_P"},
 				{"x": 32,  "y": 32,  "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE_D"},

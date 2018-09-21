@@ -1,5 +1,5 @@
 {
-	"levels": {
+	"levels": [{
 		"id": 1,
 		"name": "classic",
 		"variante": [{
@@ -31,11 +31,11 @@
 				{"x":1,"y":2}
 			],
 			"texture": [
-				{"x":1,"y":2}
+				{"x":1,"y":2,"front":true,"textureName":"","textureIndex":1}
 			],
 			"wall": [
-				{"x":1,"y":2}
+				{"x":1,"y":2,"draw":true,"textureName":"","textureIndex":1}
 			]
 		}]
-	}
+	}]
 }

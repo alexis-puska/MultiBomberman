@@ -13,17 +13,29 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
 public class LevelScreen implements Screen, MenuListener {
 
+	private static final int LEVEL_PREVIEW_X = 30;
+	private static final int LEVEL_PREVIEW_Y = 30;
+	private static final int START_GRID_X = 300;
+	private static final int START_GRID_Y = 100;
+	private static final int ROW_GRID_SPACE = 15;
+	private static final int COLUMN_GRID_SPACE = 150;
+	private static final int START_BONUS_X = 300;
+	private static final int START_BONUS_Y = 60;
+	private static final int BONUS_SPACE = 20;
+
 	private final MultiBombermanGame game;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
+	private int cursorPosition;
 
 	public LevelScreen(final MultiBombermanGame game) {
 		this.game = game;
@@ -31,6 +43,7 @@ public class LevelScreen implements Screen, MenuListener {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.game.getPlayerService().setMenuListener(this);
+		cursorPosition = 0;
 		initFont();
 	}
 
@@ -53,6 +66,43 @@ public class LevelScreen implements Screen, MenuListener {
 		game.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen"));
 		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.bombe"));
+		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 6));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.strenght"));
+		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 5));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.level"));
+		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 4));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.variante"));
+		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 3));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.levelName"));
+		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 2));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.description"));
+		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 1));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.bonus"));
+		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y);
+
+		layout.setText(font, Integer.toString(Context.getBombe()));
+		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 6));
+		layout.setText(font, Integer.toString(Context.getStrength()));
+		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 5));
+		layout.setText(font, Integer.toString(Context.getBombe()));
+		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 4));
+		layout.setText(font, Integer.toString(Context.getBombe()));
+		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 3));
+		layout.setText(font, Integer.toString(Context.getBombe()));
+		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 2));
+		layout.setText(font, Integer.toString(Context.getBombe()));
+		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 1));
+
+		for (int i = 0; i < Constante.MAX_BONUS; i++) {
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, i),
+					START_BONUS_X + (i * BONUS_SPACE), START_BONUS_Y);
+			layout.setText(font, "0");
+			font.draw(game.getBatch(), layout, START_BONUS_X + (i * BONUS_SPACE) + 5, START_BONUS_Y - 5);
+
+		}
+
 		cursor.draw(game.getBatch());
 		game.getBatch().end();
 	}
@@ -99,10 +149,72 @@ public class LevelScreen implements Screen, MenuListener {
 		generator.dispose();
 	}
 
+	public void updateCursorPosition() {
+		switch (cursorPosition) {
+		case 0:
+			cursor.updateCursorPosition(START_GRID_X - 20, START_GRID_Y + (ROW_GRID_SPACE * 6) - 10);
+			break;
+		case 1:
+			cursor.updateCursorPosition(START_GRID_X - 20, START_GRID_Y + (ROW_GRID_SPACE * 5) - 10);
+			break;
+		case 2:
+			cursor.updateCursorPosition(START_GRID_X - 20, START_GRID_Y + (ROW_GRID_SPACE * 4) - 10);
+			break;
+		case 3:
+			cursor.updateCursorPosition(START_GRID_X - 20, START_GRID_Y + (ROW_GRID_SPACE * 3) - 10);
+			break;
+		case 4:
+			cursor.updateCursorPosition(START_BONUS_X + (0 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 5:
+			cursor.updateCursorPosition(START_BONUS_X + (1 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 6:
+			cursor.updateCursorPosition(START_BONUS_X + (2 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 7:
+			cursor.updateCursorPosition(START_BONUS_X + (3 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 8:
+			cursor.updateCursorPosition(START_BONUS_X + (4 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 9:
+			cursor.updateCursorPosition(START_BONUS_X + (5 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 10:
+			cursor.updateCursorPosition(START_BONUS_X + (6 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 11:
+			cursor.updateCursorPosition(START_BONUS_X + (7 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 12:
+			cursor.updateCursorPosition(START_BONUS_X + (8 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 13:
+			cursor.updateCursorPosition(START_BONUS_X + (9 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 14:
+			cursor.updateCursorPosition(START_BONUS_X + (10 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 15:
+			cursor.updateCursorPosition(START_BONUS_X + (11 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 16:
+			cursor.updateCursorPosition(START_BONUS_X + (12 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 17:
+			cursor.updateCursorPosition(START_BONUS_X + (13 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		case 18:
+			cursor.updateCursorPosition(START_BONUS_X + (14 * BONUS_SPACE), START_BONUS_Y - 20);
+			break;
+		}
+	}
+
 	@Override
 	public void pressStart() {
-		//unused method
-
+		game.getScreen().dispose();
+		game.setScreen(new GameScreen(game));
 	}
 
 	@Override
@@ -113,31 +225,30 @@ public class LevelScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressA() {
-		game.getScreen().dispose();
-		game.setScreen(new GameScreen(game));
+		// unused method
 	}
 
 	@Override
 	public void pressUp() {
-		//unused method
+		// unused method
 
 	}
 
 	@Override
 	public void pressDown() {
-		//unused method
+		// unused method
 
 	}
 
 	@Override
 	public void pressLeft() {
-		//unused method
+		// unused method
 
 	}
 
 	@Override
 	public void pressRight() {
-		//unused method
+		// unused method
 
 	}
 
@@ -148,25 +259,25 @@ public class LevelScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressX() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressY() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressL() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressR() {
-		//unused method
-		
+		// unused method
+
 	}
 }
