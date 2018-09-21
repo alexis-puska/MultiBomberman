@@ -57,7 +57,7 @@ public class ControllerMapper {
 			return mappingButton.get(controller.getName()).get(button);
 		} else {
 			if (mappingDefault.containsKey(button)) {
-				mappingDefault.get(button);
+				return mappingDefault.get(button);
 			}
 		}
 		return null;

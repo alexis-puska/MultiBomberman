@@ -1,30 +1,30 @@
 {
 	"controllers": [
 		{
-			"name": "GamePad Usb",
+			"name": "USB Gamepad ",
 			"buttons": [
-				{"button": 0,"mapped": "A"},
-				{"button": 1,"mapped": "B"},
-				{"button": 2,"mapped": "X"},
+				{"button": 0,"mapped": "X"},
+				{"button": 1,"mapped": "A"},
+				{"button": 2,"mapped": "B"},
 				{"button": 3,"mapped": "Y"},
-				{"button": 4,"mapped": "R1"},
+				{"button": 4,"mapped": "L2"},
 				{"button": 5,"mapped": "R2"},
 				{"button": 6,"mapped": "L1"},
-				{"button": 7,"mapped": "L2"},
+				{"button": 7,"mapped": "R1"},
 				{"button": 8,"mapped": "SELECT"},
 				{"button": 9,"mapped": "START"}
 			]
 		},{
-			"name": "Logitech GamePad",
+			"name": "EA SPORTS Controller for PS3",
 			"buttons": [
-				{"button": 0,"mapped": "A"},
+				{"button": 0,"mapped": "Y"},
 				{"button": 1,"mapped": "B"},
-				{"button": 2,"mapped": "X"},
-				{"button": 3,"mapped": "Y"},
-				{"button": 4,"mapped": "R1"},
-				{"button": 5,"mapped": "R2"},
-				{"button": 6,"mapped": "L1"},
-				{"button": 7,"mapped": "L2"},
+				{"button": 2,"mapped": "A"},
+				{"button": 3,"mapped": "X"},
+				{"button": 4,"mapped": "L1"},
+				{"button": 5,"mapped": "R1"},
+				{"button": 6,"mapped": "L2"},
+				{"button": 7,"mapped": "R2"},
 				{"button": 8,"mapped": "SELECT"},
 				{"button": 9,"mapped": "START"}
 			]
