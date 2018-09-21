@@ -4,14 +4,17 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.enumeration.ControllerButtonEnum;
 import com.mygdx.service.PlayerService;
 
 public class ControllerAdapter implements ControllerListener {
 
 	private PlayerService playerService;
+	private final ControllerMapper controllerMapper;
 
 	public ControllerAdapter(PlayerService playerService) {
 		this.playerService = playerService;
+		this.controllerMapper = new ControllerMapper();
 	}
 
 	@Override
@@ -26,46 +29,62 @@ public class ControllerAdapter implements ControllerListener {
 
 	@Override
 	public boolean buttonDown(Controller controller, int buttonCode) {
-		switch (buttonCode) {
-		case 6:
-			playerService.pressL(controller);
-			break;
-		case 7:
-			playerService.pressR(controller);
-			break;
-		case 0:
-			playerService.pressA(controller);
-			break;
-		case 1:
-			playerService.pressB(controller);
-			break;
-		case 2:
-			playerService.pressX(controller);
-			break;
-		case 3:
-			playerService.pressY(controller);
-			break;
-		case 8:
-			playerService.pressSelect(controller);
-			break;
-		case 9:
-			playerService.pressStart(controller);
-			break;
-		default:
+		ControllerButtonEnum controllerButtonEnum = controllerMapper.getButton(controller, buttonCode);
+		if (controllerButtonEnum != null) {
+			switch (controllerButtonEnum) {
+			case A:
+				playerService.pressA(controller);
+				break;
+			case B:
+				playerService.pressB(controller);
+				break;
+			case X:
+				playerService.pressX(controller);
+				break;
+			case Y:
+				playerService.pressY(controller);
+				break;
+			case L1:
+				playerService.pressL(controller);
+				break;
+			case R1:
+				playerService.pressR(controller);
+				break;
+			case SELECT:
+				playerService.pressSelect(controller);
+				break;
+			case START:
+				playerService.pressStart(controller);
+				break;
+			case L2:
+			case R2:
+			default:
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public boolean buttonUp(Controller controller, int buttonCode) {
-		switch (buttonCode) {
-		case 6:
-			playerService.releaseL(controller);
-			break;
-		case 7:
-			playerService.releaseR(controller);
-			break;
-		default:
+		ControllerButtonEnum controllerButtonEnum = controllerMapper.getButton(controller, buttonCode);
+		if (controllerButtonEnum != null) {
+			switch (controllerButtonEnum) {
+			case L1:
+				playerService.releaseL(controller);
+				break;
+			case R1:
+				playerService.releaseR(controller);
+				break;
+			case A:
+			case B:
+			case X:
+			case Y:
+			case L2:
+			case R2:
+			case SELECT:
+			case START:
+			default:
+			}
 		}
 		return false;
 	}

@@ -1,0 +1,33 @@
+{
+	"controllers": [
+		{
+			"name": "GamePad Usb",
+			"buttons": [
+				{"button": 0,"mapped": "A"},
+				{"button": 1,"mapped": "B"},
+				{"button": 2,"mapped": "X"},
+				{"button": 3,"mapped": "Y"},
+				{"button": 4,"mapped": "R1"},
+				{"button": 5,"mapped": "R2"},
+				{"button": 6,"mapped": "L1"},
+				{"button": 7,"mapped": "L2"},
+				{"button": 8,"mapped": "SELECT"},
+				{"button": 9,"mapped": "START"}
+			]
+		},{
+			"name": "Logitech GamePad",
+			"buttons": [
+				{"button": 0,"mapped": "A"},
+				{"button": 1,"mapped": "B"},
+				{"button": 2,"mapped": "X"},
+				{"button": 3,"mapped": "Y"},
+				{"button": 4,"mapped": "R1"},
+				{"button": 5,"mapped": "R2"},
+				{"button": 6,"mapped": "L1"},
+				{"button": 7,"mapped": "L2"},
+				{"button": 8,"mapped": "SELECT"},
+				{"button": 9,"mapped": "START"}
+			]
+		}
+	]
+}
