@@ -254,7 +254,7 @@ public class Context {
 		return iaLevel;
 	}
 
-	public static void decbombe() {
+	public static void decBombe() {
 		bombe--;
 		if (bombe < Constante.MIN_BOMBE) {
 			bombe = Constante.MAX_BOMBE;
@@ -289,6 +289,5 @@ public class Context {
 	public static int getStrength() {
 		return strength;
 	}
-	
-	
+
 }

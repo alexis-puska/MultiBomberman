@@ -17,8 +17,8 @@ public class VarianteDTO implements Serializable {
 	private static final long serialVersionUID = -2962754568139006753L;
 
 	private long id;
-	private String name;
-	private String description;
+	private List<TextDTO> name;
+	private List<TextDTO> description;
 	private int bombe;
 	private int strenght;
 	private Integer[] bonus;

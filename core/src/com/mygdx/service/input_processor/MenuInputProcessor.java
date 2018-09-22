@@ -58,10 +58,10 @@ public class MenuInputProcessor implements InputProcessor {
 			this.playerService.pressR();
 			break;
 		case Keys.Q:
-			this.playerService.pressX();
+			this.playerService.pressY();
 			break;
 		case Keys.S:
-			this.playerService.pressY();
+			this.playerService.pressX();
 			break;
 		case Keys.CONTROL_LEFT:
 		case Keys.CONTROL_RIGHT:

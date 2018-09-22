@@ -1,11 +1,26 @@
 {
 	"levels": [{
 		"id": 1,
-		"name": "classic",
+		"name": [
+				{
+				"lang":"fr",
+				"value":"value"
+				}
+			],
 		"variante": [{
 			"id": 1,
-			"name": "",
-			"description": "",
+			"name": [
+				{
+				"lang":"fr",
+				"value":"value"
+				}
+			],
+			"description": [
+				{
+				"lang":"fr",
+				"value":"value"
+				}
+			],
 			"bombe": 1,
 			"strenght": 6,
 			"bonus": [1, 2, 3, 4, 5],
