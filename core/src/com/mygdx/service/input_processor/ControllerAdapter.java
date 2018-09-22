@@ -1,5 +1,6 @@
 package com.mygdx.service.input_processor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
@@ -58,6 +59,7 @@ public class ControllerAdapter implements ControllerListener {
 				break;
 			case L2:
 			case R2:
+			case NONE:
 			default:
 			}
 		}
@@ -83,6 +85,7 @@ public class ControllerAdapter implements ControllerListener {
 			case R2:
 			case SELECT:
 			case START:
+			case NONE:
 			default:
 			}
 		}
@@ -91,6 +94,11 @@ public class ControllerAdapter implements ControllerListener {
 
 	@Override
 	public boolean axisMoved(Controller controller, int axisCode, float value) {
+		PovDirection dir = controllerMapper.getDirection(controller, axisCode, value);
+		if (dir != null) {
+			Gdx.app.log("ControllerAdapter",dir.name());
+			playerService.move(controller, dir);
+		}
 		return false;
 	}
 

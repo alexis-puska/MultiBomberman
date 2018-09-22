@@ -2,6 +2,8 @@ package com.mygdx.dto.controller;
 
 import java.io.Serializable;
 
+import com.mygdx.enumeration.ControllerAxisEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +17,7 @@ public class AxisMappingDTO implements Serializable {
 
 	private static final long serialVersionUID = 7449893437224785568L;
 
+	private ControllerAxisEnum type;
 	private int axis;
-	private int mapped;
 	private boolean inverted;
 }

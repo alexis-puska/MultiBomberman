@@ -12,7 +12,41 @@
 				{"button": 6,"mapped": "L1"},
 				{"button": 7,"mapped": "R1"},
 				{"button": 8,"mapped": "SELECT"},
-				{"button": 9,"mapped": "START"}
+				{"button": 9,"mapped": "START"},
+				{"button": 10,"mapped": "NONE"},
+				{"button": 11,"mapped": "NONE"}
+			]
+		},{
+			"name": "USB Game Controllers",
+			"buttons": [
+				{"button": 0,"mapped": "Y"},
+				{"button": 1,"mapped": "X"},
+				{"button": 2,"mapped": "B"},
+				{"button": 3,"mapped": "A"},
+				{"button": 4,"mapped": "L1"},
+				{"button": 5,"mapped": "L2"},
+				{"button": 6,"mapped": "R1"},
+				{"button": 7,"mapped": "R2"},
+				{"button": 8,"mapped": "SELECT"},
+				{"button": 9,"mapped": "START"},
+				{"button": 10,"mapped": "NONE"},
+				{"button": 11,"mapped": "NONE"}
+			]
+		},{
+			"name": "4Axes 12Keys GamePad ",
+			"buttons": [
+				{"button": 0,"mapped": "X"},
+				{"button": 1,"mapped": "A"},
+				{"button": 2,"mapped": "B"},
+				{"button": 3,"mapped": "Y"},
+				{"button": 4,"mapped": "L2"},
+				{"button": 5,"mapped": "R2"},
+				{"button": 6,"mapped": "L1"},
+				{"button": 7,"mapped": "R1"},
+				{"button": 8,"mapped": "SELECT"},
+				{"button": 9,"mapped": "NONE"},
+				{"button": 10,"mapped": "NONE"},
+				{"button": 11,"mapped": "START"}
 			]
 		},{
 			"name": "EA SPORTS Controller for PS3",
@@ -26,7 +60,13 @@
 				{"button": 6,"mapped": "L2"},
 				{"button": 7,"mapped": "R2"},
 				{"button": 8,"mapped": "SELECT"},
-				{"button": 9,"mapped": "START"}
+				{"button": 9,"mapped": "START"},
+				{"button": 10,"mapped": "NONE"},
+				{"button": 11,"mapped": "NONE"}
+			],
+			"axis":[
+				{"type" :"HORIZONTAL", "axis":3, "inverted":false},
+				{"type" :"VERTICAL", "axis":2, "inverted":true}
 			]
 		},{
 			"name": "Dual Trigger 3-in-1",
@@ -40,7 +80,29 @@
 				{"button": 6,"mapped": "L2"},
 				{"button": 7,"mapped": "R2"},
 				{"button": 8,"mapped": "SELECT"},
-				{"button": 9,"mapped": "START"}
+				{"button": 9,"mapped": "START"},
+				{"button": 10,"mapped": "NONE"},
+				{"button": 11,"mapped": "NONE"}
+			]
+		},{
+			"name": "Xin-Mo Controller",
+			"buttons": [
+				{"button": 0,"mapped": "Y"},
+				{"button": 1,"mapped": "B"},
+				{"button": 2,"mapped": "A"},
+				{"button": 3,"mapped": "X"},
+				{"button": 4,"mapped": "R1"},
+				{"button": 5,"mapped": "L1"},
+				{"button": 6,"mapped": "R2"},
+				{"button": 7,"mapped": "L2"},
+				{"button": 8,"mapped": "SELECT"},
+				{"button": 9,"mapped": "START"},
+				{"button": 10,"mapped": "NONE"},
+				{"button": 11,"mapped": "NONE"}
+			],
+			"axis":[
+				{"type" :"HORIZONTAL", "axis":0, "inverted":false},
+				{"type" :"VERTICAL", "axis":1, "inverted":true}
 			]
 		}
 	]
