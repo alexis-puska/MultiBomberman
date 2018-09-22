@@ -19,7 +19,7 @@ public class ControllerMapper {
 
 	private static final String CONTROLLER_JSON_FILE = "json/controller.json";
 	private static final String CLASS_NAME = "ControllerMapper";
-	private static final float DETECTION = 0.79f;
+	private static final float DETECTION = 0.75f;
 
 	private Map<String, Map<Integer, ControllerButtonEnum>> mappingButton;
 	private Map<Integer, ControllerButtonEnum> mappingDefault;
