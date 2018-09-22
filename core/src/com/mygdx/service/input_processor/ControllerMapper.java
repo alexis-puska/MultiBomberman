@@ -19,7 +19,7 @@ public class ControllerMapper {
 
 	private static final String CONTROLLER_JSON_FILE = "json/controller.json";
 	private static final String CLASS_NAME = "ControllerMapper";
-	private static final float detection = 0.79f;
+	private static final float DETECTION = 0.79f;
 
 	private Map<String, Map<Integer, ControllerButtonEnum>> mappingButton;
 	private Map<Integer, ControllerButtonEnum> mappingDefault;
@@ -42,15 +42,11 @@ public class ControllerMapper {
 			if (controllerMappingFileContent != null) {
 				controllerMappingFileContent.getControllers().stream().forEach(c -> {
 					Map<Integer, ControllerButtonEnum> buttons = new HashMap<>();
-					c.getButtons().stream().forEach(b -> {
-						buttons.put(b.getButton(), b.getMapped());
-					});
+					c.getButtons().stream().forEach(b -> buttons.put(b.getButton(), b.getMapped()));
 					mappingButton.put(c.getName(), buttons);
 					if (c.getAxis() != null) {
 						Map<Integer, AxisMappingDTO> ax = new HashMap<>();
-						c.getAxis().stream().forEach(a -> {
-							ax.put(a.getAxis(), a);
-						});
+						c.getAxis().stream().forEach(a -> ax.put(a.getAxis(), a));
 						mappingAxis.put(c.getName(), ax);
 						lastAxisDirection.put(c.getName(), PovDirection.center);
 					}
@@ -67,8 +63,6 @@ public class ControllerMapper {
 	}
 
 	public ControllerButtonEnum getButton(Controller controller, int button) {
-		mappingButton.keySet().stream().forEach(n -> System.out.println(n));
-		System.out.println(controller.getName());
 		if (mappingButton.containsKey(controller.getName())
 				&& mappingButton.get(controller.getName()).containsKey(button)) {
 			return mappingButton.get(controller.getName()).get(button);
@@ -83,7 +77,7 @@ public class ControllerMapper {
 	public PovDirection getDirection(Controller controller, int axisCode, float value) {
 		if (mappingAxis.containsKey(controller.getName())
 				&& mappingAxis.get(controller.getName()).containsKey(axisCode)) {
-			if (value > detection || (value < -detection && value >= -1.1f)) {
+			if (value > DETECTION || (value < -DETECTION && value >= -1.1f)) {
 				AxisMappingDTO a = mappingAxis.get(controller.getName()).get(axisCode);
 				if (a.isInverted()) {
 					switch (a.getType()) {
@@ -101,6 +95,7 @@ public class ControllerMapper {
 								return PovDirection.east;
 							}
 						}
+						break;
 					case VERTICAL:
 						if (value > 0) {
 							if (lastAxisDirection.containsKey(controller.getName())
@@ -115,6 +110,7 @@ public class ControllerMapper {
 								return PovDirection.north;
 							}
 						}
+						break;
 					default:
 						break;
 					}
@@ -135,6 +131,7 @@ public class ControllerMapper {
 								return PovDirection.west;
 							}
 						}
+						break;
 					case VERTICAL:
 						if (value > 0) {
 							if (lastAxisDirection.containsKey(controller.getName())
@@ -149,6 +146,7 @@ public class ControllerMapper {
 								return PovDirection.south;
 							}
 						}
+						break;
 					default:
 						break;
 					}

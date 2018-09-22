@@ -281,7 +281,7 @@ public class PlayerService {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).releaseR();
 		}
 	}
-	
+
 	public void pressSelect(String uuid, int index) {
 		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
@@ -633,5 +633,5 @@ public class PlayerService {
 		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
 			game.getNetworkService().sendReleaseR(0);
 		}
-	}	
+	}
 }

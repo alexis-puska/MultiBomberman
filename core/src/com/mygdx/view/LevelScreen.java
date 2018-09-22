@@ -210,6 +210,8 @@ public class LevelScreen implements Screen, MenuListener {
 		case 18:
 			cursor.updateCursorPosition(START_BONUS_X + (14 * BONUS_SPACE), START_BONUS_Y - 40);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -251,6 +253,8 @@ public class LevelScreen implements Screen, MenuListener {
 		case 18:
 			cursorPosition = 3;
 			break;
+		default:
+			break;
 		}
 		if (cursorPosition < 0) {
 			cursorPosition = 0;
@@ -281,6 +285,8 @@ public class LevelScreen implements Screen, MenuListener {
 		case 16:
 		case 17:
 		case 18:
+		default:
+
 			break;
 		}
 	}
@@ -310,6 +316,8 @@ public class LevelScreen implements Screen, MenuListener {
 		case 18:
 			cursorPosition--;
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -337,6 +345,8 @@ public class LevelScreen implements Screen, MenuListener {
 		case 17:
 		case 18:
 			cursorPosition++;
+			break;
+		default:
 			break;
 		}
 		if (cursorPosition > 18) {
@@ -404,6 +414,8 @@ public class LevelScreen implements Screen, MenuListener {
 		case 18:
 			game.getLevelService().incBonus(14, 1);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -467,6 +479,8 @@ public class LevelScreen implements Screen, MenuListener {
 		case 18:
 			game.getLevelService().decBonus(14, 1);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -523,6 +537,8 @@ public class LevelScreen implements Screen, MenuListener {
 		case 18:
 			game.getLevelService().incBonus(14, 10);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -578,6 +594,8 @@ public class LevelScreen implements Screen, MenuListener {
 			break;
 		case 18:
 			game.getLevelService().decBonus(14, 10);
+			break;
+		default:
 			break;
 		}
 	}

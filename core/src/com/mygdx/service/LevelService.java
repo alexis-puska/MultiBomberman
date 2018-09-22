@@ -71,23 +71,23 @@ public class LevelService {
 	}
 
 	public void previousLevel() {
-
+		// make
 	}
 
 	public void nextLevel() {
-
+		// make
 	}
 
 	public void previousVariante() {
-
+		// make
 	}
 
 	public void nextVariante() {
-
+		// make
 	}
 
 	public void loadLevel() {
-
+		// make
 	}
 
 }

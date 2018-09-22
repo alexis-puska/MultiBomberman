@@ -15,6 +15,10 @@
 				{"button": 9,"mapped": "START"},
 				{"button": 10,"mapped": "NONE"},
 				{"button": 11,"mapped": "NONE"}
+			],
+			"axis":[
+				{"type" :"HORIZONTAL", "axis":1, "inverted":false},
+				{"type" :"VERTICAL", "axis":0, "inverted":true}
 			]
 		},{
 			"name": "USB Game Controllers",
