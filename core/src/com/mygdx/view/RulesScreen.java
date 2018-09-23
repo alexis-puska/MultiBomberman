@@ -161,11 +161,6 @@ public class RulesScreen implements Screen, MenuListener {
 	}
 
 	@Override
-	public void pressA() {
-		// unused method
-	}
-
-	@Override
 	public void pressUp() {
 		cursorPosition--;
 		if (cursorPosition < 0) {
@@ -183,6 +178,28 @@ public class RulesScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressLeft() {
+		// unused method
+
+	}
+
+	@Override
+	public void pressRight() {
+		// unused method
+
+	}
+
+	@Override
+	public void pressX() {
+		// unused method
+	}
+
+	@Override
+	public void pressY() {
+		// unused method
+	}
+
+	@Override
+	public void pressA() {
 		switch (cursorPosition) {
 		case 0:
 			Context.toogleSuddenDeath();
@@ -201,7 +218,7 @@ public class RulesScreen implements Screen, MenuListener {
 	}
 
 	@Override
-	public void pressRight() {
+	public void pressB() {
 		switch (cursorPosition) {
 		case 0:
 			Context.toogleSuddenDeath();
@@ -218,36 +235,17 @@ public class RulesScreen implements Screen, MenuListener {
 			break;
 		}
 	}
-	
-
-
-	@Override
-	public void pressB() {
-		// unused method
-	}
-
-	@Override
-	public void pressX() {
-		//unused method
-		
-	}
-
-	@Override
-	public void pressY() {
-		//unused method
-		
-	}
 
 	@Override
 	public void pressL() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressR() {
-		//unused method
-		
+		// unused method
+
 	}
 
 }
