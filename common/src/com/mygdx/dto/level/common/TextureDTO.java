@@ -1,4 +1,4 @@
-package com.mygdx.dto.level;
+package com.mygdx.dto.level.common;
 
 import java.io.Serializable;
 
@@ -11,10 +11,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TrolleyDTO implements Serializable {
+public class TextureDTO implements Serializable {
 
-	private static final long serialVersionUID = -2962754568139006753L;
-	private int x;
-	private int y;
+	private static final long serialVersionUID = 4557602529622087772L;
 
+	private String animation;
+	private int index;
 }

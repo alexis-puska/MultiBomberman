@@ -1,56 +1,98 @@
 {
 	"levels": [{
 		"id": 1,
-		"name": [
-				{
-				"lang":"fr",
-				"value":"value"
-				}
-			],
+		"name": [{
+			"lang": "fr",
+			"value": "value"
+		}],
 		"variante": [{
 			"id": 1,
-			"name": [
+			"name": [{
+					"lang": "fr",
+					"value": "value"
+				},
 				{
-				"lang":"fr",
-				"value":"value"
+					"lang": "en",
+					"value": "value"
 				}
 			],
-			"description": [
+			"description": [{
+					"lang": "en",
+					"value": "value"
+				},
 				{
-				"lang":"fr",
-				"value":"value"
+					"lang": "en",
+					"value": "value"
 				}
 			],
+			"shadow": 0.5,
 			"bombe": 1,
 			"strenght": 6,
-			"bonus": [1, 2, 3, 4, 5],
+			"bonus": [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5
+			],
 			"fillWithBrick": true,
-			"backgroundTextureName": "",
-			"backgroundTextureIndex": 1,
-			"hole": [
-				{"x":1,"y":2}
-			],
-			"rail": [
-				{"x":1,"y":2,"next":1,"previous":1,"nextAlt":1}
-			],
-			"interrupter": [
-				{"x":1,"y":2}
-			],
-			"mine": [
-				{"x":1,"y":2}
-			],
-			"trolley": [
-				{"x":1,"y":2}
-			],
-			"teleporter": [
-				{"x":1,"y":2}
-			],
-			"texture": [
-				{"x":1,"y":2,"front":true,"textureName":"","textureIndex":1}
-			],
-			"wall": [
-				{"x":1,"y":2,"draw":true,"textureName":"","textureIndex":1}
-			]
+			"defaultBackground": {
+				"animation": "azea",
+				"index": 1
+			},
+			"defaultWall": {
+				"animation": "azea",
+				"index": 1
+			},
+			"defaultBrickAnimation":"aze",
+			"hole": [{
+				"x": 1,
+				"y": 2
+			}],
+			"rail": [{
+				"x": 1,
+				"y": 2
+			}],
+			"trolley": [{
+				"x": 1,
+				"y": 2
+			}],
+			"interrupter": [{
+				"x": 1,
+				"y": 2
+			}],
+			"mine": [{
+				"x": 1,
+				"y": 2
+			}],
+			"teleporter": [{
+				"x": 1,
+				"y": 2
+			}],
+			"wall": [{
+				"x": 1,
+				"y": 2,
+				"draw": true,
+				"texture": {
+					"animation": "azea",
+					"index": 1
+				}
+			}],
+			"customBackgroundTexture": [{
+				"x": 1,
+				"y": 2,
+				"texture": {
+					"animation": "azea",
+					"index": 1
+				}
+			}],
+			"customForegroundTexture": [{
+				"x": 1,
+				"y": 2,
+				"texture": {
+					"animation": "azea",
+					"index": 1
+				}
+			}],
+			"startPlayer": [{
+				"x": 1,
+				"y": 2
+			}]
 		}]
 	}]
 }

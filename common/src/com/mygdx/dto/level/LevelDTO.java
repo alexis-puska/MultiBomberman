@@ -3,6 +3,8 @@ package com.mygdx.dto.level;
 import java.io.Serializable;
 import java.util.List;
 
+import com.mygdx.dto.level.common.TextDTO;
+
 import lombok.Getter;
 import lombok.Setter;
 

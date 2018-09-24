@@ -3,6 +3,10 @@ package com.mygdx.dto.level;
 import java.io.Serializable;
 import java.util.List;
 
+import com.mygdx.dto.level.common.PositionableDTO;
+import com.mygdx.dto.level.common.TextDTO;
+import com.mygdx.dto.level.common.TextureDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,20 +23,27 @@ public class VarianteDTO implements Serializable {
 	private long id;
 	private List<TextDTO> name;
 	private List<TextDTO> description;
+
 	private int bombe;
 	private int strenght;
+	private float shadow;
 	private Integer[] bonus;
 	private boolean fillWithBrick;
-	private String backgroundTextureName;
-	private int backgroundTextureIndex;
-	private List<HoleDTO> hole;
-	private List<RailDTO> rail;
-	private List<SwitchDTO> interrupter;
-	private List<MineDTO> mine;
-	private List<TrolleyDTO> trolley;
-	private List<TeleporterDTO> teleporter;
+	private TextureDTO defaultBackground;
+	private TextureDTO defaultWall;
+	private String defaultBrickAnimation;
 
-	private List<CustomTextureDTO> texture;
+	private List<PositionableDTO> hole;
+	private List<PositionableDTO> rail;
+	private List<PositionableDTO> interrupter;
+	private List<PositionableDTO> mine;
+	private List<PositionableDTO> trolley;
+	private List<PositionableDTO> teleporter;
 	private List<WallDTO> wall;
-	
+
+	private List<CustomTextureDTO> customBackgroundTexture;
+	private List<CustomTextureDTO> customForegroundTexture;
+
+	private List<PositionableDTO> startPlayer;
+
 }

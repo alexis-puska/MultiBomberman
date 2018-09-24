@@ -2,6 +2,9 @@ package com.mygdx.dto.level;
 
 import java.io.Serializable;
 
+import com.mygdx.dto.level.common.PositionableDTO;
+import com.mygdx.dto.level.common.TextureDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,14 +14,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WallDTO implements Serializable {
+public class WallDTO extends PositionableDTO implements Serializable {
 
 	private static final long serialVersionUID = -6820274884896875480L;
 
-	private int x;
-	private int y;
 	private boolean draw;
-	private String textureName;
-	private int textureIndex;
+	private TextureDTO texture;
 
 }
