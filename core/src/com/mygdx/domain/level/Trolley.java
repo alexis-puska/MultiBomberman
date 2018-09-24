@@ -1,6 +1,6 @@
 package com.mygdx.domain.level;
 
-import com.mygdx.domain.common.Identifiable;
+import com.mygdx.domain.common.BodyAble;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +11,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Trolley extends Identifiable {
+public class Trolley extends BodyAble {
 
 	protected int x;
 	protected int y;
+
+	@Override
+	public void createBody() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void drawIt() {
+		// TODO Auto-generated method stub
+	}
 
 }

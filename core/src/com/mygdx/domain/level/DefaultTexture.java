@@ -1,7 +1,5 @@
 package com.mygdx.domain.level;
 
-import com.mygdx.domain.common.Drawable;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Rail extends Drawable {
+public class DefaultTexture {
 
-	protected int x;
-	protected int y;
-
-	@Override
-	public void drawIt() {
-		// TODO Auto-generated method stub
-
-	}
+	private String animation;
+	private int index;
 
 }

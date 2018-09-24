@@ -76,18 +76,14 @@
 			"customBackgroundTexture": [{
 				"x": 1,
 				"y": 2,
-				"texture": {
-					"animation": "azea",
-					"index": 1
-				}
+				"animation": "azea",
+				"index": 1	
 			}],
 			"customForegroundTexture": [{
 				"x": 1,
 				"y": 2,
-				"texture": {
-					"animation": "azea",
-					"index": 1
-				}
+				"animation": "azea",
+				"index": 1
 			}],
 			"startPlayer": [{
 				"x": 1,

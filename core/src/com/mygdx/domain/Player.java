@@ -2,11 +2,24 @@ package com.mygdx.domain;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.mygdx.domain.common.BodyAble;
 import com.mygdx.service.input_processor.ControlEventListener;
 
-public class Player implements ControlEventListener {
+public class Player extends BodyAble implements ControlEventListener {
 
 	private static final String CLASS_NAME = "Player.class";
+
+	@Override
+	public void createBody() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void drawIt() {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public void move(PovDirection value) {

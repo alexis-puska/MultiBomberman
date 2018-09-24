@@ -3,9 +3,9 @@ package com.mygdx.dto.level;
 import java.io.Serializable;
 import java.util.List;
 
+import com.mygdx.dto.level.common.DefaultTextureDTO;
 import com.mygdx.dto.level.common.PositionableDTO;
 import com.mygdx.dto.level.common.TextDTO;
-import com.mygdx.dto.level.common.TextureDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,8 +29,8 @@ public class VarianteDTO implements Serializable {
 	private float shadow;
 	private Integer[] bonus;
 	private boolean fillWithBrick;
-	private TextureDTO defaultBackground;
-	private TextureDTO defaultWall;
+	private DefaultTextureDTO defaultBackground;
+	private DefaultTextureDTO defaultWall;
 	private String defaultBrickAnimation;
 
 	private List<PositionableDTO> hole;

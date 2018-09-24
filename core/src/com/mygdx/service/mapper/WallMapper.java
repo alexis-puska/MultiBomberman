@@ -13,6 +13,13 @@ public class WallMapper {
 		wall.setId(dto.getId());
 		wall.setX(dto.getX());
 		wall.setY(dto.getY());
+		if (dto.getTexture() != null) {
+			wall.setCustomSkin(true);
+			wall.setAnimation(dto.getTexture().getAnimation());
+			wall.setIndex(dto.getTexture().getIndex());
+		} else {
+			wall.setCustomSkin(false);
+		}
 		return wall;
 	}
 

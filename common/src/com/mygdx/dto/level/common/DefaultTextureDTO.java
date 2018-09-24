@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TextureDTO implements Serializable {
+public class DefaultTextureDTO implements Serializable {
 
 	private static final long serialVersionUID = 4557602529622087772L;
 
