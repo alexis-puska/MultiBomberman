@@ -1,6 +1,6 @@
 package com.mygdx.domain.level;
 
-import com.mygdx.domain.common.Identifiable;
+import com.mygdx.domain.common.Drawable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +11,18 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StartPlayer extends Identifiable {
+public class Wall extends Drawable {
 
 	protected int x;
 	protected int y;
+	private boolean draw;
+	private String animation;
+	private int index;
+
+	@Override
+	public void drawIt() {
+		// TODO Auto-generated method stub
+
+	}
 
 }
