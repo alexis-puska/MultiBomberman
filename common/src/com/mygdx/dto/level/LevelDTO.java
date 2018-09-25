@@ -14,7 +14,7 @@ public class LevelDTO implements Serializable {
 
 	private static final long serialVersionUID = -2962754568139006753L;
 
-	private long id;
+	private int id;
 	private List<TextDTO> name;
 	private List<VarianteDTO> variante;
 

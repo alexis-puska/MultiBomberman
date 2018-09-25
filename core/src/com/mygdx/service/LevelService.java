@@ -8,8 +8,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.level.Level;
+import com.mygdx.domain.level.Variante;
 import com.mygdx.dto.level.LevelFileDTO;
 import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.service.mapper.LevelMapper;
 
 public class LevelService {
 
@@ -19,14 +22,16 @@ public class LevelService {
 	private final MultiBombermanGame game;
 	private FileHandle levelJsonFile;
 	private final ObjectMapper objectMapper;
+	private final LevelMapper levelMapper;
 
 	private int[] bonus;
-	private int level;
-	private int variante;
+	private Level level;
+	private Variante variante;
 
 	public LevelService(final MultiBombermanGame game) {
 		Gdx.app.debug(CLASS_NAME, "Init");
 		this.game = game;
+		this.levelMapper = new LevelMapper();
 		bonus = new int[Constante.MAX_BONUS];
 
 		objectMapper = new ObjectMapper();
@@ -36,6 +41,10 @@ public class LevelService {
 			levelFileContent = objectMapper.readValue(levelJsonFile.read(), LevelFileDTO.class);
 			Gdx.app.log(CLASS_NAME, "Nb level found : " + levelFileContent.getLevels().size());
 
+			level = levelMapper.toEntity(levelFileContent.getLevels().get(0));
+			variante = level.getVariante().get(0);
+			Gdx.app.log(CLASS_NAME, level.getName().get(0).getValue());
+			Gdx.app.log(CLASS_NAME, variante.getName().get(0).getValue());
 		} catch (JsonParseException e) {
 			Gdx.app.error(CLASS_NAME, "JsonParseException : ", e);
 		} catch (JsonMappingException e) {

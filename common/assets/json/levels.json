@@ -2,27 +2,27 @@
 	"levels": [{
 		"id": 1,
 		"name": [{
-			"lang": "fr",
-			"value": "value"
+			"lang": "FRENCH",
+			"value": "level1"
 		}],
 		"variante": [{
 			"id": 1,
 			"name": [{
-					"lang": "fr",
-					"value": "value"
+					"lang": "FRENCH",
+					"value": "level-variante1"
 				},
 				{
-					"lang": "en",
-					"value": "value"
+					"lang": "ENGLISH",
+					"value": "level-variante1"
 				}
 			],
 			"description": [{
-					"lang": "en",
-					"value": "value"
+					"lang": "FRENCH",
+					"value": "level-variante-desc1"
 				},
 				{
-					"lang": "en",
-					"value": "value"
+					"lang": "ENGLISH",
+					"value": "level-variante-desc1"
 				}
 			],
 			"shadow": 0.5,

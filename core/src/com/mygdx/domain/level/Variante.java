@@ -2,8 +2,6 @@ package com.mygdx.domain.level;
 
 import java.util.List;
 
-import com.mygdx.dto.level.common.TextDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +14,8 @@ import lombok.Setter;
 public class Variante {
 
 	private long id;
-	private List<TextDTO> name;
-	private List<TextDTO> description;
+	private List<Text> name;
+	private List<Text> description;
 
 	private int bombe;
 	private int strenght;
