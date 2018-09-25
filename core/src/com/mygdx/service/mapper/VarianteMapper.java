@@ -57,7 +57,6 @@ public class VarianteMapper {
 		variante.setTeleporter(teleporterMapper.toEntitys(dto.getTeleporter()));
 		variante.setTrolley(trolleyMapper.toEntitys(dto.getTrolley()));
 		variante.setWall(wallMapper.toEntitys(dto.getWall()));
-		// TODO
 		return variante;
 	}
 

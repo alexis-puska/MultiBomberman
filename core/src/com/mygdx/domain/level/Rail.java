@@ -18,7 +18,7 @@ public class Rail extends Drawable {
 
 	@Override
 	public void drawIt() {
-		// TODO Auto-generated method stub
+		// make
 
 	}
 

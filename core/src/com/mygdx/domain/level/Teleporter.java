@@ -18,12 +18,12 @@ public class Teleporter extends BodyAble {
 
 	@Override
 	public void createBody() {
-		// TODO Auto-generated method stub
+		// make
 	}
 
 	@Override
 	public void drawIt() {
-		// TODO Auto-generated method stub
+		// make
 	}
 
 }
