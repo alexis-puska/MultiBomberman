@@ -6,11 +6,16 @@ import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.mygdx.constante.Constante;
 
 public class EditorLauncher extends JFrame {
 
 	private static final long serialVersionUID = -3272449442566277297L;
+
+	private static final Logger log = LogManager.getLogger(EditorLauncher.class);
 
 	private Locale localeLanguage;
 	private transient ResourceBundle message;
@@ -28,7 +33,7 @@ public class EditorLauncher extends JFrame {
 	public EditorLauncher(String lang) {
 		this.localeLanguage = Locale.forLanguageTag(lang);
 		this.message = ResourceBundle.getBundle("i18n/Message", localeLanguage);
-		System.out.println("message " + lang + " : " + message.getString("editor.currentLevel.border"));
+		log.info("message {} : {}", lang, message.getString("editor.border.bonus"));
 	}
 
 	public void launch() {
