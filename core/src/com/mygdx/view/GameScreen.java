@@ -13,16 +13,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
@@ -101,28 +93,9 @@ public class GameScreen implements Screen, MenuListener {
 		this.debugCamera.position.set(camX / 2, camY / 2, 0);
 		this.debugCamera.zoom = 1.01587302f;
 		this.debugCamera.update();
-		this.world = new World(new Vector2(0, 0), true);
+		this.world = new World(new Vector2(0, 0), false);
 		this.world.setContactListener(new CustomContactListener());
-		this.world.step(1 / 25f, 6, 2);
-
-		BodyDef groundBodyDef = new BodyDef();
-		PolygonShape groundBox = new PolygonShape();
-		CircleShape circle = new CircleShape();
-		circle.setRadius(0.5f);
-		FixtureDef fdef = new FixtureDef();
-	    fdef.shape = circle;
-		groundBodyDef.position.set(new Vector2(34.5f, 19.5f));
-		Body body = world.createBody(groundBodyDef);
-		Fixture fixture = body.createFixture(groundBox, 0.0f);
-		fixture.setFriction(0f);
-		body.createFixture(fdef);
-		body.setUserData(this);
-		groundBox.dispose();
-		Filter filter = new Filter();
-		filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
-		fixture.setFilterData(filter);
-		world.createBody(new BodyDef());
-
+		this.game.getPlayerService().generatePlayer(this.world);
 		initFont();
 	}
 

@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.PlayerDefinition;
@@ -172,7 +173,17 @@ public class PlayerService {
 		return definitions.get(index).getColor();
 	}
 
-	public List<Player> generatePlayer() {
+	public List<Player> generatePlayer(World world) {
+		controlEventListeners = new HashMap<>();
+		// TODO
+		for (Entry<Integer, PlayerDefinition> def : definitions.entrySet()) {
+			Gdx.app.log(CLASS_NAME,
+					"GENERATE PLAYER : " + def.getValue().getPosition() + ",  "
+							+ def.getValue().getPlayerType().toString() + ",  "
+							+ def.getValue().getCharacter().toString() + ",  " + def.getValue().getColor().toString());
+			controlEventListeners.put(def.getKey(),
+					new Player(world, game, def.getValue().getCharacter(), def.getValue().getColor()));
+		}
 		return new ArrayList<>();
 	}
 
@@ -300,7 +311,8 @@ public class PlayerService {
 	 * --- LOCAL CONTROLLER ---
 	 **************************************/
 	public void move(Controller controller, PovDirection direction) {
-		if (game.getScreen().getClass() == GameScreen.class && this.localController.containsKey(controller)) {
+		if (game.getScreen().getClass() == GameScreen.class && this.localController.containsKey(controller)
+				&& controlEventListeners.get(this.localController.get(controller)) != null) {
 			controlEventListeners.get(this.localController.get(controller)).move(direction);
 		} else if (game.getScreen().getClass() == SkinScreen.class && this.localController.containsKey(controller)) {
 			switch (direction) {
@@ -522,7 +534,8 @@ public class PlayerService {
 			default:
 				break;
 			}
-		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1
+				&& controlEventListeners.get(firstHumanIdx) != null) {
 			controlEventListeners.get(firstHumanIdx).move(direction);
 		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
 			game.getNetworkService().sendDirection(0, direction);

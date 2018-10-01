@@ -80,6 +80,12 @@ public class MenuInputProcessor implements InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 		switch (keycode) {
+		case Keys.UP:
+		case Keys.DOWN:
+		case Keys.LEFT:
+		case Keys.RIGHT:
+			this.playerService.move(PovDirection.center);
+			break;
 		case Keys.CONTROL_LEFT:
 		case Keys.CONTROL_RIGHT:
 			ctrl = false;
