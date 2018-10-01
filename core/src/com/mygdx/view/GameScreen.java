@@ -13,8 +13,14 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
@@ -86,15 +92,30 @@ public class GameScreen implements Screen, MenuListener {
 		 * --- PHYSICS ---
 		 ********************/
 		this.debugRenderer = new Box2DDebugRenderer();
-		this.debugCamera = new OrthographicCamera(Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y);
-		float camX = 10f;
-		float camY = 12f;
-		this.debugCamera.position.set(camX, camY, 0);
-		this.debugCamera.zoom = 0.05f;
+		this.debugCamera = new OrthographicCamera(35f, 21f);
+		this.debugCamera.setToOrtho(false, 35f, 21f);
+		float camX = 35f;
+		float camY = 21f;
+		this.debugCamera.position.set(camX / 2, camY / 2, 0);
+		this.debugCamera.zoom = 1.01587302f;
 		this.debugCamera.update();
 		this.world = new World(new Vector2(0, 0), true);
 		this.world.setContactListener(new CustomContactListener());
 		this.world.step(1 / 25f, 6, 2);
+
+		BodyDef groundBodyDef = new BodyDef();
+		PolygonShape groundBox = new PolygonShape();
+		groundBox.setAsBox(0.5f, 0.5f);
+		groundBodyDef.position.set(new Vector2(34.5f, 19.5f));
+		Body body = world.createBody(groundBodyDef);
+		Fixture fixture = body.createFixture(groundBox, 0.0f);
+		fixture.setFriction(0f);
+		body.setUserData(this);
+		groundBox.dispose();
+		Filter filter = new Filter();
+		filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
+		fixture.setFilterData(filter);
+		world.createBody(new BodyDef());
 
 		initFont();
 	}
@@ -150,7 +171,12 @@ public class GameScreen implements Screen, MenuListener {
 		game.getBatch().draw(mergedLayer.getColorBufferTexture(), 5, 5);
 		game.getBatch().end();
 
-		// world.step(1 / 40f, 6, 2);
+		world.step(1 / 25f, 6, 2);
+
+		if (Constante.DEBUG) {
+			debugCamera.update();
+			debugRenderer.render(world, debugCamera.combined);
+		}
 	}
 
 	private void mergeFinalTexture() {
