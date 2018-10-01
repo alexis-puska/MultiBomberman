@@ -16,8 +16,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
@@ -105,11 +107,15 @@ public class GameScreen implements Screen, MenuListener {
 
 		BodyDef groundBodyDef = new BodyDef();
 		PolygonShape groundBox = new PolygonShape();
-		groundBox.setAsBox(0.5f, 0.5f);
+		CircleShape circle = new CircleShape();
+		circle.setRadius(0.5f);
+		FixtureDef fdef = new FixtureDef();
+	    fdef.shape = circle;
 		groundBodyDef.position.set(new Vector2(34.5f, 19.5f));
 		Body body = world.createBody(groundBodyDef);
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);
+		body.createFixture(fdef);
 		body.setUserData(this);
 		groundBox.dispose();
 		Filter filter = new Filter();
