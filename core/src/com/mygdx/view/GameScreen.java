@@ -1,5 +1,7 @@
 package com.mygdx.view;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -16,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.Player;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
@@ -55,6 +58,8 @@ public class GameScreen implements Screen, MenuListener {
 	private Box2DDebugRenderer debugRenderer;
 	private OrthographicCamera debugCamera;
 
+	private List<Player> players;
+
 	public GameScreen(final MultiBombermanGame game) {
 		this.game = game;
 		this.layout = new GlyphLayout();
@@ -85,17 +90,19 @@ public class GameScreen implements Screen, MenuListener {
 		/********************
 		 * --- PHYSICS ---
 		 ********************/
+		
+
+		
 		this.debugRenderer = new Box2DDebugRenderer();
-		this.debugCamera = new OrthographicCamera(35f, 21f);
-		this.debugCamera.setToOrtho(false, 35f, 21f);
-		float camX = 35f;
-		float camY = 21f;
-		this.debugCamera.position.set(camX / 2, camY / 2, 0);
-		this.debugCamera.zoom = 1.01587302f;
+		this.debugCamera = new OrthographicCamera(640, 360);
+		float camX = 16f;
+		float camY = 10.5f;
+		this.debugCamera.position.set(camX, camY, 0);
+		this.debugCamera.zoom = 0.05f;
 		this.debugCamera.update();
 		this.world = new World(new Vector2(0, 0), false);
 		this.world.setContactListener(new CustomContactListener());
-		this.game.getPlayerService().generatePlayer(this.world);
+		this.players = this.game.getPlayerService().generatePlayer(this.world);
 		initFont();
 	}
 
@@ -128,6 +135,15 @@ public class GameScreen implements Screen, MenuListener {
 		game.getBatch().end();
 		backgroundLayer.end();
 
+		playerLayer.begin();
+		game.getBatch().setProjectionMatrix(gameCamera.combined);
+		game.getBatch().begin();
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		players.stream().forEach(p -> p.drawIt());
+		game.getBatch().end();
+		playerLayer.end();
+
 		frontLayer.begin();
 		shapeRenderer.setProjectionMatrix(gameCamera.combined);
 		shapeRenderer.begin(ShapeType.Filled);
@@ -150,12 +166,13 @@ public class GameScreen implements Screen, MenuListener {
 		game.getBatch().draw(mergedLayer.getColorBufferTexture(), 5, 5);
 		game.getBatch().end();
 
-		world.step(1 / 25f, 6, 2);
 
 		if (Constante.DEBUG) {
 			debugCamera.update();
 			debugRenderer.render(world, debugCamera.combined);
 		}
+
+		world.step(1 / 25f, 6, 2);
 	}
 
 	private void mergeFinalTexture() {

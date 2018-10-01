@@ -184,7 +184,7 @@ public class PlayerService {
 			controlEventListeners.put(def.getKey(),
 					new Player(world, game, def.getValue().getCharacter(), def.getValue().getColor()));
 		}
-		return new ArrayList<>();
+		return new ArrayList(controlEventListeners.values());
 	}
 
 	/**************************************

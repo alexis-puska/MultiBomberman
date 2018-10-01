@@ -14,15 +14,17 @@ import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
+import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
 
 public class Player extends BodyAble implements ControlEventListener {
 
 	private static final String CLASS_NAME = "Player.class";
 
-	private static final float WALK_SPEED = 5f;
-
+	private static final float WALK_SPEED = 8f;
+	
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
 
@@ -36,17 +38,17 @@ public class Player extends BodyAble implements ControlEventListener {
 	public void createBody() {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(10, 10);
+		bodyDef.position.set(1, 1);
 		body = world.createBody(bodyDef);
 		body.setFixedRotation(true);
 		MassData data = new MassData();
 		data.mass = 100f;
 		body.setMassData(data);
 		body.setUserData(this);
-		body.getPosition().x = 10.5f;
-		body.getPosition().y = 10.5f;
+		body.getPosition().x = 1f;
+		body.getPosition().y = 1f;
 		CircleShape bodyCircle = new CircleShape();
-		bodyCircle.setRadius(0.45f);
+		bodyCircle.setRadius(0.38f);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = bodyCircle;
 		fixtureDef.density = 1;
@@ -62,7 +64,9 @@ public class Player extends BodyAble implements ControlEventListener {
 
 	@Override
 	public void drawIt() {
-		// make
+		Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " + body.getPosition().y);
+		game.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
+				(body.getPosition().x * 20f) - 15, body.getPosition().y * 20f);
 	}
 
 	@Override
@@ -79,20 +83,16 @@ public class Player extends BodyAble implements ControlEventListener {
 		case north:
 			this.body.setLinearVelocity(0f, WALK_SPEED);
 			break;
-		case northEast:
-			break;
-		case northWest:
-			break;
 		case south:
 			this.body.setLinearVelocity(0f, -WALK_SPEED);
-			break;
-		case southEast:
-			break;
-		case southWest:
 			break;
 		case west:
 			this.body.setLinearVelocity(-WALK_SPEED, 0f);
 			break;
+		case southEast:
+		case southWest:
+		case northEast:
+		case northWest:
 		default:
 			break;
 		}
