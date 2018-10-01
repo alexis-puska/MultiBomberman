@@ -100,7 +100,6 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void resize(int width, int height) {
-		game.getViewport().update(width, height, true);
 	}
 
 	@Override

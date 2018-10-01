@@ -19,6 +19,7 @@ public class SplashScreen implements MenuListener, Screen {
 
 	@Override
 	public void render(float delta) {
+		game.getViewport().apply(true);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
@@ -34,7 +35,6 @@ public class SplashScreen implements MenuListener, Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		game.getViewport().update(width, height, true);
 	}
 
 	@Override
