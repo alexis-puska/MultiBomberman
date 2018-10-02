@@ -175,16 +175,18 @@ public class PlayerService {
 
 	public List<Player> generatePlayer(World world) {
 		controlEventListeners = new HashMap<>();
+		List<Player> players = new ArrayList<>();
 		// TODO
 		for (Entry<Integer, PlayerDefinition> def : definitions.entrySet()) {
 			Gdx.app.log(CLASS_NAME,
 					"GENERATE PLAYER : " + def.getValue().getPosition() + ",  "
 							+ def.getValue().getPlayerType().toString() + ",  "
 							+ def.getValue().getCharacter().toString() + ",  " + def.getValue().getColor().toString());
-			controlEventListeners.put(def.getKey(),
-					new Player(world, game, def.getValue().getCharacter(), def.getValue().getColor()));
+			Player p = new Player(world, game, def.getValue().getCharacter(), def.getValue().getColor());
+			players.add(p);
+			controlEventListeners.put(def.getKey(), p);
 		}
-		return new ArrayList(controlEventListeners.values());
+		return players;
 	}
 
 	/**************************************
