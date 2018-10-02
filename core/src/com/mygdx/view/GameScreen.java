@@ -13,10 +13,15 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.enumeration.SpriteEnum;
@@ -41,15 +46,13 @@ public class GameScreen implements Screen, MenuListener {
 	 ********************/
 	// layout
 	private FrameBuffer backgroundLayer;
-	private FrameBuffer BlocsLayer;
+	private FrameBuffer blocsLayer;
 	private FrameBuffer BricksLayer;
 	private FrameBuffer playerLayer;
 	private FrameBuffer frontLayer;
 	private FrameBuffer shadowLayer;
 	private FrameBuffer mergedLayer;
 	private ShapeRenderer shapeRenderer;
-	// camera
-	private OrthographicCamera gameCamera;
 
 	/********************
 	 * --- PHYSICS ---
@@ -68,42 +71,99 @@ public class GameScreen implements Screen, MenuListener {
 		/********************
 		 * --- DRAW ---
 		 ********************/
-		this.gameCamera = new OrthographicCamera(Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
-		this.gameCamera.position.set(Constante.GAME_SCREEN_SIZE_X / 2, Constante.GAME_SCREEN_SIZE_Y / 2, 0);
-		this.gameCamera.update();
-
-		this.backgroundLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y, false);
-		this.BlocsLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
+		this.backgroundLayer = new FrameBuffer(Format.RGBA8888, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y,
 				false);
-		this.BricksLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
-				false);
-		this.playerLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
-				false);
-		this.frontLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
-				false);
-		this.shadowLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
-				false);
-		this.mergedLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
-				false);
+		this.blocsLayer = new FrameBuffer(Format.RGBA8888, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y, false);
+		this.BricksLayer = new FrameBuffer(Format.RGBA8888, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y, false);
+		this.playerLayer = new FrameBuffer(Format.RGBA8888, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y, false);
+		this.frontLayer = new FrameBuffer(Format.RGBA8888, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y, false);
+		this.shadowLayer = new FrameBuffer(Format.RGBA8888, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y, false);
+		this.mergedLayer = new FrameBuffer(Format.RGBA8888, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y, false);
 
 		/********************
 		 * --- PHYSICS ---
 		 ********************/
-		
 
-		
 		this.debugRenderer = new Box2DDebugRenderer();
-		this.debugCamera = new OrthographicCamera(640, 360);
-		float camX = 16f;
+		this.debugCamera = new OrthographicCamera(Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y);
+		float camX = 16.5f;
 		float camY = 10.5f;
 		this.debugCamera.position.set(camX, camY, 0);
-		this.debugCamera.zoom = 0.05f;
+		this.debugCamera.zoom = 0.06f;
 		this.debugCamera.update();
 		this.world = new World(new Vector2(0, 0), false);
 		this.world.setContactListener(new CustomContactListener());
 		this.players = this.game.getPlayerService().generatePlayer(this.world);
 		initFont();
+
+		for (int i = 0; i < 35; i++) {
+			BodyDef groundBodyDef = new BodyDef();
+			PolygonShape groundBox = new PolygonShape();
+			groundBox.setAsBox(0.5f, 0.5f);
+			groundBodyDef.position.set(new Vector2(i + 0.5f, 0.5f));
+			Body body = world.createBody(groundBodyDef);
+			Fixture fixture = body.createFixture(groundBox, 0.0f);
+			fixture.setFriction(0f);
+			Filter filter = new Filter();
+			filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
+			fixture.setFilterData(filter);
+		}
+		for (int i = 0; i < 35; i++) {
+			BodyDef groundBodyDef = new BodyDef();
+			PolygonShape groundBox = new PolygonShape();
+			groundBox.setAsBox(0.5f, 0.5f);
+			groundBodyDef.position.set(new Vector2(i + 0.5f, 20.5f));
+			Body body = world.createBody(groundBodyDef);
+			Fixture fixture = body.createFixture(groundBox, 0.0f);
+			fixture.setFriction(0f);
+			Filter filter = new Filter();
+			filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
+			fixture.setFilterData(filter);
+		}
+		
+		for (int i = 0; i < 21; i++) {
+			BodyDef groundBodyDef = new BodyDef();
+			PolygonShape groundBox = new PolygonShape();
+			groundBox.setAsBox(0.5f, 0.5f);
+			groundBodyDef.position.set(new Vector2(0.5f, i+0.5f));
+			Body body = world.createBody(groundBodyDef);
+			Fixture fixture = body.createFixture(groundBox, 0.0f);
+			fixture.setFriction(0f);
+			Filter filter = new Filter();
+			filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
+			fixture.setFilterData(filter);
+		}
+		
+		for (int i = 0; i < 21; i++) {
+			BodyDef groundBodyDef = new BodyDef();
+			PolygonShape groundBox = new PolygonShape();
+			groundBox.setAsBox(0.5f, 0.5f);
+			groundBodyDef.position.set(new Vector2(34.5f, i+0.5f));
+			Body body = world.createBody(groundBodyDef);
+			Fixture fixture = body.createFixture(groundBox, 0.0f);
+			fixture.setFriction(0f);
+			Filter filter = new Filter();
+			filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
+			fixture.setFilterData(filter);
+		}
+
+		for (int j = 1; j < 19; j++) {
+			for (int i = 1; i < 34; i++) {
+				if (i % 2 == 0 && j % 2 == 0) {
+					BodyDef groundBodyDef = new BodyDef();
+					PolygonShape groundBox = new PolygonShape();
+					groundBox.setAsBox(0.5f, 0.5f);
+					groundBodyDef.position.set(new Vector2(i + 0.5f, j + 0.5f));
+					Body body = world.createBody(groundBodyDef);
+					Fixture fixture = body.createFixture(groundBox, 0.0f);
+					fixture.setFriction(0f);
+					Filter filter = new Filter();
+					filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
+					fixture.setFilterData(filter);
+				}
+			}
+		}
+
 	}
 
 	@Override
@@ -111,22 +171,14 @@ public class GameScreen implements Screen, MenuListener {
 		// clear screen
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		// update game camera
-		gameCamera.update();
 
-		// draw in layer
-		game.getBatch().setProjectionMatrix(gameCamera.combined);
+		
+
+		// draw background
 		backgroundLayer.begin();
+		game.getBatch().begin();
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		shapeRenderer.setProjectionMatrix(gameCamera.combined);
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(0, 0, 0, 1f);
-		shapeRenderer.rect(0, 0, 630, 336);
-		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.line(0, 0, 630, 336);
-		shapeRenderer.end();
-		game.getBatch().begin();
 		for (int x = 0; x < 35; x++) {
 			for (int y = 0; y < 21; y++) {
 				game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 2), x * 18, y * 16);
@@ -135,63 +187,73 @@ public class GameScreen implements Screen, MenuListener {
 		game.getBatch().end();
 		backgroundLayer.end();
 
+		// draw player
 		playerLayer.begin();
-		game.getBatch().setProjectionMatrix(gameCamera.combined);
 		game.getBatch().begin();
+
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		players.stream().forEach(p -> p.drawIt());
 		game.getBatch().end();
 		playerLayer.end();
 
-		frontLayer.begin();
-		shapeRenderer.setProjectionMatrix(gameCamera.combined);
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.line(630, 0, 0, 336);
-		shapeRenderer.end();
-		frontLayer.end();
+		// draw blocs
+		blocsLayer.begin();
+		game.getBatch().begin();
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		for (int i = 0; i < 35; i++) {
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), i * 18, 0);
+		}
+		for (int i = 0; i < 35; i++) {
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), i * 18, 20 * 16);
+		}
+		for (int j = 0; j < 21; j++) {
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), 0, j * 16);
+		}
+		for (int j = 0; j < 21; j++) {
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), 34 * 18, j * 16);
+		}
+		for (int j = 1; j < 19; j++) {
+			for (int i = 0; i < 35; i++) {
+				if (i % 2 == 0 && j % 2 == 0) {
+					game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), i * 18,
+							j * 16);
+				}
+			}
+		}
+		game.getBatch().end();
+		blocsLayer.end();
+		
 
 		// merge final layer
 		mergeFinalTexture();
 
-		// update viewport
-		game.getViewport().apply(true);
-		// update screen camera
-		game.getScreenCamera().update();
-		game.getBatch().setProjectionMatrix(game.getScreenCamera().combined);
-		// draw image in screen
+		
 		game.getBatch().begin();
 		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
 		game.getBatch().draw(mergedLayer.getColorBufferTexture(), 5, 5);
 		game.getBatch().end();
 
-
-		if (Constante.DEBUG) {
-			debugCamera.update();
-			debugRenderer.render(world, debugCamera.combined);
-		}
+		// if (Constante.DEBUG) {
+		// debugCamera.update();
+		// debugRenderer.render(world, debugCamera.combined);
+		// }
 
 		world.step(1 / 25f, 6, 2);
 	}
 
 	private void mergeFinalTexture() {
 		mergedLayer.begin();
+		game.getBatch().begin();
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getBatch().begin();
-		game.getBatch().draw(backgroundLayer.getColorBufferTexture(), 0, 0, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(BlocsLayer.getColorBufferTexture(), 0, 0, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(BricksLayer.getColorBufferTexture(), 0, 0, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(playerLayer.getColorBufferTexture(), 0, 0, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(frontLayer.getColorBufferTexture(), 0, 0, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(shadowLayer.getColorBufferTexture(), 0, 0, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
+		game.getBatch().draw(backgroundLayer.getColorBufferTexture(), 0, 0);
+		game.getBatch().draw(blocsLayer.getColorBufferTexture(), 0, 0);
+		game.getBatch().draw(BricksLayer.getColorBufferTexture(), 0, 0);
+		game.getBatch().draw(playerLayer.getColorBufferTexture(), 0, 0);
+		game.getBatch().draw(frontLayer.getColorBufferTexture(), 0, 0);
+		game.getBatch().draw(shadowLayer.getColorBufferTexture(), 0, 0);
 		game.getBatch().end();
 		mergedLayer.end();
 	}

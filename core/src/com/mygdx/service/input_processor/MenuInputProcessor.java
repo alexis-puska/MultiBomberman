@@ -15,6 +15,12 @@ public class MenuInputProcessor implements InputProcessor {
 
 	private boolean fullscreen;
 	private boolean ctrl;
+	
+	
+	private boolean up;
+	private boolean down;
+	private boolean left;
+	private boolean right;
 
 	public MenuInputProcessor(PlayerService playerService) {
 		this.playerService = playerService;
@@ -34,15 +40,19 @@ public class MenuInputProcessor implements InputProcessor {
 			this.playerService.pressSelect();
 			break;
 		case Keys.UP:
+			up = true;
 			this.playerService.move(PovDirection.north);
 			break;
 		case Keys.DOWN:
+			down = true;
 			this.playerService.move(PovDirection.south);
 			break;
 		case Keys.LEFT:
+			left = true;
 			this.playerService.move(PovDirection.west);
 			break;
 		case Keys.RIGHT:
+			right = true;
 			this.playerService.move(PovDirection.east);
 			break;
 		case Keys.X:
@@ -81,10 +91,28 @@ public class MenuInputProcessor implements InputProcessor {
 	public boolean keyUp(int keycode) {
 		switch (keycode) {
 		case Keys.UP:
+			up = false;
+			if(!right && !down && !left) {
+				this.playerService.move(PovDirection.center);
+			}
+			break;
 		case Keys.DOWN:
+			down = false;
+			if(!up && !right && !left) {
+				this.playerService.move(PovDirection.center);
+			}
+			break;
 		case Keys.LEFT:
+			left = false;
+			if(!up && !down && !right) {
+				this.playerService.move(PovDirection.center);
+			}
+			break;
 		case Keys.RIGHT:
-			this.playerService.move(PovDirection.center);
+			right = false;
+			if(!up && !down && !left) {
+				this.playerService.move(PovDirection.center);
+			}
 			break;
 		case Keys.CONTROL_LEFT:
 		case Keys.CONTROL_RIGHT:
@@ -140,8 +168,8 @@ public class MenuInputProcessor implements InputProcessor {
 			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 			fullscreen = true;
 		} else {
-			Gdx.graphics.setWindowedMode(Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y);
 			fullscreen = false;
+			Gdx.graphics.setWindowedMode(Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y);
 		}
 		ctrl = false;
 	}

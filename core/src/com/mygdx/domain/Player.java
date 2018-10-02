@@ -24,14 +24,16 @@ public class Player extends BodyAble implements ControlEventListener {
 	private static final String CLASS_NAME = "Player.class";
 
 	private static final float WALK_SPEED = 8f;
-	
+
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
+	private PovDirection direction;
 
 	public Player(World world, MultiBombermanGame game, CharacterEnum character, CharacterColorEnum color) {
 		init(world, game);
 		this.character = character;
 		this.color = color;
+		this.direction = PovDirection.center;
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class Player extends BodyAble implements ControlEventListener {
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(1, 1);
 		body = world.createBody(bodyDef);
-		body.setFixedRotation(true);
+		body.setFixedRotation(false);
 		MassData data = new MassData();
 		data.mass = 100f;
 		body.setMassData(data);
@@ -48,10 +50,10 @@ public class Player extends BodyAble implements ControlEventListener {
 		body.getPosition().x = 1f;
 		body.getPosition().y = 1f;
 		CircleShape bodyCircle = new CircleShape();
-		bodyCircle.setRadius(0.38f);
+		bodyCircle.setRadius(0.4f);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = bodyCircle;
-		fixtureDef.density = 1;
+		fixtureDef.density = 0;
 		fixtureDef.restitution = 0f;
 		Fixture fixture = body.createFixture(fixtureDef);
 		fixture.setFriction(0f);
@@ -64,16 +66,9 @@ public class Player extends BodyAble implements ControlEventListener {
 
 	@Override
 	public void drawIt() {
-		Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " + body.getPosition().y);
-		game.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
-				(body.getPosition().x * 20f) - 15, body.getPosition().y * 20f);
-	}
-
-	@Override
-	public void move(PovDirection value) {
 		// unused method
-		Gdx.app.debug(CLASS_NAME, "press move : " + value.toString());
-		switch (value) {
+
+		switch (this.direction) {
 		case center:
 			this.body.setLinearVelocity(0f, 0f);
 			break;
@@ -96,6 +91,16 @@ public class Player extends BodyAble implements ControlEventListener {
 		default:
 			break;
 		}
+
+//		Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " + body.getPosition().y);
+		game.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
+				(body.getPosition().x * 18f) - 15, body.getPosition().y * 16f);
+	}
+
+	@Override
+	public void move(PovDirection value) {
+		Gdx.app.debug(CLASS_NAME, "press move : " + value.toString());
+		this.direction = value;
 	}
 
 	@Override

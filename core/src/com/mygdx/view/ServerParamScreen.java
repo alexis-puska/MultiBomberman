@@ -116,7 +116,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void resize(int width, int height) {
-		game.getViewport().update(width, height, true);
+		// unused method
 	}
 
 	@Override
@@ -231,25 +231,25 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressX() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressY() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressL() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressR() {
-		//unused method
-		
+		// unused method
+
 	}
 }

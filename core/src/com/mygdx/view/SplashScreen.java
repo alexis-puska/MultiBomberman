@@ -19,7 +19,6 @@ public class SplashScreen implements MenuListener, Screen {
 
 	@Override
 	public void render(float delta) {
-		game.getViewport().apply(true);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.getScreenCamera().update();
@@ -65,32 +64,32 @@ public class SplashScreen implements MenuListener, Screen {
 
 	@Override
 	public void pressSelect() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressA() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressUp() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressDown() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressLeft() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressRight() {
-		//unused method
+		// unused method
 	}
 
 	@Override
@@ -100,25 +99,25 @@ public class SplashScreen implements MenuListener, Screen {
 
 	@Override
 	public void pressX() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressY() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressL() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressR() {
-		//unused method
-		
+		// unused method
+
 	}
 }
