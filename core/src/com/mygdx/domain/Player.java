@@ -2,6 +2,7 @@ package com.mygdx.domain;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.MassData;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
@@ -24,6 +26,7 @@ public class Player extends BodyAble implements ControlEventListener {
 	private static final String CLASS_NAME = "Player.class";
 
 	private static final float WALK_SPEED = 6f;
+	private static final float radius = 0.47f;
 
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
@@ -49,8 +52,17 @@ public class Player extends BodyAble implements ControlEventListener {
 		body.setUserData(this);
 		body.getPosition().x = 1f;
 		body.getPosition().y = 1f;
-		CircleShape bodyCircle = new CircleShape();
-		bodyCircle.setRadius(0.49f);
+//		CircleShape bodyCircle = new CircleShape();
+//		bodyCircle.setRadius(0.49f);
+		PolygonShape bodyCircle = new PolygonShape();
+		Vector2[] vertices = new Vector2[4];
+		vertices[0] = new Vector2(-radius, 0);
+		vertices[1] = new Vector2(0, radius);
+		vertices[2] = new Vector2(radius, 0);
+		vertices[3] = new Vector2(0, -radius);
+		bodyCircle.set(vertices);
+		
+		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = bodyCircle;
 		fixtureDef.density = 0;
@@ -94,7 +106,7 @@ public class Player extends BodyAble implements ControlEventListener {
 
 //		Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " + body.getPosition().y);
 		game.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 7f);
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
 	@Override

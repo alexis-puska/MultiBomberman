@@ -249,10 +249,10 @@ public class GameScreen implements Screen, MenuListener {
 				Constante.GAME_SCREEN_SIZE_Y);
 		game.getBatch().end();
 
-		if (Constante.DEBUG) {
-			debugCamera.update();
-			debugRenderer.render(world, debugCamera.combined);
-		}
+//		if (Constante.DEBUG) {
+//			debugCamera.update();
+//			debugRenderer.render(world, debugCamera.combined);
+//		}
 
 		world.step(1 / 25f, 6, 2);
 	}
@@ -364,23 +364,19 @@ public class GameScreen implements Screen, MenuListener {
 	}
 
 	@Override
-	public void show() {
-		// unused method
+	public void show() {// unused method
 	}
 
 	@Override
-	public void resize(int width, int height) {
-
+	public void resize(int width, int height) {// unused method
 	}
 
 	@Override
-	public void pause() {
-		// unused method
+	public void pause() {// unused method
 	}
 
 	@Override
-	public void resume() {
-		// unused method
+	public void resume() {// unused method
 	}
 
 	@Override
@@ -460,5 +456,4 @@ public class GameScreen implements Screen, MenuListener {
 	@Override
 	public void pressR() {// unused method
 	}
-
 }
