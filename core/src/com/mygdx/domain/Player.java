@@ -23,7 +23,7 @@ public class Player extends BodyAble implements ControlEventListener {
 
 	private static final String CLASS_NAME = "Player.class";
 
-	private static final float WALK_SPEED = 8f;
+	private static final float WALK_SPEED = 5f;
 
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
@@ -50,7 +50,7 @@ public class Player extends BodyAble implements ControlEventListener {
 		body.getPosition().x = 1f;
 		body.getPosition().y = 1f;
 		CircleShape bodyCircle = new CircleShape();
-		bodyCircle.setRadius(0.4f);
+		bodyCircle.setRadius(0.49f);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = bodyCircle;
 		fixtureDef.density = 0;
@@ -94,7 +94,7 @@ public class Player extends BodyAble implements ControlEventListener {
 
 //		Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " + body.getPosition().y);
 		game.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
-				(body.getPosition().x * 18f) - 15, body.getPosition().y * 16f);
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
 	@Override
