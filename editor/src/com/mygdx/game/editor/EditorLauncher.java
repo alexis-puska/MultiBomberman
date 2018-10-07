@@ -823,7 +823,7 @@ public class EditorLauncher extends JFrame {
 						loadPropertiesLevel();
 						repaint();
 					} catch (FileNotFoundException e) {
-						e.printStackTrace();
+						LOG.error("", e.getMessage());
 					}
 					System.out.println(
 							"You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());

@@ -92,6 +92,9 @@ public class SpriteService {
 				case "sprite_ennemies":
 					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_ennemies.png"));
 					break;
+				default:
+					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_ennemies.png"));
+					break;
 				}
 				for (Sprite area : file.getArea()) {
 					BufferedImage[] sprite = new BufferedImage[area.getN()];
