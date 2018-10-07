@@ -58,18 +58,12 @@ public class SpringUtilities {
 	 * preferred width and height of the components. The parent is made just big
 	 * enough to fit them all.
 	 *
-	 * @param rows
-	 *            number of rows
-	 * @param cols
-	 *            number of columns
-	 * @param initialX
-	 *            x location to start the grid at
-	 * @param initialY
-	 *            y location to start the grid at
-	 * @param xPad
-	 *            x padding between cells
-	 * @param yPad
-	 *            y padding between cells
+	 * @param rows     number of rows
+	 * @param cols     number of columns
+	 * @param initialX x location to start the grid at
+	 * @param initialY y location to start the grid at
+	 * @param xPad     x padding between cells
+	 * @param yPad     y padding between cells
 	 */
 	public static void makeGrid(Container parent, int rows, int cols, int initialX, int initialY, int xPad, int yPad) {
 		SpringLayout layout;
@@ -121,18 +115,20 @@ public class SpringUtilities {
 
 			if (i / cols == 0) { // first row
 				cons.setY(initialYSpring);
-			} else { // y position depends on previous row
+			} else if (lastRowCons != null) { // y position depends on previous row
 				cons.setY(Spring.sum(lastRowCons.getConstraint(SpringLayout.SOUTH), yPadSpring));
 			}
 			lastCons = cons;
 		}
 
 		// Set the parent's size.
-		SpringLayout.Constraints pCons = layout.getConstraints(parent);
-		pCons.setConstraint(SpringLayout.SOUTH,
-				Spring.sum(Spring.constant(yPad), lastCons.getConstraint(SpringLayout.SOUTH)));
-		pCons.setConstraint(SpringLayout.EAST,
-				Spring.sum(Spring.constant(xPad), lastCons.getConstraint(SpringLayout.EAST)));
+		if (lastCons != null) {
+			SpringLayout.Constraints pCons = layout.getConstraints(parent);
+			pCons.setConstraint(SpringLayout.SOUTH,
+					Spring.sum(Spring.constant(yPad), lastCons.getConstraint(SpringLayout.SOUTH)));
+			pCons.setConstraint(SpringLayout.EAST,
+					Spring.sum(Spring.constant(xPad), lastCons.getConstraint(SpringLayout.EAST)));
+		}
 	}
 
 	/* Used by makeCompactGrid. */
@@ -148,18 +144,12 @@ public class SpringUtilities {
 	 * maximum preferred width of the components in that column; height is similarly
 	 * determined for each row. The parent is made just big enough to fit them all.
 	 *
-	 * @param rows
-	 *            number of rows
-	 * @param cols
-	 *            number of columns
-	 * @param initialX
-	 *            x location to start the grid at
-	 * @param initialY
-	 *            y location to start the grid at
-	 * @param xPad
-	 *            x padding between cells
-	 * @param yPad
-	 *            y padding between cells
+	 * @param rows     number of rows
+	 * @param cols     number of columns
+	 * @param initialX x location to start the grid at
+	 * @param initialY y location to start the grid at
+	 * @param xPad     x padding between cells
+	 * @param yPad     y padding between cells
 	 */
 	public static void makeCompactGrid(Container parent, int rows, int cols, int initialX, int initialY, int xPad,
 			int yPad) {
