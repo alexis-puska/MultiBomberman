@@ -265,7 +265,7 @@ public class GameScreen implements Screen, MenuListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		for (int x = 0; x < 35; x++) {
 			for (int y = 0; y < 21; y++) {
-				game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 2), x * 18, y * 16);
+				game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL, 2), x * 18, y * 16);
 			}
 		}
 		game.getBatch().end();
@@ -282,21 +282,21 @@ public class GameScreen implements Screen, MenuListener {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		for (int i = 0; i < 35; i++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), i * 18, 0);
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, 0);
 		}
 		for (int i = 0; i < 35; i++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), i * 18, 20 * 16);
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, 20 * 16);
 		}
 		for (int j = 0; j < 21; j++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), 0, j * 16);
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), 0, j * 16);
 		}
 		for (int j = 0; j < 21; j++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), 34 * 18, j * 16);
+			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), 34 * 18, j * 16);
 		}
 		for (int j = 1; j < 19; j++) {
 			for (int i = 0; i < 35; i++) {
 				if (i % 2 == 0 && j % 2 == 0) {
-					game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1_BRICK, 0), i * 18,
+					game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18,
 							j * 16);
 				}
 			}

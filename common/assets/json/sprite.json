@@ -86,27 +86,16 @@
 		{
 			"files": ["sprite/level/blow.png"],
 			"area": [
-				{"x": 0,   "y": 0,   "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL1_BLOW"},
-				{"x": 0,   "y": 16,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL2_BLOW"},
-				{"x": 0,   "y": 32,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL3_BLOW"},
-				{"x": 0,   "y": 48,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL4_BLOW"},
-				{"x": 0,   "y": 64,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL5_BLOW"},
-				{"x": 0,   "y": 80,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL6_BLOW"},
-				{"x": 0,   "y": 96,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL7_BLOW"},
-				{"x": 0,   "y": 112, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL8_BLOW"},
-				{"x": 0,   "y": 128, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL9_BLOW"},
-				{"x": 0,   "y": 144, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL10_BLOW"},
-				{"x": 108, "y": 0,   "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL1_BRICK"},
-				{"x": 108, "y": 16,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL2_BRICK"},
-				{"x": 108, "y": 32,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL3_BRICK"},
-				{"x": 108, "y": 48,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL4_BRICK"},
-				{"x": 108, "y": 64,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL5_BRICK"},
-				{"x": 108, "y": 80,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL6_BRICK"},
-				{"x": 108, "y": 96,  "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL7_BRICK"},
-				{"x": 108, "y": 112, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL8_BRICK"},
-				{"x": 108, "y": 128, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL9_BRICK"},
-				{"x": 108, "y": 144, "nx": 6, "ny": 1, "n": 6, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL10_BRICK"}
-				
+				{"x": 0,   "y": 0,   "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL1"},
+				{"x": 0,   "y": 16,  "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL2"},
+				{"x": 0,   "y": 32,  "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL3"},
+				{"x": 0,   "y": 48,  "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL4"},
+				{"x": 0,   "y": 64,  "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL5"},
+				{"x": 0,   "y": 80,  "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL6"},
+				{"x": 0,   "y": 96,  "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL7"},
+				{"x": 0,   "y": 112, "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL8"},
+				{"x": 0,   "y": 128, "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL9"},
+				{"x": 0,   "y": 144, "nx": 7, "ny": 1, "n": 7, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL10"}
 			]
 		},{
 			"files": ["sprite/level/sky.png"],
@@ -116,17 +105,17 @@
 		},{
 			"files": ["sprite/level/level.png"],
 			"area": [
-				{"x": 0,   "y": 0,   "nx": 4,  "ny": 1, "n": 4,  "sx": 18, "sy": 16, "r": false, "animation": "LEVEL1"},
-				{"x": 0,   "y": 16,  "nx": 11, "ny": 1, "n": 11, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL2"},
-				{"x": 0,   "y": 32,  "nx": 14, "ny": 1, "n": 14, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL3"},
-				{"x": 0,   "y": 48,  "nx": 12, "ny": 1, "n": 12, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL4"},
-				{"x": 0,   "y": 64,  "nx": 16, "ny": 1, "n": 16, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL5"},
-				{"x": 0,   "y": 80,  "nx": 24, "ny": 1, "n": 24, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL6"},
-				{"x": 0,   "y": 96,  "nx": 10, "ny": 1, "n": 10, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL7"},
-				{"x": 0,   "y": 112, "nx": 10, "ny": 1, "n": 10, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL8"},
-				{"x": 0,   "y": 128, "nx": 19, "ny": 1, "n": 19, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL9"},
-				{"x": 0,   "y": 144, "nx": 30, "ny": 1, "n": 30, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL10"},
-				{"x": 0,   "y": 160, "nx": 17, "ny": 1, "n": 17, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL11"}
+				{"x": 0,   "y": 0,   "nx": 4,  "ny": 1, "n": 4,  "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 16,  "nx": 11, "ny": 1, "n": 11, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 32,  "nx": 14, "ny": 1, "n": 14, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 48,  "nx": 12, "ny": 1, "n": 12, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 64,  "nx": 16, "ny": 1, "n": 16, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 80,  "nx": 24, "ny": 1, "n": 24, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 96,  "nx": 10, "ny": 1, "n": 10, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 112, "nx": 10, "ny": 1, "n": 10, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 128, "nx": 19, "ny": 1, "n": 19, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 144, "nx": 30, "ny": 1, "n": 30, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 160, "nx": 17, "ny": 1, "n": 17, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"}
 			]
 		}
 	],
