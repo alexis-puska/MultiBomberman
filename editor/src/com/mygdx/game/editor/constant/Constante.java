@@ -31,8 +31,6 @@ public class Constante {
     public static final int MIN_LEVEL_ID = 0;
     
     //EVENT
-    public static final String[] MUSIQUE_LIST = {null, "boss", "boss2.3", "classic", "lost"}; 
-    public static final String[] SOUND_LIST = {null, "tubz"};
     public static final int EVENT_POSX_MIN = 0;
     public static final int EVENT_POSX_MAX = 19;
     public static final int EVENT_POSY_MIN = 0;
@@ -43,7 +41,5 @@ public class Constante {
     public static final int EVENT_DARKNESS_MIN = -1;
     public static final int EVENT_DARKNESS_DEFAULT = -1;
     public static final int EVENT_DARKNESS_MAX = 255;
-    
-    public static final String[] EVENT_ENABLE_ELEMENT_LIST = {null, "platform", "decor", "vortex", "door"};
     
 }
