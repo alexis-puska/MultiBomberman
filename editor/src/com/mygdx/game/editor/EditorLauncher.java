@@ -831,22 +831,19 @@ public class EditorLauncher extends JFrame {
 			}
 		});
 
-		openSaveFileChooser.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int returnVal = saveFileChooser.showSaveDialog(panelNavigation);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					LevelFile levelFile = levelService.getLevelFile();
-					absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
-					if (!absolutePathFile.endsWith(".json")) {
-						absolutePathFile += ".json";
-					}
-					fileService.writeJson(levelFile, new File(absolutePathFile));
-					centerPanel.updateUI();
-					loadPropertiesLevel();
-					repaint();
-					System.out.println("You chose to open this file: " + absolutePathFile);
+		openSaveFileChooser.addActionListener(arg0 -> {
+			int returnVal = saveFileChooser.showSaveDialog(panelNavigation);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				LevelFile levelFile = levelService.getLevelFile();
+				absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
+				if (!absolutePathFile.endsWith(".json")) {
+					absolutePathFile += ".json";
 				}
+				fileService.writeJson(levelFile, new File(absolutePathFile));
+				centerPanel.updateUI();
+				loadPropertiesLevel();
+				repaint();
+				System.out.println("You chose to open this file: " + absolutePathFile);
 			}
 		});
 		/*************************************************************************************
