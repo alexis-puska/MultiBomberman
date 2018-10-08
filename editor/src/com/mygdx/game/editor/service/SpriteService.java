@@ -67,65 +67,66 @@ public class SpriteService {
 	 * parse json file and create buffer sprite in memory
 	 */
 	private void initSprite() {
-		InputStream in = this.getClass().getResourceAsStream("/json/json_image_parser.json");
-
-		SpriteFileContent spriteFile = fileService.readJsonSpriteFile(in);
-		try {
-			BufferedImage temp = null;
-			for (SpriteFile file : spriteFile.getSpriteFile()) {
-				switch (file.getFile()) {
-				case "sprite_rayon_teleporter":
-					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_rayon_teleporter.png"));
-					break;
-				case "sprite_animation":
-					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_animation.png"));
-					break;
-				case "sprite_light":
-					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_light.png"));
-					break;
-				case "sprite_level":
-					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_level.png"));
-					break;
-				case "sprite_objets":
-					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_objets.png"));
-					break;
-				case "sprite_ennemies":
-					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_ennemies.png"));
-					break;
-				default:
-					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_ennemies.png"));
-					break;
-				}
-				for (Sprite area : file.getArea()) {
-					BufferedImage[] sprite = new BufferedImage[area.getN()];
-					int n = 0;
-					for (int y = 0; y < area.getNy(); y++) {
-						for (int x = 0; x < area.getNx(); x++) {
-
-							if (n >= area.getN()) {
-								break;
-							}
-							int xCalc = area.getX() + (x * area.getSx());
-							int yCalc = area.getY() + (y * area.getSy());
-							sprite[n] = temp.getSubimage(xCalc, yCalc, area.getSx(), area.getSy());
-							n++;
-						}
-					}
-					if (area.getGrp().equals("")) {
-						if (sprites.containsKey(area.getAnimation())) {
-							BufferedImage merge[] = mergeBufferedImage(sprites.get(area.getAnimation()), sprite);
-							sprites.put(area.getAnimation(), merge);
-						} else {
-							sprites.put(area.getAnimation(), sprite);
-						}
-					} else if (area.getGrp().equals("decor")) {
-						spritesDecor.put(spritesDecor.size(), sprite);
-					}
-				}
-			}
-		} catch (IOException e) {
-			LOG.info("IOException : " + e.getMessage());
-		}
+		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+		InputStream in = classloader.getResourceAsStream("json/sprite.json");
+		
+//		SpriteFileContent spriteFile = fileService.readJsonSpriteFile(in);
+//		try {
+//			BufferedImage temp = null;
+//			for (SpriteFile file : spriteFile.getSpriteFile()) {
+//				switch (file.getFile()) {
+//				case "sprite_rayon_teleporter":
+//					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_rayon_teleporter.png"));
+//					break;
+//				case "sprite_animation":
+//					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_animation.png"));
+//					break;
+//				case "sprite_light":
+//					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_light.png"));
+//					break;
+//				case "sprite_level":
+//					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_level.png"));
+//					break;
+//				case "sprite_objets":
+//					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_objets.png"));
+//					break;
+//				case "sprite_ennemies":
+//					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_ennemies.png"));
+//					break;
+//				default:
+//					temp = ImageIO.read(this.getClass().getResourceAsStream("/sprite/sprite_ennemies.png"));
+//					break;
+//				}
+//				for (Sprite area : file.getArea()) {
+//					BufferedImage[] sprite = new BufferedImage[area.getN()];
+//					int n = 0;
+//					for (int y = 0; y < area.getNy(); y++) {
+//						for (int x = 0; x < area.getNx(); x++) {
+//
+//							if (n >= area.getN()) {
+//								break;
+//							}
+//							int xCalc = area.getX() + (x * area.getSx());
+//							int yCalc = area.getY() + (y * area.getSy());
+//							sprite[n] = temp.getSubimage(xCalc, yCalc, area.getSx(), area.getSy());
+//							n++;
+//						}
+//					}
+//					if (area.getGrp().equals("")) {
+//						if (sprites.containsKey(area.getAnimation())) {
+//							BufferedImage merge[] = mergeBufferedImage(sprites.get(area.getAnimation()), sprite);
+//							sprites.put(area.getAnimation(), merge);
+//						} else {
+//							sprites.put(area.getAnimation(), sprite);
+//						}
+//					} else if (area.getGrp().equals("decor")) {
+//						spritesDecor.put(spritesDecor.size(), sprite);
+//					}
+//				}
+//			}
+//		} catch (IOException e) {
+//			LOG.info("IOException : " + e.getMessage());
+//		}
 	}
 
 	/**

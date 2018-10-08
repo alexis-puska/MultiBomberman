@@ -276,12 +276,13 @@ public class EditorLauncher extends JFrame {
 	}
 
 	public EditorLauncher(String lang) {
+		this.locale = Locale.forLanguageTag(lang);
+		this.message = ResourceBundle.getBundle("i18n/Message", locale);
+		LOG.info("message {} : {}", lang, this.message.getString("editor.border.bonus"));
 		LOG.info("Welcome in lr-inthewell-editor App !");
 		this.fileService = new FileService();
 		this.spriteService = new SpriteService(fileService);
 		this.levelService = new LevelService();
-		this.locale = Locale.forLanguageTag(lang);
-		this.message = ResourceBundle.getBundle("i18n/Message", locale);
 
 		LevelFile levelFile = new LevelFile();
 		levelFile.setType(new ArrayList<>());
