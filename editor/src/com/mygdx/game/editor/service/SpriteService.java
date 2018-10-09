@@ -4,12 +4,17 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.editor.domain.sprite.Sprite;
 import com.mygdx.game.editor.domain.sprite.SpriteFile;
 import com.mygdx.game.editor.domain.sprite.SpriteFileContent;
@@ -127,6 +132,37 @@ public class SpriteService {
 //		} catch (IOException e) {
 //			LOG.info("IOException : " + e.getMessage());
 //		}
+	}
+	
+	private void initSprite(SpriteFileContent spriteFileContent) {
+		List<SpriteFile> spriteFiles = spriteFileContent.getSpriteFile();
+		for (SpriteFile spriteFile : spriteFiles) {
+			List<String> spritesFilename = spriteFile.getFiles();
+			for (String spriteFilename : spritesFilename) {
+				Texture texture = new Texture(Gdx.files.internal(spriteFilename));
+				List<Sprite> area = spriteFile.getArea();
+				for (Sprite sprite : area) {
+					int idx = 0;
+					SpriteEnum animation = sprite.getAnimation();
+					TextureRegion[] regions = new TextureRegion[sprite.getN()];
+					for (int l = 0; l < sprite.getNy(); l++) {
+						for (int k = 0; k < sprite.getNx(); k++) {
+							regions[idx] = new TextureRegion(texture, sprite.getX() + (k * sprite.getSx()),
+									sprite.getY() + (l * sprite.getSy()), sprite.getSx(), sprite.getSy());
+							idx++;
+							if (idx >= sprite.getN()) {
+								break;
+							}
+						}
+					}
+					if (sprites.containsKey(animation)) {
+						sprites.put(animation, mergeTextureRegion(sprites.get(animation), regions));
+					} else {
+						sprites.put(animation, regions);
+					}
+				}
+			}
+		}
 	}
 
 	/**

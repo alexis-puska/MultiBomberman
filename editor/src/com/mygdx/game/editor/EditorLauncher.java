@@ -73,7 +73,6 @@ import com.mygdx.game.editor.view.properties.EnnemiePanel;
 import com.mygdx.game.editor.view.properties.EventPanel;
 import com.mygdx.game.editor.view.properties.ItemPanel;
 import com.mygdx.game.editor.view.properties.LockPanel;
-import com.mygdx.game.editor.view.properties.MapPanel;
 import com.mygdx.game.editor.view.properties.PickPanel;
 import com.mygdx.game.editor.view.properties.PlatformPanel;
 import com.mygdx.game.editor.view.properties.RayonPanel;
@@ -204,7 +203,6 @@ public class EditorLauncher extends JFrame {
 	private GridLayout layoutElement;
 	private JButton selectButton;
 	private JButton deleteButton;
-	private JButton viewMapButton;
 	private JButton verticalPlatformButton;
 	private JButton horizontalPlatformButton;
 	private JButton vortexButton;
@@ -445,7 +443,6 @@ public class EditorLauncher extends JFrame {
 		panelElement.setLayout(layoutElement);
 		panelElement.add(selectButton);
 		panelElement.add(deleteButton);
-		panelElement.add(viewMapButton);
 		panelElement.add(verticalPlatformButton);
 		panelElement.add(horizontalPlatformButton);
 		panelElement.add(vortexButton);
@@ -608,7 +605,6 @@ public class EditorLauncher extends JFrame {
 		layoutElement.setRows(EditorConstante.ROW_ELEMENT_PANEL);
 		selectButton = new JButton(message.getString("element.button.select"));
 		deleteButton = new JButton(message.getString("element.button.delete"));
-		viewMapButton = new JButton(message.getString("element.button.viewMap"));
 		verticalPlatformButton = new JButton(message.getString("element.button.vpf"));
 		horizontalPlatformButton = new JButton(message.getString("element.button.hpf"));
 		vortexButton = new JButton(message.getString("element.button.vortex"));
@@ -1182,12 +1178,6 @@ public class EditorLauncher extends JFrame {
 				action = ActionEnum.DELETE;
 			}
 		});
-		viewMapButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				viewMap();
-			}
-		});
 		verticalPlatformButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -1573,17 +1563,6 @@ public class EditorLauncher extends JFrame {
 	private void deleteElement(int x, int y) {
 		levelService.deleteElement(x, y);
 		repaint();
-	}
-
-	protected void viewMap() {
-		mapViewJFrame = new JFrame(message.getString("properties.mapPanel.title"));
-		mapViewJFrame.getContentPane().setLayout(new BorderLayout());
-		JPanel panel = new MapPanel(message, levelService.printTextMap());
-		mapViewJFrame.add(panel);
-		mapViewJFrame.setLocationRelativeTo(null);
-		mapViewJFrame.setSize(1200, 800);
-		mapViewJFrame.setVisible(true);
-		centerPanel.updateUI();
 	}
 
 	private void selectElement(int x, int y) {
