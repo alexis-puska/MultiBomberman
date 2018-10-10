@@ -11,9 +11,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mygdx.dto.level.LevelFileDTO;
+import com.mygdx.dto.sprite.SpriteFileContent;
 import com.mygdx.game.editor.EditorLauncher;
-import com.mygdx.game.editor.domain.level.LevelFile;
-import com.mygdx.game.editor.domain.sprite.SpriteFileContent;
 
 public class FileService {
 
@@ -25,10 +25,10 @@ public class FileService {
 		this.objectMapper = new ObjectMapper();
 	}
 
-	public LevelFile readJsonFile(InputStream in) {
-		LevelFile levelFile = null;
+	public LevelFileDTO readJsonFile(InputStream in) {
+		LevelFileDTO levelFile = null;
 		try {
-			levelFile = objectMapper.readValue(in, LevelFile.class);
+			levelFile = objectMapper.readValue(in, LevelFileDTO.class);
 		} catch (JsonParseException e) {
 			LOG.error("JsonParseException : " + e.getMessage());
 		} catch (JsonMappingException e) {
@@ -39,7 +39,7 @@ public class FileService {
 		return levelFile;
 	}
 
-	public void writeJson(LevelFile levelFile, File file) {
+	public void writeJson(LevelFileDTO levelFile, File file) {
 		try {
 			LOG.info("START Write level json file : " + file.getAbsolutePath());
 			objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, levelFile);

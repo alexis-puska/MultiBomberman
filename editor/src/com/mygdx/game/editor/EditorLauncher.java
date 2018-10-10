@@ -811,17 +811,17 @@ public class EditorLauncher extends JFrame {
 					} catch (IOException e1) {
 						System.out.println("Set save path failed !");
 					}
-					try {
-						levelService.putLevelFile(
-								fileService.readJsonFile(new FileInputStream(new File(absolutePathFile))));
-						currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-						currentTypeLevelIndex.setValue((Integer) levelService.getCurrentTypeIndex());
-						centerPanel.updateUI();
-						loadPropertiesLevel();
-						repaint();
-					} catch (FileNotFoundException e) {
-						LOG.error("", e.getMessage());
-					}
+//					try {
+//						levelService.putLevelFile(
+//								fileService.readJsonFile(new FileInputStream(new File(absolutePathFile))));
+//						currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
+//						currentTypeLevelIndex.setValue((Integer) levelService.getCurrentTypeIndex());
+//						centerPanel.updateUI();
+//						loadPropertiesLevel();
+//						repaint();
+//					} catch (FileNotFoundException e) {
+//						LOG.error("", e.getMessage());
+//					}
 					System.out.println(
 							"You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());
 				}
@@ -831,16 +831,16 @@ public class EditorLauncher extends JFrame {
 		openSaveFileChooser.addActionListener(arg0 -> {
 			int returnVal = saveFileChooser.showSaveDialog(panelNavigation);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				LevelFile levelFile = levelService.getLevelFile();
-				absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
-				if (!absolutePathFile.endsWith(".json")) {
-					absolutePathFile += ".json";
-				}
-				fileService.writeJson(levelFile, new File(absolutePathFile));
-				centerPanel.updateUI();
-				loadPropertiesLevel();
-				repaint();
-				System.out.println("You chose to open this file: " + absolutePathFile);
+//				LevelFile levelFile = levelService.getLevelFile();
+//				absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
+//				if (!absolutePathFile.endsWith(".json")) {
+//					absolutePathFile += ".json";
+//				}
+//				fileService.writeJson(levelFile, new File(absolutePathFile));
+//				centerPanel.updateUI();
+//				loadPropertiesLevel();
+//				repaint();
+//				System.out.println("You chose to open this file: " + absolutePathFile);
 			}
 		});
 		/*************************************************************************************
