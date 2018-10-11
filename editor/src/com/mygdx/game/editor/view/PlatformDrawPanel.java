@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.editor.constant.Constante;
 import com.mygdx.game.editor.service.SpriteService;
 
@@ -35,7 +36,7 @@ public class PlatformDrawPanel extends Canvas {
 		g2.setFont(font);
 		g2.setColor(Color.RED);
 		int idx = 0;
-		int nb = this.spriteService.getSpriteAnimationSize("platform");
+		int nb = this.spriteService.getSpriteAnimationSize(SpriteEnum.LEVEL);
 		int nbColumn = nb / 25;
 		if (nb % 25 != 0) {
 			nbColumn++;
@@ -44,7 +45,7 @@ public class PlatformDrawPanel extends Canvas {
 		int idxRow = 0;
 		int widthColumn = 300 / nbColumn;
 		while (idx < nb) {
-			BufferedImage pf = this.spriteService.getSprite("platform", idx);
+			BufferedImage pf = this.spriteService.getSprite(SpriteEnum.LEVEL, idx);
 			g2.drawImage(pf.getSubimage(0, 0, widthColumn, Constante.GRID_SIZE), idxColumn * widthColumn,
 					idxRow * Constante.GRID_SIZE, null);
 			g2.drawString(Integer.toString(idx), idxColumn * widthColumn, (idxRow + 1) * Constante.GRID_SIZE);

@@ -12,13 +12,16 @@ import com.mygdx.game.editor.constant.Constante;
  */
 public class CoordinateUtils {
 
+	private static final int SCREEN_SIZE_Y = 336;
+	private static final int MAX_BLOC_Y = 21;
+
 	/**
-	 * @param y coordinate of object to draw
+	 * @param y      coordinate of object to draw
 	 * @param height height of object to draw
 	 * @return the java y value
 	 */
 	public static int drawY(int y, int height) {
-		return 500 - height - y;
+		return SCREEN_SIZE_Y - height - y;
 	}
 
 	/**
@@ -26,7 +29,7 @@ public class CoordinateUtils {
 	 * @return libgdx y coordinate
 	 */
 	public static int clickY(int clicY) {
-		return 500 - clicY;
+		return SCREEN_SIZE_Y - clicY;
 	}
 
 	/**
@@ -34,22 +37,22 @@ public class CoordinateUtils {
 	 * @return libgdx case coordinate
 	 */
 	public static int clicGridY(int clicY) {
-		return (500 - clicY) / Constante.GRID_SIZE;
+		return (SCREEN_SIZE_Y - clicY) / Constante.GRID_SIZE;
 	}
 
-	/** 
+	/**
 	 * @param y libgdx y coordinate
 	 * @return y java coordinate
 	 */
 	public static int invGridY(int y) {
-		return 24 - y;
+		return MAX_BLOC_Y - y;
 	}
-	
-	/** 
+
+	/**
 	 * @param y libgdx y coordinate
 	 * @return y java coordinate
 	 */
 	public static double invGridY(double y) {
-		return 24.0 - y;
+		return ((double) MAX_BLOC_Y) - y;
 	}
 }

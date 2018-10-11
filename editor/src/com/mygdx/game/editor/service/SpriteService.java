@@ -28,8 +28,8 @@ public class SpriteService {
 		this.fileService = fileService;
 		sprites = new HashMap<>();
 		LOG.info("Load Sprites : START");
-		initSprite();
-		LOG.info("Load Sprites : DONE");
+		int n = initSprite();
+		LOG.info("Load Sprites : DONE, {} sprites loaded", n);
 	}
 
 	/**
@@ -51,7 +51,8 @@ public class SpriteService {
 	/**
 	 * parse json file and create buffer sprite in memory
 	 */
-	private void initSprite() {
+	private int initSprite() {
+		int nb = 0;
 		try {
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 			InputStream in = classloader.getResourceAsStream("json/sprite.json");
@@ -75,6 +76,7 @@ public class SpriteService {
 								int yCalc = area.getY() + (y * area.getSy());
 								sprite[n] = temp.getSubimage(xCalc, yCalc, area.getSx(), area.getSy());
 								n++;
+								nb++;
 							}
 						}
 						if (sprites.containsKey(area.getAnimation())) {
@@ -87,9 +89,9 @@ public class SpriteService {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("IOException : {}", e.getMessage());
 		}
+		return nb;
 	}
 
 	/**

@@ -8,7 +8,6 @@ import java.util.Map;
 import com.mygdx.game.editor.constant.Constante;
 import com.mygdx.game.editor.constant.EnnemieTypeEnum;
 import com.mygdx.game.editor.constant.RayonTypeEnum;
-import com.mygdx.game.editor.domain.StartDimension;
 import com.mygdx.game.editor.domain.level.Decor;
 import com.mygdx.game.editor.domain.level.Door;
 import com.mygdx.game.editor.domain.level.Ennemie;
@@ -40,11 +39,6 @@ public class LevelService {
 	private Map<Integer, Type> typeMap;
 	private Map<Integer, Level> levelMap;
 	private LevelFile levelFile;
-
-	// printLevel
-	private List<Integer> treatedLevels;
-	private List<String> treatedDimensions;
-	private List<Integer> treatPath;
 
 	public LevelService() {
 		this.currentTypeIndex = 0;
@@ -792,7 +786,7 @@ public class LevelService {
 				}
 			}
 			for (Event e : currentLevel.getEvent()) {
-				if ((int)e.getX() == caseX && (int)e.getY() == caseY) {
+				if ((int) e.getX() == caseX && (int) e.getY() == caseY) {
 					identified.add(e);
 				}
 			}
