@@ -1,6 +1,6 @@
 package com.mygdx.game.editor.utils;
 
-import com.mygdx.game.editor.constant.Constante;
+import com.mygdx.constante.EditorConstante;
 
 /**
  * Utils to transform java coordinate to libgdx coordinate. Prefere sav inside
@@ -37,7 +37,7 @@ public class CoordinateUtils {
 	 * @return libgdx case coordinate
 	 */
 	public static int clicGridY(int clicY) {
-		return (SCREEN_SIZE_Y - clicY) / Constante.GRID_SIZE;
+		return (SCREEN_SIZE_Y - clicY) / EditorConstante.GRID_SIZE_Y;
 	}
 
 	/**

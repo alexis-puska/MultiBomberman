@@ -38,7 +38,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.mygdx.game.editor.constant.Constante;
+import com.mygdx.constante.EditorConstante;
 import com.mygdx.game.editor.constant.EnabledElementEnum;
 import com.mygdx.game.editor.constant.MusicEnum;
 import com.mygdx.game.editor.constant.SoundEnum;
@@ -451,7 +451,7 @@ public class EventPanel extends JPanel {
 		triggerPanel.add(countDownPanel);
 		triggerPanel.add(conditionPanel);
 		triggerPanel.add(optionPanel);
-		triggerPanel.setPreferredSize(new Dimension(Constante.EVENT_FRAME_TRIGGER_PANEL_WIDTH, 700));
+		triggerPanel.setPreferredSize(new Dimension(EditorConstante.EVENT_FRAME_TRIGGER_PANEL_WIDTH, 700));
 		SpringUtilities.makeCompactGrid(triggerPanel, 5, 1, 6, 6, 6, 6);
 		this.add(triggerPanel, BorderLayout.WEST);
 	}

@@ -1,13 +1,14 @@
 package com.mygdx.constante;
 
 public class EditorConstante {
-	public static final int APP_SIZE_X = 1411;
-    public static final int APP_SIZE_Y = 1100;
+	public static final int APP_SIZE_X = 1800;
+    public static final int APP_SIZE_Y = 950;
     public static final int EVENT_FRAME_TRIGGER_PANEL_WIDTH = 300;
     public static final int PANEL_PLATFORM_BACKGROUD_WIDTH = 300;
-    public static final int SCREEN_SIZE_X = 400;
-    public static final int SCREEN_SIZE_Y = 500;
-    public static final int GRID_SIZE = 20;
+    public static final int SCREEN_SIZE_X = 630;
+    public static final int SCREEN_SIZE_Y = 336;
+    public static final int GRID_SIZE_X = 18;
+    public static final int GRID_SIZE_Y = 16;
     public static final int NB_COLUMN_NAVIGATION = 3;
     public static final int NB_ROW_NAVIGATION = 1;
     public static final int NB_COLUMN_ENNEMIE = 2;
@@ -29,6 +30,7 @@ public class EditorConstante {
     public static final int MIN_TYPE_ID = 0;
     public static final int MAX_TYPE_ID = 3;
     public static final int MIN_LEVEL_ID = 0;
+	
     
     //EVENT
         

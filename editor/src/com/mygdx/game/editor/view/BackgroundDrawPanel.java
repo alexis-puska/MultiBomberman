@@ -7,8 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
+import com.mygdx.constante.EditorConstante;
 import com.mygdx.enumeration.SpriteEnum;
-import com.mygdx.game.editor.constant.Constante;
 import com.mygdx.game.editor.service.SpriteService;
 
 public class BackgroundDrawPanel extends Canvas {
@@ -33,7 +33,7 @@ public class BackgroundDrawPanel extends Canvas {
 		}
 		Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
 		g2.setColor(Color.LIGHT_GRAY);
-		g2.fillRect(0, 0, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y);
+		g2.fillRect(0, 0, EditorConstante.SCREEN_SIZE_X, EditorConstante.SCREEN_SIZE_Y);
 		int idx = 0;
 		int nb = this.spriteService.getSpriteAnimationSize(SpriteEnum.LEVEL);
 		int idxColumn = 0;

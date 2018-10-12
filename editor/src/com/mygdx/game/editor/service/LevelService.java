@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mygdx.game.editor.constant.Constante;
+import com.mygdx.constante.EditorConstante;
 import com.mygdx.game.editor.constant.EnnemieTypeEnum;
 import com.mygdx.game.editor.constant.RayonTypeEnum;
 import com.mygdx.game.editor.domain.level.Decor;
@@ -518,8 +518,8 @@ public class LevelService {
 	}
 
 	public void deleteElement(int x, int y) {
-		int caseX = x / Constante.GRID_SIZE;
-		int caseY = y / Constante.GRID_SIZE;
+		int caseX = x / EditorConstante.GRID_SIZE_X;
+		int caseY = y / EditorConstante.GRID_SIZE_Y;
 		// DECORS
 		if (currentLevel != null) {
 			List<Decor> decorToDelete = new ArrayList<>();
@@ -701,8 +701,8 @@ public class LevelService {
 
 	public List<Identifiable> getProperties(int x, int y) {
 		List<Identifiable> identified = new ArrayList<>();
-		int caseX = x / Constante.GRID_SIZE;
-		int caseY = y / Constante.GRID_SIZE;
+		int caseX = x / EditorConstante.GRID_SIZE_X;
+		int caseY = y / EditorConstante.GRID_SIZE_Y;
 		if (currentLevel != null) {
 			for (Decor e : currentLevel.getDecor()) {
 				if (e.getX() >= ((x + 10) - 5) && e.getX() <= ((x + 10) + 5) && e.getY() >= (y - 5)

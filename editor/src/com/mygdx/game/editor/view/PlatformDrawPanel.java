@@ -8,8 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
+import com.mygdx.constante.EditorConstante;
 import com.mygdx.enumeration.SpriteEnum;
-import com.mygdx.game.editor.constant.Constante;
 import com.mygdx.game.editor.service.SpriteService;
 
 public class PlatformDrawPanel extends Canvas {
@@ -31,7 +31,7 @@ public class PlatformDrawPanel extends Canvas {
 		}
 		Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
 		g2.setColor(Color.LIGHT_GRAY);
-		g2.fillRect(0, 0, Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y);
+		g2.fillRect(0, 0, EditorConstante.SCREEN_SIZE_X, EditorConstante.SCREEN_SIZE_Y);
 		Font font = new Font("Arial", Font.PLAIN, 20);
 		g2.setFont(font);
 		g2.setColor(Color.RED);
@@ -46,9 +46,9 @@ public class PlatformDrawPanel extends Canvas {
 		int widthColumn = 300 / nbColumn;
 		while (idx < nb) {
 			BufferedImage pf = this.spriteService.getSprite(SpriteEnum.LEVEL, idx);
-			g2.drawImage(pf.getSubimage(0, 0, widthColumn, Constante.GRID_SIZE), idxColumn * widthColumn,
-					idxRow * Constante.GRID_SIZE, null);
-			g2.drawString(Integer.toString(idx), idxColumn * widthColumn, (idxRow + 1) * Constante.GRID_SIZE);
+			g2.drawImage(pf.getSubimage(0, 0, widthColumn, EditorConstante.GRID_SIZE_X), idxColumn * widthColumn,
+					idxRow * EditorConstante.GRID_SIZE_Y, null);
+			g2.drawString(Integer.toString(idx), idxColumn * widthColumn, (idxRow + 1) * EditorConstante.GRID_SIZE_Y);
 			idxRow++;
 			idx++;
 			if (idx != 0 && idx % 25 == 0) {

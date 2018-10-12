@@ -1276,7 +1276,7 @@ public class EditorLauncher extends JFrame {
 			y = 500;
 		}
 
-		int caseX = (x - OFFSET) / EditorConstante.GRID_SIZE;
+		int caseX = (x - OFFSET) / EditorConstante.GRID_SIZE_X;
 		int caseY = CoordinateUtils.clicGridY(y);
 		int invY = CoordinateUtils.clickY(y);
 
@@ -1388,7 +1388,7 @@ public class EditorLauncher extends JFrame {
 			y = 500;
 		}
 
-		int caseX = (x - OFFSET) / EditorConstante.GRID_SIZE;
+		int caseX = (x - OFFSET) / EditorConstante.GRID_SIZE_X;
 		int caseY = CoordinateUtils.clicGridY(y);
 		switch (action) {
 		case DRAW_VERTICAL_PLATFORM:
