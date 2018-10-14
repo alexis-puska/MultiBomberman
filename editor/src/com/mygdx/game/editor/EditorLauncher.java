@@ -5,23 +5,18 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,12 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SpringLayout;
 import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
@@ -42,11 +32,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mygdx.constante.EditorConstante;
-import com.mygdx.game.editor.constant.ActionEnum;
-import com.mygdx.game.editor.constant.EnnemieTypeEnum;
-import com.mygdx.game.editor.domain.level.Identifiable;
-import com.mygdx.game.editor.domain.level.LevelFile;
-import com.mygdx.game.editor.service.LevelService;
+import com.mygdx.game.editor.enumeration.ActionEnum;
 import com.mygdx.game.editor.service.LevelService2;
 import com.mygdx.game.editor.service.SpriteService;
 import com.mygdx.game.editor.utils.CoordinateUtils;
@@ -63,7 +49,6 @@ public class EditorLauncher extends JFrame {
 
 	// services
 	private final SpriteService spriteService;
-	private final LevelService levelService;
 	private final LevelService2 levelService2;
 
 	// traduction
@@ -104,18 +89,6 @@ public class EditorLauncher extends JFrame {
 	private DrawPanel drawPanel;
 	private JFrame eventJFrame;
 	private JFrame mapViewJFrame;
-
-	/****************
-	 * properties
-	 ***************/
-	private JPanel editionIdentifiablePanel;
-	private BorderLayout editionIdentifiableLayout;
-	private JPanel selectionIdentifiablePanel;
-	private Border selectionIdentifiableBorder;
-	private SpringLayout selectionIdentifiableLayout;
-	private JLabel selectionIdentifiableLabel;
-	private JComboBox<Identifiable> selectionIdentifiableComboBox;
-	private JPanel identifiablePropertiesPanel;
 
 	/****************
 	 * NAVIGATION
@@ -256,27 +229,15 @@ public class EditorLauncher extends JFrame {
 		LOG.info("message {} : {}", lang, this.message.getString("editor.border.bonus"));
 		LOG.info("Welcome in lr-inthewell-editor App !");
 		this.spriteService = new SpriteService();
-		this.levelService = new LevelService();
 
 		this.levelService2 = new LevelService2();
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 		InputStream in = classloader.getResourceAsStream("json/levels.json");
 		levelService2.load(in);
-
-		LevelFile levelFile = new LevelFile();
-		levelFile.setType(new ArrayList<>());
-		for (int i = 0; i <= EditorConstante.MAX_TYPE_ID; i++) {
-			com.mygdx.game.editor.domain.level.Type type = new com.mygdx.game.editor.domain.level.Type();
-			type.setId(i);
-			type.setLevel(new ArrayList<>());
-			levelFile.getType().add(type);
-		}
-		this.levelService.putLevelFile(levelFile);
-		this.action = ActionEnum.SELECT;
+		this.action = ActionEnum.NONE;
 	}
 
 	private void Launch() {
-		LOG.info("Nb level in file : " + levelService.getNbLevel());
 		this.getContentPane().setLayout(new BorderLayout());
 		initComponent();
 		initListeners();
@@ -490,7 +451,7 @@ public class EditorLauncher extends JFrame {
 		// draw
 		centerPanel = new JPanel();
 		drawLayout = new BorderLayout();
-		drawPanel = new DrawPanel(spriteService, levelService);
+		drawPanel = new DrawPanel(spriteService, levelService2);
 
 		// navigation
 		panelNavigation = new JPanel();
@@ -684,98 +645,98 @@ public class EditorLauncher extends JFrame {
 		 * --- NAVIGATION ---
 		 * 
 		 *************************************************************************************/
-		currentLevelIndex.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSpinner text = (JSpinner) e.getSource();
-				if (text.getValue() != null) {
-					LOG.info("ChangeLevel : " + (Integer) text.getValue());
-					levelService.setCurrentLevelIndex((Integer) text.getValue());
-					loadPropertiesLevel();
-					drawPanel.repaint();
-				}
-			}
-		});
-		currentLevelIndex.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char vChar = e.getKeyChar();
-				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-					e.consume();
-					JSpinner text = (JSpinner) e.getSource();
-					if (text.getValue() != null) {
-						LOG.info("ChangeLevel : " + (Integer) text.getValue());
-						levelService.setCurrentLevelIndex((Integer) text.getValue());
-						loadPropertiesLevel();
-						drawPanel.repaint();
-					}
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-		currentTypeLevelIndex.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSpinner text = (JSpinner) e.getSource();
-				if (text.getValue() != null) {
-					LOG.info("Change Type : " + (Integer) text.getValue());
-					levelService.setCurrentTypeIndex((Integer) text.getValue());
-					currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-					centerPanel.updateUI();
-					loadPropertiesLevel();
-					drawPanel.repaint();
-				}
-			}
-		});
-		currentTypeLevelIndex.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char vChar = e.getKeyChar();
-				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-					e.consume();
-					JSpinner text = (JSpinner) e.getSource();
-					if (text.getValue() != null) {
-						LOG.info("Change Type : " + (Integer) text.getValue());
-						levelService.setCurrentTypeIndex((Integer) text.getValue());
-						currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-						centerPanel.updateUI();
-						loadPropertiesLevel();
-						drawPanel.repaint();
-					}
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-		addLevel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				levelService.createLevel();
-				loadPropertiesLevel();
-				repaint();
-			}
-		});
-		delLevel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				levelService.deleteLevel();
-				loadPropertiesLevel();
-				repaint();
-			}
-		});
+//		currentLevelIndex.addChangeListener(new ChangeListener() {
+//			@Override
+//			public void stateChanged(ChangeEvent e) {
+//				JSpinner text = (JSpinner) e.getSource();
+//				if (text.getValue() != null) {
+//					LOG.info("ChangeLevel : " + (Integer) text.getValue());
+//					levelService.setCurrentLevelIndex((Integer) text.getValue());
+//					loadPropertiesLevel();
+//					drawPanel.repaint();
+//				}
+//			}
+//		});
+//		currentLevelIndex.addKeyListener(new KeyListener() {
+//			@Override
+//			public void keyTyped(KeyEvent e) {
+//				char vChar = e.getKeyChar();
+//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
+//					e.consume();
+//					JSpinner text = (JSpinner) e.getSource();
+//					if (text.getValue() != null) {
+//						LOG.info("ChangeLevel : " + (Integer) text.getValue());
+//						levelService.setCurrentLevelIndex((Integer) text.getValue());
+//						loadPropertiesLevel();
+//						drawPanel.repaint();
+//					}
+//				}
+//			}
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent e) {
+//			}
+//		});
+//		currentTypeLevelIndex.addChangeListener(new ChangeListener() {
+//			@Override
+//			public void stateChanged(ChangeEvent e) {
+//				JSpinner text = (JSpinner) e.getSource();
+//				if (text.getValue() != null) {
+//					LOG.info("Change Type : " + (Integer) text.getValue());
+//					levelService.setCurrentTypeIndex((Integer) text.getValue());
+//					currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
+//					centerPanel.updateUI();
+//					loadPropertiesLevel();
+//					drawPanel.repaint();
+//				}
+//			}
+//		});
+//		currentTypeLevelIndex.addKeyListener(new KeyListener() {
+//			@Override
+//			public void keyTyped(KeyEvent e) {
+//				char vChar = e.getKeyChar();
+//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
+//					e.consume();
+//					JSpinner text = (JSpinner) e.getSource();
+//					if (text.getValue() != null) {
+//						LOG.info("Change Type : " + (Integer) text.getValue());
+//						levelService.setCurrentTypeIndex((Integer) text.getValue());
+//						currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
+//						centerPanel.updateUI();
+//						loadPropertiesLevel();
+//						drawPanel.repaint();
+//					}
+//				}
+//			}
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent e) {
+//			}
+//		});
+//		addLevel.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				levelService.createLevel();
+//				loadPropertiesLevel();
+//				repaint();
+//			}
+//		});
+//		delLevel.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				levelService.deleteLevel();
+//				loadPropertiesLevel();
+//				repaint();
+//			}
+//		});
 		openLoadFileChooser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -824,420 +785,420 @@ public class EditorLauncher extends JFrame {
 		 * --- PROPERTIES LEVEL ---
 		 * 
 		 *************************************************************************************/
-
-		horizontalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSpinner text = (JSpinner) e.getSource();
-				if (text.getValue() != null) {
-					LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
-					levelService.setHorizontalPlatformId((Integer) text.getValue());
-					drawPanel.repaint();
-				}
-			}
-		});
-		horizontalPlatformIndexSpinner.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char vChar = e.getKeyChar();
-				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-					e.consume();
-					JSpinner text = (JSpinner) e.getSource();
-					if (text.getValue() != null) {
-						LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
-						levelService.setHorizontalPlatformId((Integer) text.getValue());
-						drawPanel.repaint();
-					}
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-
-		verticalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSpinner text = (JSpinner) e.getSource();
-				if (text.getValue() != null) {
-					LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
-					levelService.setVerticalPlatformId((Integer) text.getValue());
-					drawPanel.repaint();
-				}
-			}
-		});
-		verticalPlatformIndexSpinner.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char vChar = e.getKeyChar();
-				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-					e.consume();
-					JSpinner text = (JSpinner) e.getSource();
-					if (text.getValue() != null) {
-						LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
-						levelService.setVerticalPlatformId((Integer) text.getValue());
-						drawPanel.repaint();
-					}
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-
-		backgroundIndexSpinner.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSpinner text = (JSpinner) e.getSource();
-				if (text.getValue() != null) {
-					LOG.info("setBackgroundId : " + (Integer) text.getValue());
-					levelService.setBackgroundId((Integer) text.getValue());
-					drawPanel.repaint();
-				}
-			}
-		});
-		backgroundIndexSpinner.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char vChar = e.getKeyChar();
-				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-					e.consume();
-					JSpinner text = (JSpinner) e.getSource();
-					if (text.getValue() != null) {
-						LOG.info("setBackgroundId : " + (Integer) text.getValue());
-						levelService.setBackgroundId((Integer) text.getValue());
-						drawPanel.repaint();
-					}
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-
-		nextLevelIndexSpinner.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSpinner text = (JSpinner) e.getSource();
-				if (text.getValue() != null) {
-					levelService.setNextLevelId((Integer) text.getValue());
-					drawPanel.repaint();
-				}
-				LOG.info("NextLevel change : " + text.getValue());
-			}
-		});
-		nextLevelIndexSpinner.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char vChar = e.getKeyChar();
-				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-					e.consume();
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-
-		showPlatformLevelCheckBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				levelService.setShowPlatform(showPlatformLevelCheckBox.isSelected());
-			}
-		});
-
-		englishLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
-			private void updateData() {
-				levelService.setLevelName("en", englishLevelNameIndexTextField.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-		});
-		frenchLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
-			private void updateData() {
-				levelService.setLevelName("fr", frenchLevelNameIndexTextField.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-		});
-		spanishLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
-			private void updateData() {
-				levelService.setLevelName("es", spanishLevelNameIndexTextField.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-		});
-
-		/*************************************************************************************
-		 *
-		 * --- ENNEMIE ---
-		 * 
-		 *************************************************************************************/
-		ceriseButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_CERISE;
-			}
-		});
-		orangeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_ORANGE;
-			}
-		});
-		pommeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_POMME;
-			}
-		});
-		bananeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_BANANE;
-			}
-		});
-		litchiButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_LITCHI;
-			}
-		});
-		fraiseButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_FRAISE;
-			}
-		});
-		framboiseButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_FRAMBOISE;
-			}
-		});
-		citronButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_CITRON;
-			}
-		});
-		abricotButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_ABRICOT;
-			}
-		});
-		abricotnainsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_ABRICOT_NAIN;
-			}
-		});
-		annanasButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_ANANAS;
-			}
-		});
-		kiwiButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_KIWI;
-			}
-		});
-		pastequeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_PASTEQUE;
-			}
-		});
-		pruneButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_PRUNE;
-			}
-		});
-		scieButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_SCIE;
-			}
-		});
-		poireButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_POIRE;
-			}
-		});
-		blobButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_BLOB;
-			}
-		});
-
-		/*************************************************************************************
-		 *
-		 * --- ELEMENT ---
-		 * 
-		 *************************************************************************************/
-		selectButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.SELECT;
-			}
-		});
-		deleteButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.DELETE;
-			}
-		});
-		verticalPlatformButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.DRAW_VERTICAL_PLATFORM;
-			}
-		});
-		horizontalPlatformButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.DRAW_HORIZONTAL_PLATFORM;
-			}
-		});
-		vortexButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_VORTEX;
-			}
-		});
-		teleporterButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_TELEPORTER;
-			}
-		});
-		rayonButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_RAYON;
-			}
-		});
-		pickButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_PICK;
-			}
-		});
-		lockButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_LOCK;
-			}
-		});
-		doorButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_DOOR;
-			}
-		});
-		eventButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_EVENT;
-			}
-		});
-		startButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_PLAYER_SPAWN;
-			}
-		});
-		pointButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_OBJECT_POINT;
-			}
-		});
-		effectButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_OBJECT_EFFECT;
-			}
-		});
-		decorButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_DECOR;
-			}
-		});
-		itemButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				action = ActionEnum.ADD_ITEM;
-			}
-		});
+//
+//		horizontalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
+//			@Override
+//			public void stateChanged(ChangeEvent e) {
+//				JSpinner text = (JSpinner) e.getSource();
+//				if (text.getValue() != null) {
+//					LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
+//					levelService.setHorizontalPlatformId((Integer) text.getValue());
+//					drawPanel.repaint();
+//				}
+//			}
+//		});
+//		horizontalPlatformIndexSpinner.addKeyListener(new KeyListener() {
+//			@Override
+//			public void keyTyped(KeyEvent e) {
+//				char vChar = e.getKeyChar();
+//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
+//					e.consume();
+//					JSpinner text = (JSpinner) e.getSource();
+//					if (text.getValue() != null) {
+//						LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
+//						levelService.setHorizontalPlatformId((Integer) text.getValue());
+//						drawPanel.repaint();
+//					}
+//				}
+//			}
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent e) {
+//			}
+//		});
+//
+//		verticalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
+//			@Override
+//			public void stateChanged(ChangeEvent e) {
+//				JSpinner text = (JSpinner) e.getSource();
+//				if (text.getValue() != null) {
+//					LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
+//					levelService.setVerticalPlatformId((Integer) text.getValue());
+//					drawPanel.repaint();
+//				}
+//			}
+//		});
+//		verticalPlatformIndexSpinner.addKeyListener(new KeyListener() {
+//			@Override
+//			public void keyTyped(KeyEvent e) {
+//				char vChar = e.getKeyChar();
+//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
+//					e.consume();
+//					JSpinner text = (JSpinner) e.getSource();
+//					if (text.getValue() != null) {
+//						LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
+//						levelService.setVerticalPlatformId((Integer) text.getValue());
+//						drawPanel.repaint();
+//					}
+//				}
+//			}
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent e) {
+//			}
+//		});
+//
+//		backgroundIndexSpinner.addChangeListener(new ChangeListener() {
+//			@Override
+//			public void stateChanged(ChangeEvent e) {
+//				JSpinner text = (JSpinner) e.getSource();
+//				if (text.getValue() != null) {
+//					LOG.info("setBackgroundId : " + (Integer) text.getValue());
+//					levelService.setBackgroundId((Integer) text.getValue());
+//					drawPanel.repaint();
+//				}
+//			}
+//		});
+//		backgroundIndexSpinner.addKeyListener(new KeyListener() {
+//			@Override
+//			public void keyTyped(KeyEvent e) {
+//				char vChar = e.getKeyChar();
+//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
+//					e.consume();
+//					JSpinner text = (JSpinner) e.getSource();
+//					if (text.getValue() != null) {
+//						LOG.info("setBackgroundId : " + (Integer) text.getValue());
+//						levelService.setBackgroundId((Integer) text.getValue());
+//						drawPanel.repaint();
+//					}
+//				}
+//			}
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent e) {
+//			}
+//		});
+//
+//		nextLevelIndexSpinner.addChangeListener(new ChangeListener() {
+//			@Override
+//			public void stateChanged(ChangeEvent e) {
+//				JSpinner text = (JSpinner) e.getSource();
+//				if (text.getValue() != null) {
+//					levelService.setNextLevelId((Integer) text.getValue());
+//					drawPanel.repaint();
+//				}
+//				LOG.info("NextLevel change : " + text.getValue());
+//			}
+//		});
+//		nextLevelIndexSpinner.addKeyListener(new KeyListener() {
+//			@Override
+//			public void keyTyped(KeyEvent e) {
+//				char vChar = e.getKeyChar();
+//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
+//					e.consume();
+//				}
+//			}
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent e) {
+//			}
+//		});
+//
+//		showPlatformLevelCheckBox.addItemListener(new ItemListener() {
+//			public void itemStateChanged(ItemEvent e) {
+//				levelService.setShowPlatform(showPlatformLevelCheckBox.isSelected());
+//			}
+//		});
+//
+//		englishLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
+//			private void updateData() {
+//				levelService.setLevelName("en", englishLevelNameIndexTextField.getText());
+//			}
+//
+//			@Override
+//			public void changedUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//			@Override
+//			public void insertUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//			@Override
+//			public void removeUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//		});
+//		frenchLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
+//			private void updateData() {
+//				levelService.setLevelName("fr", frenchLevelNameIndexTextField.getText());
+//			}
+//
+//			@Override
+//			public void changedUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//			@Override
+//			public void insertUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//			@Override
+//			public void removeUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//		});
+//		spanishLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
+//			private void updateData() {
+//				levelService.setLevelName("es", spanishLevelNameIndexTextField.getText());
+//			}
+//
+//			@Override
+//			public void changedUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//			@Override
+//			public void insertUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//			@Override
+//			public void removeUpdate(DocumentEvent e) {
+//				updateData();
+//			}
+//
+//		});
+//
+//		/*************************************************************************************
+//		 *
+//		 * --- ENNEMIE ---
+//		 * 
+//		 *************************************************************************************/
+//		ceriseButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_CERISE;
+//			}
+//		});
+//		orangeButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_ORANGE;
+//			}
+//		});
+//		pommeButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_POMME;
+//			}
+//		});
+//		bananeButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_BANANE;
+//			}
+//		});
+//		litchiButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_LITCHI;
+//			}
+//		});
+//		fraiseButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_FRAISE;
+//			}
+//		});
+//		framboiseButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_FRAMBOISE;
+//			}
+//		});
+//		citronButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_CITRON;
+//			}
+//		});
+//		abricotButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_ABRICOT;
+//			}
+//		});
+//		abricotnainsButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_ABRICOT_NAIN;
+//			}
+//		});
+//		annanasButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_ANANAS;
+//			}
+//		});
+//		kiwiButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_KIWI;
+//			}
+//		});
+//		pastequeButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_PASTEQUE;
+//			}
+//		});
+//		pruneButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_PRUNE;
+//			}
+//		});
+//		scieButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_SCIE;
+//			}
+//		});
+//		poireButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_POIRE;
+//			}
+//		});
+//		blobButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_BLOB;
+//			}
+//		});
+//
+//		/*************************************************************************************
+//		 *
+//		 * --- ELEMENT ---
+//		 * 
+//		 *************************************************************************************/
+//		selectButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.SELECT;
+//			}
+//		});
+//		deleteButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.DELETE;
+//			}
+//		});
+//		verticalPlatformButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.DRAW_VERTICAL_PLATFORM;
+//			}
+//		});
+//		horizontalPlatformButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.DRAW_HORIZONTAL_PLATFORM;
+//			}
+//		});
+//		vortexButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_VORTEX;
+//			}
+//		});
+//		teleporterButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_TELEPORTER;
+//			}
+//		});
+//		rayonButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_RAYON;
+//			}
+//		});
+//		pickButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_PICK;
+//			}
+//		});
+//		lockButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_LOCK;
+//			}
+//		});
+//		doorButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_DOOR;
+//			}
+//		});
+//		eventButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_EVENT;
+//			}
+//		});
+//		startButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_PLAYER_SPAWN;
+//			}
+//		});
+//		pointButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_OBJECT_POINT;
+//			}
+//		});
+//		effectButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_OBJECT_EFFECT;
+//			}
+//		});
+//		decorButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_DECOR;
+//			}
+//		});
+//		itemButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				action = ActionEnum.ADD_ITEM;
+//			}
+//		});
 	}
 
 	/*************************************************************************************
@@ -1260,102 +1221,55 @@ public class EditorLauncher extends JFrame {
 		int invY = CoordinateUtils.clickY(y);
 
 		switch (action) {
-		case DRAW_VERTICAL_PLATFORM:
-			addVerticalPlatform(xFirst, yFirst, caseY);
+		case ADD_CUSTOM_BACKGROUND:
 			break;
-		case DRAW_HORIZONTAL_PLATFORM:
-			addHorizontalPlatform(xFirst, yFirst, caseX);
+		case ADD_CUSTOM_FOREGROUND:
+			break;
+		case ADD_HOLE:
+			break;
+		case ADD_INTERRUPTEUR:
+			break;
+		case ADD_MINE:
+			break;
+		case ADD_RAIL:
+			break;
+		case ADD_START_PLAYER:
 			break;
 		case ADD_TELEPORTER:
-			addTeleporter(xFirst, yFirst, caseX, caseY);
 			break;
-		case ADD_RAYON:
-			addRayon(xFirst, yFirst, caseX, caseY);
+		case ADD_TROLLEY:
 			break;
-		case SELECT:
-		case DELETE:
+		case ADD_WALL:
 			break;
-		case ADD_ITEM:
-			this.addItem(caseX, caseY);
+		case NONE:
 			break;
-		case ADD_DECOR:
-			this.addDecor(x, invY);
+		case REMOVE_CUSTOM_BACKGROUND:
 			break;
-		case ADD_LOCK:
-			this.addLock(caseX, caseY);
+		case REMOVE_CUSTOM_FOREGROUND:
 			break;
-		case ADD_DOOR:
-			this.addDoor(caseX, caseY);
+		case REMOVE_HOLE:
 			break;
-		case ADD_VORTEX:
-			this.addVortex(caseX, caseY);
+		case REMOVE_INTERRUPTEUR:
 			break;
-		case ADD_PICK:
-			this.addPick(caseX, caseY);
+		case REMOVE_MINE:
 			break;
-		case ADD_EVENT:
-			this.addEvent(caseX, caseY);
+		case REMOVE_RAIL:
 			break;
-		case ADD_PLAYER_SPAWN:
-			this.addPlayerSpawn(caseX, caseY);
+		case REMOVE_START_PLAYER:
 			break;
-		case ADD_OBJECT_POINT:
-			this.addObjectPoint(caseX, caseY);
+		case REMOVE_TELEPORTER:
 			break;
-		case ADD_OBJECT_EFFECT:
-			this.addObjectEffect(caseX, caseY);
+		case REMOVE_TROLLEY:
 			break;
-		case ADD_CERISE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.CERISE);
+		case REMOVE_WALL:
 			break;
-		case ADD_ORANGE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.ORANGE);
+		case SELECT_DEFAULT_BACKGROUND_TEXTURE:
 			break;
-		case ADD_POMME:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.POMME);
+		case SELECT_DEFAULT_WALL_TEXTURE:
 			break;
-		case ADD_BANANE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.BANANE);
+		default:
 			break;
-		case ADD_LITCHI:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.LITCHI);
-			break;
-		case ADD_FRAISE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.FRAISE);
-			break;
-		case ADD_FRAMBOISE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.FRAMBOISE);
-			break;
-		case ADD_CITRON:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.CITRON);
-			break;
-		case ADD_ABRICOT:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.ABRICOT);
-			break;
-		case ADD_ABRICOT_NAIN:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.ABRICOT_NAIN);
-			break;
-		case ADD_ANANAS:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.ANNANAS);
-			break;
-		case ADD_KIWI:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.KIWI);
-			break;
-		case ADD_PASTEQUE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.PASTEQUE);
-			break;
-		case ADD_PRUNE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.PRUNE);
-			break;
-		case ADD_SCIE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.SCIE);
-			break;
-		case ADD_POIRE:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.POIRE);
-			break;
-		case ADD_BLOB:
-			this.addEnnemie(caseX, caseY, EnnemieTypeEnum.BLOB);
-			break;
+
 		}
 	}
 
@@ -1370,42 +1284,53 @@ public class EditorLauncher extends JFrame {
 		int caseX = (x - OFFSET) / EditorConstante.GRID_SIZE_X;
 		int caseY = CoordinateUtils.clicGridY(y);
 		switch (action) {
-		case DRAW_VERTICAL_PLATFORM:
-		case DRAW_HORIZONTAL_PLATFORM:
-		case ADD_TELEPORTER:
-		case ADD_RAYON:
-			xFirst = caseX;
-			yFirst = caseY;
+		case ADD_CUSTOM_BACKGROUND:
 			break;
-		case SELECT:
-		case DELETE:
-		case ADD_DECOR:
-		case ADD_ITEM:
-		case ADD_VORTEX:
-		case ADD_PICK:
-		case ADD_DOOR:
-		case ADD_LOCK:
-		case ADD_EVENT:
-		case ADD_PLAYER_SPAWN:
-		case ADD_OBJECT_POINT:
-		case ADD_OBJECT_EFFECT:
-		case ADD_CERISE:
-		case ADD_ORANGE:
-		case ADD_POMME:
-		case ADD_BANANE:
-		case ADD_LITCHI:
-		case ADD_FRAISE:
-		case ADD_FRAMBOISE:
-		case ADD_CITRON:
-		case ADD_ABRICOT:
-		case ADD_ABRICOT_NAIN:
-		case ADD_ANANAS:
-		case ADD_KIWI:
-		case ADD_PASTEQUE:
-		case ADD_PRUNE:
-		case ADD_SCIE:
-		case ADD_BLOB:
-		case ADD_POIRE:
+		case ADD_CUSTOM_FOREGROUND:
+			break;
+		case ADD_HOLE:
+			break;
+		case ADD_INTERRUPTEUR:
+			break;
+		case ADD_MINE:
+			break;
+		case ADD_RAIL:
+			break;
+		case ADD_START_PLAYER:
+			break;
+		case ADD_TELEPORTER:
+			break;
+		case ADD_TROLLEY:
+			break;
+		case ADD_WALL:
+			break;
+		case NONE:
+			break;
+		case REMOVE_CUSTOM_BACKGROUND:
+			break;
+		case REMOVE_CUSTOM_FOREGROUND:
+			break;
+		case REMOVE_HOLE:
+			break;
+		case REMOVE_INTERRUPTEUR:
+			break;
+		case REMOVE_MINE:
+			break;
+		case REMOVE_RAIL:
+			break;
+		case REMOVE_START_PLAYER:
+			break;
+		case REMOVE_TELEPORTER:
+			break;
+		case REMOVE_TROLLEY:
+			break;
+		case REMOVE_WALL:
+			break;
+		case SELECT_DEFAULT_BACKGROUND_TEXTURE:
+			break;
+		case SELECT_DEFAULT_WALL_TEXTURE:
+			break;
+		default:
 			break;
 		}
 	}
@@ -1413,46 +1338,55 @@ public class EditorLauncher extends JFrame {
 	private void click(int x, int y) {
 		int invY = CoordinateUtils.clickY(y);
 		switch (action) {
-		case SELECT:
-			selectElement(x - OFFSET, invY);
+		case ADD_CUSTOM_BACKGROUND:
 			break;
-		case DELETE:
-			deleteElement(x - OFFSET, invY);
+		case ADD_CUSTOM_FOREGROUND:
 			break;
-		case DRAW_VERTICAL_PLATFORM:
-		case DRAW_HORIZONTAL_PLATFORM:
-		case ADD_VORTEX:
-		case ADD_ITEM:
-		case ADD_DECOR:
+		case ADD_HOLE:
+			break;
+		case ADD_INTERRUPTEUR:
+			break;
+		case ADD_MINE:
+			break;
+		case ADD_RAIL:
+			break;
+		case ADD_START_PLAYER:
+			break;
 		case ADD_TELEPORTER:
-		case ADD_RAYON:
-		case ADD_PICK:
-		case ADD_DOOR:
-		case ADD_LOCK:
-		case ADD_EVENT:
-		case ADD_PLAYER_SPAWN:
-		case ADD_OBJECT_POINT:
-		case ADD_OBJECT_EFFECT:
-		case ADD_CERISE:
-		case ADD_ORANGE:
-		case ADD_POMME:
-		case ADD_BANANE:
-		case ADD_LITCHI:
-		case ADD_FRAISE:
-		case ADD_FRAMBOISE:
-		case ADD_CITRON:
-		case ADD_ABRICOT:
-		case ADD_ABRICOT_NAIN:
-		case ADD_ANANAS:
-		case ADD_KIWI:
-		case ADD_PASTEQUE:
-		case ADD_PRUNE:
-		case ADD_SCIE:
-		case ADD_BLOB:
-		case ADD_POIRE:
+			break;
+		case ADD_TROLLEY:
+			break;
+		case ADD_WALL:
+			break;
+		case NONE:
+			break;
+		case REMOVE_CUSTOM_BACKGROUND:
+			break;
+		case REMOVE_CUSTOM_FOREGROUND:
+			break;
+		case REMOVE_HOLE:
+			break;
+		case REMOVE_INTERRUPTEUR:
+			break;
+		case REMOVE_MINE:
+			break;
+		case REMOVE_RAIL:
+			break;
+		case REMOVE_START_PLAYER:
+			break;
+		case REMOVE_TELEPORTER:
+			break;
+		case REMOVE_TROLLEY:
+			break;
+		case REMOVE_WALL:
+			break;
+		case SELECT_DEFAULT_BACKGROUND_TEXTURE:
+			break;
+		case SELECT_DEFAULT_WALL_TEXTURE:
+			break;
+		default:
 			break;
 		}
-
 	}
 
 	/*************************************************************************************
@@ -1461,104 +1395,9 @@ public class EditorLauncher extends JFrame {
 	 * 
 	 *************************************************************************************/
 
-	private void addRayon(int x, int y, int x2, int y2) {
-		levelService.addRayon(x, y, x2, y2);
+	private void addRail(int x, int y) {
+		this.levelService2.addRail(x, y);
 		repaint();
-	}
-
-	private void addTeleporter(int x, int y, int x2, int y2) {
-		levelService.addTeleporter(x, y, x2, y2);
-		repaint();
-	}
-
-	private void addHorizontalPlatform(int x, int y, int x2) {
-		levelService.addPlatform(x, y, x2, false);
-		repaint();
-	}
-
-	private void addVerticalPlatform(int x, int y, int y2) {
-		levelService.addPlatform(x, y, y2, true);
-		repaint();
-	}
-
-	private void addEnnemie(int x, int y, EnnemieTypeEnum type) {
-		levelService.addEnnemie(x, y, type);
-		repaint();
-	}
-
-	private void addDecor(int x, int y) {
-		levelService.addDecor(x, y);
-		repaint();
-	}
-
-	private void addVortex(int x, int y) {
-		levelService.addVortex(x, y);
-		repaint();
-	}
-
-	private void addPick(int x, int y) {
-		levelService.addPick(x, y);
-		repaint();
-	}
-
-	private void addDoor(int x, int y) {
-		levelService.addDoor(x, y);
-		repaint();
-	}
-
-	private void addLock(int x, int y) {
-		levelService.addLock(x, y);
-		repaint();
-	}
-
-	private void addEvent(int x, int y) {
-		levelService.addEvent(x, y);
-		repaint();
-	}
-
-	private void addPlayerSpawn(int x, int y) {
-		levelService.addPlayerSpawn(x, y);
-		repaint();
-	}
-
-	private void addObjectPoint(int x, int y) {
-		levelService.addObjectPoint(x, y);
-		repaint();
-	}
-
-	private void addObjectEffect(int x, int y) {
-		levelService.addObjectEffect(x, y);
-		repaint();
-	}
-
-	private void addItem(int x, int y) {
-		levelService.addItem(x, y);
-		repaint();
-	}
-
-	private void deleteElement(int x, int y) {
-		levelService.deleteElement(x, y);
-		repaint();
-	}
-
-	private void selectElement(int x, int y) {
-		List<Identifiable> objs = levelService.getProperties(x, y);
-		if (editionIdentifiablePanel != null) {
-			centerPanel.remove(editionIdentifiablePanel);
-		}
-		if (eventJFrame != null && eventJFrame.isVisible()) {
-			eventJFrame.dispose();
-		}
-		if (mapViewJFrame != null && mapViewJFrame.isVisible()) {
-			mapViewJFrame.dispose();
-		}
-
-		if (objs != null && !objs.isEmpty()) {
-			// buildIdentifiablePanelEdition(objs);
-			// switchIdentifiable(objs.get(0));
-		} else {
-			centerPanel.updateUI();
-		}
 	}
 
 	public void repaint() {
@@ -1566,13 +1405,17 @@ public class EditorLauncher extends JFrame {
 	}
 
 	public void loadPropertiesLevel() {
-		verticalPlatformIndexSpinner.setValue((Integer) levelService.getVerticalPlatformId());
-		horizontalPlatformIndexSpinner.setValue((Integer) levelService.getHorizontalPlatformId());
-		backgroundIndexSpinner.setValue((Integer) levelService.getBackgroundId());
-		nextLevelIndexSpinner.setValue((Integer) levelService.getNextLevelId());
-		showPlatformLevelCheckBox.setSelected(levelService.isShowPlatform());
-		spanishLevelNameIndexTextField.setText(levelService.getLevelName("es"));
-		englishLevelNameIndexTextField.setText(levelService.getLevelName("en"));
-		frenchLevelNameIndexTextField.setText(levelService.getLevelName("fr"));
+		/*
+		 * verticalPlatformIndexSpinner.setValue((Integer)
+		 * levelService2.getVerticalPlatformId());
+		 * horizontalPlatformIndexSpinner.setValue((Integer)
+		 * levelService2.getHorizontalPlatformId());
+		 * backgroundIndexSpinner.setValue((Integer) levelService2.getBackgroundId());
+		 * nextLevelIndexSpinner.setValue((Integer) levelService2.getNextLevelId());
+		 * showPlatformLevelCheckBox.setSelected(levelService2.isShowPlatform());
+		 */
+		spanishLevelNameIndexTextField.setText(levelService2.getLevelName("es"));
+		englishLevelNameIndexTextField.setText(levelService2.getLevelName("en"));
+		frenchLevelNameIndexTextField.setText(levelService2.getLevelName("fr"));
 	}
 }

@@ -122,7 +122,7 @@ public class LevelService2 {
 		LevelDTO level = new LevelDTO();
 		List<TextDTO> names = new ArrayList<>();
 		for (LocaleEnum val : LocaleEnum.values()) {
-			names.add(new TextDTO(val.getCode(), ""));
+			names.add(new TextDTO(val, ""));
 		}
 		level.setName(names);
 		level.getVariante().add(createNewVariante());
@@ -163,12 +163,12 @@ public class LevelService2 {
 		VarianteDTO variante = new VarianteDTO();
 		List<TextDTO> names = new ArrayList<>();
 		for (LocaleEnum val : LocaleEnum.values()) {
-			names.add(new TextDTO(val.getCode(), "names"));
+			names.add(new TextDTO(val, "names"));
 		}
 		variante.setName(names);
 		List<TextDTO> descriptions = new ArrayList<>();
 		for (LocaleEnum val : LocaleEnum.values()) {
-			descriptions.add(new TextDTO(val.getCode(), "descriptions"));
+			descriptions.add(new TextDTO(val, "descriptions"));
 		}
 		variante.setName(descriptions);
 		variante.setBombe(2);
@@ -180,8 +180,40 @@ public class LevelService2 {
 		return variante;
 	}
 
-	public void updateLevelName(LocaleEnum locale, String newValue) {
+	public String getLevelName(String lang) {
 
+		if (this.currentLevel != null) {
+			if (this.currentLevel.getName() != null) {
+				for (TextDTO ln : this.currentLevel.getName()) {
+					if (ln.getLang().equals(lang)) {
+						return ln.getValue();
+					}
+				}
+			} else {
+				this.currentLevel.setName(new ArrayList<>());
+				this.currentLevel.getName().add(new TextDTO(LocaleEnum.ENGLISH, ""));
+				this.currentLevel.getName().add(new TextDTO(LocaleEnum.FRENCH, ""));
+			}
+		}
+		return "";
+	}
+
+	public void setLevelName(LocaleEnum lang, String name) {
+		TextDTO tmp = null;
+		for (TextDTO ln : this.currentLevel.getName()) {
+			if (ln.getLang().equals(lang)) {
+				tmp = ln;
+				break;
+			}
+		}
+		if (tmp != null) {
+			this.currentLevel.getName().remove(tmp);
+			tmp.setValue(name);
+			this.currentLevel.getName().add(tmp);
+		} else {
+			tmp = new TextDTO(lang, name);
+			this.currentLevel.getName().add(tmp);
+		}
 	}
 
 	public void addHole(int x, int y) {

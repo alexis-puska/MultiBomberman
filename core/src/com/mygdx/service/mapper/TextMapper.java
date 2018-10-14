@@ -5,12 +5,11 @@ import java.util.List;
 
 import com.mygdx.domain.level.Text;
 import com.mygdx.dto.level.common.TextDTO;
-import com.mygdx.enumeration.LocaleEnum;
 
 public class TextMapper {
 	public Text toEntity(TextDTO dto) {
 		Text text = new Text();
-		text.setLang(LocaleEnum.valueOf(dto.getLang()));
+		text.setLang(dto.getLang());
 		text.setValue(dto.getValue());
 		return text;
 	}

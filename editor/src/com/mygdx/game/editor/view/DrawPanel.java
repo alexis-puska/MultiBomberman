@@ -11,11 +11,12 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import com.mygdx.constante.EditorConstante;
+import com.mygdx.dto.level.common.PositionableDTO;
 import com.mygdx.enumeration.SpriteEnum;
-import com.mygdx.game.editor.domain.level.Position;
-import com.mygdx.game.editor.service.LevelService;
+import com.mygdx.game.editor.service.LevelService2;
 import com.mygdx.game.editor.service.SpriteService;
 import com.mygdx.game.editor.utils.CoordinateUtils;
 
@@ -25,10 +26,10 @@ public class DrawPanel extends Canvas {
 
 	private static final int FONT_SIZE = 14;
 
-	private LevelService levelService;
+	private LevelService2 levelService;
 	private SpriteService spriteService;
 
-	public DrawPanel(SpriteService spriteService, LevelService levelService) {
+	public DrawPanel(SpriteService spriteService, LevelService2 levelService) {
 		super();
 		this.spriteService = spriteService;
 		this.levelService = levelService;
@@ -67,17 +68,20 @@ public class DrawPanel extends Canvas {
 	}
 
 	private void drawStartPlayer(Graphics2D g2) {
-		Position sp = levelService.getCurrentLevel().getStartPlayers();
-		if (sp != null) {
-			Stroke savedStrock = g2.getStroke();
-			g2.setColor(Color.GREEN);
-			Font font = new Font("Arial", Font.PLAIN, FONT_SIZE);
-			g2.setFont(font);
-			g2.setStroke(new BasicStroke(2));
+		List<PositionableDTO> sps = levelService.getCurrentVariante().getStartPlayer();
+		if (sps != null) {
+			sps.stream().forEach(sp -> {
+				Stroke savedStrock = g2.getStroke();
+				g2.setColor(Color.GREEN);
+				Font font = new Font("Arial", Font.PLAIN, FONT_SIZE);
+				g2.setFont(font);
+				g2.setStroke(new BasicStroke(2));
 
-			g2.drawString("S", (sp.getX() * EditorConstante.GRID_SIZE_X + 2),
-					(CoordinateUtils.invGridY(sp.getY()) * EditorConstante.GRID_SIZE_Y) + EditorConstante.GRID_SIZE_Y);
-			g2.setStroke(savedStrock);
+				g2.drawString("S", (sp.getX() * EditorConstante.GRID_SIZE_X + 2),
+						(CoordinateUtils.invGridY(sp.getY()) * EditorConstante.GRID_SIZE_Y)
+								+ EditorConstante.GRID_SIZE_Y);
+				g2.setStroke(savedStrock);
+			});
 		}
 	}
 
@@ -117,7 +121,8 @@ public class DrawPanel extends Canvas {
 	 * @param g2
 	 */
 	private void drawBackground(Graphics2D g2) {
-		BufferedImage bf = spriteService.getSprite(SpriteEnum.LEVEL, levelService.getCurrentLevel().getBackground());
+		BufferedImage bf = spriteService.getSprite(SpriteEnum.LEVEL,
+				levelService.getCurrentVariante().getDefaultBackground().getIndex());
 		int x = 0;
 		int y = 0;
 		while (x < EditorConstante.SCREEN_SIZE_X) {
