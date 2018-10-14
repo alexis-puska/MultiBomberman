@@ -1,12 +1,10 @@
 {
 	"levels": [{
-		"id": 1,
 		"name": [{
 			"lang": "FRENCH",
 			"value": "level1"
 		}],
 		"variante": [{
-			"id": 1,
 			"name": [{
 					"lang": "FRENCH",
 					"value": "level-variante1"
@@ -32,14 +30,14 @@
 			],
 			"fillWithBrick": true,
 			"defaultBackground": {
-				"animation": "azea",
+				"animation": "LEVEL",
 				"index": 1
 			},
 			"defaultWall": {
-				"animation": "azea",
+				"animation": "LEVEL",
 				"index": 1
 			},
-			"defaultBrickAnimation":"aze",
+			"defaultBrickAnimation":"LEVEL1",
 			"hole": [{
 				"x": 1,
 				"y": 2
@@ -69,20 +67,103 @@
 				"y": 2,
 				"draw": true,
 				"texture": {
-					"animation": "azea",
+					"animation": "LEVEL",
 					"index": 1
 				}
 			}],
 			"customBackgroundTexture": [{
 				"x": 1,
 				"y": 2,
-				"animation": "azea",
+				"animation": "LEVEL",
 				"index": 1	
 			}],
 			"customForegroundTexture": [{
 				"x": 1,
 				"y": 2,
-				"animation": "azea",
+				"animation": "LEVEL",
+				"index": 1
+			}],
+			"startPlayer": [{
+				"x": 1,
+				"y": 2
+			}]
+		},{
+			"name": [{
+					"lang": "FRENCH",
+					"value": "level-variante2"
+				},
+				{
+					"lang": "ENGLISH",
+					"value": "level-variante2"
+				}
+			],
+			"description": [{
+					"lang": "FRENCH",
+					"value": "level-variante-desc1"
+				},
+				{
+					"lang": "ENGLISH",
+					"value": "level-variante-desc1"
+				}
+			],
+			"shadow": 0.5,
+			"bombe": 1,
+			"strenght": 6,
+			"bonus": [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5
+			],
+			"fillWithBrick": true,
+			"defaultBackground": {
+				"animation": "LEVEL",
+				"index": 1
+			},
+			"defaultWall": {
+				"animation": "LEVEL",
+				"index": 1
+			},
+			"defaultBrickAnimation":"LEVEL1",
+			"hole": [{
+				"x": 1,
+				"y": 2
+			}],
+			"rail": [{
+				"x": 1,
+				"y": 2
+			}],
+			"trolley": [{
+				"x": 1,
+				"y": 2
+			}],
+			"interrupter": [{
+				"x": 1,
+				"y": 2
+			}],
+			"mine": [{
+				"x": 1,
+				"y": 2
+			}],
+			"teleporter": [{
+				"x": 1,
+				"y": 2
+			}],
+			"wall": [{
+				"x": 1,
+				"y": 2,
+				"draw": true,
+				"texture": {
+					"animation": "LEVEL",
+					"index": 1
+				}
+			}],
+			"customBackgroundTexture": [{
+				"x": 1,
+				"y": 2,
+				"animation": "LEVEL",
+				"index": 1	
+			}],
+			"customForegroundTexture": [{
+				"x": 1,
+				"y": 2,
+				"animation": "LEVEL",
 				"index": 1
 			}],
 			"startPlayer": [{

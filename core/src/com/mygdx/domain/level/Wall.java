@@ -1,6 +1,7 @@
 package com.mygdx.domain.level;
 
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.enumeration.SpriteEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class Wall extends BodyAble {
 	protected int y;
 	private boolean draw;
 	private boolean customSkin;
-	private String animation;
+	private SpriteEnum animation;
 	private int index;
 
 	@Override

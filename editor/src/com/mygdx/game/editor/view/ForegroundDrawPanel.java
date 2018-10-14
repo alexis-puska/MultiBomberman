@@ -2,7 +2,6 @@ package com.mygdx.game.editor.view;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
@@ -12,13 +11,16 @@ import com.mygdx.constante.EditorConstante;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.editor.service.SpriteService;
 
-public class PlatformDrawPanel extends Canvas {
+public class ForegroundDrawPanel extends Canvas {
 
 	private static final long serialVersionUID = -617780220828076518L;
+	private static final int HEIGHT = 48;
+	private static final int WIDTH = 54;
+	private static final int NB_COLUMN = 5;
 
 	private SpriteService spriteService;
 
-	public PlatformDrawPanel(SpriteService spriteService) {
+	public ForegroundDrawPanel(SpriteService spriteService) {
 		super();
 		this.spriteService = spriteService;
 	}
@@ -32,28 +34,18 @@ public class PlatformDrawPanel extends Canvas {
 		Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
 		g2.setColor(Color.LIGHT_GRAY);
 		g2.fillRect(0, 0, EditorConstante.SCREEN_SIZE_X, EditorConstante.SCREEN_SIZE_Y);
-		Font font = new Font("Arial", Font.PLAIN, 20);
-		g2.setFont(font);
-		g2.setColor(Color.RED);
 		int idx = 0;
-		int nb = this.spriteService.getSpriteAnimationSize(SpriteEnum.LEVEL);
-		int nbColumn = nb / 25;
-		if (nb % 25 != 0) {
-			nbColumn++;
-		}
+		int nb = this.spriteService.getSpriteAnimationSize(SpriteEnum.SKY);
 		int idxColumn = 0;
 		int idxRow = 0;
-		int widthColumn = 300 / nbColumn;
 		while (idx < nb) {
-			BufferedImage pf = this.spriteService.getSprite(SpriteEnum.LEVEL, idx);
-			g2.drawImage(pf.getSubimage(0, 0, widthColumn, EditorConstante.GRID_SIZE_X), idxColumn * widthColumn,
-					idxRow * EditorConstante.GRID_SIZE_Y, null);
-			g2.drawString(Integer.toString(idx), idxColumn * widthColumn, (idxRow + 1) * EditorConstante.GRID_SIZE_Y);
-			idxRow++;
+			BufferedImage pf = this.spriteService.getSprite(SpriteEnum.SKY, idx);
+			g2.drawImage(pf.getSubimage(0, 0, WIDTH, HEIGHT), idxColumn * WIDTH, idxRow * HEIGHT, null);
+			idxColumn++;
 			idx++;
-			if (idx != 0 && idx % 25 == 0) {
-				idxColumn++;
-				idxRow = 0;
+			if (idx != 0 && idx % NB_COLUMN == 0) {
+				idxRow++;
+				idxColumn = 0;
 			}
 		}
 		g2.dispose();

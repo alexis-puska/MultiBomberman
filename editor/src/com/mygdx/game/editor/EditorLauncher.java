@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -43,39 +44,16 @@ import org.apache.logging.log4j.Logger;
 import com.mygdx.constante.EditorConstante;
 import com.mygdx.game.editor.constant.ActionEnum;
 import com.mygdx.game.editor.constant.EnnemieTypeEnum;
-import com.mygdx.game.editor.domain.level.Decor;
-import com.mygdx.game.editor.domain.level.Door;
-import com.mygdx.game.editor.domain.level.Ennemie;
 import com.mygdx.game.editor.domain.level.Identifiable;
-import com.mygdx.game.editor.domain.level.Item;
 import com.mygdx.game.editor.domain.level.LevelFile;
-import com.mygdx.game.editor.domain.level.Lock;
-import com.mygdx.game.editor.domain.level.Pick;
-import com.mygdx.game.editor.domain.level.Platform;
-import com.mygdx.game.editor.domain.level.Rayon;
-import com.mygdx.game.editor.domain.level.Teleporter;
-import com.mygdx.game.editor.domain.level.Vortex;
-import com.mygdx.game.editor.domain.level.event.Event;
-import com.mygdx.game.editor.service.FileService;
 import com.mygdx.game.editor.service.LevelService;
+import com.mygdx.game.editor.service.LevelService2;
 import com.mygdx.game.editor.service.SpriteService;
 import com.mygdx.game.editor.utils.CoordinateUtils;
 import com.mygdx.game.editor.utils.SpringUtilities;
 import com.mygdx.game.editor.view.BackgroundDrawPanel;
 import com.mygdx.game.editor.view.DrawPanel;
-import com.mygdx.game.editor.view.PlatformDrawPanel;
-import com.mygdx.game.editor.view.properties.DecorPanel;
-import com.mygdx.game.editor.view.properties.DoorPanel;
-import com.mygdx.game.editor.view.properties.EnnemiePanel;
-import com.mygdx.game.editor.view.properties.EventPanel;
-import com.mygdx.game.editor.view.properties.ItemPanel;
-import com.mygdx.game.editor.view.properties.LockPanel;
-import com.mygdx.game.editor.view.properties.PickPanel;
-import com.mygdx.game.editor.view.properties.PlatformPanel;
-import com.mygdx.game.editor.view.properties.RayonPanel;
-import com.mygdx.game.editor.view.properties.TeleporterPanel;
-import com.mygdx.game.editor.view.properties.VortexPanel;
-import com.mygdx.game.editor.view.properties.renderer.IdentifiableComboBoxRenderer;
+import com.mygdx.game.editor.view.ForegroundDrawPanel;
 
 public class EditorLauncher extends JFrame {
 
@@ -84,9 +62,9 @@ public class EditorLauncher extends JFrame {
 	private static final int OFFSET = 10;
 
 	// services
-	private final FileService fileService;
 	private final SpriteService spriteService;
 	private final LevelService levelService;
+	private final LevelService2 levelService2;
 
 	// traduction
 	private final Locale locale;
@@ -109,8 +87,11 @@ public class EditorLauncher extends JFrame {
 	private JPanel eastPanel;
 	private GridLayout eastLayout;
 	private JPanel platformPanel;
+	private JPanel texturePanel;
+	private GridLayout textureLayout;
+	private Border textureBorder;
 	private Border platformBorder;
-	private PlatformDrawPanel platformDrawPanel;
+	private ForegroundDrawPanel platformDrawPanel;
 	private JPanel backgroundPanel;
 	private Border backgroundBorder;
 	private BackgroundDrawPanel backgroundDrawPanel;
@@ -219,7 +200,6 @@ public class EditorLauncher extends JFrame {
 	 * LEVEL PROPERTIES
 	 *******************/
 	private JPanel panelParameters;
-	private GridLayout layoutParameters;
 	private Border borderParameters;
 	private JPanel verticalPlatformIndexPanel;
 	private GridLayout verticalPlatformLayout;
@@ -275,9 +255,13 @@ public class EditorLauncher extends JFrame {
 		this.message = ResourceBundle.getBundle("i18n/Message", locale);
 		LOG.info("message {} : {}", lang, this.message.getString("editor.border.bonus"));
 		LOG.info("Welcome in lr-inthewell-editor App !");
-		this.fileService = new FileService();
-		this.spriteService = new SpriteService(fileService);
+		this.spriteService = new SpriteService();
 		this.levelService = new LevelService();
+
+		this.levelService2 = new LevelService2();
+		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+		InputStream in = classloader.getResourceAsStream("json/levels.json");
+		levelService2.load(in);
 
 		LevelFile levelFile = new LevelFile();
 		levelFile.setType(new ArrayList<>());
@@ -297,12 +281,12 @@ public class EditorLauncher extends JFrame {
 		initComponent();
 		initListeners();
 		buildWestPanel();
+		buildParameterPanelButton();
 		buildEastPanel();
 		buildDrawElement();
 		buildNavigationPanelButton();
 		buildElementPanelButton();
 		buildEnnemiePanelButton();
-		buildParameterPanelButton();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setSize(EditorConstante.APP_SIZE_X, EditorConstante.APP_SIZE_Y);
@@ -315,44 +299,6 @@ public class EditorLauncher extends JFrame {
 	 * --- BUILD FUNCTION ---
 	 * 
 	 *************************************************************************************/
-	private void buildIdentifiablePanelEdition(List<Identifiable> objs) {
-		selectionIdentifiableLabel = new JLabel(message.getString("selectionIdentifiable.border"));
-		selectionIdentifiableComboBox = new JComboBox<>();
-		selectionIdentifiableBorder = BorderFactory
-				.createTitledBorder(message.getString("selectionIdentifiable.combo"));
-		selectionIdentifiableLayout = new SpringLayout();
-		selectionIdentifiablePanel = new JPanel();
-		selectionIdentifiablePanel.setBorder(selectionIdentifiableBorder);
-		selectionIdentifiablePanel.setLayout(selectionIdentifiableLayout);
-		selectionIdentifiablePanel.add(selectionIdentifiableLabel);
-		selectionIdentifiablePanel.add(selectionIdentifiableComboBox);
-		SpringUtilities.makeCompactGrid(selectionIdentifiablePanel, 1, 2, 6, 6, 6, 6);
-		editionIdentifiableLayout = new BorderLayout();
-		editionIdentifiablePanel = new JPanel();
-		editionIdentifiablePanel.setLayout(editionIdentifiableLayout);
-		editionIdentifiablePanel.add(selectionIdentifiablePanel, BorderLayout.NORTH);
-		selectionIdentifiableComboBox.setRenderer(new IdentifiableComboBoxRenderer(message));
-		selectionIdentifiableComboBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					Identifiable identifiable = (Identifiable) selectionIdentifiableComboBox.getSelectedItem();
-					if (identifiable != null) {
-						if (eventJFrame != null && eventJFrame.isVisible()) {
-							eventJFrame.dispose();
-						}
-						if (mapViewJFrame != null && mapViewJFrame.isVisible()) {
-							mapViewJFrame.dispose();
-						}
-						switchIdentifiable(identifiable);
-					}
-				}
-			}
-		});
-		for (Identifiable identifiable : objs) {
-			selectionIdentifiableComboBox.addItem(identifiable);
-		}
-		centerPanel.add(editionIdentifiablePanel, BorderLayout.SOUTH);
-	}
 
 	private void buildDrawElement() {
 		drawPanel.setSize(EditorConstante.SCREEN_SIZE_X, EditorConstante.SCREEN_SIZE_Y);
@@ -378,10 +324,15 @@ public class EditorLauncher extends JFrame {
 		backgroundDrawPanel.setVisible(true);
 		backgroundPanel.setBorder(backgroundBorder);
 		backgroundPanel.add(backgroundDrawPanel);
+		textureLayout.setRows(2);
+		texturePanel.setLayout(textureLayout);
+		texturePanel.setBorder(textureBorder);
+		texturePanel.add(platformPanel);
+		texturePanel.add(backgroundPanel);
 		eastLayout.setColumns(2);
 		eastPanel.setLayout(eastLayout);
-		eastPanel.add(platformPanel);
-		eastPanel.add(backgroundPanel);
+		eastPanel.add(panelParameters);
+		eastPanel.add(texturePanel);
 		this.getContentPane().add(eastPanel, BorderLayout.EAST);
 	}
 
@@ -493,17 +444,23 @@ public class EditorLauncher extends JFrame {
 		spanishLevelNameIndexPanel.setBorder(spanishLevelNameIndexBorder);
 		spanishLevelNameIndexPanel.setLayout(spanishLevelNameIndexLayout);
 		spanishLevelNameIndexPanel.add(spanishLevelNameIndexTextField);
-		panelParameters.setLayout(layoutParameters);
 		panelParameters.setBorder(borderParameters);
-		panelParameters.add(verticalPlatformIndexPanel);
-		panelParameters.add(horizontalPlatformIndexPanel);
-		panelParameters.add(backgroundIndexPanel);
-		panelParameters.add(nextLevelIndexPanel);
-		panelParameters.add(showPlatformLevelPanel);
-		panelParameters.add(frenchLevelNameIndexPanel);
-		panelParameters.add(englishLevelNameIndexPanel);
-		panelParameters.add(spanishLevelNameIndexPanel);
-		this.getContentPane().add(panelParameters, BorderLayout.SOUTH);
+//		panelParameters.add(verticalPlatformIndexPanel);
+//		panelParameters.add(horizontalPlatformIndexPanel);
+//		panelParameters.add(backgroundIndexPanel);
+//		panelParameters.add(nextLevelIndexPanel);
+//		panelParameters.add(showPlatformLevelPanel);
+//		panelParameters.add(frenchLevelNameIndexPanel);
+//		panelParameters.add(englishLevelNameIndexPanel);
+//		panelParameters.add(spanishLevelNameIndexPanel);
+
+		JLabel enableLabel = new JLabel(message.getString("properties.platform.enable"), JLabel.TRAILING);
+		JCheckBox enableCheckBox = new JCheckBox();
+		enableLabel.setLabelFor(enableCheckBox);
+		panelParameters.add(enableLabel);
+		panelParameters.add(enableCheckBox);
+
+		SpringUtilities.makeCompactGrid(panelParameters, 4, 2, 2, 2, 2, 2);
 	}
 
 	/*************************************************************************************
@@ -520,9 +477,12 @@ public class EditorLauncher extends JFrame {
 		// EastPanel
 		eastPanel = new JPanel();
 		eastLayout = new GridLayout();
+		texturePanel = new JPanel();
+		textureLayout = new GridLayout();
+		textureBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
 		platformPanel = new JPanel();
 		platformBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
-		platformDrawPanel = new PlatformDrawPanel(spriteService);
+		platformDrawPanel = new ForegroundDrawPanel(spriteService);
 		backgroundPanel = new JPanel();
 		backgroundBorder = BorderFactory.createTitledBorder(message.getString("background.border"));
 		backgroundDrawPanel = new BackgroundDrawPanel(spriteService);
@@ -619,9 +579,10 @@ public class EditorLauncher extends JFrame {
 
 		// properties
 		panelParameters = new JPanel();
-		layoutParameters = new GridLayout();
-		layoutParameters.setColumns(EditorConstante.NB_COLUMN_PARAMETER);
-		layoutParameters.setRows(EditorConstante.NB_ROW_PARAMETER);
+//		layoutParameters = new GridLayout();
+//		layoutParameters.setColumns(EditorConstante.NB_COLUMN_PARAMETER);
+//		layoutParameters.setRows(EditorConstante.NB_ROW_PARAMETER);
+
 		borderParameters = BorderFactory.createTitledBorder("Properties");
 
 		verticalPlatformIndexPanel = new JPanel();
@@ -697,6 +658,24 @@ public class EditorLauncher extends JFrame {
 
 			@Override
 			public void mouseExited(MouseEvent e) {
+			}
+		});
+
+		drawPanel.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				System.out.println(e.getKeyCode());
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				System.out.println(e.getKeyCode());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println(e.getKeyCode());
 			}
 		});
 
@@ -1575,109 +1554,11 @@ public class EditorLauncher extends JFrame {
 		}
 
 		if (objs != null && !objs.isEmpty()) {
-			buildIdentifiablePanelEdition(objs);
+			// buildIdentifiablePanelEdition(objs);
 			// switchIdentifiable(objs.get(0));
 		} else {
 			centerPanel.updateUI();
 		}
-	}
-
-	private void switchIdentifiable(Identifiable obj) {
-		if (obj.getClass().equals(Item.class)) {
-			treatItemProperties((Item) obj);
-		} else if (obj.getClass().equals(Decor.class)) {
-			treatDecorProperties((Decor) obj);
-		} else if (obj.getClass().equals(Door.class)) {
-			treatDoorProperties((Door) obj);
-		} else if (obj.getClass().equals(Ennemie.class)) {
-			treatEnnemieProperties((Ennemie) obj);
-		} else if (obj.getClass().equals(Event.class)) {
-			treatEventProperties((Event) obj);
-		} else if (obj.getClass().equals(Lock.class)) {
-			treatLockProperties((Lock) obj);
-		} else if (obj.getClass().equals(Pick.class)) {
-			treatPickProperties((Pick) obj);
-		} else if (obj.getClass().equals(Platform.class)) {
-			treatPlatformProperties((Platform) obj);
-		} else if (obj.getClass().equals(Rayon.class)) {
-			treatRayonProperties((Rayon) obj);
-		} else if (obj.getClass().equals(Teleporter.class)) {
-			treatTeleporterProperties((Teleporter) obj);
-		} else if (obj.getClass().equals(Vortex.class)) {
-			treatVortexProperties((Vortex) obj);
-		}
-	}
-
-	private void treatItemProperties(Item item) {
-		identifiablePropertiesPanel = new ItemPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.item.border"), item);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatEventProperties(Event event) {
-		eventJFrame = new JFrame(message.getString("properties.event.title") + event.getId());
-		eventJFrame.getContentPane().setLayout(new BorderLayout());
-		identifiablePropertiesPanel = new EventPanel(message, eventJFrame, drawPanel, levelService,
-				message.getString("properties.event.title"), event);
-		eventJFrame.add(identifiablePropertiesPanel);
-		eventJFrame.setLocationRelativeTo(null);
-		eventJFrame.setSize(1200, 800);
-		eventJFrame.setVisible(true);
-		centerPanel.updateUI();
-	}
-
-	private void treatVortexProperties(Vortex vortex) {
-		identifiablePropertiesPanel = new VortexPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.vortex.border"), vortex);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatEnnemieProperties(Ennemie ennemie) {
-		identifiablePropertiesPanel = new EnnemiePanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.ennemie.border"), ennemie);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatDecorProperties(Decor decor) {
-		identifiablePropertiesPanel = new DecorPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.decor.border"), decor);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatDoorProperties(Door door) {
-		identifiablePropertiesPanel = new DoorPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.door.border"), door);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatLockProperties(Lock lock) {
-		identifiablePropertiesPanel = new LockPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.lock.border"), lock);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatPickProperties(Pick pick) {
-		identifiablePropertiesPanel = new PickPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.pick.border"), pick);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatPlatformProperties(Platform platform) {
-		identifiablePropertiesPanel = new PlatformPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.platform.border"), platform);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatRayonProperties(Rayon rayon) {
-		identifiablePropertiesPanel = new RayonPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.rayon.border"), rayon);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
-	}
-
-	private void treatTeleporterProperties(Teleporter teleporter) {
-		identifiablePropertiesPanel = new TeleporterPanel(message, centerPanel, drawPanel, levelService,
-				message.getString("properties.teleporter.border"), teleporter);
-		editionIdentifiablePanel.add(identifiablePropertiesPanel, BorderLayout.SOUTH);
 	}
 
 	public void repaint() {

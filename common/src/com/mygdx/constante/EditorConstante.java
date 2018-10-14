@@ -15,8 +15,8 @@ public class EditorConstante {
     public static final int NB_ROW_ENNEMIE = 10;
     public static final int ROW_ELEMENT_PANEL = 9;
     public static final int COL_ELEMENT_PANEL = 2;
-    public static final int NB_COLUMN_PARAMETER = 4;
-    public static final int NB_ROW_PARAMETER = 2;
+    public static final int NB_COLUMN_PARAMETER = 2;
+    public static final int NB_ROW_PARAMETER = 4;
     public static final int NB_COLUMN_CURRENT_LEVEL = 10;
     public static final int NB_ROW_CURRENT_LEVEL = 1;
     public static final int NB_COLUMN_CURRENT_TYPE_LEVEL = 10;

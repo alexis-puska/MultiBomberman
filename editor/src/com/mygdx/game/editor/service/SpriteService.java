@@ -12,6 +12,9 @@ import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.dto.sprite.Sprite;
 import com.mygdx.dto.sprite.SpriteFile;
 import com.mygdx.dto.sprite.SpriteFileContent;
@@ -21,15 +24,29 @@ public class SpriteService {
 
 	private final static Logger LOG = LogManager.getLogger(SpriteService.class);
 
-	private final FileService fileService;
 	private Map<SpriteEnum, BufferedImage[]> sprites;
+	private final ObjectMapper objectMapper;
 
-	public SpriteService(FileService fileService) {
-		this.fileService = fileService;
+	public SpriteService() {
+		this.objectMapper = new ObjectMapper();
 		sprites = new HashMap<>();
 		LOG.info("Load Sprites : START");
 		int n = initSprite();
 		LOG.info("Load Sprites : DONE, {} sprites loaded", n);
+	}
+
+	public SpriteFileContent readJsonSpriteFile(InputStream in) {
+		SpriteFileContent list = null;
+		try {
+			list = objectMapper.readValue(in, SpriteFileContent.class);
+		} catch (JsonParseException e) {
+			LOG.error("JsonParseException : " + e.getMessage());
+		} catch (JsonMappingException e) {
+			LOG.error("JsonMappingException : " + e.getMessage());
+		} catch (IOException e) {
+			LOG.error("IOException : " + e.getMessage());
+		}
+		return list;
 	}
 
 	/**
@@ -56,7 +73,7 @@ public class SpriteService {
 		try {
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 			InputStream in = classloader.getResourceAsStream("json/sprite.json");
-			SpriteFileContent spriteFileContent = fileService.readJsonSpriteFile(in);
+			SpriteFileContent spriteFileContent = this.readJsonSpriteFile(in);
 			BufferedImage temp = null;
 			List<SpriteFile> spriteFiles = spriteFileContent.getSpriteFile();
 			for (SpriteFile spriteFile : spriteFiles) {

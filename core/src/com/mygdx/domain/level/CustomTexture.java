@@ -1,6 +1,7 @@
 package com.mygdx.domain.level;
 
 import com.mygdx.domain.common.Drawable;
+import com.mygdx.enumeration.SpriteEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ public class CustomTexture extends Drawable {
 
 	protected int x;
 	protected int y;
-	protected String animation;
+	protected SpriteEnum animation;
 	protected int index;
 
 	@Override

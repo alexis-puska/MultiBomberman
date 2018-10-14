@@ -18,7 +18,7 @@ public class LevelMapper {
 
 	public Level toEntity(LevelDTO dto) {
 		Level level = new Level();
-		level.setId(dto.getId());
+//		level.setId(dto.getId());
 		level.setName(textMapper.toEntitys(dto.getName()));
 		level.setVariante(varianteMapper.toEntitys(dto.getVariante()));
 		return level;

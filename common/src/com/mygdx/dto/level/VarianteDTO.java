@@ -6,6 +6,7 @@ import java.util.List;
 import com.mygdx.dto.level.common.DefaultTextureDTO;
 import com.mygdx.dto.level.common.PositionableDTO;
 import com.mygdx.dto.level.common.TextDTO;
+import com.mygdx.enumeration.SpriteEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,6 @@ public class VarianteDTO implements Serializable {
 
 	private static final long serialVersionUID = -2962754568139006753L;
 
-	private long id;
 	private List<TextDTO> name;
 	private List<TextDTO> description;
 
@@ -31,7 +31,7 @@ public class VarianteDTO implements Serializable {
 	private boolean fillWithBrick;
 	private DefaultTextureDTO defaultBackground;
 	private DefaultTextureDTO defaultWall;
-	private String defaultBrickAnimation;
+	private SpriteEnum defaultBrickAnimation;
 
 	private List<PositionableDTO> hole;
 	private List<PositionableDTO> rail;

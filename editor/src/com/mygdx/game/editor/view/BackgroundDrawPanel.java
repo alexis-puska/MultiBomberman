@@ -40,7 +40,7 @@ public class BackgroundDrawPanel extends Canvas {
 		int idxRow = 0;
 		while (idx < nb) {
 			BufferedImage pf = this.spriteService.getSprite(SpriteEnum.LEVEL, idx);
-			g2.drawImage(pf.getSubimage(0, 0, 18, 16), idxColumn * WIDTH, idxRow * HEIGHT, null);
+			g2.drawImage(pf.getSubimage(0, 0, WIDTH, HEIGHT), idxColumn * WIDTH, idxRow * HEIGHT, null);
 			idxColumn++;
 			idx++;
 			if (idx != 0 && idx % NB_COLUMN == 0) {
