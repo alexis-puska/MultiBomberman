@@ -49,20 +49,21 @@ public class LevelService2 {
 		levelFileDTO = null;
 		try {
 			levelFileDTO = objectMapper.readValue(in, LevelFileDTO.class);
+
+			if (!levelFileDTO.getLevels().isEmpty()) {
+				currentLevel = levelFileDTO.getLevels().get(0);
+				if (!currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				}
+			} else {
+				addLevel();
+			}
 		} catch (JsonParseException e) {
 			LOG.error("JsonParseException : " + e.getMessage());
 		} catch (JsonMappingException e) {
 			LOG.error("JsonMappingException : " + e.getMessage());
 		} catch (IOException e) {
 			LOG.error("IOException : " + e.getMessage());
-		}
-		if (!levelFileDTO.getLevels().isEmpty()) {
-			currentLevel = levelFileDTO.getLevels().get(0);
-			if (!currentLevel.getVariante().isEmpty()) {
-				currentVariante = currentLevel.getVariante().get(0);
-			}
-		} else {
-			addLevel();
 		}
 	}
 
