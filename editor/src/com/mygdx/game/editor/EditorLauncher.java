@@ -3,7 +3,6 @@ package com.mygdx.game.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -18,6 +17,7 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -87,43 +87,70 @@ public class EditorLauncher extends JFrame {
 	 *******************/
 	private JPanel panelParameters;
 	private SpringLayout panelParametersLayout;
-	private Border borderParameters;
-	private JPanel verticalPlatformIndexPanel;
-	private GridLayout verticalPlatformLayout;
-	private Border verticalPlatformIndexBorder;
-	private SpinnerNumberModel verticalPlatformIndexModel;
-	private JSpinner verticalPlatformIndexSpinner;
-	private JPanel backgroundIndexPanel;
-	private GridLayout backgroundLayout;
-	private Border backgroundIndexBorder;
-	private SpinnerNumberModel backgroundIndexModel;
-	private JSpinner backgroundIndexSpinner;
-	private JPanel horizontalPlatformIndexPanel;
-	private GridLayout horizontalPlatformLayout;
-	private Border horizontalPlatformIndexBorder;
-	private SpinnerNumberModel horizontalPlatformIndexModel;
-	private JSpinner horizontalPlatformIndexSpinner;
-	private JPanel nextLevelIndexPanel;
-	private GridLayout nextLevelIndexLayout;
-	private Border nextLevelIndexBorder;
-	private SpinnerNumberModel nextLevelIndexSpinnerModel;
-	private JSpinner nextLevelIndexSpinner;
-	private JPanel showPlatformLevelPanel;
-	private GridLayout showPlatformLevelLayout;
-	private Border showPlatformLevelBorder;
-	private JCheckBox showPlatformLevelCheckBox;
-	private JPanel frenchLevelNameIndexPanel;
-	private GridLayout frenchLevelNameIndexLayout;
-	private Border frenchLevelNameIndexBorder;
-	private JTextField frenchLevelNameIndexTextField;
-	private JPanel englishLevelNameIndexPanel;
-	private GridLayout englishLevelNameIndexLayout;
-	private Border englishLevelNameIndexBorder;
-	private JTextField englishLevelNameIndexTextField;
-	private JPanel spanishLevelNameIndexPanel;
-	private GridLayout spanishLevelNameIndexLayout;
-	private Border spanishLevelNameIndexBorder;
-	private JTextField spanishLevelNameIndexTextField;
+	private Border panelParametersBorder;
+	private JLabel levelNameFrLabel;
+	private JTextField levelNameFrTextField;
+	private JLabel levelNameEnLabel;
+	private JTextField levelNameEnTextField;
+	private JLabel varianteNameFrLabel;
+	private JTextField varianteNameFrTextField;
+	private JLabel varianteNameEnLabel;
+	private JTextField varianteNameEnTextField;
+	private JLabel descriptionFrLabel;
+	private JTextField descriptionFrTextField;
+	private JLabel descriptionEnLabel;
+	private JTextField descriptionEnTextField;
+	private JLabel shadowLabel;
+	private SpinnerNumberModel shadowSpinnerModel;
+	private JSpinner shadowSpinner;
+	private JLabel bombeLabel;
+	private SpinnerNumberModel bombeSpinnerModel;
+	private JSpinner bombeSpinner;
+	private JLabel strenghtLabel;
+	private SpinnerNumberModel strenghtSpinnerModel;
+	private JSpinner strenghtSpinner;
+	private JLabel fillWithBrickLabel;
+	private JCheckBox fillWithBrickCheckbox;
+	private JLabel defaultBackgroundLabel;
+	private JButton defaultBackGround;
+	private JLabel defaultWallLabel;
+	private JButton defaultWall;
+	private JLabel defaultBrickAnimationLabel;
+	private JComboBox defaultBrickAnimationComboBox;
+
+	private JPanel bonusPanel;
+	private SpringLayout bonusLayout;
+	private Border bonusBorder;
+	private JTextField bonus1TextField;
+	private JLabel bonus1Label;
+	private JTextField bonus2TextField;
+	private JLabel bonus2Label;
+	private JTextField bonus3TextField;
+	private JLabel bonus3Label;
+	private JTextField bonus4TextField;
+	private JLabel bonus4Label;
+	private JTextField bonus5TextField;
+	private JLabel bonus5Label;
+	private JTextField bonus6TextField;
+	private JLabel bonus6Label;
+	private JTextField bonus7TextField;
+	private JLabel bonus7Label;
+	private JTextField bonus8TextField;
+	private JLabel bonus8Label;
+	private JTextField bonus9TextField;
+	private JLabel bonus9Label;
+	private JTextField bonus10TextField;
+	private JLabel bonus10Label;
+	private JTextField bonus11TextField;
+	private JLabel bonus11Label;
+	private JTextField bonus12TextField;
+	private JLabel bonus12Label;
+	private JTextField bonus13TextField;
+	private JLabel bonus13Label;
+	private JTextField bonus14TextField;
+	private JLabel bonus14Label;
+	private JTextField bonus15TextField;
+	private JLabel bonus15Label;
 
 	/****************
 	 * DRAW
@@ -140,21 +167,23 @@ public class EditorLauncher extends JFrame {
 	private JPanel panelNavigation;
 	private Border borderNavigation;
 	private GridLayout layoutNavigation;
-	// currentLevelType
-	private JPanel currentTypePanel;
-	private GridLayout currentTypeLayout;
-	private Border currentTypeBorder;
-	private JLabel currentTypeLevel;
-	private SpinnerNumberModel currentTypeLevelIndexModel;
-	private JSpinner currentTypeLevelIndex;
 	// currentLevelIndex
 	private JPanel currentLevelPanel;
 	private GridLayout currentLevelLayout;
 	private Border currentLevelBorder;
 	private JButton addLevel;
 	private JButton delLevel;
-	private SpinnerNumberModel currentLevelIndexModel;
-	private JSpinner currentLevelIndex;
+	private JButton nextLevel;
+	private JButton previousLevel;
+	// currentLevelIndex
+	private JPanel currentVariantePanel;
+	private GridLayout currentVarianteLayout;
+	private Border currentVarianteBorder;
+	private JButton addVariante;
+	private JButton delVariante;
+	private JButton nextVariante;
+	private JButton previousVariante;
+
 	// file
 	private JPanel filePanel;
 	private GridLayout fileLayout;
@@ -167,7 +196,7 @@ public class EditorLauncher extends JFrame {
 	private FileNameExtensionFilter saveFileChooserFilter;
 
 	/****************
-	 * ENNEMIES
+	 * ACTIONS
 	 ***************/
 	private JPanel buttonPanel;
 	private Border buttonPanelBorder;
@@ -192,8 +221,6 @@ public class EditorLauncher extends JFrame {
 	private JButton removeCustomBackgroundButton;
 	private JButton addCustomForegroundButton;
 	private JButton removeCustomForegroundButton;
-	
-	
 
 	public static void main(String[] args) {
 		String lang = "fr";
@@ -229,7 +256,7 @@ public class EditorLauncher extends JFrame {
 		buildEastPanel();
 		buildDrawElement();
 		buildNavigationPanelButton();
-		buildEnnemiePanelButton();
+		buildActionPanelButton();
 		buildWestPanel();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
@@ -269,12 +296,20 @@ public class EditorLauncher extends JFrame {
 		texturePanel.add(backgroundPanel);
 		eastLayout.setColumns(2);
 		eastPanel.setLayout(eastLayout);
-		eastPanel.add(panelParameters);
+
+		JPanel tmp = new JPanel();
+		BorderLayout layout = new BorderLayout();
+		tmp.setLayout(layout);
+		tmp.add(panelParameters, BorderLayout.NORTH);
+		tmp.add(bonusPanel, BorderLayout.CENTER);
+		eastPanel.add(tmp);
+
+//		eastPanel.add(panelParameters);
 		eastPanel.add(texturePanel);
 		this.getContentPane().add(eastPanel, BorderLayout.EAST);
 	}
 
-	private void buildEnnemiePanelButton() {
+	private void buildActionPanelButton() {
 		buttonPanel.setBorder(buttonPanelBorder);
 		buttonPanel.setLayout(buttonPanelLayout);
 		buttonPanel.add(addHoleButton);
@@ -293,6 +328,10 @@ public class EditorLauncher extends JFrame {
 		buttonPanel.add(removeWallButton);
 		buttonPanel.add(addStartPlayerButton);
 		buttonPanel.add(removeStartPlayerButton);
+		buttonPanel.add(addCustomBackgroundButton);
+		buttonPanel.add(removeCustomBackgroundButton);
+		buttonPanel.add(addCustomForegroundButton);
+		buttonPanel.add(removeCustomForegroundButton);
 	}
 
 	private void buildWestPanel() {
@@ -302,20 +341,18 @@ public class EditorLauncher extends JFrame {
 	}
 
 	private void buildNavigationPanelButton() {
-		currentLevelIndexModel.setMinimum(EditorConstante.MIN_LEVEL_ID);
-		currentLevelIndex.setModel(currentLevelIndexModel);
 		currentLevelPanel.setLayout(currentLevelLayout);
 		currentLevelPanel.setBorder(currentLevelBorder);
-		currentLevelPanel.add(currentLevelIndex);
+		currentLevelPanel.add(previousLevel);
+		currentLevelPanel.add(nextLevel);
 		currentLevelPanel.add(addLevel);
 		currentLevelPanel.add(delLevel);
-		currentTypeLevelIndexModel.setMinimum(EditorConstante.MIN_TYPE_ID);
-		currentTypeLevelIndexModel.setMaximum(EditorConstante.MAX_TYPE_ID);
-		currentTypeLevelIndex.setModel(currentTypeLevelIndexModel);
-		currentTypePanel.setLayout(currentTypeLayout);
-		currentTypePanel.setBorder(currentTypeBorder);
-		currentTypePanel.add(currentTypeLevel);
-		currentTypePanel.add(currentTypeLevelIndex);
+		currentVariantePanel.setLayout(currentVarianteLayout);
+		currentVariantePanel.setBorder(currentVarianteBorder);
+		currentVariantePanel.add(previousVariante);
+		currentVariantePanel.add(nextVariante);
+		currentVariantePanel.add(addVariante);
+		currentVariantePanel.add(delVariante);
 		filePanel.setLayout(fileLayout);
 		filePanel.setBorder(fileBorder);
 		filePanel.add(openLoadFileChooser);
@@ -323,65 +360,155 @@ public class EditorLauncher extends JFrame {
 		panelNavigation.setBorder(borderNavigation);
 		panelNavigation.setLayout(layoutNavigation);
 		panelNavigation.add(filePanel);
-		panelNavigation.add(currentTypePanel);
 		panelNavigation.add(currentLevelPanel);
+		panelNavigation.add(currentVariantePanel);
 		this.getContentPane().add(panelNavigation, BorderLayout.NORTH);
 	}
 
 	private void buildParameterPanelButton() {
-		verticalPlatformIndexModel.setMinimum(EditorConstante.MIN_PLATFORM_ID);
-		verticalPlatformIndexModel.setMaximum(EditorConstante.MAX_PLATFORM_ID);
-		verticalPlatformIndexSpinner.setModel(verticalPlatformIndexModel);
-		verticalPlatformIndexPanel.setBorder(verticalPlatformIndexBorder);
-		verticalPlatformIndexPanel.setLayout(verticalPlatformLayout);
-		verticalPlatformIndexPanel.add(verticalPlatformIndexSpinner);
-		horizontalPlatformIndexModel.setMinimum(EditorConstante.MIN_PLATFORM_ID);
-		horizontalPlatformIndexModel.setMaximum(EditorConstante.MAX_PLATFORM_ID);
-		horizontalPlatformIndexSpinner.setModel(horizontalPlatformIndexModel);
-		horizontalPlatformIndexPanel.setBorder(horizontalPlatformIndexBorder);
-		horizontalPlatformIndexPanel.setLayout(horizontalPlatformLayout);
-		horizontalPlatformIndexPanel.add(horizontalPlatformIndexSpinner);
-		backgroundIndexModel.setMinimum(EditorConstante.MIN_BACKGROUND_ID);
-		backgroundIndexModel.setMaximum(EditorConstante.MAX_BACKGROUND_ID);
-		backgroundIndexSpinner.setModel(backgroundIndexModel);
-		backgroundIndexPanel.setBorder(backgroundIndexBorder);
-		backgroundIndexPanel.setLayout(backgroundLayout);
-		backgroundIndexPanel.add(backgroundIndexSpinner);
-		nextLevelIndexPanel.setBorder(nextLevelIndexBorder);
-		nextLevelIndexPanel.setLayout(nextLevelIndexLayout);
-		nextLevelIndexSpinnerModel.setMinimum(-1);
-		nextLevelIndexSpinner.setModel(nextLevelIndexSpinnerModel);
-		nextLevelIndexPanel.add(nextLevelIndexSpinner);
-		showPlatformLevelPanel.setBorder(showPlatformLevelBorder);
-		showPlatformLevelPanel.setLayout(showPlatformLevelLayout);
-		showPlatformLevelPanel.add(showPlatformLevelCheckBox);
-		frenchLevelNameIndexPanel.setBorder(frenchLevelNameIndexBorder);
-		frenchLevelNameIndexPanel.setLayout(frenchLevelNameIndexLayout);
-		frenchLevelNameIndexPanel.add(frenchLevelNameIndexTextField);
-		englishLevelNameIndexPanel.setBorder(englishLevelNameIndexBorder);
-		englishLevelNameIndexPanel.setLayout(englishLevelNameIndexLayout);
-		englishLevelNameIndexPanel.add(englishLevelNameIndexTextField);
-		spanishLevelNameIndexPanel.setBorder(spanishLevelNameIndexBorder);
-		spanishLevelNameIndexPanel.setLayout(spanishLevelNameIndexLayout);
-		spanishLevelNameIndexPanel.add(spanishLevelNameIndexTextField);
-		panelParameters.setBorder(borderParameters);
-		// panelParameters.add(verticalPlatformIndexPanel);
-		// panelParameters.add(horizontalPlatformIndexPanel);
-		// panelParameters.add(backgroundIndexPanel);
-		// panelParameters.add(nextLevelIndexPanel);
-		// panelParameters.add(showPlatformLevelPanel);
-		// panelParameters.add(frenchLevelNameIndexPanel);
-		// panelParameters.add(englishLevelNameIndexPanel);
-		// panelParameters.add(spanishLevelNameIndexPanel);
 
-		JLabel enableLabel = new JLabel(message.getString("properties.platform.enable"), JLabel.TRAILING);
+		panelParameters.setBorder(panelParametersBorder);
 		panelParameters.setLayout(panelParametersLayout);
-		JCheckBox enableCheckBox = new JCheckBox();
-		enableLabel.setLabelFor(enableCheckBox);
-		panelParameters.add(enableLabel);
-		panelParameters.add(enableCheckBox);
 
-		SpringUtilities.makeCompactGrid(panelParameters, 1, 2, 2, 2, 2, 2);
+		shadowSpinnerModel.setMinimum(0);
+		shadowSpinnerModel.setMaximum(1);
+		shadowSpinnerModel.setValue(0);
+		shadowSpinnerModel.setStepSize(0.1f);
+		shadowSpinner.setModel(shadowSpinnerModel);
+
+		bombeSpinnerModel.setMinimum(1);
+		bombeSpinnerModel.setMaximum(6);
+		bombeSpinnerModel.setValue(2);
+		bombeSpinnerModel.setStepSize(0.1f);
+		bombeSpinner.setModel(bombeSpinnerModel);
+
+		strenghtSpinnerModel.setMinimum(1);
+		strenghtSpinnerModel.setMaximum(20);
+		strenghtSpinnerModel.setValue(2);
+		strenghtSpinnerModel.setStepSize(0.1f);
+		strenghtSpinner.setModel(strenghtSpinnerModel);
+
+		levelNameFrLabel.setLabelFor(levelNameFrTextField);
+		levelNameEnLabel.setLabelFor(levelNameEnTextField);
+		varianteNameFrLabel.setLabelFor(levelNameFrLabel);
+		varianteNameEnLabel.setLabelFor(levelNameFrLabel);
+		descriptionFrLabel.setLabelFor(levelNameFrLabel);
+		descriptionEnLabel.setLabelFor(levelNameFrLabel);
+		shadowLabel.setLabelFor(levelNameFrLabel);
+		bombeLabel.setLabelFor(levelNameFrLabel);
+		strenghtLabel.setLabelFor(strenghtSpinner);
+		fillWithBrickLabel.setLabelFor(fillWithBrickCheckbox);
+		defaultBackgroundLabel.setLabelFor(defaultBackGround);
+		defaultWallLabel.setLabelFor(defaultWall);
+		defaultBrickAnimationLabel.setLabelFor(defaultBrickAnimationComboBox);
+
+		panelParameters.add(levelNameFrLabel);
+		panelParameters.add(levelNameFrTextField);
+		panelParameters.add(levelNameEnLabel);
+		panelParameters.add(levelNameEnTextField);
+		panelParameters.add(varianteNameFrLabel);
+		panelParameters.add(varianteNameFrTextField);
+		panelParameters.add(varianteNameEnLabel);
+		panelParameters.add(varianteNameEnTextField);
+		panelParameters.add(descriptionFrLabel);
+		panelParameters.add(descriptionFrTextField);
+		panelParameters.add(descriptionEnLabel);
+		panelParameters.add(descriptionEnTextField);
+		panelParameters.add(shadowLabel);
+		panelParameters.add(shadowSpinner);
+		panelParameters.add(bombeLabel);
+		panelParameters.add(bombeSpinner);
+		panelParameters.add(strenghtLabel);
+		panelParameters.add(strenghtSpinner);
+		panelParameters.add(fillWithBrickLabel);
+		panelParameters.add(fillWithBrickCheckbox);
+		panelParameters.add(defaultBackgroundLabel);
+		panelParameters.add(defaultBackGround);
+		panelParameters.add(defaultWallLabel);
+		panelParameters.add(defaultWall);
+		panelParameters.add(defaultBrickAnimationLabel);
+		panelParameters.add(defaultBrickAnimationComboBox);
+		SpringUtilities.makeGrid(panelParameters, 13, 2, 2, 2, 2, 2);
+
+		bonus1Label.setLabelFor(bonus1TextField);
+		bonus2Label.setLabelFor(bonus2TextField);
+		bonus3Label.setLabelFor(bonus3TextField);
+		bonus4Label.setLabelFor(bonus4TextField);
+		bonus5Label.setLabelFor(bonus5TextField);
+		bonus6Label.setLabelFor(bonus6TextField);
+		bonus7Label.setLabelFor(bonus7TextField);
+		bonus8Label.setLabelFor(bonus8TextField);
+		bonus9Label.setLabelFor(bonus9TextField);
+		bonus10Label.setLabelFor(bonus10TextField);
+		bonus11Label.setLabelFor(bonus11TextField);
+		bonus12Label.setLabelFor(bonus12TextField);
+		bonus13Label.setLabelFor(bonus13TextField);
+		bonus14Label.setLabelFor(bonus14TextField);
+		bonus15Label.setLabelFor(bonus15TextField);
+		bonusPanel.setLayout(bonusLayout);
+		bonusPanel.setBorder(bonusBorder);
+		bonusPanel.add(bonus1Label);
+		bonusPanel.add(bonus1TextField);
+		bonusPanel.add(bonus2Label);
+		bonusPanel.add(bonus2TextField);
+		bonusPanel.add(bonus3Label);
+		bonusPanel.add(bonus3TextField);
+		bonusPanel.add(bonus4Label);
+		bonusPanel.add(bonus4TextField);
+		bonusPanel.add(bonus5Label);
+		bonusPanel.add(bonus5TextField);
+		bonusPanel.add(bonus6Label);
+		bonusPanel.add(bonus6TextField);
+		bonusPanel.add(bonus7Label);
+		bonusPanel.add(bonus7TextField);
+		bonusPanel.add(bonus8Label);
+		bonusPanel.add(bonus8TextField);
+		bonusPanel.add(bonus9Label);
+		bonusPanel.add(bonus9TextField);
+		bonusPanel.add(bonus10Label);
+		bonusPanel.add(bonus10TextField);
+		bonusPanel.add(bonus11Label);
+		bonusPanel.add(bonus11TextField);
+		bonusPanel.add(bonus12Label);
+		bonusPanel.add(bonus12TextField);
+		bonusPanel.add(bonus13Label);
+		bonusPanel.add(bonus13TextField);
+		bonusPanel.add(bonus14Label);
+		bonusPanel.add(bonus14TextField);
+		bonusPanel.add(bonus15Label);
+		bonusPanel.add(bonus15TextField);
+
+		SpringUtilities.makeGrid(bonusPanel, 15, 2, 2, 2, 2, 2);
+
+		/*
+		 * boolean shouldFill = true; boolean shouldWeightX = true; JButton button;
+		 * panelParameters.setLayout(new GridBagLayout()); GridBagConstraints c = new
+		 * GridBagConstraints(); if (shouldFill) { //natural height, maximum width
+		 * c.fill = GridBagConstraints.HORIZONTAL; }
+		 * 
+		 * button = new JButton("Button 1"); if (shouldWeightX) { c.weightx = 0.5; }
+		 * c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0; c.gridy = 0;
+		 * panelParameters.add(button, c);
+		 * 
+		 * button = new JButton("Button 2"); c.fill = GridBagConstraints.HORIZONTAL;
+		 * c.weightx = 0.5; c.gridx = 1; c.gridy = 0; panelParameters.add(button, c);
+		 * 
+		 * button = new JButton("Button 3"); c.fill = GridBagConstraints.HORIZONTAL;
+		 * c.weightx = 0.0; c.gridx = 0; c.gridy = 1; panelParameters.add(button, c);
+		 * 
+		 * button = new JButton("Long-Named Button 4"); c.fill =
+		 * GridBagConstraints.HORIZONTAL; c.ipady = 40; //make this component tall
+		 * c.weightx = 0.0; c.gridwidth = 3; c.gridx = 0; c.gridy = 2;
+		 * panelParameters.add(button, c);
+		 * 
+		 * button = new JButton("5"); c.fill = GridBagConstraints.HORIZONTAL; c.ipady =
+		 * 0; //reset to default c.weighty = 1.0; //request any extra vertical space
+		 * //c.anchor = GridBagConstraints.PAGE_END; //bottom of space c.insets = new
+		 * Insets(10,0,0,0); //top padding c.gridx = 1; //aligned with button 2
+		 * c.gridwidth = 2; //2 columns wide c.gridy = 3; //third row
+		 * panelParameters.add(button, c);
+		 */
+
 	}
 
 	/*************************************************************************************
@@ -425,17 +552,16 @@ public class EditorLauncher extends JFrame {
 		currentLevelBorder = BorderFactory.createTitledBorder(message.getString("currentLevel.border"));
 		addLevel = new JButton(message.getString("currentLevel.button.add"));
 		delLevel = new JButton(message.getString("currentLevel.button.delete"));
-		currentLevelIndexModel = new SpinnerNumberModel();
-		currentLevelIndex = new JSpinner();
+		nextLevel = new JButton(message.getString("currentLevel.button.next"));
+		previousLevel = new JButton(message.getString("currentLevel.button.previous"));
 
-		currentTypePanel = new JPanel();
-		currentTypeLayout = new GridLayout();
-		currentTypeBorder = BorderFactory.createTitledBorder(message.getString("type.border"));
-		currentTypeLevel = new JLabel(message.getString("currentLevel.label"));
-		currentTypeLevel.setToolTipText(message.getString("currentLevel.tooltip"));
-		currentTypeLevelIndexModel = new SpinnerNumberModel();
-		currentTypeLevelIndex = new JSpinner();
-		currentTypeLevelIndex.setToolTipText(message.getString("currentLevel.tooltip"));
+		currentVariantePanel = new JPanel();
+		currentVarianteLayout = new GridLayout();
+		currentVarianteBorder = BorderFactory.createTitledBorder(message.getString("currentVariante.border"));
+		addVariante = new JButton(message.getString("currentVariante.button.add"));
+		delVariante = new JButton(message.getString("currentVariante.button.delete"));
+		nextVariante = new JButton(message.getString("currentVariante.button.next"));
+		previousVariante = new JButton(message.getString("currentVariante.button.previous"));
 
 		// file
 		filePanel = new JPanel();
@@ -465,7 +591,9 @@ public class EditorLauncher extends JFrame {
 		addTeleporterButton = new JButton(message.getString("editor.button.teleporter.add"));
 		addWallButton = new JButton(message.getString("editor.button.wall.add"));
 		addStartPlayerButton = new JButton(message.getString("editor.button.startPlayer.add"));
-		
+		addCustomBackgroundButton = new JButton(message.getString("editor.button.defaultBackground.add"));
+		addCustomForegroundButton = new JButton(message.getString("editor.button.defaultForeground.add"));
+
 		removeHoleButton = new JButton(message.getString("editor.button.hole.remove"));
 		removeRailButton = new JButton(message.getString("editor.button.rail.remove"));
 		removeTrolleyButton = new JButton(message.getString("editor.button.trolley.remove"));
@@ -474,8 +602,8 @@ public class EditorLauncher extends JFrame {
 		removeTeleporterButton = new JButton(message.getString("editor.button.teleporter.remove"));
 		removeWallButton = new JButton(message.getString("editor.button.wall.remove"));
 		removeStartPlayerButton = new JButton(message.getString("editor.button.startPlayer.remove"));
-		
-		
+		removeCustomBackgroundButton = new JButton(message.getString("editor.button.defaultBackground.remove"));
+		removeCustomForegroundButton = new JButton(message.getString("editor.button.defaultForeground.remove"));
 
 		// properties
 		panelParameters = new JPanel();
@@ -484,49 +612,71 @@ public class EditorLauncher extends JFrame {
 		// layoutParameters.setColumns(EditorConstante.NB_COLUMN_PARAMETER);
 		// layoutParameters.setRows(EditorConstante.NB_ROW_PARAMETER);
 
-		borderParameters = BorderFactory.createTitledBorder("Properties");
+		panelParametersBorder = BorderFactory.createTitledBorder("Properties");
 
-		verticalPlatformIndexPanel = new JPanel();
-		verticalPlatformLayout = new GridLayout();
-		verticalPlatformIndexBorder = BorderFactory
-				.createTitledBorder(message.getString("properties.border.platformVertical"));
-		verticalPlatformIndexModel = new SpinnerNumberModel();
-		verticalPlatformIndexSpinner = new JSpinner();
-		backgroundIndexPanel = new JPanel();
-		backgroundLayout = new GridLayout();
-		backgroundIndexBorder = BorderFactory.createTitledBorder(message.getString("properties.border.background"));
-		backgroundIndexModel = new SpinnerNumberModel();
-		backgroundIndexSpinner = new JSpinner();
-		horizontalPlatformIndexPanel = new JPanel();
-		horizontalPlatformLayout = new GridLayout();
-		horizontalPlatformIndexBorder = BorderFactory
-				.createTitledBorder(message.getString("properties.border.platformHorizontal"));
-		horizontalPlatformIndexModel = new SpinnerNumberModel();
-		horizontalPlatformIndexSpinner = new JSpinner();
-		nextLevelIndexPanel = new JPanel();
-		nextLevelIndexLayout = new GridLayout();
-		nextLevelIndexBorder = BorderFactory.createTitledBorder(message.getString("properties.border.nextLevel"));
-		nextLevelIndexSpinnerModel = new SpinnerNumberModel();
-		nextLevelIndexSpinner = new JSpinner();
-		showPlatformLevelPanel = new JPanel();
-		showPlatformLevelLayout = new GridLayout();
-		showPlatformLevelBorder = BorderFactory.createTitledBorder(message.getString("properties.border.showPlatform"));
-		showPlatformLevelCheckBox = new JCheckBox();
-		frenchLevelNameIndexPanel = new JPanel();
-		frenchLevelNameIndexLayout = new GridLayout();
-		frenchLevelNameIndexBorder = BorderFactory
-				.createTitledBorder(message.getString("properties.border.frenchName"));
-		frenchLevelNameIndexTextField = new JTextField();
-		englishLevelNameIndexPanel = new JPanel();
-		englishLevelNameIndexLayout = new GridLayout();
-		englishLevelNameIndexBorder = BorderFactory
-				.createTitledBorder(message.getString("properties.border.englishName"));
-		englishLevelNameIndexTextField = new JTextField();
-		spanishLevelNameIndexPanel = new JPanel();
-		spanishLevelNameIndexLayout = new GridLayout();
-		spanishLevelNameIndexBorder = BorderFactory
-				.createTitledBorder(message.getString("properties.border.spanishName"));
-		spanishLevelNameIndexTextField = new JTextField();
+		levelNameFrLabel = new JLabel("level name fr");
+		levelNameFrTextField = new JTextField();
+		levelNameEnLabel = new JLabel("level name en");
+		levelNameEnTextField = new JTextField();
+		varianteNameFrLabel = new JLabel("variante name fr");
+		varianteNameFrTextField = new JTextField();
+		varianteNameEnLabel = new JLabel("varnate name fr");
+		varianteNameEnTextField = new JTextField();
+		descriptionFrLabel = new JLabel("description fr");
+		descriptionFrTextField = new JTextField();
+		descriptionEnLabel = new JLabel("description en");
+		descriptionEnTextField = new JTextField();
+		shadowLabel = new JLabel("shadow value");
+		shadowSpinnerModel = new SpinnerNumberModel();
+		shadowSpinner = new JSpinner();
+		bombeLabel = new JLabel("nb bombe");
+		bombeSpinnerModel = new SpinnerNumberModel();
+		bombeSpinner = new JSpinner();
+		strenghtLabel = new JLabel("strnght of bombe");
+		strenghtSpinnerModel = new SpinnerNumberModel();
+		strenghtSpinner = new JSpinner();
+		fillWithBrickLabel = new JLabel("fill with bricks");
+		fillWithBrickCheckbox = new JCheckBox();
+		defaultBackgroundLabel = new JLabel("default background texture");
+		defaultBackGround = new JButton();
+		defaultWallLabel = new JLabel("default wall texture");
+		defaultWall = new JButton();
+		defaultBrickAnimationLabel = new JLabel("default bricks animation");
+		defaultBrickAnimationComboBox = new JComboBox();
+
+		bonusPanel = new JPanel();
+		bonusLayout = new SpringLayout();
+		bonusBorder = BorderFactory.createTitledBorder("Bonus");
+		bonus1TextField = new JTextField();
+		bonus1Label = new JLabel("bonus1");
+		bonus2TextField = new JTextField();
+		bonus2Label = new JLabel("bonus2");
+		bonus3TextField = new JTextField();
+		bonus3Label = new JLabel("bonus3");
+		bonus4TextField = new JTextField();
+		bonus4Label = new JLabel("bonus4");
+		bonus5TextField = new JTextField();
+		bonus5Label = new JLabel("bonus5");
+		bonus6TextField = new JTextField();
+		bonus6Label = new JLabel("bonus6");
+		bonus7TextField = new JTextField();
+		bonus7Label = new JLabel("bonus7");
+		bonus8TextField = new JTextField();
+		bonus8Label = new JLabel("bonus8");
+		bonus9TextField = new JTextField();
+		bonus9Label = new JLabel("bonus9");
+		bonus10TextField = new JTextField();
+		bonus10Label = new JLabel("bonus10");
+		bonus11TextField = new JTextField();
+		bonus11Label = new JLabel("bonus11");
+		bonus12TextField = new JTextField();
+		bonus12Label = new JLabel("bonus12");
+		bonus13TextField = new JTextField();
+		bonus13Label = new JLabel("bonus13");
+		bonus14TextField = new JTextField();
+		bonus14Label = new JLabel("bonus14");
+		bonus15TextField = new JTextField();
+		bonus15Label = new JLabel("bonus15");
 
 	}
 
@@ -939,215 +1089,31 @@ public class EditorLauncher extends JFrame {
 		//
 		// });
 		//
-		// /*************************************************************************************
-		// *
-		// * --- ENNEMIE ---
-		// *
-		// *************************************************************************************/
-		// ceriseButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_CERISE;
-		// }
-		// });
-		// orangeButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_ORANGE;
-		// }
-		// });
-		// pommeButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_POMME;
-		// }
-		// });
-		// bananeButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_BANANE;
-		// }
-		// });
-		// litchiButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_LITCHI;
-		// }
-		// });
-		// fraiseButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_FRAISE;
-		// }
-		// });
-		// framboiseButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_FRAMBOISE;
-		// }
-		// });
-		// citronButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_CITRON;
-		// }
-		// });
-		// abricotButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_ABRICOT;
-		// }
-		// });
-		// abricotnainsButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_ABRICOT_NAIN;
-		// }
-		// });
-		// annanasButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_ANANAS;
-		// }
-		// });
-		// kiwiButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_KIWI;
-		// }
-		// });
-		// pastequeButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_PASTEQUE;
-		// }
-		// });
-		// pruneButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_PRUNE;
-		// }
-		// });
-		// scieButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_SCIE;
-		// }
-		// });
-		// poireButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_POIRE;
-		// }
-		// });
-		// blobButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_BLOB;
-		// }
-		// });
-		//
-		// /*************************************************************************************
-		// *
-		// * --- ELEMENT ---
-		// *
-		// *************************************************************************************/
-		// selectButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.SELECT;
-		// }
-		// });
-		// deleteButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.DELETE;
-		// }
-		// });
-		// verticalPlatformButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.DRAW_VERTICAL_PLATFORM;
-		// }
-		// });
-		// horizontalPlatformButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.DRAW_HORIZONTAL_PLATFORM;
-		// }
-		// });
-		// vortexButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_VORTEX;
-		// }
-		// });
-		// teleporterButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_TELEPORTER;
-		// }
-		// });
-		// rayonButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_RAYON;
-		// }
-		// });
-		// pickButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_PICK;
-		// }
-		// });
-		// lockButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_LOCK;
-		// }
-		// });
-		// doorButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_DOOR;
-		// }
-		// });
-		// eventButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_EVENT;
-		// }
-		// });
-		// startButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_PLAYER_SPAWN;
-		// }
-		// });
-		// pointButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_OBJECT_POINT;
-		// }
-		// });
-		// effectButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_OBJECT_EFFECT;
-		// }
-		// });
-		// decorButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_DECOR;
-		// }
-		// });
-		// itemButton.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// action = ActionEnum.ADD_ITEM;
-		// }
-		// });
+		/*************************************************************************************
+		 *
+		 * --- ACTION ---
+		 *
+		 *************************************************************************************/
+		addHoleButton.addActionListener(listener -> action = ActionEnum.ADD_HOLE);
+		addRailButton.addActionListener(listener -> action = ActionEnum.ADD_RAIL);
+		addTrolleyButton.addActionListener(listener -> action = ActionEnum.ADD_TROLLEY);
+		addInterrupteurButton.addActionListener(listener -> action = ActionEnum.ADD_INTERRUPTEUR);
+		addMineButton.addActionListener(listener -> action = ActionEnum.ADD_MINE);
+		addTeleporterButton.addActionListener(listener -> action = ActionEnum.ADD_TELEPORTER);
+		addWallButton.addActionListener(listener -> action = ActionEnum.ADD_WALL);
+		addStartPlayerButton.addActionListener(listener -> action = ActionEnum.ADD_START_PLAYER);
+		addCustomBackgroundButton.addActionListener(listener -> action = ActionEnum.ADD_CUSTOM_BACKGROUND);
+		addCustomForegroundButton.addActionListener(listener -> action = ActionEnum.ADD_CUSTOM_FOREGROUND);
+		removeHoleButton.addActionListener(listener -> action = ActionEnum.REMOVE_HOLE);
+		removeRailButton.addActionListener(listener -> action = ActionEnum.REMOVE_RAIL);
+		removeTrolleyButton.addActionListener(listener -> action = ActionEnum.REMOVE_TROLLEY);
+		removeInterrupteurButton.addActionListener(listener -> action = ActionEnum.REMOVE_INTERRUPTEUR);
+		removeMineButton.addActionListener(listener -> action = ActionEnum.REMOVE_MINE);
+		removeTeleporterButton.addActionListener(listener -> action = ActionEnum.REMOVE_TELEPORTER);
+		removeWallButton.addActionListener(listener -> action = ActionEnum.REMOVE_WALL);
+		removeStartPlayerButton.addActionListener(listener -> action = ActionEnum.REMOVE_START_PLAYER);
+		removeCustomBackgroundButton.addActionListener(listener -> action = ActionEnum.REMOVE_CUSTOM_BACKGROUND);
+		removeCustomForegroundButton.addActionListener(listener -> action = ActionEnum.REMOVE_CUSTOM_FOREGROUND);
 	}
 
 	/*************************************************************************************
@@ -1363,8 +1329,8 @@ public class EditorLauncher extends JFrame {
 		 * nextLevelIndexSpinner.setValue((Integer) levelService2.getNextLevelId());
 		 * showPlatformLevelCheckBox.setSelected(levelService2.isShowPlatform());
 		 */
-		spanishLevelNameIndexTextField.setText(levelService2.getLevelName("es"));
-		englishLevelNameIndexTextField.setText(levelService2.getLevelName("en"));
-		frenchLevelNameIndexTextField.setText(levelService2.getLevelName("fr"));
+//		spanishLevelNameIndexTextField.setText(levelService2.getLevelName("es"));
+//		englishLevelNameIndexTextField.setText(levelService2.getLevelName("en"));
+//		frenchLevelNameIndexTextField.setText(levelService2.getLevelName("fr"));
 	}
 }
