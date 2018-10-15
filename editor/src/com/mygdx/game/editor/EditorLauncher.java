@@ -3,6 +3,7 @@ package com.mygdx.game.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -24,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -71,15 +73,57 @@ public class EditorLauncher extends JFrame {
 	 ***************/
 	private JPanel eastPanel;
 	private GridLayout eastLayout;
-	private JPanel platformPanel;
 	private JPanel texturePanel;
-	private GridLayout textureLayout;
 	private Border textureBorder;
-	private Border platformBorder;
-	private ForegroundDrawPanel platformDrawPanel;
+	private GridLayout textureLayout;
+	private JPanel foregroundPanel;
+	private Border foregroundBorder;
+	private ForegroundDrawPanel foregroundDrawPanel;
 	private JPanel backgroundPanel;
 	private Border backgroundBorder;
 	private BackgroundDrawPanel backgroundDrawPanel;
+	/********************
+	 * LEVEL PROPERTIES
+	 *******************/
+	private JPanel panelParameters;
+	private SpringLayout panelParametersLayout;
+	private Border borderParameters;
+	private JPanel verticalPlatformIndexPanel;
+	private GridLayout verticalPlatformLayout;
+	private Border verticalPlatformIndexBorder;
+	private SpinnerNumberModel verticalPlatformIndexModel;
+	private JSpinner verticalPlatformIndexSpinner;
+	private JPanel backgroundIndexPanel;
+	private GridLayout backgroundLayout;
+	private Border backgroundIndexBorder;
+	private SpinnerNumberModel backgroundIndexModel;
+	private JSpinner backgroundIndexSpinner;
+	private JPanel horizontalPlatformIndexPanel;
+	private GridLayout horizontalPlatformLayout;
+	private Border horizontalPlatformIndexBorder;
+	private SpinnerNumberModel horizontalPlatformIndexModel;
+	private JSpinner horizontalPlatformIndexSpinner;
+	private JPanel nextLevelIndexPanel;
+	private GridLayout nextLevelIndexLayout;
+	private Border nextLevelIndexBorder;
+	private SpinnerNumberModel nextLevelIndexSpinnerModel;
+	private JSpinner nextLevelIndexSpinner;
+	private JPanel showPlatformLevelPanel;
+	private GridLayout showPlatformLevelLayout;
+	private Border showPlatformLevelBorder;
+	private JCheckBox showPlatformLevelCheckBox;
+	private JPanel frenchLevelNameIndexPanel;
+	private GridLayout frenchLevelNameIndexLayout;
+	private Border frenchLevelNameIndexBorder;
+	private JTextField frenchLevelNameIndexTextField;
+	private JPanel englishLevelNameIndexPanel;
+	private GridLayout englishLevelNameIndexLayout;
+	private Border englishLevelNameIndexBorder;
+	private JTextField englishLevelNameIndexTextField;
+	private JPanel spanishLevelNameIndexPanel;
+	private GridLayout spanishLevelNameIndexLayout;
+	private Border spanishLevelNameIndexBorder;
+	private JTextField spanishLevelNameIndexTextField;
 
 	/****************
 	 * DRAW
@@ -125,91 +169,31 @@ public class EditorLauncher extends JFrame {
 	/****************
 	 * ENNEMIES
 	 ***************/
-	private JPanel panelEnnemies;
-	private Border borderEnnemies;
-	private GridLayout layoutEnnemies;
-	private JButton ceriseButton;
-	private JButton orangeButton;
-	private JButton pommeButton;
-	private JButton bananeButton;
-	private JButton litchiButton;
-	private JButton fraiseButton;
-	private JButton framboiseButton;
-	private JButton citronButton;
-	private JButton abricotButton;
-	private JButton abricotnainsButton;
-	private JButton annanasButton;
-	private JButton kiwiButton;
-	private JButton pastequeButton;
-	private JButton pruneButton;
-	private JButton scieButton;
-	private JButton poireButton;
-	private JButton blobButton;
-
-	/****************
-	 * ELEMENTS
-	 ***************/
-	private JPanel panelElement;
-	private Border borderElement;
-	private GridLayout layoutElement;
-	private JButton selectButton;
-	private JButton deleteButton;
-	private JButton verticalPlatformButton;
-	private JButton horizontalPlatformButton;
-	private JButton vortexButton;
-	private JButton teleporterButton;
-	private JButton rayonButton;
-	private JButton pickButton;
-	private JButton doorButton;
-	private JButton lockButton;
-	private JButton eventButton;
-	private JButton startButton;
-	private JButton pointButton;
-	private JButton effectButton;
-	private JButton decorButton;
-	private JButton itemButton;
-
-	/********************
-	 * LEVEL PROPERTIES
-	 *******************/
-	private JPanel panelParameters;
-	private Border borderParameters;
-	private JPanel verticalPlatformIndexPanel;
-	private GridLayout verticalPlatformLayout;
-	private Border verticalPlatformIndexBorder;
-	private SpinnerNumberModel verticalPlatformIndexModel;
-	private JSpinner verticalPlatformIndexSpinner;
-	private JPanel backgroundIndexPanel;
-	private GridLayout backgroundLayout;
-	private Border backgroundIndexBorder;
-	private SpinnerNumberModel backgroundIndexModel;
-	private JSpinner backgroundIndexSpinner;
-	private JPanel horizontalPlatformIndexPanel;
-	private GridLayout horizontalPlatformLayout;
-	private Border horizontalPlatformIndexBorder;
-	private SpinnerNumberModel horizontalPlatformIndexModel;
-	private JSpinner horizontalPlatformIndexSpinner;
-	private JPanel nextLevelIndexPanel;
-	private GridLayout nextLevelIndexLayout;
-	private Border nextLevelIndexBorder;
-	private SpinnerNumberModel nextLevelIndexSpinnerModel;
-	private JSpinner nextLevelIndexSpinner;
-	private JPanel showPlatformLevelPanel;
-	private GridLayout showPlatformLevelLayout;
-	private Border showPlatformLevelBorder;
-	private JCheckBox showPlatformLevelCheckBox;
-	private JPanel frenchLevelNameIndexPanel;
-	private GridLayout frenchLevelNameIndexLayout;
-	private Border frenchLevelNameIndexBorder;
-	private JTextField frenchLevelNameIndexTextField;
-	private JPanel englishLevelNameIndexPanel;
-	private GridLayout englishLevelNameIndexLayout;
-	private Border englishLevelNameIndexBorder;
-	private JTextField englishLevelNameIndexTextField;
-	private JPanel spanishLevelNameIndexPanel;
-	private GridLayout spanishLevelNameIndexLayout;
-	private Border spanishLevelNameIndexBorder;
-	private JTextField spanishLevelNameIndexTextField;
+	private JPanel buttonPanel;
+	private Border buttonPanelBorder;
+	private GridLayout buttonPanelLayout;
+	private JButton addHoleButton;
+	private JButton removeHoleButton;
+	private JButton addRailButton;
+	private JButton removeRailButton;
+	private JButton addTrolleyButton;
+	private JButton removeTrolleyButton;
+	private JButton addInterrupteurButton;
+	private JButton removeInterrupteurButton;
+	private JButton addMineButton;
+	private JButton removeMineButton;
+	private JButton addTeleporterButton;
+	private JButton removeTeleporterButton;
+	private JButton addWallButton;
+	private JButton removeWallButton;
+	private JButton addStartPlayerButton;
+	private JButton removeStartPlayerButton;
+	private JButton addCustomBackgroundButton;
+	private JButton removeCustomBackgroundButton;
+	private JButton addCustomForegroundButton;
+	private JButton removeCustomForegroundButton;
+	
+	
 
 	public static void main(String[] args) {
 		String lang = "fr";
@@ -241,13 +225,12 @@ public class EditorLauncher extends JFrame {
 		this.getContentPane().setLayout(new BorderLayout());
 		initComponent();
 		initListeners();
-		buildWestPanel();
 		buildParameterPanelButton();
 		buildEastPanel();
 		buildDrawElement();
 		buildNavigationPanelButton();
-		buildElementPanelButton();
 		buildEnnemiePanelButton();
+		buildWestPanel();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setSize(EditorConstante.APP_SIZE_X, EditorConstante.APP_SIZE_Y);
@@ -270,17 +253,11 @@ public class EditorLauncher extends JFrame {
 		this.getContentPane().add(centerPanel, BorderLayout.CENTER);
 	}
 
-	private void buildWestPanel() {
-		westLayout.setRows(2);
-		westPanel.setLayout(westLayout);
-		this.getContentPane().add(westPanel, BorderLayout.WEST);
-	}
-
 	private void buildEastPanel() {
-		platformDrawPanel.setSize(EditorConstante.PANEL_PLATFORM_BACKGROUD_WIDTH, EditorConstante.SCREEN_SIZE_Y);
-		platformDrawPanel.setVisible(true);
-		platformPanel.setBorder(platformBorder);
-		platformPanel.add(platformDrawPanel);
+		foregroundDrawPanel.setSize(EditorConstante.PANEL_PLATFORM_BACKGROUD_WIDTH, EditorConstante.SCREEN_SIZE_Y);
+		foregroundDrawPanel.setVisible(true);
+		foregroundPanel.setBorder(foregroundBorder);
+		foregroundPanel.add(foregroundDrawPanel);
 		backgroundDrawPanel.setSize(EditorConstante.PANEL_PLATFORM_BACKGROUD_WIDTH, EditorConstante.SCREEN_SIZE_Y);
 		backgroundDrawPanel.setVisible(true);
 		backgroundPanel.setBorder(backgroundBorder);
@@ -288,7 +265,7 @@ public class EditorLauncher extends JFrame {
 		textureLayout.setRows(2);
 		texturePanel.setLayout(textureLayout);
 		texturePanel.setBorder(textureBorder);
-		texturePanel.add(platformPanel);
+		texturePanel.add(foregroundPanel);
 		texturePanel.add(backgroundPanel);
 		eastLayout.setColumns(2);
 		eastPanel.setLayout(eastLayout);
@@ -298,26 +275,30 @@ public class EditorLauncher extends JFrame {
 	}
 
 	private void buildEnnemiePanelButton() {
-		panelEnnemies.setBorder(borderEnnemies);
-		panelEnnemies.setLayout(layoutEnnemies);
-		panelEnnemies.add(ceriseButton);
-		panelEnnemies.add(orangeButton);
-		panelEnnemies.add(pommeButton);
-		panelEnnemies.add(bananeButton);
-		panelEnnemies.add(litchiButton);
-		panelEnnemies.add(fraiseButton);
-		panelEnnemies.add(framboiseButton);
-		panelEnnemies.add(citronButton);
-		panelEnnemies.add(abricotButton);
-		panelEnnemies.add(abricotnainsButton);
-		panelEnnemies.add(annanasButton);
-		panelEnnemies.add(kiwiButton);
-		panelEnnemies.add(pastequeButton);
-		panelEnnemies.add(pruneButton);
-		panelEnnemies.add(scieButton);
-		panelEnnemies.add(poireButton);
-		panelEnnemies.add(blobButton);
-		westPanel.add(panelEnnemies);
+		buttonPanel.setBorder(buttonPanelBorder);
+		buttonPanel.setLayout(buttonPanelLayout);
+		buttonPanel.add(addHoleButton);
+		buttonPanel.add(removeHoleButton);
+		buttonPanel.add(addRailButton);
+		buttonPanel.add(removeRailButton);
+		buttonPanel.add(addTrolleyButton);
+		buttonPanel.add(removeTrolleyButton);
+		buttonPanel.add(addInterrupteurButton);
+		buttonPanel.add(removeInterrupteurButton);
+		buttonPanel.add(addMineButton);
+		buttonPanel.add(removeMineButton);
+		buttonPanel.add(addTeleporterButton);
+		buttonPanel.add(removeTeleporterButton);
+		buttonPanel.add(addWallButton);
+		buttonPanel.add(removeWallButton);
+		buttonPanel.add(addStartPlayerButton);
+		buttonPanel.add(removeStartPlayerButton);
+	}
+
+	private void buildWestPanel() {
+		westLayout.setRows(2);
+		westPanel.setLayout(westLayout);
+		this.getContentPane().add(buttonPanel, BorderLayout.WEST);
 	}
 
 	private void buildNavigationPanelButton() {
@@ -345,28 +326,6 @@ public class EditorLauncher extends JFrame {
 		panelNavigation.add(currentTypePanel);
 		panelNavigation.add(currentLevelPanel);
 		this.getContentPane().add(panelNavigation, BorderLayout.NORTH);
-	}
-
-	private void buildElementPanelButton() {
-		panelElement.setBorder(borderElement);
-		panelElement.setLayout(layoutElement);
-		panelElement.add(selectButton);
-		panelElement.add(deleteButton);
-		panelElement.add(verticalPlatformButton);
-		panelElement.add(horizontalPlatformButton);
-		panelElement.add(vortexButton);
-		panelElement.add(teleporterButton);
-		panelElement.add(rayonButton);
-		panelElement.add(pickButton);
-		panelElement.add(doorButton);
-		panelElement.add(lockButton);
-		panelElement.add(eventButton);
-		panelElement.add(startButton);
-		panelElement.add(pointButton);
-		panelElement.add(effectButton);
-		panelElement.add(decorButton);
-		panelElement.add(itemButton);
-		westPanel.add(panelElement);
 	}
 
 	private void buildParameterPanelButton() {
@@ -406,22 +365,23 @@ public class EditorLauncher extends JFrame {
 		spanishLevelNameIndexPanel.setLayout(spanishLevelNameIndexLayout);
 		spanishLevelNameIndexPanel.add(spanishLevelNameIndexTextField);
 		panelParameters.setBorder(borderParameters);
-//		panelParameters.add(verticalPlatformIndexPanel);
-//		panelParameters.add(horizontalPlatformIndexPanel);
-//		panelParameters.add(backgroundIndexPanel);
-//		panelParameters.add(nextLevelIndexPanel);
-//		panelParameters.add(showPlatformLevelPanel);
-//		panelParameters.add(frenchLevelNameIndexPanel);
-//		panelParameters.add(englishLevelNameIndexPanel);
-//		panelParameters.add(spanishLevelNameIndexPanel);
+		// panelParameters.add(verticalPlatformIndexPanel);
+		// panelParameters.add(horizontalPlatformIndexPanel);
+		// panelParameters.add(backgroundIndexPanel);
+		// panelParameters.add(nextLevelIndexPanel);
+		// panelParameters.add(showPlatformLevelPanel);
+		// panelParameters.add(frenchLevelNameIndexPanel);
+		// panelParameters.add(englishLevelNameIndexPanel);
+		// panelParameters.add(spanishLevelNameIndexPanel);
 
 		JLabel enableLabel = new JLabel(message.getString("properties.platform.enable"), JLabel.TRAILING);
+		panelParameters.setLayout(panelParametersLayout);
 		JCheckBox enableCheckBox = new JCheckBox();
 		enableLabel.setLabelFor(enableCheckBox);
 		panelParameters.add(enableLabel);
 		panelParameters.add(enableCheckBox);
 
-		SpringUtilities.makeCompactGrid(panelParameters, 4, 2, 2, 2, 2, 2);
+		SpringUtilities.makeCompactGrid(panelParameters, 1, 2, 2, 2, 2, 2);
 	}
 
 	/*************************************************************************************
@@ -441,9 +401,9 @@ public class EditorLauncher extends JFrame {
 		texturePanel = new JPanel();
 		textureLayout = new GridLayout();
 		textureBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
-		platformPanel = new JPanel();
-		platformBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
-		platformDrawPanel = new ForegroundDrawPanel(spriteService);
+		foregroundPanel = new JPanel();
+		foregroundBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
+		foregroundDrawPanel = new ForegroundDrawPanel(spriteService);
 		backgroundPanel = new JPanel();
 		backgroundBorder = BorderFactory.createTitledBorder(message.getString("background.border"));
 		backgroundDrawPanel = new BackgroundDrawPanel(spriteService);
@@ -492,57 +452,37 @@ public class EditorLauncher extends JFrame {
 		saveFileChooser.setFileFilter(saveFileChooserFilter);
 
 		// ennemies
-		panelEnnemies = new JPanel();
-		borderEnnemies = BorderFactory.createTitledBorder(message.getString("ennemie.border"));
-		layoutEnnemies = new GridLayout();
-		layoutEnnemies.setColumns(EditorConstante.NB_COLUMN_ENNEMIE);
-		layoutEnnemies.setRows(EditorConstante.NB_ROW_ENNEMIE);
-		ceriseButton = new JButton(message.getString("ennemie.type.cerise"));
-		orangeButton = new JButton(message.getString("ennemie.type.orange"));
-		pommeButton = new JButton(message.getString("ennemie.type.pomme"));
-		litchiButton = new JButton(message.getString("ennemie.type.litchi"));
-		fraiseButton = new JButton(message.getString("ennemie.type.fraise"));
-		framboiseButton = new JButton(message.getString("ennemie.type.framboise"));
-		citronButton = new JButton(message.getString("ennemie.type.citron"));
-		abricotButton = new JButton(message.getString("ennemie.type.abricot"));
-		abricotnainsButton = new JButton(message.getString("ennemie.type.nainBricot"));
-		annanasButton = new JButton(message.getString("ennemie.type.annanas"));
-		kiwiButton = new JButton(message.getString("ennemie.type.kiwi"));
-		pastequeButton = new JButton(message.getString("ennemie.type.pasteque"));
-		pruneButton = new JButton(message.getString("ennemie.type.prune"));
-		scieButton = new JButton(message.getString("ennemie.type.scie"));
-		poireButton = new JButton(message.getString("ennemie.type.poire"));
-		blobButton = new JButton(message.getString("ennemie.type.blob"));
-		bananeButton = new JButton(message.getString("ennemie.type.banane"));
-
-		// element
-		panelElement = new JPanel();
-		borderElement = BorderFactory.createTitledBorder(message.getString("element.border"));
-		layoutElement = new GridLayout();
-		layoutElement.setColumns(EditorConstante.COL_ELEMENT_PANEL);
-		layoutElement.setRows(EditorConstante.ROW_ELEMENT_PANEL);
-		selectButton = new JButton(message.getString("element.button.select"));
-		deleteButton = new JButton(message.getString("element.button.delete"));
-		verticalPlatformButton = new JButton(message.getString("element.button.vpf"));
-		horizontalPlatformButton = new JButton(message.getString("element.button.hpf"));
-		vortexButton = new JButton(message.getString("element.button.vortex"));
-		teleporterButton = new JButton(message.getString("element.button.teleporter"));
-		rayonButton = new JButton(message.getString("element.button.rayon"));
-		pickButton = new JButton(message.getString("element.button.pick"));
-		doorButton = new JButton(message.getString("element.button.door"));
-		lockButton = new JButton(message.getString("element.button.lock"));
-		eventButton = new JButton(message.getString("element.button.event"));
-		startButton = new JButton(message.getString("element.button.startPlayer"));
-		pointButton = new JButton(message.getString("element.button.point"));
-		effectButton = new JButton(message.getString("element.button.effect"));
-		decorButton = new JButton(message.getString("element.button.decor"));
-		itemButton = new JButton(message.getString("element.button.item"));
+		buttonPanel = new JPanel();
+		buttonPanelBorder = BorderFactory.createTitledBorder(message.getString("editor.border.action"));
+		buttonPanelLayout = new GridLayout();
+		buttonPanelLayout.setColumns(EditorConstante.NB_COLUMN_ENNEMIE);
+		buttonPanelLayout.setRows(EditorConstante.NB_ROW_ENNEMIE);
+		addHoleButton = new JButton(message.getString("editor.button.hole.add"));
+		addRailButton = new JButton(message.getString("editor.button.rail.add"));
+		addTrolleyButton = new JButton(message.getString("editor.button.trolley.add"));
+		addInterrupteurButton = new JButton(message.getString("editor.button.interrupteur.add"));
+		addMineButton = new JButton(message.getString("editor.button.mine.add"));
+		addTeleporterButton = new JButton(message.getString("editor.button.teleporter.add"));
+		addWallButton = new JButton(message.getString("editor.button.wall.add"));
+		addStartPlayerButton = new JButton(message.getString("editor.button.startPlayer.add"));
+		
+		removeHoleButton = new JButton(message.getString("editor.button.hole.remove"));
+		removeRailButton = new JButton(message.getString("editor.button.rail.remove"));
+		removeTrolleyButton = new JButton(message.getString("editor.button.trolley.remove"));
+		removeInterrupteurButton = new JButton(message.getString("editor.button.interrupteur.remove"));
+		removeMineButton = new JButton(message.getString("editor.button.mine.remove"));
+		removeTeleporterButton = new JButton(message.getString("editor.button.teleporter.remove"));
+		removeWallButton = new JButton(message.getString("editor.button.wall.remove"));
+		removeStartPlayerButton = new JButton(message.getString("editor.button.startPlayer.remove"));
+		
+		
 
 		// properties
 		panelParameters = new JPanel();
-//		layoutParameters = new GridLayout();
-//		layoutParameters.setColumns(EditorConstante.NB_COLUMN_PARAMETER);
-//		layoutParameters.setRows(EditorConstante.NB_ROW_PARAMETER);
+		panelParametersLayout = new SpringLayout();
+		// layoutParameters = new GridLayout();
+		// layoutParameters.setColumns(EditorConstante.NB_COLUMN_PARAMETER);
+		// layoutParameters.setRows(EditorConstante.NB_ROW_PARAMETER);
 
 		borderParameters = BorderFactory.createTitledBorder("Properties");
 
@@ -645,98 +585,100 @@ public class EditorLauncher extends JFrame {
 		 * --- NAVIGATION ---
 		 * 
 		 *************************************************************************************/
-//		currentLevelIndex.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent e) {
-//				JSpinner text = (JSpinner) e.getSource();
-//				if (text.getValue() != null) {
-//					LOG.info("ChangeLevel : " + (Integer) text.getValue());
-//					levelService.setCurrentLevelIndex((Integer) text.getValue());
-//					loadPropertiesLevel();
-//					drawPanel.repaint();
-//				}
-//			}
-//		});
-//		currentLevelIndex.addKeyListener(new KeyListener() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				char vChar = e.getKeyChar();
-//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-//					e.consume();
-//					JSpinner text = (JSpinner) e.getSource();
-//					if (text.getValue() != null) {
-//						LOG.info("ChangeLevel : " + (Integer) text.getValue());
-//						levelService.setCurrentLevelIndex((Integer) text.getValue());
-//						loadPropertiesLevel();
-//						drawPanel.repaint();
-//					}
-//				}
-//			}
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent e) {
-//			}
-//		});
-//		currentTypeLevelIndex.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent e) {
-//				JSpinner text = (JSpinner) e.getSource();
-//				if (text.getValue() != null) {
-//					LOG.info("Change Type : " + (Integer) text.getValue());
-//					levelService.setCurrentTypeIndex((Integer) text.getValue());
-//					currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-//					centerPanel.updateUI();
-//					loadPropertiesLevel();
-//					drawPanel.repaint();
-//				}
-//			}
-//		});
-//		currentTypeLevelIndex.addKeyListener(new KeyListener() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				char vChar = e.getKeyChar();
-//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-//					e.consume();
-//					JSpinner text = (JSpinner) e.getSource();
-//					if (text.getValue() != null) {
-//						LOG.info("Change Type : " + (Integer) text.getValue());
-//						levelService.setCurrentTypeIndex((Integer) text.getValue());
-//						currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-//						centerPanel.updateUI();
-//						loadPropertiesLevel();
-//						drawPanel.repaint();
-//					}
-//				}
-//			}
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent e) {
-//			}
-//		});
-//		addLevel.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				levelService.createLevel();
-//				loadPropertiesLevel();
-//				repaint();
-//			}
-//		});
-//		delLevel.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				levelService.deleteLevel();
-//				loadPropertiesLevel();
-//				repaint();
-//			}
-//		});
+		// currentLevelIndex.addChangeListener(new ChangeListener() {
+		// @Override
+		// public void stateChanged(ChangeEvent e) {
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("ChangeLevel : " + (Integer) text.getValue());
+		// levelService.setCurrentLevelIndex((Integer) text.getValue());
+		// loadPropertiesLevel();
+		// drawPanel.repaint();
+		// }
+		// }
+		// });
+		// currentLevelIndex.addKeyListener(new KeyListener() {
+		// @Override
+		// public void keyTyped(KeyEvent e) {
+		// char vChar = e.getKeyChar();
+		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
+		// == KeyEvent.VK_DELETE))) {
+		// e.consume();
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("ChangeLevel : " + (Integer) text.getValue());
+		// levelService.setCurrentLevelIndex((Integer) text.getValue());
+		// loadPropertiesLevel();
+		// drawPanel.repaint();
+		// }
+		// }
+		// }
+		//
+		// @Override
+		// public void keyPressed(KeyEvent e) {
+		// }
+		//
+		// @Override
+		// public void keyReleased(KeyEvent e) {
+		// }
+		// });
+		// currentTypeLevelIndex.addChangeListener(new ChangeListener() {
+		// @Override
+		// public void stateChanged(ChangeEvent e) {
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("Change Type : " + (Integer) text.getValue());
+		// levelService.setCurrentTypeIndex((Integer) text.getValue());
+		// currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
+		// centerPanel.updateUI();
+		// loadPropertiesLevel();
+		// drawPanel.repaint();
+		// }
+		// }
+		// });
+		// currentTypeLevelIndex.addKeyListener(new KeyListener() {
+		// @Override
+		// public void keyTyped(KeyEvent e) {
+		// char vChar = e.getKeyChar();
+		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
+		// == KeyEvent.VK_DELETE))) {
+		// e.consume();
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("Change Type : " + (Integer) text.getValue());
+		// levelService.setCurrentTypeIndex((Integer) text.getValue());
+		// currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
+		// centerPanel.updateUI();
+		// loadPropertiesLevel();
+		// drawPanel.repaint();
+		// }
+		// }
+		// }
+		//
+		// @Override
+		// public void keyPressed(KeyEvent e) {
+		// }
+		//
+		// @Override
+		// public void keyReleased(KeyEvent e) {
+		// }
+		// });
+		// addLevel.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// levelService.createLevel();
+		// loadPropertiesLevel();
+		// repaint();
+		// }
+		// });
+		// delLevel.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// levelService.deleteLevel();
+		// loadPropertiesLevel();
+		// repaint();
+		// }
+		// });
 		openLoadFileChooser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -748,17 +690,17 @@ public class EditorLauncher extends JFrame {
 					} catch (IOException e1) {
 						System.out.println("Set save path failed !");
 					}
-//					try {
-//						levelService.putLevelFile(
-//								fileService.readJsonFile(new FileInputStream(new File(absolutePathFile))));
-//						currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-//						currentTypeLevelIndex.setValue((Integer) levelService.getCurrentTypeIndex());
-//						centerPanel.updateUI();
-//						loadPropertiesLevel();
-//						repaint();
-//					} catch (FileNotFoundException e) {
-//						LOG.error("", e.getMessage());
-//					}
+					// try {
+					// levelService.putLevelFile(
+					// fileService.readJsonFile(new FileInputStream(new File(absolutePathFile))));
+					// currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
+					// currentTypeLevelIndex.setValue((Integer) levelService.getCurrentTypeIndex());
+					// centerPanel.updateUI();
+					// loadPropertiesLevel();
+					// repaint();
+					// } catch (FileNotFoundException e) {
+					// LOG.error("", e.getMessage());
+					// }
 					System.out.println(
 							"You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());
 				}
@@ -768,16 +710,16 @@ public class EditorLauncher extends JFrame {
 		openSaveFileChooser.addActionListener(arg0 -> {
 			int returnVal = saveFileChooser.showSaveDialog(panelNavigation);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-//				LevelFile levelFile = levelService.getLevelFile();
-//				absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
-//				if (!absolutePathFile.endsWith(".json")) {
-//					absolutePathFile += ".json";
-//				}
-//				fileService.writeJson(levelFile, new File(absolutePathFile));
-//				centerPanel.updateUI();
-//				loadPropertiesLevel();
-//				repaint();
-//				System.out.println("You chose to open this file: " + absolutePathFile);
+				// LevelFile levelFile = levelService.getLevelFile();
+				// absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
+				// if (!absolutePathFile.endsWith(".json")) {
+				// absolutePathFile += ".json";
+				// }
+				// fileService.writeJson(levelFile, new File(absolutePathFile));
+				// centerPanel.updateUI();
+				// loadPropertiesLevel();
+				// repaint();
+				// System.out.println("You chose to open this file: " + absolutePathFile);
 			}
 		});
 		/*************************************************************************************
@@ -785,420 +727,427 @@ public class EditorLauncher extends JFrame {
 		 * --- PROPERTIES LEVEL ---
 		 * 
 		 *************************************************************************************/
-//
-//		horizontalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent e) {
-//				JSpinner text = (JSpinner) e.getSource();
-//				if (text.getValue() != null) {
-//					LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
-//					levelService.setHorizontalPlatformId((Integer) text.getValue());
-//					drawPanel.repaint();
-//				}
-//			}
-//		});
-//		horizontalPlatformIndexSpinner.addKeyListener(new KeyListener() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				char vChar = e.getKeyChar();
-//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-//					e.consume();
-//					JSpinner text = (JSpinner) e.getSource();
-//					if (text.getValue() != null) {
-//						LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
-//						levelService.setHorizontalPlatformId((Integer) text.getValue());
-//						drawPanel.repaint();
-//					}
-//				}
-//			}
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent e) {
-//			}
-//		});
-//
-//		verticalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent e) {
-//				JSpinner text = (JSpinner) e.getSource();
-//				if (text.getValue() != null) {
-//					LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
-//					levelService.setVerticalPlatformId((Integer) text.getValue());
-//					drawPanel.repaint();
-//				}
-//			}
-//		});
-//		verticalPlatformIndexSpinner.addKeyListener(new KeyListener() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				char vChar = e.getKeyChar();
-//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-//					e.consume();
-//					JSpinner text = (JSpinner) e.getSource();
-//					if (text.getValue() != null) {
-//						LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
-//						levelService.setVerticalPlatformId((Integer) text.getValue());
-//						drawPanel.repaint();
-//					}
-//				}
-//			}
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent e) {
-//			}
-//		});
-//
-//		backgroundIndexSpinner.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent e) {
-//				JSpinner text = (JSpinner) e.getSource();
-//				if (text.getValue() != null) {
-//					LOG.info("setBackgroundId : " + (Integer) text.getValue());
-//					levelService.setBackgroundId((Integer) text.getValue());
-//					drawPanel.repaint();
-//				}
-//			}
-//		});
-//		backgroundIndexSpinner.addKeyListener(new KeyListener() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				char vChar = e.getKeyChar();
-//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-//					e.consume();
-//					JSpinner text = (JSpinner) e.getSource();
-//					if (text.getValue() != null) {
-//						LOG.info("setBackgroundId : " + (Integer) text.getValue());
-//						levelService.setBackgroundId((Integer) text.getValue());
-//						drawPanel.repaint();
-//					}
-//				}
-//			}
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent e) {
-//			}
-//		});
-//
-//		nextLevelIndexSpinner.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent e) {
-//				JSpinner text = (JSpinner) e.getSource();
-//				if (text.getValue() != null) {
-//					levelService.setNextLevelId((Integer) text.getValue());
-//					drawPanel.repaint();
-//				}
-//				LOG.info("NextLevel change : " + text.getValue());
-//			}
-//		});
-//		nextLevelIndexSpinner.addKeyListener(new KeyListener() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				char vChar = e.getKeyChar();
-//				if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar == KeyEvent.VK_DELETE))) {
-//					e.consume();
-//				}
-//			}
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent e) {
-//			}
-//		});
-//
-//		showPlatformLevelCheckBox.addItemListener(new ItemListener() {
-//			public void itemStateChanged(ItemEvent e) {
-//				levelService.setShowPlatform(showPlatformLevelCheckBox.isSelected());
-//			}
-//		});
-//
-//		englishLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
-//			private void updateData() {
-//				levelService.setLevelName("en", englishLevelNameIndexTextField.getText());
-//			}
-//
-//			@Override
-//			public void changedUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//			@Override
-//			public void insertUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//			@Override
-//			public void removeUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//		});
-//		frenchLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
-//			private void updateData() {
-//				levelService.setLevelName("fr", frenchLevelNameIndexTextField.getText());
-//			}
-//
-//			@Override
-//			public void changedUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//			@Override
-//			public void insertUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//			@Override
-//			public void removeUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//		});
-//		spanishLevelNameIndexTextField.getDocument().addDocumentListener(new DocumentListener() {
-//			private void updateData() {
-//				levelService.setLevelName("es", spanishLevelNameIndexTextField.getText());
-//			}
-//
-//			@Override
-//			public void changedUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//			@Override
-//			public void insertUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//			@Override
-//			public void removeUpdate(DocumentEvent e) {
-//				updateData();
-//			}
-//
-//		});
-//
-//		/*************************************************************************************
-//		 *
-//		 * --- ENNEMIE ---
-//		 * 
-//		 *************************************************************************************/
-//		ceriseButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_CERISE;
-//			}
-//		});
-//		orangeButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_ORANGE;
-//			}
-//		});
-//		pommeButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_POMME;
-//			}
-//		});
-//		bananeButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_BANANE;
-//			}
-//		});
-//		litchiButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_LITCHI;
-//			}
-//		});
-//		fraiseButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_FRAISE;
-//			}
-//		});
-//		framboiseButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_FRAMBOISE;
-//			}
-//		});
-//		citronButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_CITRON;
-//			}
-//		});
-//		abricotButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_ABRICOT;
-//			}
-//		});
-//		abricotnainsButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_ABRICOT_NAIN;
-//			}
-//		});
-//		annanasButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_ANANAS;
-//			}
-//		});
-//		kiwiButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_KIWI;
-//			}
-//		});
-//		pastequeButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_PASTEQUE;
-//			}
-//		});
-//		pruneButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_PRUNE;
-//			}
-//		});
-//		scieButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_SCIE;
-//			}
-//		});
-//		poireButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_POIRE;
-//			}
-//		});
-//		blobButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_BLOB;
-//			}
-//		});
-//
-//		/*************************************************************************************
-//		 *
-//		 * --- ELEMENT ---
-//		 * 
-//		 *************************************************************************************/
-//		selectButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.SELECT;
-//			}
-//		});
-//		deleteButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.DELETE;
-//			}
-//		});
-//		verticalPlatformButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.DRAW_VERTICAL_PLATFORM;
-//			}
-//		});
-//		horizontalPlatformButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.DRAW_HORIZONTAL_PLATFORM;
-//			}
-//		});
-//		vortexButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_VORTEX;
-//			}
-//		});
-//		teleporterButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_TELEPORTER;
-//			}
-//		});
-//		rayonButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_RAYON;
-//			}
-//		});
-//		pickButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_PICK;
-//			}
-//		});
-//		lockButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_LOCK;
-//			}
-//		});
-//		doorButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_DOOR;
-//			}
-//		});
-//		eventButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_EVENT;
-//			}
-//		});
-//		startButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_PLAYER_SPAWN;
-//			}
-//		});
-//		pointButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_OBJECT_POINT;
-//			}
-//		});
-//		effectButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_OBJECT_EFFECT;
-//			}
-//		});
-//		decorButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_DECOR;
-//			}
-//		});
-//		itemButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				action = ActionEnum.ADD_ITEM;
-//			}
-//		});
+		//
+		// horizontalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
+		// @Override
+		// public void stateChanged(ChangeEvent e) {
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
+		// levelService.setHorizontalPlatformId((Integer) text.getValue());
+		// drawPanel.repaint();
+		// }
+		// }
+		// });
+		// horizontalPlatformIndexSpinner.addKeyListener(new KeyListener() {
+		// @Override
+		// public void keyTyped(KeyEvent e) {
+		// char vChar = e.getKeyChar();
+		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
+		// == KeyEvent.VK_DELETE))) {
+		// e.consume();
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
+		// levelService.setHorizontalPlatformId((Integer) text.getValue());
+		// drawPanel.repaint();
+		// }
+		// }
+		// }
+		//
+		// @Override
+		// public void keyPressed(KeyEvent e) {
+		// }
+		//
+		// @Override
+		// public void keyReleased(KeyEvent e) {
+		// }
+		// });
+		//
+		// verticalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
+		// @Override
+		// public void stateChanged(ChangeEvent e) {
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
+		// levelService.setVerticalPlatformId((Integer) text.getValue());
+		// drawPanel.repaint();
+		// }
+		// }
+		// });
+		// verticalPlatformIndexSpinner.addKeyListener(new KeyListener() {
+		// @Override
+		// public void keyTyped(KeyEvent e) {
+		// char vChar = e.getKeyChar();
+		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
+		// == KeyEvent.VK_DELETE))) {
+		// e.consume();
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
+		// levelService.setVerticalPlatformId((Integer) text.getValue());
+		// drawPanel.repaint();
+		// }
+		// }
+		// }
+		//
+		// @Override
+		// public void keyPressed(KeyEvent e) {
+		// }
+		//
+		// @Override
+		// public void keyReleased(KeyEvent e) {
+		// }
+		// });
+		//
+		// backgroundIndexSpinner.addChangeListener(new ChangeListener() {
+		// @Override
+		// public void stateChanged(ChangeEvent e) {
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("setBackgroundId : " + (Integer) text.getValue());
+		// levelService.setBackgroundId((Integer) text.getValue());
+		// drawPanel.repaint();
+		// }
+		// }
+		// });
+		// backgroundIndexSpinner.addKeyListener(new KeyListener() {
+		// @Override
+		// public void keyTyped(KeyEvent e) {
+		// char vChar = e.getKeyChar();
+		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
+		// == KeyEvent.VK_DELETE))) {
+		// e.consume();
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// LOG.info("setBackgroundId : " + (Integer) text.getValue());
+		// levelService.setBackgroundId((Integer) text.getValue());
+		// drawPanel.repaint();
+		// }
+		// }
+		// }
+		//
+		// @Override
+		// public void keyPressed(KeyEvent e) {
+		// }
+		//
+		// @Override
+		// public void keyReleased(KeyEvent e) {
+		// }
+		// });
+		//
+		// nextLevelIndexSpinner.addChangeListener(new ChangeListener() {
+		// @Override
+		// public void stateChanged(ChangeEvent e) {
+		// JSpinner text = (JSpinner) e.getSource();
+		// if (text.getValue() != null) {
+		// levelService.setNextLevelId((Integer) text.getValue());
+		// drawPanel.repaint();
+		// }
+		// LOG.info("NextLevel change : " + text.getValue());
+		// }
+		// });
+		// nextLevelIndexSpinner.addKeyListener(new KeyListener() {
+		// @Override
+		// public void keyTyped(KeyEvent e) {
+		// char vChar = e.getKeyChar();
+		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
+		// == KeyEvent.VK_DELETE))) {
+		// e.consume();
+		// }
+		// }
+		//
+		// @Override
+		// public void keyPressed(KeyEvent e) {
+		// }
+		//
+		// @Override
+		// public void keyReleased(KeyEvent e) {
+		// }
+		// });
+		//
+		// showPlatformLevelCheckBox.addItemListener(new ItemListener() {
+		// public void itemStateChanged(ItemEvent e) {
+		// levelService.setShowPlatform(showPlatformLevelCheckBox.isSelected());
+		// }
+		// });
+		//
+		// englishLevelNameIndexTextField.getDocument().addDocumentListener(new
+		// DocumentListener() {
+		// private void updateData() {
+		// levelService.setLevelName("en", englishLevelNameIndexTextField.getText());
+		// }
+		//
+		// @Override
+		// public void changedUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// @Override
+		// public void insertUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// @Override
+		// public void removeUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// });
+		// frenchLevelNameIndexTextField.getDocument().addDocumentListener(new
+		// DocumentListener() {
+		// private void updateData() {
+		// levelService.setLevelName("fr", frenchLevelNameIndexTextField.getText());
+		// }
+		//
+		// @Override
+		// public void changedUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// @Override
+		// public void insertUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// @Override
+		// public void removeUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// });
+		// spanishLevelNameIndexTextField.getDocument().addDocumentListener(new
+		// DocumentListener() {
+		// private void updateData() {
+		// levelService.setLevelName("es", spanishLevelNameIndexTextField.getText());
+		// }
+		//
+		// @Override
+		// public void changedUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// @Override
+		// public void insertUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// @Override
+		// public void removeUpdate(DocumentEvent e) {
+		// updateData();
+		// }
+		//
+		// });
+		//
+		// /*************************************************************************************
+		// *
+		// * --- ENNEMIE ---
+		// *
+		// *************************************************************************************/
+		// ceriseButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_CERISE;
+		// }
+		// });
+		// orangeButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_ORANGE;
+		// }
+		// });
+		// pommeButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_POMME;
+		// }
+		// });
+		// bananeButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_BANANE;
+		// }
+		// });
+		// litchiButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_LITCHI;
+		// }
+		// });
+		// fraiseButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_FRAISE;
+		// }
+		// });
+		// framboiseButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_FRAMBOISE;
+		// }
+		// });
+		// citronButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_CITRON;
+		// }
+		// });
+		// abricotButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_ABRICOT;
+		// }
+		// });
+		// abricotnainsButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_ABRICOT_NAIN;
+		// }
+		// });
+		// annanasButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_ANANAS;
+		// }
+		// });
+		// kiwiButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_KIWI;
+		// }
+		// });
+		// pastequeButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_PASTEQUE;
+		// }
+		// });
+		// pruneButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_PRUNE;
+		// }
+		// });
+		// scieButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_SCIE;
+		// }
+		// });
+		// poireButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_POIRE;
+		// }
+		// });
+		// blobButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_BLOB;
+		// }
+		// });
+		//
+		// /*************************************************************************************
+		// *
+		// * --- ELEMENT ---
+		// *
+		// *************************************************************************************/
+		// selectButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.SELECT;
+		// }
+		// });
+		// deleteButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.DELETE;
+		// }
+		// });
+		// verticalPlatformButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.DRAW_VERTICAL_PLATFORM;
+		// }
+		// });
+		// horizontalPlatformButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.DRAW_HORIZONTAL_PLATFORM;
+		// }
+		// });
+		// vortexButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_VORTEX;
+		// }
+		// });
+		// teleporterButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_TELEPORTER;
+		// }
+		// });
+		// rayonButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_RAYON;
+		// }
+		// });
+		// pickButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_PICK;
+		// }
+		// });
+		// lockButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_LOCK;
+		// }
+		// });
+		// doorButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_DOOR;
+		// }
+		// });
+		// eventButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_EVENT;
+		// }
+		// });
+		// startButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_PLAYER_SPAWN;
+		// }
+		// });
+		// pointButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_OBJECT_POINT;
+		// }
+		// });
+		// effectButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_OBJECT_EFFECT;
+		// }
+		// });
+		// decorButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_DECOR;
+		// }
+		// });
+		// itemButton.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// action = ActionEnum.ADD_ITEM;
+		// }
+		// });
 	}
 
 	/*************************************************************************************
