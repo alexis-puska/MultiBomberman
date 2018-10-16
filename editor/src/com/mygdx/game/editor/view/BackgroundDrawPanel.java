@@ -14,9 +14,6 @@ import com.mygdx.game.editor.service.SpriteService;
 public class BackgroundDrawPanel extends Canvas {
 
 	private static final long serialVersionUID = -617780220828076518L;
-	private static final int HEIGHT = 16;
-	private static final int WIDTH = 18;
-	private static final int NB_COLUMN = 16;
 
 	private SpriteService spriteService;
 
@@ -40,10 +37,11 @@ public class BackgroundDrawPanel extends Canvas {
 		int idxRow = 0;
 		while (idx < nb) {
 			BufferedImage pf = this.spriteService.getSprite(SpriteEnum.LEVEL, idx);
-			g2.drawImage(pf.getSubimage(0, 0, WIDTH, HEIGHT), idxColumn * WIDTH, idxRow * HEIGHT, null);
+			g2.drawImage(pf.getSubimage(0, 0, EditorConstante.GRID_SIZE_X, EditorConstante.GRID_SIZE_Y),
+					idxColumn * EditorConstante.GRID_SIZE_X, idxRow * EditorConstante.GRID_SIZE_Y, null);
 			idxColumn++;
 			idx++;
-			if (idx != 0 && idx % NB_COLUMN == 0) {
+			if (idx != 0 && idx % EditorConstante.NB_COLUMN_DRAW_BACKGROUND == 0) {
 				idxRow++;
 				idxColumn = 0;
 			}

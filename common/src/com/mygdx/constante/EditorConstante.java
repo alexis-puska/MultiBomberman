@@ -3,34 +3,19 @@ package com.mygdx.constante;
 public class EditorConstante {
 	public static final int APP_SIZE_X = 1800;
     public static final int APP_SIZE_Y = 950;
-    public static final int EVENT_FRAME_TRIGGER_PANEL_WIDTH = 300;
-    public static final int PANEL_PLATFORM_BACKGROUD_WIDTH = 300;
     public static final int SCREEN_SIZE_X = 630;
     public static final int SCREEN_SIZE_Y = 336;
+    public static final int EAST_PANEL_WIDTH = 300;
     public static final int GRID_SIZE_X = 18;
     public static final int GRID_SIZE_Y = 16;
-    public static final int NB_COLUMN_NAVIGATION = 3;
-    public static final int NB_ROW_NAVIGATION = 1;
-    public static final int NB_COLUMN_ENNEMIE = 2;
-    public static final int NB_ROW_ENNEMIE = 10;
-    public static final int ROW_ELEMENT_PANEL = 9;
-    public static final int COL_ELEMENT_PANEL = 2;
-    public static final int NB_COLUMN_PARAMETER = 2;
-    public static final int NB_ROW_PARAMETER = 4;
-    public static final int NB_COLUMN_CURRENT_LEVEL = 10;
-    public static final int NB_ROW_CURRENT_LEVEL = 1;
-    public static final int NB_COLUMN_CURRENT_TYPE_LEVEL = 10;
-    public static final int NB_ROW_CURRENT_TYPE_LEVEL = 1;
-    public static final int NB_COLUMN_FILE = 10;
-    public static final int NB_ROW_FILE = 1;
-    public static final int MIN_BACKGROUND_ID = 0;
-    public static final int MAX_BACKGROUND_ID = 27;
-    public static final int MIN_PLATFORM_ID = 0;
-    public static final int MAX_PLATFORM_ID = 61;
-    public static final int MIN_TYPE_ID = 0;
-    public static final int MAX_TYPE_ID = 3;
-    public static final int MIN_LEVEL_ID = 0;
+	public static final int NB_COLUMN_ACTION = 2;
+	public static final int NB_ROW_ACTION = 10;
+	public static final int NB_COLUMN_DRAW_BACKGROUND = 16;
+	public static final int NB_COLUMN_NAVIGATION = 3;
+	public static final int NB_ROW_NAVIGATION = 1;
 	
+	
+    
     
     //EVENT
         

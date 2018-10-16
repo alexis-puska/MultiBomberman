@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import com.mygdx.constante.EditorConstante;
+import com.mygdx.dto.level.WallDTO;
 import com.mygdx.dto.level.common.PositionableDTO;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.editor.service.LevelService2;
@@ -38,7 +39,8 @@ public class DrawPanel extends Canvas {
 	/**
 	 * Draw the level if exists, draw message if level doesn't exists
 	 * 
-	 * @param g2 graphics
+	 * @param g2
+	 *            graphics
 	 */
 	public void paint(Graphics g) {
 		BufferStrategy bs = getBufferStrategy();
@@ -49,6 +51,7 @@ public class DrawPanel extends Canvas {
 		Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
 		if (levelService.getCurrentLevel() != null) {
 			drawBackground(g2);
+			drawWall(g2);
 			drawStartPlayer(g2);
 			drawGrid(g2);
 			g2.clearRect(630, 0, 200, 800);
@@ -88,7 +91,8 @@ public class DrawPanel extends Canvas {
 	/**
 	 * Draw the level
 	 * 
-	 * @param g2 graphics2D
+	 * @param g2
+	 *            graphics2D
 	 */
 	private void drawGrid(Graphics2D g2) {
 
@@ -135,4 +139,14 @@ public class DrawPanel extends Canvas {
 		}
 	}
 
+	private void drawWall(Graphics2D g2) {
+		BufferedImage bf = spriteService.getSprite(SpriteEnum.LEVEL,
+				levelService.getCurrentVariante().getDefaultWall().getIndex());
+		List<WallDTO> wall = levelService.getCurrentVariante().getWall();
+		if (wall != null) {
+			wall.stream().forEach(w -> {
+				g2.drawImage(bf, null, w.getX() * bf.getWidth(), w.getY() * bf.getHeight());
+			});
+		}
+	}
 }

@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -30,6 +29,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
@@ -128,6 +129,9 @@ public class EditorLauncher extends JFrame {
 	private JLabel defaultBrickAnimationLabel;
 	private JComboBox<String> defaultBrickAnimationComboBox;
 
+	/*********************************
+	 * --- BONUS ---
+	 *********************************/
 	private JTextField bonus1TextField;
 	private JLabel bonus1Label;
 	private JTextField bonus2TextField;
@@ -240,17 +244,13 @@ public class EditorLauncher extends JFrame {
 	}
 
 	public EditorLauncher(String lang) {
+		this.action = ActionEnum.NONE;
 		this.locale = Locale.forLanguageTag(lang);
 		this.message = ResourceBundle.getBundle("i18n/Message", locale);
 		LOG.info("message {} : {}", lang, this.message.getString("editor.border.bonus"));
 		LOG.info("Welcome in lr-inthewell-editor App !");
 		this.spriteService = new SpriteService();
-
 		this.levelService2 = new LevelService2();
-		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-		InputStream in = classloader.getResourceAsStream("json/levels.json");
-		levelService2.load(in);
-		this.action = ActionEnum.NONE;
 	}
 
 	private void Launch() {
@@ -271,12 +271,9 @@ public class EditorLauncher extends JFrame {
 		this.setVisible(true);
 	}
 
-	/*************************************************************************************
-	 * 
+	/**************************
 	 * --- BUILD FUNCTION ---
-	 * 
-	 *************************************************************************************/
-
+	 **************************/
 	private void buildDrawElement() {
 		drawPanel.setSize(EditorConstante.SCREEN_SIZE_X, EditorConstante.SCREEN_SIZE_Y);
 		drawPanel.setVisible(true);
@@ -287,11 +284,11 @@ public class EditorLauncher extends JFrame {
 	}
 
 	private void buildEastPanel() {
-		foregroundDrawPanel.setSize(EditorConstante.PANEL_PLATFORM_BACKGROUD_WIDTH, EditorConstante.SCREEN_SIZE_Y);
+		foregroundDrawPanel.setSize(EditorConstante.EAST_PANEL_WIDTH, EditorConstante.SCREEN_SIZE_Y);
 		foregroundDrawPanel.setVisible(true);
 		foregroundPanel.setBorder(foregroundPanelBorder);
 		foregroundPanel.add(foregroundDrawPanel);
-		backgroundDrawPanel.setSize(EditorConstante.PANEL_PLATFORM_BACKGROUD_WIDTH, EditorConstante.SCREEN_SIZE_Y);
+		backgroundDrawPanel.setSize(EditorConstante.EAST_PANEL_WIDTH, EditorConstante.SCREEN_SIZE_Y);
 		backgroundDrawPanel.setVisible(true);
 		backgroundPanel.setBorder(backgroundPanelBorder);
 		backgroundPanel.add(backgroundDrawPanel);
@@ -528,8 +525,8 @@ public class EditorLauncher extends JFrame {
 		buttonPanel = new JPanel();
 		buttonPanelBorder = BorderFactory.createTitledBorder(message.getString("editor.border.action"));
 		buttonPanelLayout = new GridLayout();
-		buttonPanelLayout.setColumns(EditorConstante.NB_COLUMN_ENNEMIE);
-		buttonPanelLayout.setRows(EditorConstante.NB_ROW_ENNEMIE);
+		buttonPanelLayout.setColumns(EditorConstante.NB_COLUMN_ACTION);
+		buttonPanelLayout.setRows(EditorConstante.NB_ROW_ACTION);
 		addHoleButton = new JButton(message.getString("editor.button.hole.add"));
 		addRailButton = new JButton(message.getString("editor.button.rail.add"));
 		addTrolleyButton = new JButton(message.getString("editor.button.trolley.add"));
@@ -592,7 +589,7 @@ public class EditorLauncher extends JFrame {
 		descriptionEnLabel = new JLabel("description en");
 		descriptionEnTextField = new JTextField();
 		shadowLabel = new JLabel("shadow value");
-		shadowSpinnerModel = new SpinnerNumberModel(0.0, 0.0, 1.0, 0.1);
+		shadowSpinnerModel = new SpinnerNumberModel(new Float(0.0), new Float(0.0), new Float(1.0), new Float(0.05));
 		shadowSpinner = new JSpinner(shadowSpinnerModel);
 		bombeLabel = new JLabel("nb bombe");
 		bombeSpinnerModel = new SpinnerNumberModel(2, 1, 6, 1);
@@ -646,12 +643,51 @@ public class EditorLauncher extends JFrame {
 	}
 
 	private void initListeners() {
+		/***********************
+		 * --- NAVIGATION ---
+		 ***********************/
+		openLoadFileChooser.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int returnVal = loadFileChooser.showOpenDialog(panelNavigation);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					absolutePathFile = loadFileChooser.getSelectedFile().getAbsolutePath();
+					try {
+						saveFileChooser.setCurrentDirectory(loadFileChooser.getSelectedFile().getCanonicalFile());
 
-		/*************************************************************************************
-		 *
+						levelService2.load(new FileInputStream(new File(absolutePathFile)));
+						centerPanel.updateUI();
+						loadPropertiesLevel();
+						repaint();
+					} catch (FileNotFoundException e) {
+						LOG.error("", e.getMessage());
+					} catch (IOException e1) {
+						System.out.println("Set save path failed !");
+					}
+					System.out.println(
+							"You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());
+				}
+			}
+		});
+
+		openSaveFileChooser.addActionListener(arg0 -> {
+			int returnVal = saveFileChooser.showSaveDialog(panelNavigation);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
+				if (!absolutePathFile.endsWith(".json")) {
+					absolutePathFile += ".json";
+				}
+				levelService2.save(new File(absolutePathFile));
+				centerPanel.updateUI();
+				loadPropertiesLevel();
+				repaint();
+				System.out.println("You chose to open this file: " + absolutePathFile);
+			}
+		});
+
+		/***********************
 		 * --- DRAW ---
-		 * 
-		 *************************************************************************************/
+		 ***********************/
 		drawPanel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -693,365 +729,281 @@ public class EditorLauncher extends JFrame {
 			}
 		});
 
-		/*************************************************************************************
-		 *
-		 * --- NAVIGATION ---
-		 * 
-		 *************************************************************************************/
-		// currentLevelIndex.addChangeListener(new ChangeListener() {
-		// @Override
-		// public void stateChanged(ChangeEvent e) {
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("ChangeLevel : " + (Integer) text.getValue());
-		// levelService.setCurrentLevelIndex((Integer) text.getValue());
-		// loadPropertiesLevel();
-		// drawPanel.repaint();
-		// }
-		// }
-		// });
-		// currentLevelIndex.addKeyListener(new KeyListener() {
-		// @Override
-		// public void keyTyped(KeyEvent e) {
-		// char vChar = e.getKeyChar();
-		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
-		// == KeyEvent.VK_DELETE))) {
-		// e.consume();
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("ChangeLevel : " + (Integer) text.getValue());
-		// levelService.setCurrentLevelIndex((Integer) text.getValue());
-		// loadPropertiesLevel();
-		// drawPanel.repaint();
-		// }
-		// }
-		// }
-		//
-		// @Override
-		// public void keyPressed(KeyEvent e) {
-		// }
-		//
-		// @Override
-		// public void keyReleased(KeyEvent e) {
-		// }
-		// });
-		// currentTypeLevelIndex.addChangeListener(new ChangeListener() {
-		// @Override
-		// public void stateChanged(ChangeEvent e) {
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("Change Type : " + (Integer) text.getValue());
-		// levelService.setCurrentTypeIndex((Integer) text.getValue());
-		// currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-		// centerPanel.updateUI();
-		// loadPropertiesLevel();
-		// drawPanel.repaint();
-		// }
-		// }
-		// });
-		// currentTypeLevelIndex.addKeyListener(new KeyListener() {
-		// @Override
-		// public void keyTyped(KeyEvent e) {
-		// char vChar = e.getKeyChar();
-		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
-		// == KeyEvent.VK_DELETE))) {
-		// e.consume();
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("Change Type : " + (Integer) text.getValue());
-		// levelService.setCurrentTypeIndex((Integer) text.getValue());
-		// currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-		// centerPanel.updateUI();
-		// loadPropertiesLevel();
-		// drawPanel.repaint();
-		// }
-		// }
-		// }
-		//
-		// @Override
-		// public void keyPressed(KeyEvent e) {
-		// }
-		//
-		// @Override
-		// public void keyReleased(KeyEvent e) {
-		// }
-		// });
-		// addLevel.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// levelService.createLevel();
-		// loadPropertiesLevel();
-		// repaint();
-		// }
-		// });
-		// delLevel.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// levelService.deleteLevel();
-		// loadPropertiesLevel();
-		// repaint();
-		// }
-		// });
-		openLoadFileChooser.addActionListener(new ActionListener() {
+		backgroundDrawPanel.addMouseListener(new MouseListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int returnVal = loadFileChooser.showOpenDialog(panelNavigation);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					absolutePathFile = loadFileChooser.getSelectedFile().getAbsolutePath();
-					try {
-						saveFileChooser.setCurrentDirectory(loadFileChooser.getSelectedFile().getCanonicalFile());
-
-						levelService2.load(new FileInputStream(new File(absolutePathFile)));
-						centerPanel.updateUI();
-						loadPropertiesLevel();
-						repaint();
-					} catch (FileNotFoundException e) {
-						LOG.error("", e.getMessage());
-					} catch (IOException e1) {
-						System.out.println("Set save path failed !");
-					}
-					System.out.println(
-							"You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());
+			public void mouseClicked(MouseEvent e) {
+				if (action == ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE) {
+					int caseX = e.getX() / EditorConstante.GRID_SIZE_X;
+					int caseY = e.getY() / EditorConstante.GRID_SIZE_Y;
+					levelService2
+							.setDefaultBackgroungTexture((caseY * EditorConstante.NB_COLUMN_DRAW_BACKGROUND) + caseX);
+					repaint();
 				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
 			}
 		});
 
-		openSaveFileChooser.addActionListener(arg0 -> {
-			int returnVal = saveFileChooser.showSaveDialog(panelNavigation);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
-				if (!absolutePathFile.endsWith(".json")) {
-					absolutePathFile += ".json";
+		backgroundDrawPanel.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (action == ActionEnum.SELECT_DEFAULT_WALL_TEXTURE) {
+					int caseX = e.getX() / EditorConstante.GRID_SIZE_X;
+					int caseY = e.getY() / EditorConstante.GRID_SIZE_Y;
+					levelService2.setDefaultWallTexture((caseY * EditorConstante.NB_COLUMN_DRAW_BACKGROUND) + caseX);
+					repaint();
 				}
-				levelService2.save(new File(absolutePathFile));
-				centerPanel.updateUI();
-				loadPropertiesLevel();
-				repaint();
-				System.out.println("You chose to open this file: " + absolutePathFile);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
 			}
 		});
-		/*************************************************************************************
-		 *
+
+		/***********************
+		 * --- NAVIGATION ---
+		 ***********************/
+		nextLevel.addActionListener(action -> {
+			levelService2.nextLevel();
+			loadPropertiesLevel();
+			repaint();
+		});
+		previousLevel.addActionListener(action -> {
+			levelService2.previousLevel();
+			loadPropertiesLevel();
+			repaint();
+		});
+		addLevel.addActionListener(action -> {
+			levelService2.addLevel();
+			loadPropertiesLevel();
+			repaint();
+		});
+		delLevel.addActionListener(action -> {
+			levelService2.deleteLevel();
+			loadPropertiesLevel();
+			repaint();
+		});
+		nextVariante.addActionListener(action -> {
+			levelService2.nextVariante();
+			loadPropertiesLevel();
+			repaint();
+		});
+		previousVariante.addActionListener(action -> {
+			levelService2.previousVariante();
+			loadPropertiesLevel();
+			repaint();
+		});
+		addVariante.addActionListener(action -> {
+			levelService2.addVariante();
+			loadPropertiesLevel();
+			repaint();
+		});
+		delVariante.addActionListener(action -> {
+			levelService2.deleteVariante();
+			loadPropertiesLevel();
+			repaint();
+		});
+
+		/***************************
 		 * --- PROPERTIES LEVEL ---
-		 * 
-		 *************************************************************************************/
-		//
-		// horizontalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
-		// @Override
-		// public void stateChanged(ChangeEvent e) {
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
-		// levelService.setHorizontalPlatformId((Integer) text.getValue());
-		// drawPanel.repaint();
-		// }
-		// }
-		// });
-		// horizontalPlatformIndexSpinner.addKeyListener(new KeyListener() {
-		// @Override
-		// public void keyTyped(KeyEvent e) {
-		// char vChar = e.getKeyChar();
-		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
-		// == KeyEvent.VK_DELETE))) {
-		// e.consume();
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("setHorizontalPlatformId : " + (Integer) text.getValue());
-		// levelService.setHorizontalPlatformId((Integer) text.getValue());
-		// drawPanel.repaint();
-		// }
-		// }
-		// }
-		//
-		// @Override
-		// public void keyPressed(KeyEvent e) {
-		// }
-		//
-		// @Override
-		// public void keyReleased(KeyEvent e) {
-		// }
-		// });
-		//
-		// verticalPlatformIndexSpinner.addChangeListener(new ChangeListener() {
-		// @Override
-		// public void stateChanged(ChangeEvent e) {
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
-		// levelService.setVerticalPlatformId((Integer) text.getValue());
-		// drawPanel.repaint();
-		// }
-		// }
-		// });
-		// verticalPlatformIndexSpinner.addKeyListener(new KeyListener() {
-		// @Override
-		// public void keyTyped(KeyEvent e) {
-		// char vChar = e.getKeyChar();
-		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
-		// == KeyEvent.VK_DELETE))) {
-		// e.consume();
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("setVerticalPlatformId : " + (Integer) text.getValue());
-		// levelService.setVerticalPlatformId((Integer) text.getValue());
-		// drawPanel.repaint();
-		// }
-		// }
-		// }
-		//
-		// @Override
-		// public void keyPressed(KeyEvent e) {
-		// }
-		//
-		// @Override
-		// public void keyReleased(KeyEvent e) {
-		// }
-		// });
-		//
-		// backgroundIndexSpinner.addChangeListener(new ChangeListener() {
-		// @Override
-		// public void stateChanged(ChangeEvent e) {
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("setBackgroundId : " + (Integer) text.getValue());
-		// levelService.setBackgroundId((Integer) text.getValue());
-		// drawPanel.repaint();
-		// }
-		// }
-		// });
-		// backgroundIndexSpinner.addKeyListener(new KeyListener() {
-		// @Override
-		// public void keyTyped(KeyEvent e) {
-		// char vChar = e.getKeyChar();
-		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
-		// == KeyEvent.VK_DELETE))) {
-		// e.consume();
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// LOG.info("setBackgroundId : " + (Integer) text.getValue());
-		// levelService.setBackgroundId((Integer) text.getValue());
-		// drawPanel.repaint();
-		// }
-		// }
-		// }
-		//
-		// @Override
-		// public void keyPressed(KeyEvent e) {
-		// }
-		//
-		// @Override
-		// public void keyReleased(KeyEvent e) {
-		// }
-		// });
-		//
-		// nextLevelIndexSpinner.addChangeListener(new ChangeListener() {
-		// @Override
-		// public void stateChanged(ChangeEvent e) {
-		// JSpinner text = (JSpinner) e.getSource();
-		// if (text.getValue() != null) {
-		// levelService.setNextLevelId((Integer) text.getValue());
-		// drawPanel.repaint();
-		// }
-		// LOG.info("NextLevel change : " + text.getValue());
-		// }
-		// });
-		// nextLevelIndexSpinner.addKeyListener(new KeyListener() {
-		// @Override
-		// public void keyTyped(KeyEvent e) {
-		// char vChar = e.getKeyChar();
-		// if (!(Character.isDigit(vChar) || (vChar == KeyEvent.VK_BACK_SPACE) || (vChar
-		// == KeyEvent.VK_DELETE))) {
-		// e.consume();
-		// }
-		// }
-		//
-		// @Override
-		// public void keyPressed(KeyEvent e) {
-		// }
-		//
-		// @Override
-		// public void keyReleased(KeyEvent e) {
-		// }
-		// });
-		//
-		// showPlatformLevelCheckBox.addItemListener(new ItemListener() {
-		// public void itemStateChanged(ItemEvent e) {
-		// levelService.setShowPlatform(showPlatformLevelCheckBox.isSelected());
-		// }
-		// });
-		//
-		// englishLevelNameIndexTextField.getDocument().addDocumentListener(new
-		// DocumentListener() {
-		// private void updateData() {
-		// levelService.setLevelName("en", englishLevelNameIndexTextField.getText());
-		// }
-		//
-		// @Override
-		// public void changedUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// @Override
-		// public void insertUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// @Override
-		// public void removeUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// });
-		// frenchLevelNameIndexTextField.getDocument().addDocumentListener(new
-		// DocumentListener() {
-		// private void updateData() {
-		// levelService.setLevelName("fr", frenchLevelNameIndexTextField.getText());
-		// }
-		//
-		// @Override
-		// public void changedUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// @Override
-		// public void insertUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// @Override
-		// public void removeUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// });
-		// spanishLevelNameIndexTextField.getDocument().addDocumentListener(new
-		// DocumentListener() {
-		// private void updateData() {
-		// levelService.setLevelName("es", spanishLevelNameIndexTextField.getText());
-		// }
-		//
-		// @Override
-		// public void changedUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// @Override
-		// public void insertUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// @Override
-		// public void removeUpdate(DocumentEvent e) {
-		// updateData();
-		// }
-		//
-		// });
-		//
-		/*************************************************************************************
-		 *
+		 ***************************/
+		levelNameEnTextField.getDocument().addDocumentListener(new DocumentListener() {
+			private void updateData() {
+				levelService2.setLevelName(LocaleEnum.ENGLISH, levelNameEnTextField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateData();
+			}
+		});
+
+		levelNameFrTextField.getDocument().addDocumentListener(new DocumentListener() {
+			private void updateData() {
+				levelService2.setLevelName(LocaleEnum.FRENCH, levelNameFrTextField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateData();
+			}
+		});
+
+		varianteNameEnTextField.getDocument().addDocumentListener(new DocumentListener() {
+			private void updateData() {
+				levelService2.setVarianteName(LocaleEnum.ENGLISH, varianteNameEnTextField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateData();
+			}
+		});
+		varianteNameFrTextField.getDocument().addDocumentListener(new DocumentListener() {
+			private void updateData() {
+				levelService2.setVarianteName(LocaleEnum.FRENCH, varianteNameFrTextField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateData();
+			}
+		});
+
+		descriptionEnTextField.getDocument().addDocumentListener(new DocumentListener() {
+			private void updateData() {
+				levelService2.setVarianteDescription(LocaleEnum.ENGLISH, descriptionEnTextField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateData();
+			}
+		});
+
+		descriptionFrTextField.getDocument().addDocumentListener(new DocumentListener() {
+			private void updateData() {
+				levelService2.setVarianteDescription(LocaleEnum.FRENCH, descriptionFrTextField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateData();
+			}
+		});
+
+		shadowSpinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Float f = (Float) text.getValue();
+				levelService2.setShadow(f.floatValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bombeSpinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBombe(f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		strenghtSpinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setStrenght(f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		fillWithBrickCheckbox.addItemListener(item -> {
+			levelService2.setFillWithBrick(fillWithBrickCheckbox.isSelected());
+		});
+		defaultBackGround.addActionListener(e -> {
+			action = ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE;
+		});
+		defaultWall.addActionListener(e -> {
+			action = ActionEnum.SELECT_DEFAULT_WALL_TEXTURE;
+		});
+		defaultBrickAnimationComboBox.addItemListener(event -> {
+			// door.setKey((GameKeyEnum) requieredKeyComboBox.getSelectedItem());
+			// levelService.updateDoor(door);
+			// drawPanel.repaint();
+			// parent.repaint();
+		});
+
+		/********************
 		 * --- ACTION ---
-		 *
-		 *************************************************************************************/
+		 ********************/
 		addHoleButton.addActionListener(listener -> action = ActionEnum.ADD_HOLE);
 		addRailButton.addActionListener(listener -> action = ActionEnum.ADD_RAIL);
 		addTrolleyButton.addActionListener(listener -> action = ActionEnum.ADD_TROLLEY);
@@ -1145,21 +1097,15 @@ public class EditorLauncher extends JFrame {
 	}
 
 	public void loadPropertiesLevel() {
-		/*
-		 * verticalPlatformIndexSpinner.setValue((Integer)
-		 * levelService2.getVerticalPlatformId());
-		 * horizontalPlatformIndexSpinner.setValue((Integer)
-		 * levelService2.getHorizontalPlatformId());
-		 * backgroundIndexSpinner.setValue((Integer) levelService2.getBackgroundId());
-		 * nextLevelIndexSpinner.setValue((Integer) levelService2.getNextLevelId());
-		 * showPlatformLevelCheckBox.setSelected(levelService2.isShowPlatform());
-		 */
-		// spanishLevelNameIndexTextField.setText(levelService2.getLevelName("es"));
-		// englishLevelNameIndexTextField.setText(levelService2.getLevelName("en"));
-		// frenchLevelNameIndexTextField.setText(levelService2.getLevelName("fr"));
-
 		levelNameEnTextField.setText(levelService2.getLevelName(LocaleEnum.ENGLISH));
 		levelNameFrTextField.setText(levelService2.getLevelName(LocaleEnum.FRENCH));
-
+		varianteNameEnTextField.setText(levelService2.getVarianteName(LocaleEnum.ENGLISH));
+		varianteNameFrTextField.setText(levelService2.getVarianteName(LocaleEnum.FRENCH));
+		descriptionEnTextField.setText(levelService2.getVarianteDescription(LocaleEnum.ENGLISH));
+		descriptionFrTextField.setText(levelService2.getVarianteDescription(LocaleEnum.FRENCH));
+		shadowSpinner.setValue(Float.valueOf(levelService2.getShadow()));
+		bombeSpinner.setValue(Integer.valueOf(levelService2.getBombe()));
+		strenghtSpinner.setValue(Integer.valueOf(levelService2.getStrenght()));
+		fillWithBrickCheckbox.setSelected(levelService2.isFillWithBrick());
 	}
 }

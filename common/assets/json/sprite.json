@@ -109,7 +109,7 @@
 				{"x": 0,   "y": 16,  "nx": 11, "ny": 1, "n": 11, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
 				{"x": 0,   "y": 32,  "nx": 14, "ny": 1, "n": 14, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
 				{"x": 0,   "y": 48,  "nx": 12, "ny": 1, "n": 12, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
-				{"x": 0,   "y": 64,  "nx": 16, "ny": 1, "n": 16, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
+				{"x": 0,   "y": 64,  "nx": 17, "ny": 1, "n": 17, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
 				{"x": 0,   "y": 80,  "nx": 24, "ny": 1, "n": 24, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
 				{"x": 0,   "y": 96,  "nx": 10, "ny": 1, "n": 10, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
 				{"x": 0,   "y": 112, "nx": 10, "ny": 1, "n": 10, "sx": 18, "sy": 16, "r": false, "animation": "LEVEL"},
