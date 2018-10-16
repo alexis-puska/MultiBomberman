@@ -36,12 +36,17 @@ import java.awt.Container;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * A 1.4 file that provides utility methods for creating form- or grid-style
  * layouts with SpringLayout. These utilities are used by several programs, such
  * as SpringBox and SpringCompactGrid.
  */
 public class SpringUtilities {
+
+	private static final Logger LOG = LogManager.getLogger(SpringUtilities.class);
 
 	private SpringUtilities() {
 		// unused constructor
@@ -52,9 +57,9 @@ public class SpringUtilities {
 	 * and maximum sizes.
 	 */
 	public static void printSizes(Component c) {
-		System.out.println("minimumSize = " + c.getMinimumSize());
-		System.out.println("preferredSize = " + c.getPreferredSize());
-		System.out.println("maximumSize = " + c.getMaximumSize());
+		LOG.info("minimumSize = {}", c.getMinimumSize());
+		LOG.info("preferredSize = {}", c.getPreferredSize());
+		LOG.info("maximumSize = {}", c.getMaximumSize());
 	}
 
 	/**
@@ -75,7 +80,7 @@ public class SpringUtilities {
 		try {
 			layout = (SpringLayout) parent.getLayout();
 		} catch (ClassCastException exc) {
-			System.err.println("The first argument to makeGrid must use SpringLayout.");
+			LOG.error("The first argument to makeGrid must use SpringLayout.");
 			return;
 		}
 
@@ -162,7 +167,7 @@ public class SpringUtilities {
 		try {
 			layout = (SpringLayout) parent.getLayout();
 		} catch (ClassCastException exc) {
-			System.err.println("The first argument to makeCompactGrid must use SpringLayout.");
+			LOG.error("The first argument to makeCompactGrid must use SpringLayout.");
 			return;
 		}
 

@@ -58,7 +58,7 @@ public class EditorLauncher extends JFrame {
 
 	// traduction
 	private final Locale currentLocale;
-	private final ResourceBundle message;
+	private final transient ResourceBundle message;
 
 	private String absolutePathFile;
 	private ActionEnum action;
@@ -73,27 +73,27 @@ public class EditorLauncher extends JFrame {
 	 * EAST PANEL
 	 ***************/
 	private JPanel eastPanel;
-	private Border eastPanelBorder;
+	private transient Border eastPanelBorder;
 	private GridLayout eastPanelLayout;
 
 	private JPanel propertiesPanel;
 	private BorderLayout propertiesPanelLayout;
-	private Border propertiesPanelBorder;
+	private transient Border propertiesPanelBorder;
 	private JPanel levelPropertiesPanel;
-	private SpringLayout levelPropertiesPanelLayout;
+	private transient SpringLayout levelPropertiesPanelLayout;
 	private TitledBorder levelPropertiesPanelBorder;
 	private JPanel bonusPanel;
-	private SpringLayout bonusLayout;
+	private transient SpringLayout bonusLayout;
 	private TitledBorder bonusBorder;
 
 	private JPanel texturePanel;
-	private Border texturePanelBorder;
+	private transient Border texturePanelBorder;
 	private GridLayout texturePanelLayout;
 	private JPanel foregroundPanel;
-	private Border foregroundPanelBorder;
+	private transient Border foregroundPanelBorder;
 	private ForegroundDrawPanel foregroundDrawPanel;
 	private JPanel backgroundPanel;
-	private Border backgroundPanelBorder;
+	private transient Border backgroundPanelBorder;
 	private BackgroundDrawPanel backgroundDrawPanel;
 	/********************
 	 * LEVEL PROPERTIES
@@ -173,12 +173,12 @@ public class EditorLauncher extends JFrame {
 	 * NAVIGATION
 	 ***************/
 	private JPanel panelNavigation;
-	private Border borderNavigation;
+	private transient Border borderNavigation;
 	private GridLayout layoutNavigation;
 	// currentLevelIndex
 	private JPanel currentLevelPanel;
 	private GridLayout currentLevelLayout;
-	private Border currentLevelBorder;
+	private transient Border currentLevelBorder;
 	private JButton addLevel;
 	private JButton delLevel;
 	private JButton nextLevel;
@@ -186,7 +186,7 @@ public class EditorLauncher extends JFrame {
 	// currentLevelIndex
 	private JPanel currentVariantePanel;
 	private GridLayout currentVarianteLayout;
-	private Border currentVarianteBorder;
+	private transient Border currentVarianteBorder;
 	private JButton addVariante;
 	private JButton delVariante;
 	private JButton nextVariante;
@@ -195,7 +195,7 @@ public class EditorLauncher extends JFrame {
 	// file
 	private JPanel filePanel;
 	private GridLayout fileLayout;
-	private Border fileBorder;
+	private transient Border fileBorder;
 	private JButton openSaveFileChooser;
 	private JFileChooser saveFileChooser;
 	private JButton openLoadFileChooser;
@@ -207,7 +207,7 @@ public class EditorLauncher extends JFrame {
 	 * ACTIONS
 	 ***************/
 	private JPanel buttonPanel;
-	private Border buttonPanelBorder;
+	private transient Border buttonPanelBorder;
 	private GridLayout buttonPanelLayout;
 	private JButton addHoleButton;
 	private JButton removeHoleButton;
@@ -659,10 +659,9 @@ public class EditorLauncher extends JFrame {
 				} catch (FileNotFoundException e) {
 					LOG.error("", e.getMessage());
 				} catch (IOException e1) {
-					System.out.println("Set save path failed !");
+					LOG.info("Set save path failed !");
 				}
-				System.out
-						.println("You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());
+				LOG.info("You chose to open this file: {}", loadFileChooser.getSelectedFile().getAbsolutePath());
 			}
 		});
 
@@ -677,7 +676,7 @@ public class EditorLauncher extends JFrame {
 				centerPanel.updateUI();
 				loadPropertiesLevel();
 				repaint();
-				System.out.println("You chose to open this file: " + absolutePathFile);
+				LOG.info("You chose to open this file: ", absolutePathFile);
 			}
 		});
 
@@ -711,17 +710,17 @@ public class EditorLauncher extends JFrame {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				System.out.println(e.getKeyCode());
+				LOG.info(e.getKeyCode());
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				System.out.println(e.getKeyCode());
+				LOG.info(e.getKeyCode());
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				System.out.println(e.getKeyCode());
+				LOG.info(e.getKeyCode());
 			}
 		});
 
