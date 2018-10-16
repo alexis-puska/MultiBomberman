@@ -46,7 +46,6 @@ public class VarianteMapper {
 		variante.setDescription(textMapper.toEntitys(dto.getDescription()));
 		variante.setFillWithBrick(dto.isFillWithBrick());
 		variante.setHole(holeMapper.toEntitys(dto.getHole()));
-//		variante.setId(dto.getId());
 		variante.setInterrupter(interrupterMapper.toEntitys(dto.getInterrupter()));
 		variante.setMine(mineMapper.toEntitys(dto.getMine()));
 		variante.setName(textMapper.toEntitys(dto.getName()));

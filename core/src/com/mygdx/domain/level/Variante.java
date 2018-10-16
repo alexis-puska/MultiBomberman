@@ -14,7 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Variante {
-	private long id;
 	private List<Text> name;
 	private List<Text> description;
 	private int bombe;
