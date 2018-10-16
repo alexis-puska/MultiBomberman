@@ -1107,5 +1107,7 @@ public class EditorLauncher extends JFrame {
 		bombeSpinner.setValue(Integer.valueOf(levelService2.getBombe()));
 		strenghtSpinner.setValue(Integer.valueOf(levelService2.getStrenght()));
 		fillWithBrickCheckbox.setSelected(levelService2.isFillWithBrick());
+		LOG.info("level position : {}", levelService2.getLevelPosition());
+		LOG.info("variante position : {}", levelService2.getVariantePosition());
 	}
 }

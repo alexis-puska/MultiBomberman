@@ -42,8 +42,7 @@ public class LevelService2 {
 	/**
 	 * Load JSON Level file and init map with all level and variante
 	 * 
-	 * @param in
-	 *            inputStream of file
+	 * @param in inputStream of file
 	 * @return Level to Edit
 	 */
 	public void load(InputStream in) {
@@ -88,24 +87,30 @@ public class LevelService2 {
 	}
 
 	public void nextLevel() {
-		int pos = levelFileDTO.getLevels().indexOf(currentLevel);
-		if (pos == levelFileDTO.getLevels().size() - 1) {
-			currentLevel = levelFileDTO.getLevels().get(0);
-			currentVariante = currentLevel.getVariante().get(0);
-		} else {
-			currentLevel = levelFileDTO.getLevels().get(pos + 1);
-			currentVariante = currentLevel.getVariante().get(0);
+		if (currentLevel != null) {
+			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
+			if (pos != levelFileDTO.getLevels().size() - 1) {
+				currentLevel = levelFileDTO.getLevels().get(pos + 1);
+				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				} else {
+					currentVariante = null;
+				}
+			}
 		}
 	}
 
 	public void previousLevel() {
-		int pos = levelFileDTO.getLevels().indexOf(currentLevel);
-		if (pos == 0) {
-			currentLevel = levelFileDTO.getLevels().get(levelFileDTO.getLevels().size() - 1);
-			currentVariante = currentLevel.getVariante().get(0);
-		} else {
-			currentLevel = levelFileDTO.getLevels().get(pos - 1);
-			currentVariante = currentLevel.getVariante().get(0);
+		if (currentLevel != null) {
+			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
+			if (pos > 0) {
+				currentLevel = levelFileDTO.getLevels().get(pos - 1);
+				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				} else {
+					currentVariante = null;
+				}
+			}
 		}
 	}
 
@@ -119,9 +124,18 @@ public class LevelService2 {
 	}
 
 	public void deleteLevel() {
-		levelFileDTO.getLevels().remove(currentLevel);
-		if (levelFileDTO.getLevels().size() > 0) {
-			currentLevel = levelFileDTO.getLevels().get(0);
+		if (currentLevel != null) {
+			levelFileDTO.getLevels().remove(currentLevel);
+			if (levelFileDTO.getLevels().size() > 0) {
+				currentLevel = levelFileDTO.getLevels().get(0);
+			} else {
+				currentLevel = null;
+			}
+			if (currentLevel != null && currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+				currentVariante = currentLevel.getVariante().get(0);
+			} else {
+				currentVariante = null;
+			}
 		}
 	}
 
@@ -143,32 +157,40 @@ public class LevelService2 {
 	}
 
 	public void nextVariante() {
-		int pos = currentLevel.getVariante().indexOf(currentVariante);
-		if (pos == currentLevel.getVariante().size() - 1) {
-			currentVariante = currentLevel.getVariante().get(0);
-		} else {
-			currentVariante = currentLevel.getVariante().get(pos + 1);
+		if (currentVariante != null) {
+			int pos = currentLevel.getVariante().indexOf(currentVariante);
+			if (pos == currentLevel.getVariante().size() - 1) {
+				currentVariante = currentLevel.getVariante().get(0);
+			} else {
+				currentVariante = currentLevel.getVariante().get(pos + 1);
+			}
 		}
 	}
 
 	public void previousVariante() {
-		int pos = currentLevel.getVariante().indexOf(currentVariante);
-		if (pos == 0) {
-			currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
-		} else {
-			currentVariante = currentLevel.getVariante().get(pos - 1);
+		if (currentVariante != null) {
+			int pos = currentLevel.getVariante().indexOf(currentVariante);
+			if (pos == 0) {
+				currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
+			} else {
+				currentVariante = currentLevel.getVariante().get(pos - 1);
+			}
 		}
 	}
 
 	public void addVariante() {
-		currentLevel.getVariante().add(createNewVariante());
-		currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
+		if (currentLevel != null) {
+			currentLevel.getVariante().add(createNewVariante());
+			currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
+		}
 	}
 
 	public void deleteVariante() {
-		currentLevel.getVariante().remove(currentVariante);
-		if (currentLevel.getVariante().size() > 0) {
-			currentVariante = currentLevel.getVariante().get(0);
+		if (currentVariante != null) {
+			currentLevel.getVariante().remove(currentVariante);
+			if (currentLevel.getVariante().size() > 0) {
+				currentVariante = currentLevel.getVariante().get(0);
+			}
 		}
 	}
 
@@ -212,6 +234,24 @@ public class LevelService2 {
 			}
 		}
 		return variante;
+	}
+
+	public String getLevelPosition() {
+		if (currentLevel != null) {
+			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
+			return (pos + 1) + "/" + levelFileDTO.getLevels().size();
+		} else {
+			return "0 / 0";
+		}
+	}
+
+	public String getVariantePosition() {
+		if (currentLevel != null && currentVariante != null) {
+			int pos = currentLevel.getVariante().indexOf(currentVariante);
+			return (pos + 1) + "/" + currentLevel.getVariante().size();
+		} else {
+			return "0 / 0";
+		}
 	}
 
 	public String getLevelName(LocaleEnum lang) {

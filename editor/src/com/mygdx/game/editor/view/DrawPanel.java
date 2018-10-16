@@ -39,8 +39,7 @@ public class DrawPanel extends Canvas {
 	/**
 	 * Draw the level if exists, draw message if level doesn't exists
 	 * 
-	 * @param g2
-	 *            graphics
+	 * @param g2 graphics
 	 */
 	public void paint(Graphics g) {
 		BufferStrategy bs = getBufferStrategy();
@@ -91,8 +90,7 @@ public class DrawPanel extends Canvas {
 	/**
 	 * Draw the level
 	 * 
-	 * @param g2
-	 *            graphics2D
+	 * @param g2 graphics2D
 	 */
 	private void drawGrid(Graphics2D g2) {
 
