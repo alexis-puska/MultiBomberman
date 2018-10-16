@@ -9,6 +9,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
@@ -34,6 +37,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mygdx.constante.EditorConstante;
+import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.game.editor.enumeration.ActionEnum;
 import com.mygdx.game.editor.service.LevelService2;
 import com.mygdx.game.editor.service.SpriteService;
@@ -47,7 +51,6 @@ public class EditorLauncher extends JFrame {
 
 	private static final Logger LOG = LogManager.getLogger(EditorLauncher.class);
 	private static final long serialVersionUID = -8256444946608935363L;
-	private static final int OFFSET = 10;
 
 	// services
 	private final SpriteService spriteService;
@@ -58,8 +61,6 @@ public class EditorLauncher extends JFrame {
 	private final ResourceBundle message;
 
 	private String absolutePathFile;
-	private int xFirst;
-	private int yFirst;
 	private ActionEnum action;
 
 	/****************
@@ -72,22 +73,31 @@ public class EditorLauncher extends JFrame {
 	 * EAST PANEL
 	 ***************/
 	private JPanel eastPanel;
-	private GridLayout eastLayout;
+	private Border eastPanelBorder;
+	private GridLayout eastPanelLayout;
+
+	private JPanel propertiesPanel;
+	private BorderLayout propertiesPanelLayout;
+	private Border propertiesPanelBorder;
+	private JPanel levelPropertiesPanel;
+	private SpringLayout levelPropertiesPanelLayout;
+	private Border levelPropertiesPanelBorder;
+	private JPanel bonusPanel;
+	private SpringLayout bonusLayout;
+	private Border bonusBorder;
+
 	private JPanel texturePanel;
-	private Border textureBorder;
-	private GridLayout textureLayout;
+	private Border texturePanelBorder;
+	private GridLayout texturePanelLayout;
 	private JPanel foregroundPanel;
-	private Border foregroundBorder;
+	private Border foregroundPanelBorder;
 	private ForegroundDrawPanel foregroundDrawPanel;
 	private JPanel backgroundPanel;
-	private Border backgroundBorder;
+	private Border backgroundPanelBorder;
 	private BackgroundDrawPanel backgroundDrawPanel;
 	/********************
 	 * LEVEL PROPERTIES
 	 *******************/
-	private JPanel panelParameters;
-	private SpringLayout panelParametersLayout;
-	private Border panelParametersBorder;
 	private JLabel levelNameFrLabel;
 	private JTextField levelNameFrTextField;
 	private JLabel levelNameEnLabel;
@@ -116,11 +126,8 @@ public class EditorLauncher extends JFrame {
 	private JLabel defaultWallLabel;
 	private JButton defaultWall;
 	private JLabel defaultBrickAnimationLabel;
-	private JComboBox defaultBrickAnimationComboBox;
+	private JComboBox<String> defaultBrickAnimationComboBox;
 
-	private JPanel bonusPanel;
-	private SpringLayout bonusLayout;
-	private Border bonusBorder;
 	private JTextField bonus1TextField;
 	private JLabel bonus1Label;
 	private JTextField bonus2TextField;
@@ -158,8 +165,6 @@ public class EditorLauncher extends JFrame {
 	private JPanel centerPanel;
 	private BorderLayout drawLayout;
 	private DrawPanel drawPanel;
-	private JFrame eventJFrame;
-	private JFrame mapViewJFrame;
 
 	/****************
 	 * NAVIGATION
@@ -251,13 +256,14 @@ public class EditorLauncher extends JFrame {
 	private void Launch() {
 		this.getContentPane().setLayout(new BorderLayout());
 		initComponent();
-		initListeners();
 		buildParameterPanelButton();
-		buildEastPanel();
+		buildBonusPanel();
 		buildDrawElement();
 		buildNavigationPanelButton();
 		buildActionPanelButton();
+		buildEastPanel();
 		buildWestPanel();
+		initListeners();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setSize(EditorConstante.APP_SIZE_X, EditorConstante.APP_SIZE_Y);
@@ -283,28 +289,29 @@ public class EditorLauncher extends JFrame {
 	private void buildEastPanel() {
 		foregroundDrawPanel.setSize(EditorConstante.PANEL_PLATFORM_BACKGROUD_WIDTH, EditorConstante.SCREEN_SIZE_Y);
 		foregroundDrawPanel.setVisible(true);
-		foregroundPanel.setBorder(foregroundBorder);
+		foregroundPanel.setBorder(foregroundPanelBorder);
 		foregroundPanel.add(foregroundDrawPanel);
 		backgroundDrawPanel.setSize(EditorConstante.PANEL_PLATFORM_BACKGROUD_WIDTH, EditorConstante.SCREEN_SIZE_Y);
 		backgroundDrawPanel.setVisible(true);
-		backgroundPanel.setBorder(backgroundBorder);
+		backgroundPanel.setBorder(backgroundPanelBorder);
 		backgroundPanel.add(backgroundDrawPanel);
-		textureLayout.setRows(2);
-		texturePanel.setLayout(textureLayout);
-		texturePanel.setBorder(textureBorder);
+		texturePanelLayout.setRows(2);
+		texturePanel.setLayout(texturePanelLayout);
+		texturePanel.setBorder(texturePanelBorder);
 		texturePanel.add(foregroundPanel);
 		texturePanel.add(backgroundPanel);
-		eastLayout.setColumns(2);
-		eastPanel.setLayout(eastLayout);
 
-		JPanel tmp = new JPanel();
-		BorderLayout layout = new BorderLayout();
-		tmp.setLayout(layout);
-		tmp.add(panelParameters, BorderLayout.NORTH);
-		tmp.add(bonusPanel, BorderLayout.CENTER);
-		eastPanel.add(tmp);
+		levelPropertiesPanel.setLayout(levelPropertiesPanelLayout);
+		bonusPanel.setLayout(bonusLayout);
+		propertiesPanel.setLayout(propertiesPanelLayout);
+		propertiesPanel.setBorder(propertiesPanelBorder);
+		propertiesPanel.add(levelPropertiesPanel, BorderLayout.NORTH);
+		propertiesPanel.add(bonusPanel, BorderLayout.CENTER);
 
-//		eastPanel.add(panelParameters);
+		eastPanelLayout.setColumns(2);
+		eastPanel.setLayout(eastPanelLayout);
+		eastPanel.setBorder(eastPanelBorder);
+		eastPanel.add(propertiesPanel);
 		eastPanel.add(texturePanel);
 		this.getContentPane().add(eastPanel, BorderLayout.EAST);
 	}
@@ -366,28 +373,8 @@ public class EditorLauncher extends JFrame {
 	}
 
 	private void buildParameterPanelButton() {
-
-		panelParameters.setBorder(panelParametersBorder);
-		panelParameters.setLayout(panelParametersLayout);
-
-		shadowSpinnerModel.setMinimum(0);
-		shadowSpinnerModel.setMaximum(1);
-		shadowSpinnerModel.setValue(0);
-		shadowSpinnerModel.setStepSize(0.1f);
-		shadowSpinner.setModel(shadowSpinnerModel);
-
-		bombeSpinnerModel.setMinimum(1);
-		bombeSpinnerModel.setMaximum(6);
-		bombeSpinnerModel.setValue(2);
-		bombeSpinnerModel.setStepSize(0.1f);
-		bombeSpinner.setModel(bombeSpinnerModel);
-
-		strenghtSpinnerModel.setMinimum(1);
-		strenghtSpinnerModel.setMaximum(20);
-		strenghtSpinnerModel.setValue(2);
-		strenghtSpinnerModel.setStepSize(0.1f);
-		strenghtSpinner.setModel(strenghtSpinnerModel);
-
+		levelPropertiesPanel.setBorder(levelPropertiesPanelBorder);
+		levelPropertiesPanel.setLayout(levelPropertiesPanelLayout);
 		levelNameFrLabel.setLabelFor(levelNameFrTextField);
 		levelNameEnLabel.setLabelFor(levelNameEnTextField);
 		varianteNameFrLabel.setLabelFor(levelNameFrLabel);
@@ -401,35 +388,36 @@ public class EditorLauncher extends JFrame {
 		defaultBackgroundLabel.setLabelFor(defaultBackGround);
 		defaultWallLabel.setLabelFor(defaultWall);
 		defaultBrickAnimationLabel.setLabelFor(defaultBrickAnimationComboBox);
+		levelPropertiesPanel.add(levelNameFrLabel);
+		levelPropertiesPanel.add(levelNameFrTextField);
+		levelPropertiesPanel.add(levelNameEnLabel);
+		levelPropertiesPanel.add(levelNameEnTextField);
+		levelPropertiesPanel.add(varianteNameFrLabel);
+		levelPropertiesPanel.add(varianteNameFrTextField);
+		levelPropertiesPanel.add(varianteNameEnLabel);
+		levelPropertiesPanel.add(varianteNameEnTextField);
+		levelPropertiesPanel.add(descriptionFrLabel);
+		levelPropertiesPanel.add(descriptionFrTextField);
+		levelPropertiesPanel.add(descriptionEnLabel);
+		levelPropertiesPanel.add(descriptionEnTextField);
+		levelPropertiesPanel.add(shadowLabel);
+		levelPropertiesPanel.add(shadowSpinner);
+		levelPropertiesPanel.add(bombeLabel);
+		levelPropertiesPanel.add(bombeSpinner);
+		levelPropertiesPanel.add(strenghtLabel);
+		levelPropertiesPanel.add(strenghtSpinner);
+		levelPropertiesPanel.add(fillWithBrickLabel);
+		levelPropertiesPanel.add(fillWithBrickCheckbox);
+		levelPropertiesPanel.add(defaultBackgroundLabel);
+		levelPropertiesPanel.add(defaultBackGround);
+		levelPropertiesPanel.add(defaultWallLabel);
+		levelPropertiesPanel.add(defaultWall);
+		levelPropertiesPanel.add(defaultBrickAnimationLabel);
+		levelPropertiesPanel.add(defaultBrickAnimationComboBox);
+		SpringUtilities.makeGrid(levelPropertiesPanel, 13, 2, 2, 2, 2, 2);
+	}
 
-		panelParameters.add(levelNameFrLabel);
-		panelParameters.add(levelNameFrTextField);
-		panelParameters.add(levelNameEnLabel);
-		panelParameters.add(levelNameEnTextField);
-		panelParameters.add(varianteNameFrLabel);
-		panelParameters.add(varianteNameFrTextField);
-		panelParameters.add(varianteNameEnLabel);
-		panelParameters.add(varianteNameEnTextField);
-		panelParameters.add(descriptionFrLabel);
-		panelParameters.add(descriptionFrTextField);
-		panelParameters.add(descriptionEnLabel);
-		panelParameters.add(descriptionEnTextField);
-		panelParameters.add(shadowLabel);
-		panelParameters.add(shadowSpinner);
-		panelParameters.add(bombeLabel);
-		panelParameters.add(bombeSpinner);
-		panelParameters.add(strenghtLabel);
-		panelParameters.add(strenghtSpinner);
-		panelParameters.add(fillWithBrickLabel);
-		panelParameters.add(fillWithBrickCheckbox);
-		panelParameters.add(defaultBackgroundLabel);
-		panelParameters.add(defaultBackGround);
-		panelParameters.add(defaultWallLabel);
-		panelParameters.add(defaultWall);
-		panelParameters.add(defaultBrickAnimationLabel);
-		panelParameters.add(defaultBrickAnimationComboBox);
-		SpringUtilities.makeGrid(panelParameters, 13, 2, 2, 2, 2, 2);
-
+	private void buildBonusPanel() {
 		bonus1Label.setLabelFor(bonus1TextField);
 		bonus2Label.setLabelFor(bonus2TextField);
 		bonus3Label.setLabelFor(bonus3TextField);
@@ -477,38 +465,7 @@ public class EditorLauncher extends JFrame {
 		bonusPanel.add(bonus14TextField);
 		bonusPanel.add(bonus15Label);
 		bonusPanel.add(bonus15TextField);
-
 		SpringUtilities.makeGrid(bonusPanel, 15, 2, 2, 2, 2, 2);
-
-		/*
-		 * boolean shouldFill = true; boolean shouldWeightX = true; JButton button;
-		 * panelParameters.setLayout(new GridBagLayout()); GridBagConstraints c = new
-		 * GridBagConstraints(); if (shouldFill) { //natural height, maximum width
-		 * c.fill = GridBagConstraints.HORIZONTAL; }
-		 * 
-		 * button = new JButton("Button 1"); if (shouldWeightX) { c.weightx = 0.5; }
-		 * c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0; c.gridy = 0;
-		 * panelParameters.add(button, c);
-		 * 
-		 * button = new JButton("Button 2"); c.fill = GridBagConstraints.HORIZONTAL;
-		 * c.weightx = 0.5; c.gridx = 1; c.gridy = 0; panelParameters.add(button, c);
-		 * 
-		 * button = new JButton("Button 3"); c.fill = GridBagConstraints.HORIZONTAL;
-		 * c.weightx = 0.0; c.gridx = 0; c.gridy = 1; panelParameters.add(button, c);
-		 * 
-		 * button = new JButton("Long-Named Button 4"); c.fill =
-		 * GridBagConstraints.HORIZONTAL; c.ipady = 40; //make this component tall
-		 * c.weightx = 0.0; c.gridwidth = 3; c.gridx = 0; c.gridy = 2;
-		 * panelParameters.add(button, c);
-		 * 
-		 * button = new JButton("5"); c.fill = GridBagConstraints.HORIZONTAL; c.ipady =
-		 * 0; //reset to default c.weighty = 1.0; //request any extra vertical space
-		 * //c.anchor = GridBagConstraints.PAGE_END; //bottom of space c.insets = new
-		 * Insets(10,0,0,0); //top padding c.gridx = 1; //aligned with button 2
-		 * c.gridwidth = 2; //2 columns wide c.gridy = 3; //third row
-		 * panelParameters.add(button, c);
-		 */
-
 	}
 
 	/*************************************************************************************
@@ -518,35 +475,21 @@ public class EditorLauncher extends JFrame {
 	 *************************************************************************************/
 	private void initComponent() {
 
-		// westPanel
-		westPanel = new JPanel();
-		westLayout = new GridLayout();
-
-		// EastPanel
-		eastPanel = new JPanel();
-		eastLayout = new GridLayout();
-		texturePanel = new JPanel();
-		textureLayout = new GridLayout();
-		textureBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
-		foregroundPanel = new JPanel();
-		foregroundBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
-		foregroundDrawPanel = new ForegroundDrawPanel(spriteService);
-		backgroundPanel = new JPanel();
-		backgroundBorder = BorderFactory.createTitledBorder(message.getString("background.border"));
-		backgroundDrawPanel = new BackgroundDrawPanel(spriteService);
-
-		// draw
+		/***********************
+		 * --- DRAW : CENTER---
+		 ***********************/
 		centerPanel = new JPanel();
 		drawLayout = new BorderLayout();
 		drawPanel = new DrawPanel(spriteService, levelService2);
 
-		// navigation
+		/*********************
+		 * --- NAVIGATION ---
+		 *********************/
 		panelNavigation = new JPanel();
 		borderNavigation = BorderFactory.createTitledBorder(message.getString("navigation.border"));
 		layoutNavigation = new GridLayout();
 		layoutNavigation.setColumns(EditorConstante.NB_COLUMN_NAVIGATION);
 		layoutNavigation.setRows(EditorConstante.NB_ROW_NAVIGATION);
-
 		currentLevelPanel = new JPanel();
 		currentLevelLayout = new GridLayout();
 		currentLevelBorder = BorderFactory.createTitledBorder(message.getString("currentLevel.border"));
@@ -554,7 +497,6 @@ public class EditorLauncher extends JFrame {
 		delLevel = new JButton(message.getString("currentLevel.button.delete"));
 		nextLevel = new JButton(message.getString("currentLevel.button.next"));
 		previousLevel = new JButton(message.getString("currentLevel.button.previous"));
-
 		currentVariantePanel = new JPanel();
 		currentVarianteLayout = new GridLayout();
 		currentVarianteBorder = BorderFactory.createTitledBorder(message.getString("currentVariante.border"));
@@ -563,11 +505,12 @@ public class EditorLauncher extends JFrame {
 		nextVariante = new JButton(message.getString("currentVariante.button.next"));
 		previousVariante = new JButton(message.getString("currentVariante.button.previous"));
 
-		// file
+		/*********************
+		 * --- FILE : NORTH ---
+		 *********************/
 		filePanel = new JPanel();
 		fileLayout = new GridLayout();
 		fileBorder = BorderFactory.createTitledBorder(message.getString("file.border"));
-
 		openLoadFileChooser = new JButton(message.getString("file.open"));
 		openSaveFileChooser = new JButton(message.getString("file.save"));
 		loadFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
@@ -577,7 +520,11 @@ public class EditorLauncher extends JFrame {
 		saveFileChooserFilter = new FileNameExtensionFilter(message.getString("file.description"), "json");
 		saveFileChooser.setFileFilter(saveFileChooserFilter);
 
-		// ennemies
+		/***********************
+		 * --- BUTTONS : WEST---
+		 ***********************/
+		westPanel = new JPanel();
+		westLayout = new GridLayout();
 		buttonPanel = new JPanel();
 		buttonPanelBorder = BorderFactory.createTitledBorder(message.getString("editor.border.action"));
 		buttonPanelLayout = new GridLayout();
@@ -593,7 +540,6 @@ public class EditorLauncher extends JFrame {
 		addStartPlayerButton = new JButton(message.getString("editor.button.startPlayer.add"));
 		addCustomBackgroundButton = new JButton(message.getString("editor.button.defaultBackground.add"));
 		addCustomForegroundButton = new JButton(message.getString("editor.button.defaultForeground.add"));
-
 		removeHoleButton = new JButton(message.getString("editor.button.hole.remove"));
 		removeRailButton = new JButton(message.getString("editor.button.rail.remove"));
 		removeTrolleyButton = new JButton(message.getString("editor.button.trolley.remove"));
@@ -605,15 +551,34 @@ public class EditorLauncher extends JFrame {
 		removeCustomBackgroundButton = new JButton(message.getString("editor.button.defaultBackground.remove"));
 		removeCustomForegroundButton = new JButton(message.getString("editor.button.defaultForeground.remove"));
 
-		// properties
-		panelParameters = new JPanel();
-		panelParametersLayout = new SpringLayout();
-		// layoutParameters = new GridLayout();
-		// layoutParameters.setColumns(EditorConstante.NB_COLUMN_PARAMETER);
-		// layoutParameters.setRows(EditorConstante.NB_ROW_PARAMETER);
+		/*************************************
+		 * --- PROPERTIES / TEXTURE : WEST---
+		 *************************************/
+		eastPanel = new JPanel();
+		eastPanelLayout = new GridLayout();
+		eastPanelBorder = BorderFactory.createTitledBorder("Outils");
+		levelPropertiesPanel = new JPanel();
+		levelPropertiesPanelLayout = new SpringLayout();
+		levelPropertiesPanelBorder = BorderFactory.createTitledBorder("Level");
+		bonusPanel = new JPanel();
+		bonusLayout = new SpringLayout();
+		bonusBorder = BorderFactory.createTitledBorder("Bonus");
+		propertiesPanel = new JPanel();
+		propertiesPanelLayout = new BorderLayout();
+		propertiesPanelBorder = BorderFactory.createTitledBorder("Properties");
+		foregroundPanel = new JPanel();
+		foregroundPanelBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
+		foregroundDrawPanel = new ForegroundDrawPanel(spriteService);
+		backgroundPanel = new JPanel();
+		backgroundPanelBorder = BorderFactory.createTitledBorder(message.getString("background.border"));
+		backgroundDrawPanel = new BackgroundDrawPanel(spriteService);
+		texturePanel = new JPanel();
+		texturePanelLayout = new GridLayout();
+		texturePanelBorder = BorderFactory.createTitledBorder("Texture");
 
-		panelParametersBorder = BorderFactory.createTitledBorder("Properties");
-
+		/*********************
+		 * --- PROPERTIES ---
+		 *********************/
 		levelNameFrLabel = new JLabel("level name fr");
 		levelNameFrTextField = new JTextField();
 		levelNameEnLabel = new JLabel("level name en");
@@ -627,14 +592,14 @@ public class EditorLauncher extends JFrame {
 		descriptionEnLabel = new JLabel("description en");
 		descriptionEnTextField = new JTextField();
 		shadowLabel = new JLabel("shadow value");
-		shadowSpinnerModel = new SpinnerNumberModel();
-		shadowSpinner = new JSpinner();
+		shadowSpinnerModel = new SpinnerNumberModel(0.0, 0.0, 1.0, 0.1);
+		shadowSpinner = new JSpinner(shadowSpinnerModel);
 		bombeLabel = new JLabel("nb bombe");
-		bombeSpinnerModel = new SpinnerNumberModel();
-		bombeSpinner = new JSpinner();
+		bombeSpinnerModel = new SpinnerNumberModel(2, 1, 6, 1);
+		bombeSpinner = new JSpinner(bombeSpinnerModel);
 		strenghtLabel = new JLabel("strnght of bombe");
-		strenghtSpinnerModel = new SpinnerNumberModel();
-		strenghtSpinner = new JSpinner();
+		strenghtSpinnerModel = new SpinnerNumberModel(2, 1, 20, 1);
+		strenghtSpinner = new JSpinner(strenghtSpinnerModel);
 		fillWithBrickLabel = new JLabel("fill with bricks");
 		fillWithBrickCheckbox = new JCheckBox();
 		defaultBackgroundLabel = new JLabel("default background texture");
@@ -642,11 +607,11 @@ public class EditorLauncher extends JFrame {
 		defaultWallLabel = new JLabel("default wall texture");
 		defaultWall = new JButton();
 		defaultBrickAnimationLabel = new JLabel("default bricks animation");
-		defaultBrickAnimationComboBox = new JComboBox();
+		defaultBrickAnimationComboBox = new JComboBox<String>();
 
-		bonusPanel = new JPanel();
-		bonusLayout = new SpringLayout();
-		bonusBorder = BorderFactory.createTitledBorder("Bonus");
+		/*****************
+		 * --- BONUS ---
+		 *****************/
 		bonus1TextField = new JTextField();
 		bonus1Label = new JLabel("bonus1");
 		bonus2TextField = new JTextField();
@@ -695,12 +660,10 @@ public class EditorLauncher extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pressed(e.getX(), e.getY());
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				release(e.getX(), e.getY());
 			}
 
 			@Override
@@ -837,20 +800,16 @@ public class EditorLauncher extends JFrame {
 					absolutePathFile = loadFileChooser.getSelectedFile().getAbsolutePath();
 					try {
 						saveFileChooser.setCurrentDirectory(loadFileChooser.getSelectedFile().getCanonicalFile());
+
+						levelService2.load(new FileInputStream(new File(absolutePathFile)));
+						centerPanel.updateUI();
+						loadPropertiesLevel();
+						repaint();
+					} catch (FileNotFoundException e) {
+						LOG.error("", e.getMessage());
 					} catch (IOException e1) {
 						System.out.println("Set save path failed !");
 					}
-					// try {
-					// levelService.putLevelFile(
-					// fileService.readJsonFile(new FileInputStream(new File(absolutePathFile))));
-					// currentLevelIndex.setValue((Integer) levelService.getCurrentLevelIndex());
-					// currentTypeLevelIndex.setValue((Integer) levelService.getCurrentTypeIndex());
-					// centerPanel.updateUI();
-					// loadPropertiesLevel();
-					// repaint();
-					// } catch (FileNotFoundException e) {
-					// LOG.error("", e.getMessage());
-					// }
 					System.out.println(
 							"You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());
 				}
@@ -860,16 +819,15 @@ public class EditorLauncher extends JFrame {
 		openSaveFileChooser.addActionListener(arg0 -> {
 			int returnVal = saveFileChooser.showSaveDialog(panelNavigation);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				// LevelFile levelFile = levelService.getLevelFile();
-				// absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
-				// if (!absolutePathFile.endsWith(".json")) {
-				// absolutePathFile += ".json";
-				// }
-				// fileService.writeJson(levelFile, new File(absolutePathFile));
-				// centerPanel.updateUI();
-				// loadPropertiesLevel();
-				// repaint();
-				// System.out.println("You chose to open this file: " + absolutePathFile);
+				absolutePathFile = saveFileChooser.getSelectedFile().getAbsolutePath();
+				if (!absolutePathFile.endsWith(".json")) {
+					absolutePathFile += ".json";
+				}
+				levelService2.save(new File(absolutePathFile));
+				centerPanel.updateUI();
+				loadPropertiesLevel();
+				repaint();
+				System.out.println("You chose to open this file: " + absolutePathFile);
 			}
 		});
 		/*************************************************************************************
@@ -1121,135 +1079,6 @@ public class EditorLauncher extends JFrame {
 	 * --- DRAW EVENT ---
 	 * 
 	 *************************************************************************************/
-
-	private void release(int x, int y) {
-
-		if (x > 400) {
-			x = 400;
-		}
-		if (y > 500) {
-			y = 500;
-		}
-
-		int caseX = (x - OFFSET) / EditorConstante.GRID_SIZE_X;
-		int caseY = CoordinateUtils.clicGridY(y);
-		int invY = CoordinateUtils.clickY(y);
-
-		switch (action) {
-		case ADD_CUSTOM_BACKGROUND:
-			break;
-		case ADD_CUSTOM_FOREGROUND:
-			break;
-		case ADD_HOLE:
-			break;
-		case ADD_INTERRUPTEUR:
-			break;
-		case ADD_MINE:
-			break;
-		case ADD_RAIL:
-			break;
-		case ADD_START_PLAYER:
-			break;
-		case ADD_TELEPORTER:
-			break;
-		case ADD_TROLLEY:
-			break;
-		case ADD_WALL:
-			break;
-		case NONE:
-			break;
-		case REMOVE_CUSTOM_BACKGROUND:
-			break;
-		case REMOVE_CUSTOM_FOREGROUND:
-			break;
-		case REMOVE_HOLE:
-			break;
-		case REMOVE_INTERRUPTEUR:
-			break;
-		case REMOVE_MINE:
-			break;
-		case REMOVE_RAIL:
-			break;
-		case REMOVE_START_PLAYER:
-			break;
-		case REMOVE_TELEPORTER:
-			break;
-		case REMOVE_TROLLEY:
-			break;
-		case REMOVE_WALL:
-			break;
-		case SELECT_DEFAULT_BACKGROUND_TEXTURE:
-			break;
-		case SELECT_DEFAULT_WALL_TEXTURE:
-			break;
-		default:
-			break;
-
-		}
-	}
-
-	private void pressed(int x, int y) {
-		if (x > 400) {
-			x = 400;
-		}
-		if (y > 500) {
-			y = 500;
-		}
-
-		int caseX = (x - OFFSET) / EditorConstante.GRID_SIZE_X;
-		int caseY = CoordinateUtils.clicGridY(y);
-		switch (action) {
-		case ADD_CUSTOM_BACKGROUND:
-			break;
-		case ADD_CUSTOM_FOREGROUND:
-			break;
-		case ADD_HOLE:
-			break;
-		case ADD_INTERRUPTEUR:
-			break;
-		case ADD_MINE:
-			break;
-		case ADD_RAIL:
-			break;
-		case ADD_START_PLAYER:
-			break;
-		case ADD_TELEPORTER:
-			break;
-		case ADD_TROLLEY:
-			break;
-		case ADD_WALL:
-			break;
-		case NONE:
-			break;
-		case REMOVE_CUSTOM_BACKGROUND:
-			break;
-		case REMOVE_CUSTOM_FOREGROUND:
-			break;
-		case REMOVE_HOLE:
-			break;
-		case REMOVE_INTERRUPTEUR:
-			break;
-		case REMOVE_MINE:
-			break;
-		case REMOVE_RAIL:
-			break;
-		case REMOVE_START_PLAYER:
-			break;
-		case REMOVE_TELEPORTER:
-			break;
-		case REMOVE_TROLLEY:
-			break;
-		case REMOVE_WALL:
-			break;
-		case SELECT_DEFAULT_BACKGROUND_TEXTURE:
-			break;
-		case SELECT_DEFAULT_WALL_TEXTURE:
-			break;
-		default:
-			break;
-		}
-	}
-
 	private void click(int x, int y) {
 		int invY = CoordinateUtils.clickY(y);
 		switch (action) {
@@ -1264,6 +1093,7 @@ public class EditorLauncher extends JFrame {
 		case ADD_MINE:
 			break;
 		case ADD_RAIL:
+			this.levelService2.addRail(x, invY);
 			break;
 		case ADD_START_PLAYER:
 			break;
@@ -1302,6 +1132,7 @@ public class EditorLauncher extends JFrame {
 		default:
 			break;
 		}
+		repaint();
 	}
 
 	/*************************************************************************************
@@ -1309,12 +1140,6 @@ public class EditorLauncher extends JFrame {
 	 * --- TREAT FUNCTION ---
 	 * 
 	 *************************************************************************************/
-
-	private void addRail(int x, int y) {
-		this.levelService2.addRail(x, y);
-		repaint();
-	}
-
 	public void repaint() {
 		this.drawPanel.repaint();
 	}
@@ -1329,8 +1154,12 @@ public class EditorLauncher extends JFrame {
 		 * nextLevelIndexSpinner.setValue((Integer) levelService2.getNextLevelId());
 		 * showPlatformLevelCheckBox.setSelected(levelService2.isShowPlatform());
 		 */
-//		spanishLevelNameIndexTextField.setText(levelService2.getLevelName("es"));
-//		englishLevelNameIndexTextField.setText(levelService2.getLevelName("en"));
-//		frenchLevelNameIndexTextField.setText(levelService2.getLevelName("fr"));
+		// spanishLevelNameIndexTextField.setText(levelService2.getLevelName("es"));
+		// englishLevelNameIndexTextField.setText(levelService2.getLevelName("en"));
+		// frenchLevelNameIndexTextField.setText(levelService2.getLevelName("fr"));
+
+		levelNameEnTextField.setText(levelService2.getLevelName(LocaleEnum.ENGLISH));
+		levelNameFrTextField.setText(levelService2.getLevelName(LocaleEnum.FRENCH));
+
 	}
 }

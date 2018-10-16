@@ -42,7 +42,8 @@ public class LevelService2 {
 	/**
 	 * Load JSON Level file and init map with all level and variante
 	 * 
-	 * @param in inputStream of file
+	 * @param in
+	 *            inputStream of file
 	 * @return Level to Edit
 	 */
 	public void load(InputStream in) {
@@ -180,7 +181,7 @@ public class LevelService2 {
 		return variante;
 	}
 
-	public String getLevelName(String lang) {
+	public String getLevelName(LocaleEnum lang) {
 
 		if (this.currentLevel != null) {
 			if (this.currentLevel.getName() != null) {
@@ -189,6 +190,8 @@ public class LevelService2 {
 						return ln.getValue();
 					}
 				}
+				this.currentLevel.getName().add(new TextDTO(lang, "CHANGE IT !"));
+				return "CHANGE IT !";
 			} else {
 				this.currentLevel.setName(new ArrayList<>());
 				this.currentLevel.getName().add(new TextDTO(LocaleEnum.ENGLISH, ""));
