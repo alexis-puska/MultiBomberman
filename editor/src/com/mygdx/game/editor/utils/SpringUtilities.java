@@ -42,6 +42,11 @@ import javax.swing.SpringLayout;
  * as SpringBox and SpringCompactGrid.
  */
 public class SpringUtilities {
+
+	private SpringUtilities() {
+		// unused constructor
+	}
+
 	/**
 	 * A debugging utility that prints to stdout the component's minimum, preferred,
 	 * and maximum sizes.

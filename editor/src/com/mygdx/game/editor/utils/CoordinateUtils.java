@@ -15,6 +15,10 @@ public class CoordinateUtils {
 	private static final int SCREEN_SIZE_Y = 336;
 	private static final int MAX_BLOC_Y = 21;
 
+	private CoordinateUtils() {
+		// unused constructor
+	}
+
 	/**
 	 * @param y      coordinate of object to draw
 	 * @param height height of object to draw

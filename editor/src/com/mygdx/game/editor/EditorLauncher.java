@@ -645,7 +645,7 @@ public class EditorLauncher extends JFrame {
 		/***********************
 		 * --- NAVIGATION ---
 		 ***********************/
-		openLoadFileChooser.addActionListener(ActionEvent -> {
+		openLoadFileChooser.addActionListener(actionEvent -> {
 			int returnVal = loadFileChooser.showOpenDialog(panelNavigation);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				absolutePathFile = loadFileChooser.getSelectedFile().getAbsolutePath();
