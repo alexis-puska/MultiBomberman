@@ -409,10 +409,8 @@ public class LevelService2 {
 	}
 
 	public int getBombe() {
-		if (this.currentVariante != null) {
-			if (this.currentVariante.getBombe() >= 1) {
-				return this.currentVariante.getBombe();
-			}
+		if (this.currentVariante != null && this.currentVariante.getBombe() >= 1) {
+			return this.currentVariante.getBombe();
 		}
 		return 0;
 	}
@@ -424,10 +422,8 @@ public class LevelService2 {
 	}
 
 	public int getStrenght() {
-		if (this.currentVariante != null) {
-			if (this.currentVariante.getStrenght() >= 1) {
-				return this.currentVariante.getStrenght();
-			}
+		if (this.currentVariante != null && this.currentVariante.getStrenght() >= 1) {
+			return this.currentVariante.getStrenght();
 		}
 		return 1;
 	}

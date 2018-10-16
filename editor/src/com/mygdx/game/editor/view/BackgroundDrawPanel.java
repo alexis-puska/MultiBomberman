@@ -22,6 +22,7 @@ public class BackgroundDrawPanel extends Canvas {
 		this.spriteService = spriteService;
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {

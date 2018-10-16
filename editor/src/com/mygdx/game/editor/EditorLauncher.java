@@ -197,9 +197,9 @@ public class EditorLauncher extends JFrame {
 	private GridLayout fileLayout;
 	private transient Border fileBorder;
 	private JButton openSaveFileChooser;
-	private JFileChooser saveFileChooser;
+	private transient JFileChooser saveFileChooser;
 	private JButton openLoadFileChooser;
-	private JFileChooser loadFileChooser;
+	private transient JFileChooser loadFileChooser;
 	private FileNameExtensionFilter loadFileChooserFilter;
 	private FileNameExtensionFilter saveFileChooserFilter;
 
@@ -233,10 +233,8 @@ public class EditorLauncher extends JFrame {
 	public static void main(String[] args) {
 		String lang = "fr";
 		EditorLauncher app;
-		if (args != null && args.length > 0) {
-			if (args[0].equals("fr") || args[0].equals("en")) {
-				lang = args[0];
-			}
+		if (args != null && args.length > 0 && (args[0].equals("fr") || args[0].equals("en"))) {
+			lang = args[0];
 		}
 		app = new EditorLauncher(lang);
 		app.launch();
@@ -980,15 +978,10 @@ public class EditorLauncher extends JFrame {
 				drawPanel.repaint();
 			}
 		});
-		fillWithBrickCheckbox.addItemListener(item -> {
-			levelService2.setFillWithBrick(fillWithBrickCheckbox.isSelected());
-		});
-		defaultBackGround.addActionListener(e -> {
-			action = ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE;
-		});
-		defaultWall.addActionListener(e -> {
-			action = ActionEnum.SELECT_DEFAULT_WALL_TEXTURE;
-		});
+		fillWithBrickCheckbox
+				.addItemListener(item -> levelService2.setFillWithBrick(fillWithBrickCheckbox.isSelected()));
+		defaultBackGround.addActionListener(e -> action = ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE);
+		defaultWall.addActionListener(e -> action = ActionEnum.SELECT_DEFAULT_WALL_TEXTURE);
 		defaultBrickAnimationComboBox.addItemListener(event -> {
 			// door.setKey((GameKeyEnum) requieredKeyComboBox.getSelectedItem());
 			// levelService.updateDoor(door);
@@ -1087,6 +1080,7 @@ public class EditorLauncher extends JFrame {
 	 * --- TREAT FUNCTION ---
 	 * 
 	 *************************************************************************************/
+	@Override
 	public void repaint() {
 		this.drawPanel.repaint();
 	}

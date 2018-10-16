@@ -41,6 +41,7 @@ public class DrawPanel extends Canvas {
 	 * 
 	 * @param g2 graphics
 	 */
+	@Override
 	public void paint(Graphics g) {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
@@ -98,7 +99,7 @@ public class DrawPanel extends Canvas {
 		Composite saved = g2.getComposite();
 		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
 		g2.setComposite(ac);
-		int x; 
+		int x;
 		int y;
 		g2.setColor(Color.RED);
 		x = 0;
@@ -143,9 +144,7 @@ public class DrawPanel extends Canvas {
 				levelService.getCurrentVariante().getDefaultWall().getIndex());
 		List<WallDTO> wall = levelService.getCurrentVariante().getWall();
 		if (wall != null) {
-			wall.stream().forEach(w -> {
-				g2.drawImage(bf, null, w.getX() * bf.getWidth(), w.getY() * bf.getHeight());
-			});
+			wall.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(), w.getY() * bf.getHeight()));
 		}
 	}
 }

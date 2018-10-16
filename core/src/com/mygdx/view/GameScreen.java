@@ -49,21 +49,21 @@ public class GameScreen implements Screen, MenuListener {
 	// layout
 	private FrameBuffer backgroundLayer;
 	private FrameBuffer blocsLayer;
-	private FrameBuffer BricksLayer;
+	private FrameBuffer bricksLayer;
 	private FrameBuffer playerLayer;
 	private FrameBuffer frontLayer;
 	private FrameBuffer shadowLayer;
 
 	private Texture backgroundLayerTexture;
 	private Texture blocsLayerTexture;
-	private Texture BricksLayerTexture;
+	private Texture bricksLayerTexture;
 	private Texture playerLayerTexture;
 	private Texture frontLayerTexture;
 	private Texture shadowLayerTexture;
 
 	private TextureRegion backgroundLayerTextureRegion;
 	private TextureRegion blocsLayerTextureRegion;
-	private TextureRegion BricksLayerTextureRegion;
+	private TextureRegion bricksLayerTextureRegion;
 	private TextureRegion playerLayerTextureRegion;
 	private TextureRegion frontLayerTextureRegion;
 	private TextureRegion shadowLayerTextureRegion;
@@ -97,7 +97,7 @@ public class GameScreen implements Screen, MenuListener {
 				Constante.GAME_SCREEN_SIZE_Y, false);
 		this.blocsLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
 				false);
-		this.BricksLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
+		this.bricksLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
 				false);
 		this.playerLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
 				false);
@@ -108,14 +108,14 @@ public class GameScreen implements Screen, MenuListener {
 
 		this.backgroundLayerTexture = backgroundLayer.getColorBufferTexture();
 		this.blocsLayerTexture = blocsLayer.getColorBufferTexture();
-		this.BricksLayerTexture = BricksLayer.getColorBufferTexture();
+		this.bricksLayerTexture = bricksLayer.getColorBufferTexture();
 		this.playerLayerTexture = playerLayer.getColorBufferTexture();
 		this.frontLayerTexture = frontLayer.getColorBufferTexture();
 		this.shadowLayerTexture = shadowLayer.getColorBufferTexture();
 
 		backgroundLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 		blocsLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		BricksLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		bricksLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 		playerLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 		frontLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 		shadowLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -240,7 +240,7 @@ public class GameScreen implements Screen, MenuListener {
 		game.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		game.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(BricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		game.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		game.getBatch().draw(playerLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
@@ -308,16 +308,16 @@ public class GameScreen implements Screen, MenuListener {
 	}
 
 	private void drawBricks() {
-		BricksLayer.begin();
+		bricksLayer.begin();
 		game.getBatch().begin();
 		game.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		game.getBatch().end();
-		BricksLayerTextureRegion = new TextureRegion(BricksLayerTexture);
-		BricksLayerTextureRegion.flip(false, true);
-		BricksLayer.end();
+		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
+		bricksLayerTextureRegion.flip(false, true);
+		bricksLayer.end();
 
 	}
 
@@ -390,14 +390,14 @@ public class GameScreen implements Screen, MenuListener {
 
 		this.backgroundLayer.dispose();
 		this.blocsLayer.dispose();
-		this.BricksLayer.dispose();
+		this.bricksLayer.dispose();
 		this.playerLayer.dispose();
 		this.frontLayer.dispose();
 		this.shadowLayer.dispose();
 
 		this.backgroundLayerTexture.dispose();
 		this.blocsLayerTexture.dispose();
-		this.BricksLayerTexture.dispose();
+		this.bricksLayerTexture.dispose();
 		this.playerLayerTexture.dispose();
 		this.frontLayerTexture.dispose();
 		this.shadowLayerTexture.dispose();
