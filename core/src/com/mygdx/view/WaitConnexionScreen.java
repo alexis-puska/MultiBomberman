@@ -78,6 +78,7 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void resize(int width, int height) {
+		// unused method
 	}
 
 	@Override

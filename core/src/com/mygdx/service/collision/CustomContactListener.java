@@ -9,22 +9,22 @@ public class CustomContactListener implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-
+		// a definir
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-
+		// a definir
 	}
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-
+		// a definir
 	}
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-
+		// a definir
 	}
 
 }

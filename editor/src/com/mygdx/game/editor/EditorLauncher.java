@@ -688,18 +688,22 @@ public class EditorLauncher extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
+				// unused method
 			}
 		});
 
@@ -735,18 +739,22 @@ public class EditorLauncher extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
+				// unused method
 			}
 		});
 
@@ -763,18 +771,22 @@ public class EditorLauncher extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				// unused method
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
+				// unused method
 			}
 		});
 

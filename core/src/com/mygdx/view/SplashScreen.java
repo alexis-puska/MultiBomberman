@@ -34,6 +34,7 @@ public class SplashScreen implements MenuListener, Screen {
 
 	@Override
 	public void resize(int width, int height) {
+		// unused method
 	}
 
 	@Override

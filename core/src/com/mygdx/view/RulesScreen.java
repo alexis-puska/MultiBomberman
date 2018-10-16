@@ -113,6 +113,7 @@ public class RulesScreen implements Screen, MenuListener {
 
 	@Override
 	public void resize(int width, int height) {
+		// unused method
 	}
 
 	@Override
