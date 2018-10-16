@@ -25,7 +25,7 @@ public class Player extends BodyAble implements ControlEventListener {
 	private static final String CLASS_NAME = "Player.class";
 
 	private static final float WALK_SPEED = 6f;
-	private static final float radius = 0.47f;
+	private static final float RADIUS = 0.47f;
 
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
@@ -55,10 +55,10 @@ public class Player extends BodyAble implements ControlEventListener {
 //		bodyCircle.setRadius(0.49f);
 		PolygonShape bodyCircle = new PolygonShape();
 		Vector2[] vertices = new Vector2[4];
-		vertices[0] = new Vector2(-radius, 0);
-		vertices[1] = new Vector2(0, radius);
-		vertices[2] = new Vector2(radius, 0);
-		vertices[3] = new Vector2(0, -radius);
+		vertices[0] = new Vector2(-RADIUS, 0);
+		vertices[1] = new Vector2(0, RADIUS);
+		vertices[2] = new Vector2(RADIUS, 0);
+		vertices[3] = new Vector2(0, -RADIUS);
 		bodyCircle.set(vertices);
 		
 		

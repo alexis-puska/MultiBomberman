@@ -296,8 +296,7 @@ public class GameScreen implements Screen, MenuListener {
 		for (int j = 1; j < 19; j++) {
 			for (int i = 0; i < 35; i++) {
 				if (i % 2 == 0 && j % 2 == 0) {
-					game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18,
-							j * 16);
+					game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, j * 16);
 				}
 			}
 		}
@@ -356,7 +355,7 @@ public class GameScreen implements Screen, MenuListener {
 		game.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		players.stream().forEach(p -> p.drawIt());
+		players.stream().forEach(Player::drawIt);
 		game.getBatch().end();
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);
 		playerLayerTextureRegion.flip(false, true);

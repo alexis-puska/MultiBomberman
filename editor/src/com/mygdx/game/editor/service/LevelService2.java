@@ -534,7 +534,7 @@ public class LevelService2 {
 		}
 	}
 
-	public void removeWall(int x, int y, boolean draw, TextureDTO extureDTO) {
+	public void removeWall(int x, int y) {
 		if (currentVariante != null) {
 			currentVariante.getWall().removeIf(el -> el.getX() == x && el.getY() == y);
 		}

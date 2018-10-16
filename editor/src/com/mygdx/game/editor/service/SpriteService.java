@@ -97,7 +97,7 @@ public class SpriteService {
 							}
 						}
 						if (sprites.containsKey(area.getAnimation())) {
-							BufferedImage merge[] = mergeBufferedImage(sprites.get(area.getAnimation()), sprite);
+							BufferedImage[] merge = mergeBufferedImage(sprites.get(area.getAnimation()), sprite);
 							sprites.put(area.getAnimation(), merge);
 						} else {
 							sprites.put(area.getAnimation(), sprite);

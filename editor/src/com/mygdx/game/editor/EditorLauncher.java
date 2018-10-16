@@ -3,8 +3,6 @@ package com.mygdx.game.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -59,7 +57,7 @@ public class EditorLauncher extends JFrame {
 	private final LevelService2 levelService2;
 
 	// traduction
-	private final Locale locale;
+	private final Locale currentLocale;
 	private final ResourceBundle message;
 
 	private String absolutePathFile;
@@ -241,20 +239,20 @@ public class EditorLauncher extends JFrame {
 			}
 		}
 		app = new EditorLauncher(lang);
-		app.Launch();
+		app.launch();
 	}
 
 	public EditorLauncher(String lang) {
 		this.action = ActionEnum.NONE;
-		this.locale = Locale.forLanguageTag(lang);
-		this.message = ResourceBundle.getBundle("i18n/Message", locale);
+		this.currentLocale = Locale.forLanguageTag(lang);
+		this.message = ResourceBundle.getBundle("i18n/Message", currentLocale);
 		LOG.info("message {} : {}", lang, this.message.getString("editor.border.bonus"));
 		LOG.info("Welcome in lr-inthewell-editor App !");
 		this.spriteService = new SpriteService();
 		this.levelService2 = new LevelService2();
 	}
 
-	private void Launch() {
+	private void launch() {
 		this.getContentPane().setLayout(new BorderLayout());
 		initComponent();
 		buildParameterPanelButton();
@@ -605,7 +603,7 @@ public class EditorLauncher extends JFrame {
 		defaultWallLabel = new JLabel("default wall texture");
 		defaultWall = new JButton();
 		defaultBrickAnimationLabel = new JLabel("default bricks animation");
-		defaultBrickAnimationComboBox = new JComboBox<String>();
+		defaultBrickAnimationComboBox = new JComboBox<>();
 
 		/*****************
 		 * --- BONUS ---
@@ -647,27 +645,24 @@ public class EditorLauncher extends JFrame {
 		/***********************
 		 * --- NAVIGATION ---
 		 ***********************/
-		openLoadFileChooser.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int returnVal = loadFileChooser.showOpenDialog(panelNavigation);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					absolutePathFile = loadFileChooser.getSelectedFile().getAbsolutePath();
-					try {
-						saveFileChooser.setCurrentDirectory(loadFileChooser.getSelectedFile().getCanonicalFile());
+		openLoadFileChooser.addActionListener(ActionEvent -> {
+			int returnVal = loadFileChooser.showOpenDialog(panelNavigation);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				absolutePathFile = loadFileChooser.getSelectedFile().getAbsolutePath();
+				try {
+					saveFileChooser.setCurrentDirectory(loadFileChooser.getSelectedFile().getCanonicalFile());
 
-						levelService2.load(new FileInputStream(new File(absolutePathFile)));
-						centerPanel.updateUI();
-						loadPropertiesLevel();
-						repaint();
-					} catch (FileNotFoundException e) {
-						LOG.error("", e.getMessage());
-					} catch (IOException e1) {
-						System.out.println("Set save path failed !");
-					}
-					System.out.println(
-							"You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());
+					levelService2.load(new FileInputStream(new File(absolutePathFile)));
+					centerPanel.updateUI();
+					loadPropertiesLevel();
+					repaint();
+				} catch (FileNotFoundException e) {
+					LOG.error("", e.getMessage());
+				} catch (IOException e1) {
+					System.out.println("Set save path failed !");
 				}
+				System.out
+						.println("You chose to open this file: " + loadFileChooser.getSelectedFile().getAbsolutePath());
 			}
 		});
 
