@@ -29,6 +29,8 @@ public class LevelService2 {
 
 	private static final Logger LOG = LogManager.getLogger(LevelService2.class);
 
+	private static final String CHANGE_IT = "CHANGE !!!";
+
 	private final ObjectMapper objectMapper;
 	private LevelFileDTO levelFileDTO;
 
@@ -162,7 +164,7 @@ public class LevelService2 {
 		LevelDTO level = new LevelDTO();
 		List<TextDTO> names = new ArrayList<>();
 		for (LocaleEnum val : LocaleEnum.values()) {
-			names.add(new TextDTO(val, "CHANGE !"));
+			names.add(new TextDTO(val, CHANGE_IT));
 		}
 		level.setName(names);
 		level.setVariante(new ArrayList<>());
@@ -217,7 +219,7 @@ public class LevelService2 {
 		variante.setName(names);
 		List<TextDTO> descriptions = new ArrayList<>();
 		for (LocaleEnum val : LocaleEnum.values()) {
-			descriptions.add(new TextDTO(val, "CHANGE IT !"));
+			descriptions.add(new TextDTO(val, CHANGE_IT));
 		}
 		variante.setDescription(descriptions);
 		variante.setBombe(2);
@@ -286,8 +288,8 @@ public class LevelService2 {
 						return ln.getValue();
 					}
 				}
-				this.currentLevel.getName().add(new TextDTO(lang, "CHANGE IT !"));
-				return "CHANGE IT !";
+				this.currentLevel.getName().add(new TextDTO(lang, CHANGE_IT));
+				return CHANGE_IT;
 			} else {
 				this.currentLevel.setName(new ArrayList<>());
 				this.currentLevel.getName().add(new TextDTO(LocaleEnum.ENGLISH, ""));
@@ -325,8 +327,8 @@ public class LevelService2 {
 						return ln.getValue();
 					}
 				}
-				this.currentVariante.getName().add(new TextDTO(lang, "CHANGE IT !"));
-				return "CHANGE IT !";
+				this.currentVariante.getName().add(new TextDTO(lang, CHANGE_IT));
+				return CHANGE_IT;
 			} else {
 				this.currentVariante.setName(new ArrayList<>());
 				this.currentVariante.getName().add(new TextDTO(LocaleEnum.ENGLISH, ""));
@@ -364,8 +366,8 @@ public class LevelService2 {
 						return ln.getValue();
 					}
 				}
-				this.currentVariante.getDescription().add(new TextDTO(lang, "CHANGE IT !"));
-				return "CHANGE IT !";
+				this.currentVariante.getDescription().add(new TextDTO(lang, CHANGE_IT));
+				return CHANGE_IT;
 			} else {
 				this.currentVariante.setDescription(new ArrayList<>());
 				this.currentVariante.getDescription().add(new TextDTO(LocaleEnum.ENGLISH, ""));
