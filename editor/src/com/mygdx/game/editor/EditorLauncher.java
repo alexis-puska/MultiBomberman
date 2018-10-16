@@ -475,41 +475,41 @@ public class EditorLauncher extends JFrame {
 		 * --- NAVIGATION ---
 		 *********************/
 		panelNavigation = new JPanel();
-		borderNavigation = BorderFactory.createTitledBorder(message.getString("navigation.border"));
+		borderNavigation = BorderFactory.createTitledBorder(message.getString("editor.border.navigation"));
 		layoutNavigation = new GridLayout();
 		layoutNavigation.setColumns(EditorConstante.NB_COLUMN_NAVIGATION);
 		layoutNavigation.setRows(EditorConstante.NB_ROW_NAVIGATION);
 		currentLevelPanel = new JPanel();
 		currentLevelLayout = new GridLayout();
-		currentLevelBorder = BorderFactory.createTitledBorder(message.getString("currentLevel.border"));
-		addLevel = new JButton(message.getString("currentLevel.button.add"));
-		delLevel = new JButton(message.getString("currentLevel.button.delete"));
-		nextLevel = new JButton(message.getString("currentLevel.button.next"));
-		previousLevel = new JButton(message.getString("currentLevel.button.previous"));
+		currentLevelBorder = BorderFactory.createTitledBorder(message.getString("editor.border.currentLevel"));
+		addLevel = new JButton(message.getString("editor.button.currentLevel.add"));
+		delLevel = new JButton(message.getString("editor.button.currentLevel.delete"));
+		nextLevel = new JButton(message.getString("editor.button.currentLevel.next"));
+		previousLevel = new JButton(message.getString("editor.button.currentLevel.previous"));
 		currentVariantePanel = new JPanel();
 		currentVarianteLayout = new GridLayout();
-		currentVarianteBorder = BorderFactory.createTitledBorder(message.getString("currentVariante.border"));
-		addVariante = new JButton(message.getString("currentVariante.button.add"));
-		delVariante = new JButton(message.getString("currentVariante.button.delete"));
-		nextVariante = new JButton(message.getString("currentVariante.button.next"));
-		previousVariante = new JButton(message.getString("currentVariante.button.previous"));
+		currentVarianteBorder = BorderFactory.createTitledBorder(message.getString("editor.border.currentVariante"));
+		addVariante = new JButton(message.getString("editor.button.currentVariante.add"));
+		delVariante = new JButton(message.getString("editor.button.currentVariante.delete"));
+		nextVariante = new JButton(message.getString("editor.button.currentVariante.next"));
+		previousVariante = new JButton(message.getString("editor.button.currentVariante.previous"));
 
 		/*********************
 		 * --- FILE : NORTH ---
 		 *********************/
 		filePanel = new JPanel();
 		fileLayout = new GridLayout();
-		fileBorder = BorderFactory.createTitledBorder(message.getString("file.border"));
-		openLoadFileChooser = new JButton(message.getString("file.open"));
-		openSaveFileChooser = new JButton(message.getString("file.save"));
+		fileBorder = BorderFactory.createTitledBorder(message.getString("editor.file.border"));
+		openLoadFileChooser = new JButton(message.getString("editor.file.open"));
+		openSaveFileChooser = new JButton(message.getString("editor.file.save"));
 		loadFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
 		FileNameExtensionFilter loadFileChooserFilter = new FileNameExtensionFilter(
-				message.getString("file.description"), "json");
+				message.getString("editor.file.description"), "json");
 		loadFileChooser.setFileFilter(loadFileChooserFilter);
 		saveFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		FileNameExtensionFilter saveFileChooserFilter = new FileNameExtensionFilter(
-				message.getString("file.description"), "json");
+				message.getString("editor.file.description"), "json");
 		saveFileChooser.setFileFilter(saveFileChooserFilter);
 
 		/***********************
@@ -548,93 +548,93 @@ public class EditorLauncher extends JFrame {
 		 *************************************/
 		eastPanel = new JPanel();
 		eastPanelLayout = new GridLayout();
-		eastPanelBorder = BorderFactory.createTitledBorder("Outils");
+		eastPanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.tools"));
 		levelPropertiesPanel = new JPanel();
 		levelPropertiesPanelLayout = new SpringLayout();
-		levelPropertiesPanelBorder = BorderFactory.createTitledBorder("Level");
+		levelPropertiesPanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.level"));
 		bonusPanel = new JPanel();
 		bonusLayout = new SpringLayout();
-		bonusBorder = BorderFactory.createTitledBorder("Bonus");
+		bonusBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.bonus"));
 		propertiesPanel = new JPanel();
 		propertiesPanelLayout = new BorderLayout();
-		propertiesPanelBorder = BorderFactory.createTitledBorder("Properties");
+		propertiesPanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.properties"));
 		foregroundPanel = new JPanel();
-		foregroundPanelBorder = BorderFactory.createTitledBorder(message.getString("platform.border"));
+		foregroundPanelBorder = BorderFactory.createTitledBorder(message.getString("editor.border.foreground"));
 		foregroundDrawPanel = new ForegroundDrawPanel(spriteService);
 		backgroundPanel = new JPanel();
-		backgroundPanelBorder = BorderFactory.createTitledBorder(message.getString("background.border"));
+		backgroundPanelBorder = BorderFactory.createTitledBorder(message.getString("editor.border.background"));
 		backgroundDrawPanel = new BackgroundDrawPanel(spriteService);
 		texturePanel = new JPanel();
 		texturePanelLayout = new GridLayout();
-		texturePanelBorder = BorderFactory.createTitledBorder("Texture");
+		texturePanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.texture"));
 
 		/*********************
 		 * --- PROPERTIES ---
 		 *********************/
-		levelNameFrLabel = new JLabel("level name fr");
+		levelNameFrLabel = new JLabel(this.message.getString("editor.label.level.name.fr"));
 		levelNameFrTextField = new JTextField();
-		levelNameEnLabel = new JLabel("level name en");
+		levelNameEnLabel = new JLabel(this.message.getString("editor.label.level.name.en"));
 		levelNameEnTextField = new JTextField();
-		varianteNameFrLabel = new JLabel("variante name fr");
+		varianteNameFrLabel = new JLabel(this.message.getString("editor.label.variante.name.fr"));
 		varianteNameFrTextField = new JTextField();
-		varianteNameEnLabel = new JLabel("varnate name fr");
+		varianteNameEnLabel = new JLabel(this.message.getString("editor.label.variante.name.en"));
 		varianteNameEnTextField = new JTextField();
-		descriptionFrLabel = new JLabel("description fr");
+		descriptionFrLabel = new JLabel(this.message.getString("editor.label.variante.description.fr"));
 		descriptionFrTextField = new JTextField();
-		descriptionEnLabel = new JLabel("description en");
+		descriptionEnLabel = new JLabel(this.message.getString("editor.label.variante.description.en"));
 		descriptionEnTextField = new JTextField();
-		shadowLabel = new JLabel("shadow value");
+		shadowLabel = new JLabel(this.message.getString("editor.label.variante.shadow"));
 		SpinnerNumberModel shadowSpinnerModel = new SpinnerNumberModel(new Float(0.0), new Float(0.0), new Float(1.0),
 				new Float(0.05));
 		shadowSpinner = new JSpinner(shadowSpinnerModel);
-		bombeLabel = new JLabel("nb bombe");
+		bombeLabel = new JLabel(this.message.getString("editor.label.variante.bombe"));
 		SpinnerNumberModel bombeSpinnerModel = new SpinnerNumberModel(2, 1, 6, 1);
 		bombeSpinner = new JSpinner(bombeSpinnerModel);
-		strenghtLabel = new JLabel("strnght of bombe");
+		strenghtLabel = new JLabel(this.message.getString("editor.label.variante.strength"));
 		SpinnerNumberModel strenghtSpinnerModel = new SpinnerNumberModel(2, 1, 20, 1);
 		strenghtSpinner = new JSpinner(strenghtSpinnerModel);
-		fillWithBrickLabel = new JLabel("fill with bricks");
+		fillWithBrickLabel = new JLabel(this.message.getString("editor.label.variante.fillBrick"));
 		fillWithBrickCheckbox = new JCheckBox();
-		defaultBackgroundLabel = new JLabel("default background texture");
+		defaultBackgroundLabel = new JLabel(this.message.getString("editor.label.variante.defaultBackgroundTexture"));
 		defaultBackGround = new JButton();
-		defaultWallLabel = new JLabel("default wall texture");
+		defaultWallLabel = new JLabel(this.message.getString("editor.label.variante.defaultWallTexture"));
 		defaultWall = new JButton();
-		defaultBrickAnimationLabel = new JLabel("default bricks animation");
+		defaultBrickAnimationLabel = new JLabel(this.message.getString("editor.label.variante.defaultBrickAnimation"));
 		defaultBrickAnimationComboBox = new JComboBox<>();
 
 		/*****************
 		 * --- BONUS ---
 		 *****************/
 		bonus1TextField = new JTextField();
-		bonus1Label = new JLabel("bonus1");
+		bonus1Label = new JLabel(this.message.getString("editor.label.variante.bonus.death"));
 		bonus2TextField = new JTextField();
-		bonus2Label = new JLabel("bonus2");
+		bonus2Label = new JLabel(this.message.getString("editor.label.variante.bonus.roller"));
 		bonus3TextField = new JTextField();
-		bonus3Label = new JLabel("bonus3");
+		bonus3Label = new JLabel(this.message.getString("editor.label.variante.bonus.fire"));
 		bonus4TextField = new JTextField();
-		bonus4Label = new JLabel("bonus4");
+		bonus4Label = new JLabel(this.message.getString("editor.label.variante.bonus.fire+"));
 		bonus5TextField = new JTextField();
-		bonus5Label = new JLabel("bonus5");
+		bonus5Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombe"));
 		bonus6TextField = new JTextField();
-		bonus6Label = new JLabel("bonus6");
+		bonus6Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombep"));
 		bonus7TextField = new JTextField();
-		bonus7Label = new JLabel("bonus7");
+		bonus7Label = new JLabel(this.message.getString("editor.label.variante.bonus.kick"));
 		bonus8TextField = new JTextField();
-		bonus8Label = new JLabel("bonus8");
+		bonus8Label = new JLabel(this.message.getString("editor.label.variante.bonus.glove"));
 		bonus9TextField = new JTextField();
-		bonus9Label = new JLabel("bonus9");
+		bonus9Label = new JLabel(this.message.getString("editor.label.variante.bonus.rubber"));
 		bonus10TextField = new JTextField();
-		bonus10Label = new JLabel("bonus10");
+		bonus10Label = new JLabel(this.message.getString("editor.label.variante.bonus.superBombe"));
 		bonus11TextField = new JTextField();
-		bonus11Label = new JLabel("bonus11");
+		bonus11Label = new JLabel(this.message.getString("editor.label.variante.bonus.shoes"));
 		bonus12TextField = new JTextField();
-		bonus12Label = new JLabel("bonus12");
+		bonus12Label = new JLabel(this.message.getString("editor.label.variante.bonus.wall"));
 		bonus13TextField = new JTextField();
-		bonus13Label = new JLabel("bonus13");
+		bonus13Label = new JLabel(this.message.getString("editor.label.variante.bonus.egg"));
 		bonus14TextField = new JTextField();
-		bonus14Label = new JLabel("bonus14");
+		bonus14Label = new JLabel(this.message.getString("editor.label.variante.bonus.shield"));
 		bonus15TextField = new JTextField();
-		bonus15Label = new JLabel("bonus15");
+		bonus15Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombeLine"));
 
 	}
 
