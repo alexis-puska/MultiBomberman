@@ -29,6 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -82,10 +83,10 @@ public class EditorLauncher extends JFrame {
 	private Border propertiesPanelBorder;
 	private JPanel levelPropertiesPanel;
 	private SpringLayout levelPropertiesPanelLayout;
-	private Border levelPropertiesPanelBorder;
+	private TitledBorder levelPropertiesPanelBorder;
 	private JPanel bonusPanel;
 	private SpringLayout bonusLayout;
-	private Border bonusBorder;
+	private TitledBorder bonusBorder;
 
 	private JPanel texturePanel;
 	private Border texturePanelBorder;
@@ -1107,7 +1108,8 @@ public class EditorLauncher extends JFrame {
 		bombeSpinner.setValue(Integer.valueOf(levelService2.getBombe()));
 		strenghtSpinner.setValue(Integer.valueOf(levelService2.getStrenght()));
 		fillWithBrickCheckbox.setSelected(levelService2.isFillWithBrick());
-		LOG.info("level position : {}", levelService2.getLevelPosition());
-		LOG.info("variante position : {}", levelService2.getVariantePosition());
+		levelPropertiesPanelBorder.setTitle(
+				"Level : " + levelService2.getLevelPosition() + ", variante : " + levelService2.getVariantePosition());
+		levelPropertiesPanel.repaint();
 	}
 }

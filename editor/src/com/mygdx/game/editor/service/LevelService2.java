@@ -96,6 +96,13 @@ public class LevelService2 {
 				} else {
 					currentVariante = null;
 				}
+			} else {
+				currentLevel = levelFileDTO.getLevels().get(0);
+				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				} else {
+					currentVariante = null;
+				}
 			}
 		}
 	}
@@ -105,6 +112,13 @@ public class LevelService2 {
 			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
 			if (pos > 0) {
 				currentLevel = levelFileDTO.getLevels().get(pos - 1);
+				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				} else {
+					currentVariante = null;
+				}
+			} else {
+				currentLevel = levelFileDTO.getLevels().get(levelFileDTO.getLevels().size() - 1);
 				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
 					currentVariante = currentLevel.getVariante().get(0);
 				} else {
@@ -212,6 +226,16 @@ public class LevelService2 {
 		variante.setDefaultBackground(new DefaultTextureDTO(SpriteEnum.LEVEL, 0));
 		variante.setDefaultBrickAnimation(SpriteEnum.LEVEL1);
 		variante.setDefaultWall(new DefaultTextureDTO(SpriteEnum.LEVEL, 0));
+
+		variante.setCustomBackgroundTexture(new ArrayList<>());
+		variante.setCustomForegroundTexture(new ArrayList<>());
+		variante.setHole(new ArrayList<>());
+		variante.setInterrupter(new ArrayList<>());
+		variante.setMine(new ArrayList<>());
+		variante.setRail(new ArrayList<>());
+		variante.setStartPlayer(new ArrayList<>());
+		variante.setTeleporter(new ArrayList<>());
+		variante.setTrolley(new ArrayList<>());
 		variante.setWall(new ArrayList<>());
 		for (int i = 0; i < 35; i++) {
 			variante.getWall().add(new WallDTO(i, 0));
@@ -255,7 +279,6 @@ public class LevelService2 {
 	}
 
 	public String getLevelName(LocaleEnum lang) {
-
 		if (this.currentLevel != null) {
 			if (this.currentLevel.getName() != null) {
 				for (TextDTO ln : this.currentLevel.getName()) {
@@ -275,25 +298,26 @@ public class LevelService2 {
 	}
 
 	public void setLevelName(LocaleEnum lang, String name) {
-		TextDTO tmp = null;
-		for (TextDTO ln : this.currentLevel.getName()) {
-			if (ln.getLang().equals(lang)) {
-				tmp = ln;
-				break;
+		if (this.currentLevel != null) {
+			TextDTO tmp = null;
+			for (TextDTO ln : this.currentLevel.getName()) {
+				if (ln.getLang().equals(lang)) {
+					tmp = ln;
+					break;
+				}
 			}
-		}
-		if (tmp != null) {
-			this.currentLevel.getName().remove(tmp);
-			tmp.setValue(name);
-			this.currentLevel.getName().add(tmp);
-		} else {
-			tmp = new TextDTO(lang, name);
-			this.currentLevel.getName().add(tmp);
+			if (tmp != null) {
+				this.currentLevel.getName().remove(tmp);
+				tmp.setValue(name);
+				this.currentLevel.getName().add(tmp);
+			} else {
+				tmp = new TextDTO(lang, name);
+				this.currentLevel.getName().add(tmp);
+			}
 		}
 	}
 
 	public String getVarianteName(LocaleEnum lang) {
-
 		if (this.currentVariante != null) {
 			if (this.currentVariante.getName() != null) {
 				for (TextDTO ln : this.currentVariante.getName()) {
@@ -313,25 +337,26 @@ public class LevelService2 {
 	}
 
 	public void setVarianteName(LocaleEnum lang, String name) {
-		TextDTO tmp = null;
-		for (TextDTO ln : this.currentVariante.getName()) {
-			if (ln.getLang().equals(lang)) {
-				tmp = ln;
-				break;
+		if (this.currentVariante != null) {
+			TextDTO tmp = null;
+			for (TextDTO ln : this.currentVariante.getName()) {
+				if (ln.getLang().equals(lang)) {
+					tmp = ln;
+					break;
+				}
 			}
-		}
-		if (tmp != null) {
-			this.currentVariante.getName().remove(tmp);
-			tmp.setValue(name);
-			this.currentVariante.getName().add(tmp);
-		} else {
-			tmp = new TextDTO(lang, name);
-			this.currentVariante.getName().add(tmp);
+			if (tmp != null) {
+				this.currentVariante.getName().remove(tmp);
+				tmp.setValue(name);
+				this.currentVariante.getName().add(tmp);
+			} else {
+				tmp = new TextDTO(lang, name);
+				this.currentVariante.getName().add(tmp);
+			}
 		}
 	}
 
 	public String getVarianteDescription(LocaleEnum lang) {
-
 		if (this.currentVariante != null) {
 			if (this.currentVariante.getDescription() != null) {
 				for (TextDTO ln : this.currentVariante.getDescription()) {
@@ -351,20 +376,22 @@ public class LevelService2 {
 	}
 
 	public void setVarianteDescription(LocaleEnum lang, String name) {
-		TextDTO tmp = null;
-		for (TextDTO ln : this.currentVariante.getDescription()) {
-			if (ln.getLang().equals(lang)) {
-				tmp = ln;
-				break;
+		if (this.currentVariante != null) {
+			TextDTO tmp = null;
+			for (TextDTO ln : this.currentVariante.getDescription()) {
+				if (ln.getLang().equals(lang)) {
+					tmp = ln;
+					break;
+				}
 			}
-		}
-		if (tmp != null) {
-			this.currentVariante.getDescription().remove(tmp);
-			tmp.setValue(name);
-			this.currentVariante.getDescription().add(tmp);
-		} else {
-			tmp = new TextDTO(lang, name);
-			this.currentVariante.getDescription().add(tmp);
+			if (tmp != null) {
+				this.currentVariante.getDescription().remove(tmp);
+				tmp.setValue(name);
+				this.currentVariante.getDescription().add(tmp);
+			} else {
+				tmp = new TextDTO(lang, name);
+				this.currentVariante.getDescription().add(tmp);
+			}
 		}
 	}
 
