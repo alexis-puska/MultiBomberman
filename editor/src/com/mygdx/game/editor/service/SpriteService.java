@@ -22,7 +22,7 @@ import com.mygdx.enumeration.SpriteEnum;
 
 public class SpriteService {
 
-	private final static Logger LOG = LogManager.getLogger(SpriteService.class);
+	private static final Logger LOG = LogManager.getLogger(SpriteService.class);
 
 	private Map<SpriteEnum, BufferedImage[]> sprites;
 	private final ObjectMapper objectMapper;

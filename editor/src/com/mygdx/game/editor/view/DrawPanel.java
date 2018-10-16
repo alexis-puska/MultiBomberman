@@ -98,7 +98,8 @@ public class DrawPanel extends Canvas {
 		Composite saved = g2.getComposite();
 		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
 		g2.setComposite(ac);
-		int x, y;
+		int x; 
+		int y;
 		g2.setColor(Color.RED);
 		x = 0;
 		while (x < EditorConstante.SCREEN_SIZE_X) {
