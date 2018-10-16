@@ -111,13 +111,10 @@ public class EditorLauncher extends JFrame {
 	private JLabel descriptionEnLabel;
 	private JTextField descriptionEnTextField;
 	private JLabel shadowLabel;
-	private SpinnerNumberModel shadowSpinnerModel;
 	private JSpinner shadowSpinner;
 	private JLabel bombeLabel;
-	private SpinnerNumberModel bombeSpinnerModel;
 	private JSpinner bombeSpinner;
 	private JLabel strenghtLabel;
-	private SpinnerNumberModel strenghtSpinnerModel;
 	private JSpinner strenghtSpinner;
 	private JLabel fillWithBrickLabel;
 	private JCheckBox fillWithBrickCheckbox;
@@ -196,12 +193,10 @@ public class EditorLauncher extends JFrame {
 	private JPanel filePanel;
 	private GridLayout fileLayout;
 	private transient Border fileBorder;
+	private transient JFileChooser loadFileChooser;
 	private JButton openSaveFileChooser;
 	private transient JFileChooser saveFileChooser;
 	private JButton openLoadFileChooser;
-	private transient JFileChooser loadFileChooser;
-	private FileNameExtensionFilter loadFileChooserFilter;
-	private FileNameExtensionFilter saveFileChooserFilter;
 
 	/****************
 	 * ACTIONS
@@ -508,10 +503,13 @@ public class EditorLauncher extends JFrame {
 		openLoadFileChooser = new JButton(message.getString("file.open"));
 		openSaveFileChooser = new JButton(message.getString("file.save"));
 		loadFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		loadFileChooserFilter = new FileNameExtensionFilter(message.getString("file.description"), "json");
+
+		FileNameExtensionFilter loadFileChooserFilter = new FileNameExtensionFilter(
+				message.getString("file.description"), "json");
 		loadFileChooser.setFileFilter(loadFileChooserFilter);
 		saveFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		saveFileChooserFilter = new FileNameExtensionFilter(message.getString("file.description"), "json");
+		FileNameExtensionFilter saveFileChooserFilter = new FileNameExtensionFilter(
+				message.getString("file.description"), "json");
 		saveFileChooser.setFileFilter(saveFileChooserFilter);
 
 		/***********************
@@ -586,13 +584,14 @@ public class EditorLauncher extends JFrame {
 		descriptionEnLabel = new JLabel("description en");
 		descriptionEnTextField = new JTextField();
 		shadowLabel = new JLabel("shadow value");
-		shadowSpinnerModel = new SpinnerNumberModel(new Float(0.0), new Float(0.0), new Float(1.0), new Float(0.05));
+		SpinnerNumberModel shadowSpinnerModel = new SpinnerNumberModel(new Float(0.0), new Float(0.0), new Float(1.0),
+				new Float(0.05));
 		shadowSpinner = new JSpinner(shadowSpinnerModel);
 		bombeLabel = new JLabel("nb bombe");
-		bombeSpinnerModel = new SpinnerNumberModel(2, 1, 6, 1);
+		SpinnerNumberModel bombeSpinnerModel = new SpinnerNumberModel(2, 1, 6, 1);
 		bombeSpinner = new JSpinner(bombeSpinnerModel);
 		strenghtLabel = new JLabel("strnght of bombe");
-		strenghtSpinnerModel = new SpinnerNumberModel(2, 1, 20, 1);
+		SpinnerNumberModel strenghtSpinnerModel = new SpinnerNumberModel(2, 1, 20, 1);
 		strenghtSpinner = new JSpinner(strenghtSpinnerModel);
 		fillWithBrickLabel = new JLabel("fill with bricks");
 		fillWithBrickCheckbox = new JCheckBox();
@@ -782,42 +781,42 @@ public class EditorLauncher extends JFrame {
 		/***********************
 		 * --- NAVIGATION ---
 		 ***********************/
-		nextLevel.addActionListener(action -> {
+		nextLevel.addActionListener(e -> {
 			levelService2.nextLevel();
 			loadPropertiesLevel();
 			repaint();
 		});
-		previousLevel.addActionListener(action -> {
+		previousLevel.addActionListener(e -> {
 			levelService2.previousLevel();
 			loadPropertiesLevel();
 			repaint();
 		});
-		addLevel.addActionListener(action -> {
+		addLevel.addActionListener(e -> {
 			levelService2.addLevel();
 			loadPropertiesLevel();
 			repaint();
 		});
-		delLevel.addActionListener(action -> {
+		delLevel.addActionListener(e -> {
 			levelService2.deleteLevel();
 			loadPropertiesLevel();
 			repaint();
 		});
-		nextVariante.addActionListener(action -> {
+		nextVariante.addActionListener(e -> {
 			levelService2.nextVariante();
 			loadPropertiesLevel();
 			repaint();
 		});
-		previousVariante.addActionListener(action -> {
+		previousVariante.addActionListener(e -> {
 			levelService2.previousVariante();
 			loadPropertiesLevel();
 			repaint();
 		});
-		addVariante.addActionListener(action -> {
+		addVariante.addActionListener(e -> {
 			levelService2.addVariante();
 			loadPropertiesLevel();
 			repaint();
 		});
-		delVariante.addActionListener(action -> {
+		delVariante.addActionListener(e -> {
 			levelService2.deleteVariante();
 			loadPropertiesLevel();
 			repaint();
