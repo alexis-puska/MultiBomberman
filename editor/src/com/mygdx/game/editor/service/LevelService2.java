@@ -444,7 +444,12 @@ public class LevelService2 {
 
 	public void addRail(int x, int y) {
 		if (currentVariante != null) {
-			currentVariante.getRail().add(new PositionableDTO(x, y));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if(!currentVariante.getRail().contains(t)) {
+				currentVariante.getRail().add(t);
+			}else {
+				LOG.info("rail already exist at this position !");
+			}
 		}
 	}
 
