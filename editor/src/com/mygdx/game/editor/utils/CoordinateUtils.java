@@ -13,7 +13,7 @@ import com.mygdx.constante.EditorConstante;
 public class CoordinateUtils {
 
 	private static final int SCREEN_SIZE_Y = 336;
-	private static final int MAX_BLOC_Y = 21;
+	private static final int MAX_BLOC_Y = 20;
 
 	private CoordinateUtils() {
 		// unused constructor

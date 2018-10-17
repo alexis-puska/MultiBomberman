@@ -30,10 +30,20 @@ public class DrawPanel extends Canvas {
 	private LevelService2 levelService;
 	private SpriteService spriteService;
 
+	private int posX;
+	private int posY;
+
 	public DrawPanel(SpriteService spriteService, LevelService2 levelService) {
 		super();
 		this.spriteService = spriteService;
 		this.levelService = levelService;
+		this.posX = -1;
+		this.posY = -1;
+	}
+
+	public void updatePoint(int posX, int posY) {
+		this.posX = posX;
+		this.posY = posY;
 	}
 
 	/**
@@ -54,6 +64,7 @@ public class DrawPanel extends Canvas {
 			drawWall(g2);
 			drawStartPlayer(g2);
 			drawGrid(g2);
+			drawPoint(g2);
 			g2.clearRect(630, 0, 200, 800);
 			g2.clearRect(0, 336, 700, 300);
 
@@ -68,6 +79,16 @@ public class DrawPanel extends Canvas {
 		}
 		g2.dispose();
 		bs.show();
+	}
+
+	private void drawPoint(Graphics2D g2) {
+		if (posX != -1 && posY != -1) {
+			g2.setColor(Color.RED);
+			System.out.println("draw point : " + posX * EditorConstante.GRID_SIZE_X + " "
+					+ (21 - posY) * EditorConstante.GRID_SIZE_Y);
+			g2.fillOval(posX * EditorConstante.GRID_SIZE_X + (EditorConstante.GRID_SIZE_X / 2),
+					(20 - (posY)) * EditorConstante.GRID_SIZE_Y + (EditorConstante.GRID_SIZE_Y / 2), 5, 5);
+		}
 	}
 
 	private void drawStartPlayer(Graphics2D g2) {

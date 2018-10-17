@@ -63,6 +63,10 @@ public class EditorLauncher extends JFrame {
 	private String absolutePathFile;
 	private ActionEnum action;
 
+	// utils
+	private int posX;
+	private int posY;
+
 	/****************
 	 * WEST PANEL
 	 ***************/
@@ -236,6 +240,8 @@ public class EditorLauncher extends JFrame {
 	}
 
 	public EditorLauncher(String lang) {
+		this.posX = 1;
+		this.posY = 1;
 		this.action = ActionEnum.NONE;
 		this.currentLocale = Locale.forLanguageTag(lang);
 		this.message = ResourceBundle.getBundle("i18n/Message", currentLocale);
@@ -683,7 +689,8 @@ public class EditorLauncher extends JFrame {
 		drawPanel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				click(e.getX(), e.getY());
+				calCoordinate(e.getX(), e.getY());
+				addElement();
 			}
 
 			@Override
@@ -711,17 +718,51 @@ public class EditorLauncher extends JFrame {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				LOG.info(e.getKeyCode());
+				// unused method
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				LOG.info(e.getKeyCode());
+				// unused method
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				LOG.info(e.getKeyCode());
+				LOG.info("pressed : " + e.getKeyCode());
+				switch (e.getKeyCode()) {
+				case 32:
+				case 10:
+					addElement();
+					break;
+				case 37: // left
+					if (posX > 0) {
+						posX--;
+					}
+					drawPanel.updatePoint(posX, posY);
+					drawPanel.repaint();
+					break;
+				case 38: // top
+					if (posY < 20) {
+						posY++;
+					}
+					drawPanel.updatePoint(posX, posY);
+					drawPanel.repaint();
+					break;
+				case 39: // right
+					if (posX < 34) {
+						posX++;
+					}
+					drawPanel.updatePoint(posX, posY);
+					drawPanel.repaint();
+					break;
+				case 40: // bottom
+					if (posY > 0) {
+						posY--;
+					}
+					drawPanel.updatePoint(posX, posY);
+					drawPanel.repaint();
+					break;
+				}
 			}
 		});
 
@@ -1030,8 +1071,7 @@ public class EditorLauncher extends JFrame {
 	 * --- DRAW EVENT ---
 	 * 
 	 *************************************************************************************/
-	private void click(int x, int y) {
-		int invY = CoordinateUtils.clickY(y);
+	private void addElement() {
 		switch (action) {
 		case ADD_CUSTOM_BACKGROUND:
 			break;
@@ -1044,7 +1084,7 @@ public class EditorLauncher extends JFrame {
 		case ADD_MINE:
 			break;
 		case ADD_RAIL:
-			this.levelService2.addRail(x, invY);
+			this.levelService2.addRail(posX, posY);
 			break;
 		case ADD_START_PLAYER:
 			break;
@@ -1094,6 +1134,13 @@ public class EditorLauncher extends JFrame {
 	@Override
 	public void repaint() {
 		this.drawPanel.repaint();
+	}
+
+	private void calCoordinate(int x, int y) {
+		posX = x / EditorConstante.GRID_SIZE_X;
+		int tmpY = y / EditorConstante.GRID_SIZE_Y;
+		posY = CoordinateUtils.invGridY(tmpY);
+		drawPanel.updatePoint(posX, posY);
 	}
 
 	public void loadPropertiesLevel() {
