@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mygdx.constante.Constante;
 import com.mygdx.dto.level.CustomTextureDTO;
 import com.mygdx.dto.level.LevelDTO;
 import com.mygdx.dto.level.LevelFileDTO;
@@ -44,8 +45,7 @@ public class LevelService2 {
 	/**
 	 * Load JSON Level file and init map with all level and variante
 	 * 
-	 * @param in
-	 *            inputStream of file
+	 * @param in inputStream of file
 	 * @return Level to Edit
 	 */
 	public void load(InputStream in) {
@@ -224,7 +224,11 @@ public class LevelService2 {
 		}
 		variante.setDescription(descriptions);
 		variante.setBombe(2);
-		variante.setBonus(new Integer[15]);
+		Integer[] bonus = new Integer[Constante.MAX_BONUS];
+		for (int i = 0; i < Constante.MAX_BONUS; i++) {
+			bonus[i] = 0;
+		}
+		variante.setBonus(bonus);
 		variante.setShadow(0f);
 		variante.setDefaultBackground(new DefaultTextureDTO(SpriteEnum.LEVEL, 0));
 		variante.setDefaultBrickAnimation(SpriteEnum.LEVEL1);
@@ -676,4 +680,34 @@ public class LevelService2 {
 		}
 	}
 
+	public void setBonus(int i, int intValue) {
+		if (currentVariante != null) {
+			if (currentVariante.getBonus() == null) {
+				currentVariante.setBonus(new Integer[Constante.MAX_BONUS]);
+			}
+			Integer[] bonus = currentVariante.getBonus();
+			bonus[i] = intValue;
+			currentVariante.setBonus(bonus);
+		}
+	}
+
+	public int getBonus(int i) {
+		if (currentVariante != null && currentVariante.getBonus() != null) {
+			return currentVariante.getBonus()[i];
+		}
+		return 0;
+	}
+
+	public void setDefaultBrickAnimtion(SpriteEnum se) {
+		if (currentVariante != null) {
+			currentVariante.setDefaultBrickAnimation(se);
+		}
+	}
+
+	public SpriteEnum getDefaultBrickAnimation() {
+		if (currentVariante != null) {
+			return currentVariante.getDefaultBrickAnimation();
+		}
+		return null;
+	}
 }

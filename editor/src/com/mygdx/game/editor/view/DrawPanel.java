@@ -9,6 +9,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -51,8 +54,7 @@ public class DrawPanel extends Canvas {
 	/**
 	 * Draw the level if exists, draw message if level doesn't exists
 	 * 
-	 * @param g2
-	 *            graphics
+	 * @param g2 graphics
 	 */
 	@Override
 	public void paint(Graphics g) {
@@ -79,6 +81,7 @@ public class DrawPanel extends Canvas {
 			drawPoint(g2);
 			g2.clearRect(630, 0, 200, 800);
 			g2.clearRect(0, 336, 700, 300);
+			drawShadow(g2);
 
 		} else {
 			Font font = new Font("Serif", Font.PLAIN, FONT_SIZE);
@@ -104,8 +107,7 @@ public class DrawPanel extends Canvas {
 	/**
 	 * Draw the level
 	 * 
-	 * @param g2
-	 *            graphics2D
+	 * @param g2 graphics2D
 	 */
 	private void drawGrid(Graphics2D g2) {
 
@@ -234,6 +236,25 @@ public class DrawPanel extends Canvas {
 								+ EditorConstante.GRID_SIZE_Y);
 				g2.setStroke(savedStrock);
 			});
+		}
+	}
+
+	private void drawShadow(Graphics2D g2) {
+		if (levelService.getCurrentVariante() != null) {
+			BufferedImage bf = new BufferedImage(630, 336, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = bf.createGraphics();
+			float shadow = levelService.getCurrentVariante().getShadow();
+			g.setColor(new Color(0, 0, 0, (int) (shadow * 255f)));
+			Rectangle2D r = new Rectangle2D.Double(0, 0, 630, 360);
+			Area areaRect = new Area(r);
+			levelService.getCurrentVariante().getStartPlayer().stream().forEach(d -> {
+				Ellipse2D e = new Ellipse2D.Double(d.getX() * EditorConstante.GRID_SIZE_X -18,
+						CoordinateUtils.invGridY(d.getY()) * EditorConstante.GRID_SIZE_Y - 16, 54, 48);
+				Area area = new Area(e);
+				areaRect.subtract(area);
+			});
+			g.fill(areaRect);
+			g2.drawImage(bf, null, 0, 0);
 		}
 	}
 

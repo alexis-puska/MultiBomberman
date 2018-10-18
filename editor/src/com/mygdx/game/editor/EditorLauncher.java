@@ -39,6 +39,8 @@ import org.apache.logging.log4j.Logger;
 import com.mygdx.constante.EditorConstante;
 import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.game.editor.enumeration.ActionEnum;
+import com.mygdx.game.editor.enumeration.BrickBurnEnum;
+import com.mygdx.game.editor.renderer.BrickComboboxRenderer;
 import com.mygdx.game.editor.service.LevelService2;
 import com.mygdx.game.editor.service.SpriteService;
 import com.mygdx.game.editor.utils.CoordinateUtils;
@@ -129,41 +131,41 @@ public class EditorLauncher extends JFrame {
 	private JLabel defaultWallLabel;
 	private JButton defaultWall;
 	private JLabel defaultBrickAnimationLabel;
-	private JComboBox<String> defaultBrickAnimationComboBox;
+	private JComboBox<BrickBurnEnum> defaultBrickAnimationComboBox;
 
 	/*********************************
 	 * --- BONUS ---
 	 *********************************/
-	private JTextField bonus1TextField;
+	private JSpinner bonus0Spinner;
+	private JLabel bonus0Label;
+	private JSpinner bonus1Spinner;
 	private JLabel bonus1Label;
-	private JTextField bonus2TextField;
+	private JSpinner bonus2Spinner;
 	private JLabel bonus2Label;
-	private JTextField bonus3TextField;
+	private JSpinner bonus3Spinner;
 	private JLabel bonus3Label;
-	private JTextField bonus4TextField;
+	private JSpinner bonus4Spinner;
 	private JLabel bonus4Label;
-	private JTextField bonus5TextField;
+	private JSpinner bonus5Spinner;
 	private JLabel bonus5Label;
-	private JTextField bonus6TextField;
+	private JSpinner bonus6Spinner;
 	private JLabel bonus6Label;
-	private JTextField bonus7TextField;
+	private JSpinner bonus7Spinner;
 	private JLabel bonus7Label;
-	private JTextField bonus8TextField;
+	private JSpinner bonus8Spinner;
 	private JLabel bonus8Label;
-	private JTextField bonus9TextField;
+	private JSpinner bonus9Spinner;
 	private JLabel bonus9Label;
-	private JTextField bonus10TextField;
+	private JSpinner bonus10Spinner;
 	private JLabel bonus10Label;
-	private JTextField bonus11TextField;
+	private JSpinner bonus11Spinner;
 	private JLabel bonus11Label;
-	private JTextField bonus12TextField;
+	private JSpinner bonus12Spinner;
 	private JLabel bonus12Label;
-	private JTextField bonus13TextField;
+	private JSpinner bonus13Spinner;
 	private JLabel bonus13Label;
-	private JTextField bonus14TextField;
+	private JSpinner bonus14Spinner;
 	private JLabel bonus14Label;
-	private JTextField bonus15TextField;
-	private JLabel bonus15Label;
 
 	/****************
 	 * DRAW
@@ -421,53 +423,53 @@ public class EditorLauncher extends JFrame {
 	}
 
 	private void buildBonusPanel() {
-		bonus1Label.setLabelFor(bonus1TextField);
-		bonus2Label.setLabelFor(bonus2TextField);
-		bonus3Label.setLabelFor(bonus3TextField);
-		bonus4Label.setLabelFor(bonus4TextField);
-		bonus5Label.setLabelFor(bonus5TextField);
-		bonus6Label.setLabelFor(bonus6TextField);
-		bonus7Label.setLabelFor(bonus7TextField);
-		bonus8Label.setLabelFor(bonus8TextField);
-		bonus9Label.setLabelFor(bonus9TextField);
-		bonus10Label.setLabelFor(bonus10TextField);
-		bonus11Label.setLabelFor(bonus11TextField);
-		bonus12Label.setLabelFor(bonus12TextField);
-		bonus13Label.setLabelFor(bonus13TextField);
-		bonus14Label.setLabelFor(bonus14TextField);
-		bonus15Label.setLabelFor(bonus15TextField);
+		bonus0Label.setLabelFor(bonus0Spinner);
+		bonus1Label.setLabelFor(bonus1Spinner);
+		bonus2Label.setLabelFor(bonus2Spinner);
+		bonus3Label.setLabelFor(bonus3Spinner);
+		bonus4Label.setLabelFor(bonus4Spinner);
+		bonus5Label.setLabelFor(bonus5Spinner);
+		bonus6Label.setLabelFor(bonus6Spinner);
+		bonus7Label.setLabelFor(bonus7Spinner);
+		bonus8Label.setLabelFor(bonus8Spinner);
+		bonus9Label.setLabelFor(bonus9Spinner);
+		bonus10Label.setLabelFor(bonus10Spinner);
+		bonus11Label.setLabelFor(bonus11Spinner);
+		bonus12Label.setLabelFor(bonus12Spinner);
+		bonus13Label.setLabelFor(bonus13Spinner);
+		bonus14Label.setLabelFor(bonus14Spinner);
 		bonusPanel.setLayout(bonusLayout);
 		bonusPanel.setBorder(bonusBorder);
+		bonusPanel.add(bonus0Label);
+		bonusPanel.add(bonus0Spinner);
 		bonusPanel.add(bonus1Label);
-		bonusPanel.add(bonus1TextField);
+		bonusPanel.add(bonus1Spinner);
 		bonusPanel.add(bonus2Label);
-		bonusPanel.add(bonus2TextField);
+		bonusPanel.add(bonus2Spinner);
 		bonusPanel.add(bonus3Label);
-		bonusPanel.add(bonus3TextField);
+		bonusPanel.add(bonus3Spinner);
 		bonusPanel.add(bonus4Label);
-		bonusPanel.add(bonus4TextField);
+		bonusPanel.add(bonus4Spinner);
 		bonusPanel.add(bonus5Label);
-		bonusPanel.add(bonus5TextField);
+		bonusPanel.add(bonus5Spinner);
 		bonusPanel.add(bonus6Label);
-		bonusPanel.add(bonus6TextField);
+		bonusPanel.add(bonus6Spinner);
 		bonusPanel.add(bonus7Label);
-		bonusPanel.add(bonus7TextField);
+		bonusPanel.add(bonus7Spinner);
 		bonusPanel.add(bonus8Label);
-		bonusPanel.add(bonus8TextField);
+		bonusPanel.add(bonus8Spinner);
 		bonusPanel.add(bonus9Label);
-		bonusPanel.add(bonus9TextField);
+		bonusPanel.add(bonus9Spinner);
 		bonusPanel.add(bonus10Label);
-		bonusPanel.add(bonus10TextField);
+		bonusPanel.add(bonus10Spinner);
 		bonusPanel.add(bonus11Label);
-		bonusPanel.add(bonus11TextField);
+		bonusPanel.add(bonus11Spinner);
 		bonusPanel.add(bonus12Label);
-		bonusPanel.add(bonus12TextField);
+		bonusPanel.add(bonus12Spinner);
 		bonusPanel.add(bonus13Label);
-		bonusPanel.add(bonus13TextField);
+		bonusPanel.add(bonus13Spinner);
 		bonusPanel.add(bonus14Label);
-		bonusPanel.add(bonus14TextField);
-		bonusPanel.add(bonus15Label);
-		bonusPanel.add(bonus15TextField);
+		bonusPanel.add(bonus14Spinner);
 		SpringUtilities.makeGrid(bonusPanel, 15, 2, 2, 2, 2, 2);
 	}
 
@@ -544,8 +546,8 @@ public class EditorLauncher extends JFrame {
 		addTeleporterButton = new JButton(message.getString("editor.button.teleporter.add"));
 		addWallButton = new JButton(message.getString("editor.button.wall.add"));
 		addWallCustomisationButton = new JButton(message.getString("editor.button.wall.addCustomisation"));
-		removeWallCustomisationButton  = new JButton(message.getString("editor.button.wall.removeCustomisation"));
-		setWallTransparent  = new JButton(message.getString("editor.button.wall.setTransparent"));
+		removeWallCustomisationButton = new JButton(message.getString("editor.button.wall.removeCustomisation"));
+		setWallTransparent = new JButton(message.getString("editor.button.wall.setTransparent"));
 		addStartPlayerButton = new JButton(message.getString("editor.button.startPlayer.add"));
 		addCustomBackgroundButton = new JButton(message.getString("editor.button.defaultBackground.add"));
 		addCustomForegroundButton = new JButton(message.getString("editor.button.defaultForeground.add"));
@@ -617,41 +619,57 @@ public class EditorLauncher extends JFrame {
 		defaultWallLabel = new JLabel(this.message.getString("editor.label.variante.defaultWallTexture"));
 		defaultWall = new JButton();
 		defaultBrickAnimationLabel = new JLabel(this.message.getString("editor.label.variante.defaultBrickAnimation"));
-		defaultBrickAnimationComboBox = new JComboBox<>();
+		defaultBrickAnimationComboBox = new JComboBox<>(BrickBurnEnum.values());
+		defaultBrickAnimationComboBox.setRenderer(new BrickComboboxRenderer(spriteService));
 
 		/*****************
 		 * --- BONUS ---
 		 *****************/
-		bonus1TextField = new JTextField();
-		bonus1Label = new JLabel(this.message.getString("editor.label.variante.bonus.death"));
-		bonus2TextField = new JTextField();
-		bonus2Label = new JLabel(this.message.getString("editor.label.variante.bonus.roller"));
-		bonus3TextField = new JTextField();
-		bonus3Label = new JLabel(this.message.getString("editor.label.variante.bonus.fire"));
-		bonus4TextField = new JTextField();
-		bonus4Label = new JLabel(this.message.getString("editor.label.variante.bonus.fire+"));
-		bonus5TextField = new JTextField();
-		bonus5Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombe"));
-		bonus6TextField = new JTextField();
-		bonus6Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombep"));
-		bonus7TextField = new JTextField();
-		bonus7Label = new JLabel(this.message.getString("editor.label.variante.bonus.kick"));
-		bonus8TextField = new JTextField();
-		bonus8Label = new JLabel(this.message.getString("editor.label.variante.bonus.glove"));
-		bonus9TextField = new JTextField();
-		bonus9Label = new JLabel(this.message.getString("editor.label.variante.bonus.rubber"));
-		bonus10TextField = new JTextField();
-		bonus10Label = new JLabel(this.message.getString("editor.label.variante.bonus.superBombe"));
-		bonus11TextField = new JTextField();
-		bonus11Label = new JLabel(this.message.getString("editor.label.variante.bonus.shoes"));
-		bonus12TextField = new JTextField();
-		bonus12Label = new JLabel(this.message.getString("editor.label.variante.bonus.wall"));
-		bonus13TextField = new JTextField();
-		bonus13Label = new JLabel(this.message.getString("editor.label.variante.bonus.egg"));
-		bonus14TextField = new JTextField();
-		bonus14Label = new JLabel(this.message.getString("editor.label.variante.bonus.shield"));
-		bonus15TextField = new JTextField();
-		bonus15Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombeLine"));
+		SpinnerNumberModel bonus0SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus0Spinner = new JSpinner(bonus0SpinnerModel);
+		bonus0Label = new JLabel(this.message.getString("editor.label.variante.bonus.death"));
+		SpinnerNumberModel bonus1SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus1Spinner = new JSpinner(bonus1SpinnerModel);
+		bonus1Label = new JLabel(this.message.getString("editor.label.variante.bonus.roller"));
+		SpinnerNumberModel bonus2SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus2Spinner = new JSpinner(bonus2SpinnerModel);
+		bonus2Label = new JLabel(this.message.getString("editor.label.variante.bonus.fire"));
+		SpinnerNumberModel bonus3SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus3Spinner = new JSpinner(bonus3SpinnerModel);
+		bonus3Label = new JLabel(this.message.getString("editor.label.variante.bonus.fire+"));
+		SpinnerNumberModel bonus4SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus4Spinner = new JSpinner(bonus4SpinnerModel);
+		bonus4Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombe"));
+		SpinnerNumberModel bonus5SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus5Spinner = new JSpinner(bonus5SpinnerModel);
+		bonus5Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombep"));
+		SpinnerNumberModel bonus6SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus6Spinner = new JSpinner(bonus6SpinnerModel);
+		bonus6Label = new JLabel(this.message.getString("editor.label.variante.bonus.kick"));
+		SpinnerNumberModel bonus7SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus7Spinner = new JSpinner(bonus7SpinnerModel);
+		bonus7Label = new JLabel(this.message.getString("editor.label.variante.bonus.glove"));
+		SpinnerNumberModel bonus8SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus8Spinner = new JSpinner(bonus8SpinnerModel);
+		bonus8Label = new JLabel(this.message.getString("editor.label.variante.bonus.rubber"));
+		SpinnerNumberModel bonus9SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus9Spinner = new JSpinner(bonus9SpinnerModel);
+		bonus9Label = new JLabel(this.message.getString("editor.label.variante.bonus.superBombe"));
+		SpinnerNumberModel bonus10SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus10Spinner = new JSpinner(bonus10SpinnerModel);
+		bonus10Label = new JLabel(this.message.getString("editor.label.variante.bonus.shoes"));
+		SpinnerNumberModel bonus11SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus11Spinner = new JSpinner(bonus11SpinnerModel);
+		bonus11Label = new JLabel(this.message.getString("editor.label.variante.bonus.wall"));
+		SpinnerNumberModel bonus12SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus12Spinner = new JSpinner(bonus12SpinnerModel);
+		bonus12Label = new JLabel(this.message.getString("editor.label.variante.bonus.egg"));
+		SpinnerNumberModel bonus13SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus13Spinner = new JSpinner(bonus13SpinnerModel);
+		bonus13Label = new JLabel(this.message.getString("editor.label.variante.bonus.shield"));
+		SpinnerNumberModel bonus14SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
+		bonus14Spinner = new JSpinner(bonus14SpinnerModel);
+		bonus14Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombeLine"));
 
 	}
 
@@ -1047,10 +1065,9 @@ public class EditorLauncher extends JFrame {
 		defaultBackGround.addActionListener(e -> action = ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE);
 		defaultWall.addActionListener(e -> action = ActionEnum.SELECT_DEFAULT_WALL_TEXTURE);
 		defaultBrickAnimationComboBox.addItemListener(event -> {
-			// door.setKey((GameKeyEnum) requieredKeyComboBox.getSelectedItem());
-			// levelService.updateDoor(door);
-			// drawPanel.repaint();
-			// parent.repaint();
+			levelService2.setDefaultBrickAnimtion(
+					BrickBurnEnum.getSpriteFromBrick((BrickBurnEnum) defaultBrickAnimationComboBox.getSelectedItem()));
+			drawPanel.repaint();
 		});
 
 		/********************
@@ -1079,6 +1096,146 @@ public class EditorLauncher extends JFrame {
 		removeStartPlayerButton.addActionListener(listener -> action = ActionEnum.REMOVE_START_PLAYER);
 		removeCustomBackgroundButton.addActionListener(listener -> action = ActionEnum.REMOVE_CUSTOM_BACKGROUND);
 		removeCustomForegroundButton.addActionListener(listener -> action = ActionEnum.REMOVE_CUSTOM_FOREGROUND);
+
+		/********************
+		 * --- BONUS ---
+		 ********************/
+		bonus0Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(0, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus1Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(1, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus2Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(2, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus3Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(3, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus4Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(4, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus5Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(5, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus6Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(6, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus7Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(7, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus8Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(8, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus9Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(9, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus10Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(10, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus11Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(11, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus12Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(12, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus13Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(13, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+		bonus14Spinner.addChangeListener(e -> {
+			JSpinner text = (JSpinner) e.getSource();
+			if (text.getValue() != null) {
+				Integer f = (Integer) text.getValue();
+				levelService2.setBonus(14, f.intValue());
+				loadPropertiesLevel();
+				drawPanel.repaint();
+			}
+		});
+
 	}
 
 	/*************************************************************************************
@@ -1194,10 +1351,28 @@ public class EditorLauncher extends JFrame {
 		descriptionFrTextField.setText(levelService2.getVarianteDescription(LocaleEnum.FRENCH));
 		shadowSpinner.setValue(Float.valueOf(levelService2.getShadow()));
 		bombeSpinner.setValue(Integer.valueOf(levelService2.getBombe()));
+		defaultBrickAnimationComboBox
+				.setSelectedItem(BrickBurnEnum.getBrickFromSprite(levelService2.getDefaultBrickAnimation()));
 		strenghtSpinner.setValue(Integer.valueOf(levelService2.getStrenght()));
 		fillWithBrickCheckbox.setSelected(levelService2.isFillWithBrick());
 		levelPropertiesPanelBorder.setTitle(
 				"Level : " + levelService2.getLevelPosition() + ", variante : " + levelService2.getVariantePosition());
 		levelPropertiesPanel.repaint();
+		bonus0Spinner.setValue(Integer.valueOf(levelService2.getBonus(0)));
+		bonus1Spinner.setValue(Integer.valueOf(levelService2.getBonus(1)));
+		bonus2Spinner.setValue(Integer.valueOf(levelService2.getBonus(2)));
+		bonus3Spinner.setValue(Integer.valueOf(levelService2.getBonus(3)));
+		bonus4Spinner.setValue(Integer.valueOf(levelService2.getBonus(4)));
+		bonus5Spinner.setValue(Integer.valueOf(levelService2.getBonus(5)));
+		bonus6Spinner.setValue(Integer.valueOf(levelService2.getBonus(6)));
+		bonus7Spinner.setValue(Integer.valueOf(levelService2.getBonus(7)));
+		bonus8Spinner.setValue(Integer.valueOf(levelService2.getBonus(8)));
+		bonus9Spinner.setValue(Integer.valueOf(levelService2.getBonus(9)));
+		bonus10Spinner.setValue(Integer.valueOf(levelService2.getBonus(10)));
+		bonus11Spinner.setValue(Integer.valueOf(levelService2.getBonus(11)));
+		bonus12Spinner.setValue(Integer.valueOf(levelService2.getBonus(12)));
+		bonus13Spinner.setValue(Integer.valueOf(levelService2.getBonus(13)));
+		bonus14Spinner.setValue(Integer.valueOf(levelService2.getBonus(14)));
+		bonusPanel.repaint();
 	}
 }
