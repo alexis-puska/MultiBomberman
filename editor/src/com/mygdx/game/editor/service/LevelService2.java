@@ -465,10 +465,7 @@ public class LevelService2 {
 		if (currentVariante.getTeleporter().contains(tmp)) {
 			return false;
 		}
-		if (currentVariante.getTrolley().contains(tmp)) {
-			return false;
-		}
-		return true;
+		return currentVariante.getTrolley().contains(tmp);
 	}
 
 	public void addHole(int x, int y) {
@@ -534,7 +531,7 @@ public class LevelService2 {
 		}
 	}
 
-	public void customizeWall(int x, int y, boolean draw, int textureIndex) {
+	public void customizeWall(int x, int y, int textureIndex) {
 		if (currentVariante != null) {
 			currentVariante.getWall().stream().forEach(obj -> {
 				if (obj.getX() == x && obj.getY() == y) {

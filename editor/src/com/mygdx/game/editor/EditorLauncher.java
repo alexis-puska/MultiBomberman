@@ -791,6 +791,8 @@ public class EditorLauncher extends JFrame {
 					drawPanel.updatePoint(posX, posY);
 					drawPanel.repaint();
 					break;
+				default:
+					break;
 				}
 			}
 		});
@@ -1276,7 +1278,7 @@ public class EditorLauncher extends JFrame {
 			this.levelService2.addWall(posX, posY);
 			break;
 		case CUSTOMIZE_WALL:
-			this.levelService2.customizeWall(posX, posY, true, lastBackgroundIndexClicked);
+			this.levelService2.customizeWall(posX, posY, lastBackgroundIndexClicked);
 			break;
 		case REMOVE_CUSTOM_BACKGROUND:
 			this.levelService2.removeCustomBackgroundTexture(posX, posY);
