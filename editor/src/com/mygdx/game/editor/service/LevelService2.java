@@ -44,7 +44,8 @@ public class LevelService2 {
 	/**
 	 * Load JSON Level file and init map with all level and variante
 	 * 
-	 * @param in inputStream of file
+	 * @param in
+	 *            inputStream of file
 	 * @return Level to Edit
 	 */
 	public void load(InputStream in) {
@@ -436,68 +437,135 @@ public class LevelService2 {
 		}
 	}
 
+	private boolean positionContainsWall(int x, int y) {
+		return currentVariante.getWall().contains(new PositionableDTO(x, y));
+	}
+
+	private boolean canSetWall(int x, int y) {
+		PositionableDTO tmp = new PositionableDTO(x, y);
+		if (currentVariante.getHole().contains(tmp)) {
+			return false;
+		}
+		if (currentVariante.getInterrupter().contains(tmp)) {
+			return false;
+		}
+		if (currentVariante.getMine().contains(tmp)) {
+			return false;
+		}
+		if (currentVariante.getRail().contains(tmp)) {
+			return false;
+		}
+		if (currentVariante.getStartPlayer().contains(tmp)) {
+			return false;
+		}
+		if (currentVariante.getTeleporter().contains(tmp)) {
+			return false;
+		}
+		if (currentVariante.getTrolley().contains(tmp)) {
+			return false;
+		}
+		return true;
+	}
+
 	public void addHole(int x, int y) {
 		if (currentVariante != null) {
-			currentVariante.getHole().add(new PositionableDTO(x, y));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getRail().contains(t) && !positionContainsWall(x, y)) {
+				currentVariante.getHole().add(t);
+			}
 		}
 	}
 
 	public void addRail(int x, int y) {
 		if (currentVariante != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if(!currentVariante.getRail().contains(t)) {
+			if (!currentVariante.getRail().contains(t) && !positionContainsWall(x, y)) {
 				currentVariante.getRail().add(t);
-			}else {
-				LOG.info("rail already exist at this position !");
 			}
 		}
 	}
 
 	public void addTrolley(int x, int y) {
 		if (currentVariante != null) {
-			currentVariante.getTrolley().add(new PositionableDTO(x, y));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getTrolley().contains(t) && !positionContainsWall(x, y)) {
+				currentVariante.getTrolley().add(new PositionableDTO(x, y));
+			}
 		}
 	}
 
 	public void addInterrupter(int x, int y) {
 		if (currentVariante != null) {
-			currentVariante.getInterrupter().add(new PositionableDTO(x, y));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getInterrupter().contains(t) && !positionContainsWall(x, y)) {
+				currentVariante.getInterrupter().add(new PositionableDTO(x, y));
+			}
 		}
 	}
 
 	public void addMine(int x, int y) {
 		if (currentVariante != null) {
-			currentVariante.getMine().add(new PositionableDTO(x, y));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getMine().contains(t) && !positionContainsWall(x, y)) {
+				currentVariante.getMine().add(new PositionableDTO(x, y));
+			}
 		}
 	}
 
 	public void addTeleporter(int x, int y) {
 		if (currentVariante != null) {
-			currentVariante.getTeleporter().add(new PositionableDTO(x, y));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getTeleporter().contains(t) && !positionContainsWall(x, y)) {
+				currentVariante.getTeleporter().add(new PositionableDTO(x, y));
+			}
 		}
 	}
 
-	public void addWall(int x, int y, boolean draw, int textureIndex) {
+	public void addWall(int x, int y) {
 		if (currentVariante != null) {
-			currentVariante.getWall().add(new WallDTO(x, y, draw, new TextureDTO(SpriteEnum.BACKGROUND, textureIndex)));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getWall().contains(t) && canSetWall(x, y)) {
+				currentVariante.getWall().add(new WallDTO(x, y));
+			}
+		}
+	}
+
+	public void customizeWall(int x, int y, boolean draw, int textureIndex) {
+		if (currentVariante != null) {
+			currentVariante.getWall().stream().forEach(obj -> {
+				if (obj.getX() == x && obj.getY() == y) {
+					obj.setDraw(true);
+					obj.setTexture(new TextureDTO(SpriteEnum.LEVEL, textureIndex));
+				}
+			});
 		}
 	}
 
 	public void addCustomBackgroundTexture(int x, int y, int index) {
 		if (currentVariante != null) {
-			currentVariante.getCustomBackgroundTexture().add(new CustomTextureDTO(x, y, SpriteEnum.LEVEL, index));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getCustomBackgroundTexture().contains(t)) {
+				currentVariante.getCustomBackgroundTexture().add(new CustomTextureDTO(x, y, SpriteEnum.LEVEL, index));
+			}
 		}
 	}
 
 	public void addCustomForegroundTexture(int x, int y, int index) {
 		if (currentVariante != null) {
-			currentVariante.getCustomForegroundTexture().add(new CustomTextureDTO(x, y, SpriteEnum.SKY, index));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getCustomForegroundTexture().contains(t)) {
+				currentVariante.getCustomForegroundTexture().add(new CustomTextureDTO(x, y, SpriteEnum.SKY, index));
+			}
 		}
 	}
 
 	public void addStartPlayer(int x, int y) {
 		if (currentVariante != null) {
-			currentVariante.getStartPlayer().add(new PositionableDTO(x, y));
+			PositionableDTO t = new PositionableDTO(x, y);
+			if (!currentVariante.getStartPlayer().contains(t) && !positionContainsWall(x, y)
+					&& currentVariante.getStartPlayer().size() < 16) {
+				currentVariante.getStartPlayer().add(new PositionableDTO(x, y));
+			}
 		}
 	}
 
@@ -558,6 +626,28 @@ public class LevelService2 {
 	public void removeStartPlayer(int x, int y) {
 		if (currentVariante != null) {
 			currentVariante.getStartPlayer().removeIf(el -> el.getX() == x && el.getY() == y);
+		}
+	}
+
+	public void removeCustomizationWall(int posX, int posY) {
+		if (currentVariante != null) {
+			currentVariante.getWall().stream().forEach(obj -> {
+				if (obj.getX() == posX && obj.getY() == posY) {
+					obj.setDraw(true);
+					obj.setTexture(null);
+				}
+			});
+		}
+	}
+
+	public void setWallTransparent(int posX, int posY) {
+		if (currentVariante != null) {
+			currentVariante.getWall().stream().forEach(obj -> {
+				if (obj.getX() == posX && obj.getY() == posY) {
+					obj.setDraw(false);
+					obj.setTexture(null);
+				}
+			});
 		}
 	}
 

@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import com.mygdx.constante.EditorConstante;
+import com.mygdx.dto.level.CustomTextureDTO;
 import com.mygdx.dto.level.WallDTO;
 import com.mygdx.dto.level.common.PositionableDTO;
 import com.mygdx.enumeration.SpriteEnum;
@@ -26,6 +27,7 @@ public class DrawPanel extends Canvas {
 	private static final long serialVersionUID = -617780220828076518L;
 
 	private static final int FONT_SIZE = 14;
+	private static final int SMALL_FONT_SIZE = 8;
 
 	private LevelService2 levelService;
 	private SpriteService spriteService;
@@ -49,7 +51,8 @@ public class DrawPanel extends Canvas {
 	/**
 	 * Draw the level if exists, draw message if level doesn't exists
 	 * 
-	 * @param g2 graphics
+	 * @param g2
+	 *            graphics
 	 */
 	@Override
 	public void paint(Graphics g) {
@@ -61,7 +64,16 @@ public class DrawPanel extends Canvas {
 		Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
 		if (levelService.getCurrentLevel() != null) {
 			drawBackground(g2);
+			drawCustomBackground(g2);
 			drawWall(g2);
+			drawHole(g2);
+			drawInterrupter(g2);
+			drawMine(g2);
+			drawRail(g2);
+			drawTrolley(g2);
+			drawTeleporter(g2);
+
+			drawCustomForeground(g2);
 			drawStartPlayer(g2);
 			drawGrid(g2);
 			drawPoint(g2);
@@ -84,35 +96,16 @@ public class DrawPanel extends Canvas {
 	private void drawPoint(Graphics2D g2) {
 		if (posX != -1 && posY != -1) {
 			g2.setColor(Color.RED);
-			System.out.println("draw point : " + posX * EditorConstante.GRID_SIZE_X + " "
-					+ (21 - posY) * EditorConstante.GRID_SIZE_Y);
 			g2.fillOval(posX * EditorConstante.GRID_SIZE_X + (EditorConstante.GRID_SIZE_X / 2),
 					(20 - (posY)) * EditorConstante.GRID_SIZE_Y + (EditorConstante.GRID_SIZE_Y / 2), 5, 5);
-		}
-	}
-
-	private void drawStartPlayer(Graphics2D g2) {
-		List<PositionableDTO> sps = levelService.getCurrentVariante().getStartPlayer();
-		if (sps != null) {
-			sps.stream().forEach(sp -> {
-				Stroke savedStrock = g2.getStroke();
-				g2.setColor(Color.GREEN);
-				Font font = new Font("Arial", Font.PLAIN, FONT_SIZE);
-				g2.setFont(font);
-				g2.setStroke(new BasicStroke(2));
-
-				g2.drawString("S", (sp.getX() * EditorConstante.GRID_SIZE_X + 2),
-						(CoordinateUtils.invGridY(sp.getY()) * EditorConstante.GRID_SIZE_Y)
-								+ EditorConstante.GRID_SIZE_Y);
-				g2.setStroke(savedStrock);
-			});
 		}
 	}
 
 	/**
 	 * Draw the level
 	 * 
-	 * @param g2 graphics2D
+	 * @param g2
+	 *            graphics2D
 	 */
 	private void drawGrid(Graphics2D g2) {
 
@@ -160,12 +153,128 @@ public class DrawPanel extends Canvas {
 		}
 	}
 
+	private void drawHole(Graphics2D g2) {
+		BufferedImage bf = spriteService.getSprite(SpriteEnum.HOLE, 0);
+		List<PositionableDTO> hole = levelService.getCurrentVariante().getHole();
+		if (hole != null) {
+			hole.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
+					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
+		}
+	}
+
+	private void drawRail(Graphics2D g2) {
+		BufferedImage bf = spriteService.getSprite(SpriteEnum.RAIL, 0);
+		List<PositionableDTO> rail = levelService.getCurrentVariante().getRail();
+		if (rail != null) {
+			rail.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
+					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
+		}
+	}
+
+	private void drawInterrupter(Graphics2D g2) {
+		BufferedImage bf = spriteService.getSprite(SpriteEnum.BUTTON, 0);
+		List<PositionableDTO> interrupter = levelService.getCurrentVariante().getInterrupter();
+		if (interrupter != null) {
+			interrupter.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
+					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
+		}
+	}
+
+	private void drawMine(Graphics2D g2) {
+		BufferedImage bf = spriteService.getSprite(SpriteEnum.MINE, 0);
+		List<PositionableDTO> mine = levelService.getCurrentVariante().getMine();
+		if (mine != null) {
+			mine.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
+					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
+		}
+	}
+
+	private void drawTrolley(Graphics2D g2) {
+		BufferedImage bf = spriteService.getSprite(SpriteEnum.TROLLEY, 0);
+		List<PositionableDTO> trolley = levelService.getCurrentVariante().getTrolley();
+		if (trolley != null) {
+			trolley.stream().forEach(w -> g2.drawImage(bf, null, (w.getX() * EditorConstante.GRID_SIZE_X) - 6,
+					(CoordinateUtils.invGridY(w.getY()) * EditorConstante.GRID_SIZE_Y) - 26));
+		}
+	}
+
+	private void drawTeleporter(Graphics2D g2) {
+		BufferedImage bf = spriteService.getSprite(SpriteEnum.TELEPORTER, 0);
+		List<PositionableDTO> teleporter = levelService.getCurrentVariante().getTeleporter();
+		if (teleporter != null) {
+			teleporter.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
+					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
+		}
+	}
+
 	private void drawWall(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.LEVEL,
 				levelService.getCurrentVariante().getDefaultWall().getIndex());
 		List<WallDTO> wall = levelService.getCurrentVariante().getWall();
 		if (wall != null) {
-			wall.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(), w.getY() * bf.getHeight()));
+			wall.stream().forEach(w -> {
+				if (w.isDraw()) {
+					if (w.getTexture() != null) {
+						BufferedImage bf1 = spriteService.getSprite(w.getTexture().getAnimation(),
+								w.getTexture().getIndex());
+						g2.drawImage(bf1, null, w.getX() * bf.getWidth(),
+								CoordinateUtils.invGridY(w.getY()) * bf.getHeight());
+					} else {
+						g2.drawImage(bf, null, w.getX() * bf.getWidth(),
+								CoordinateUtils.invGridY(w.getY()) * bf.getHeight());
+					}
+				}
+				Stroke savedStrock = g2.getStroke();
+				g2.setColor(Color.RED);
+				Font font = new Font("Arial", Font.PLAIN, SMALL_FONT_SIZE);
+				g2.setFont(font);
+				g2.setStroke(new BasicStroke(2));
+				g2.drawString("w", (w.getX() * EditorConstante.GRID_SIZE_X + 2),
+						(CoordinateUtils.invGridY(w.getY()) * EditorConstante.GRID_SIZE_Y)
+								+ EditorConstante.GRID_SIZE_Y);
+				g2.setStroke(savedStrock);
+			});
 		}
 	}
+
+	private void drawCustomBackground(Graphics2D g2) {
+		List<CustomTextureDTO> customBackgroundTexture = levelService.getCurrentVariante().getCustomBackgroundTexture();
+		if (customBackgroundTexture != null) {
+			customBackgroundTexture.stream().forEach(w -> {
+				BufferedImage bf = spriteService.getSprite(w.getAnimation(), w.getIndex());
+				g2.drawImage(bf, null, w.getX() * bf.getWidth(), CoordinateUtils.invGridY(w.getY()) * bf.getHeight());
+
+			});
+		}
+	}
+
+	private void drawCustomForeground(Graphics2D g2) {
+		List<CustomTextureDTO> customForegroundTexture = levelService.getCurrentVariante().getCustomForegroundTexture();
+		if (customForegroundTexture != null) {
+			customForegroundTexture.stream().forEach(w -> {
+				BufferedImage bf = spriteService.getSprite(w.getAnimation(), w.getIndex());
+				g2.drawImage(bf, null, (w.getX() * EditorConstante.GRID_SIZE_X) - 18,
+						(CoordinateUtils.invGridY(w.getY()) * EditorConstante.GRID_SIZE_Y) - 16);
+			});
+		}
+	}
+
+	private void drawStartPlayer(Graphics2D g2) {
+		List<PositionableDTO> sps = levelService.getCurrentVariante().getStartPlayer();
+		if (sps != null) {
+			sps.stream().forEach(sp -> {
+				Stroke savedStrock = g2.getStroke();
+				g2.setColor(Color.RED);
+				Font font = new Font("Arial", Font.PLAIN, FONT_SIZE);
+				g2.setFont(font);
+				g2.setStroke(new BasicStroke(2));
+
+				g2.drawString("S", (sp.getX() * EditorConstante.GRID_SIZE_X + 2),
+						(CoordinateUtils.invGridY(sp.getY()) * EditorConstante.GRID_SIZE_Y)
+								+ EditorConstante.GRID_SIZE_Y);
+				g2.setStroke(savedStrock);
+			});
+		}
+	}
+
 }

@@ -3,7 +3,6 @@ package com.mygdx.dto.level;
 import java.io.Serializable;
 
 import com.mygdx.dto.level.common.PositionableDTO;
-import com.mygdx.enumeration.SpriteEnum;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,7 @@ public class WallDTO extends PositionableDTO implements Serializable {
 
 	public WallDTO(int x, int y) {
 		super(x, y);
-		this.draw = false;
-		this.texture = new TextureDTO(SpriteEnum.LEVEL, 0);
+		this.draw = true;
+		this.texture = null;
 	}
 }

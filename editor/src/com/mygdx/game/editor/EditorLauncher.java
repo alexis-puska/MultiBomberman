@@ -66,6 +66,8 @@ public class EditorLauncher extends JFrame {
 	// utils
 	private int posX;
 	private int posY;
+	private int lastBackgroundIndexClicked;
+	private int lastForegroundIndexClicked;
 
 	/****************
 	 * WEST PANEL
@@ -221,6 +223,9 @@ public class EditorLauncher extends JFrame {
 	private JButton addTeleporterButton;
 	private JButton removeTeleporterButton;
 	private JButton addWallButton;
+	private JButton addWallCustomisationButton;
+	private JButton removeWallCustomisationButton;
+	private JButton setWallTransparent;
 	private JButton removeWallButton;
 	private JButton addStartPlayerButton;
 	private JButton removeStartPlayerButton;
@@ -327,6 +332,9 @@ public class EditorLauncher extends JFrame {
 		buttonPanel.add(addTeleporterButton);
 		buttonPanel.add(removeTeleporterButton);
 		buttonPanel.add(addWallButton);
+		buttonPanel.add(addWallCustomisationButton);
+		buttonPanel.add(removeWallCustomisationButton);
+		buttonPanel.add(setWallTransparent);
 		buttonPanel.add(removeWallButton);
 		buttonPanel.add(addStartPlayerButton);
 		buttonPanel.add(removeStartPlayerButton);
@@ -535,6 +543,9 @@ public class EditorLauncher extends JFrame {
 		addMineButton = new JButton(message.getString("editor.button.mine.add"));
 		addTeleporterButton = new JButton(message.getString("editor.button.teleporter.add"));
 		addWallButton = new JButton(message.getString("editor.button.wall.add"));
+		addWallCustomisationButton = new JButton(message.getString("editor.button.wall.addCustomisation"));
+		removeWallCustomisationButton  = new JButton(message.getString("editor.button.wall.removeCustomisation"));
+		setWallTransparent  = new JButton(message.getString("editor.button.wall.setTransparent"));
 		addStartPlayerButton = new JButton(message.getString("editor.button.startPlayer.add"));
 		addCustomBackgroundButton = new JButton(message.getString("editor.button.defaultBackground.add"));
 		addCustomForegroundButton = new JButton(message.getString("editor.button.defaultForeground.add"));
@@ -766,16 +777,12 @@ public class EditorLauncher extends JFrame {
 			}
 		});
 
-		backgroundDrawPanel.addMouseListener(new MouseListener() {
+		foregroundDrawPanel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (action == ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE) {
-					int caseX = e.getX() / EditorConstante.GRID_SIZE_X;
-					int caseY = e.getY() / EditorConstante.GRID_SIZE_Y;
-					levelService2
-							.setDefaultBackgroungTexture((caseY * EditorConstante.NB_COLUMN_DRAW_BACKGROUND) + caseX);
-					repaint();
-				}
+				int caseX = e.getX() / EditorConstante.LARGE_GRID_SIZE_X;
+				int caseY = e.getY() / EditorConstante.LARGE_GRID_SIZE_Y;
+				lastForegroundIndexClicked = (caseY * EditorConstante.NB_COLUMN_DRAW_FOREGROUND) + caseX;
 			}
 
 			@Override
@@ -802,10 +809,15 @@ public class EditorLauncher extends JFrame {
 		backgroundDrawPanel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				int caseX = e.getX() / EditorConstante.GRID_SIZE_X;
+				int caseY = e.getY() / EditorConstante.GRID_SIZE_Y;
+				lastBackgroundIndexClicked = (caseY * EditorConstante.NB_COLUMN_DRAW_BACKGROUND) + caseX;
 				if (action == ActionEnum.SELECT_DEFAULT_WALL_TEXTURE) {
-					int caseX = e.getX() / EditorConstante.GRID_SIZE_X;
-					int caseY = e.getY() / EditorConstante.GRID_SIZE_Y;
 					levelService2.setDefaultWallTexture((caseY * EditorConstante.NB_COLUMN_DRAW_BACKGROUND) + caseX);
+					repaint();
+				} else if (action == ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE) {
+					levelService2
+							.setDefaultBackgroungTexture((caseY * EditorConstante.NB_COLUMN_DRAW_BACKGROUND) + caseX);
 					repaint();
 				}
 			}
@@ -1051,6 +1063,9 @@ public class EditorLauncher extends JFrame {
 		addMineButton.addActionListener(listener -> action = ActionEnum.ADD_MINE);
 		addTeleporterButton.addActionListener(listener -> action = ActionEnum.ADD_TELEPORTER);
 		addWallButton.addActionListener(listener -> action = ActionEnum.ADD_WALL);
+		addWallCustomisationButton.addActionListener(listener -> action = ActionEnum.CUSTOMIZE_WALL);
+		removeWallCustomisationButton.addActionListener(listener -> action = ActionEnum.REMOVE_CUSTOMIZATION_WALL);
+		setWallTransparent.addActionListener(listener -> action = ActionEnum.SET_WALL_TRANSPARENT);
 		addStartPlayerButton.addActionListener(listener -> action = ActionEnum.ADD_START_PLAYER);
 		addCustomBackgroundButton.addActionListener(listener -> action = ActionEnum.ADD_CUSTOM_BACKGROUND);
 		addCustomForegroundButton.addActionListener(listener -> action = ActionEnum.ADD_CUSTOM_FOREGROUND);
@@ -1074,52 +1089,79 @@ public class EditorLauncher extends JFrame {
 	private void addElement() {
 		switch (action) {
 		case ADD_CUSTOM_BACKGROUND:
+			this.levelService2.addCustomBackgroundTexture(posX, posY, lastBackgroundIndexClicked);
 			break;
 		case ADD_CUSTOM_FOREGROUND:
+			this.levelService2.addCustomForegroundTexture(posX, posY, lastForegroundIndexClicked);
 			break;
 		case ADD_HOLE:
+			this.levelService2.addHole(posX, posY);
 			break;
 		case ADD_INTERRUPTEUR:
+			this.levelService2.addInterrupter(posX, posY);
 			break;
 		case ADD_MINE:
+			this.levelService2.addMine(posX, posY);
 			break;
 		case ADD_RAIL:
 			this.levelService2.addRail(posX, posY);
 			break;
 		case ADD_START_PLAYER:
+			this.levelService2.addStartPlayer(posX, posY);
 			break;
 		case ADD_TELEPORTER:
+			this.levelService2.addTeleporter(posX, posY);
 			break;
 		case ADD_TROLLEY:
+			this.levelService2.addTrolley(posX, posY);
 			break;
 		case ADD_WALL:
+			this.levelService2.addWall(posX, posY);
 			break;
-		case NONE:
+		case CUSTOMIZE_WALL:
+			this.levelService2.customizeWall(posX, posY, true, lastBackgroundIndexClicked);
 			break;
 		case REMOVE_CUSTOM_BACKGROUND:
+			this.levelService2.removeCustomBackgroundTexture(posX, posY);
 			break;
 		case REMOVE_CUSTOM_FOREGROUND:
+			this.levelService2.removeCustomForegroundTexture(posX, posY);
 			break;
 		case REMOVE_HOLE:
+			this.levelService2.removeHole(posX, posY);
 			break;
 		case REMOVE_INTERRUPTEUR:
+			this.levelService2.removeInterrupter(posX, posY);
 			break;
 		case REMOVE_MINE:
+			this.levelService2.removeMine(posX, posY);
 			break;
 		case REMOVE_RAIL:
+			this.levelService2.removeRail(posX, posY);
 			break;
 		case REMOVE_START_PLAYER:
+			this.levelService2.removeStartPlayer(posX, posY);
 			break;
 		case REMOVE_TELEPORTER:
+			this.levelService2.removeTeleporter(posX, posY);
 			break;
 		case REMOVE_TROLLEY:
+			this.levelService2.removeTrolley(posX, posY);
 			break;
 		case REMOVE_WALL:
+			this.levelService2.removeWall(posX, posY);
+			break;
+		case REMOVE_CUSTOMIZATION_WALL:
+			this.levelService2.removeCustomizationWall(posX, posY);
 			break;
 		case SELECT_DEFAULT_BACKGROUND_TEXTURE:
 			break;
 		case SELECT_DEFAULT_WALL_TEXTURE:
 			break;
+		case SET_WALL_TRANSPARENT:
+			this.levelService2.setWallTransparent(posX, posY);
+			break;
+		case NONE:
 		default:
 			break;
 		}
