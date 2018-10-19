@@ -29,4 +29,12 @@ public class WallDTO extends PositionableDTO implements Serializable {
 		this.draw = true;
 		this.texture = null;
 	}
+
+	public WallDTO(WallDTO orignial) {
+		super(orignial.getX(), orignial.getY());
+		this.draw = orignial.draw;
+		if (orignial.texture != null) {
+			this.texture = new TextureDTO(orignial.texture);
+		}
+	}
 }

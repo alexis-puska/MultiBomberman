@@ -10,7 +10,6 @@ public class StartPlayerMapper {
 
 	public StartPlayer toEntity(PositionableDTO dto) {
 		StartPlayer startPlayer = new StartPlayer();
-		startPlayer.setId(dto.getId());
 		startPlayer.setX(dto.getX());
 		startPlayer.setY(dto.getY());
 		return startPlayer;

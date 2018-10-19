@@ -11,7 +11,6 @@ public class RailMapper {
 	
 	public Rail toEntity(PositionableDTO dto) {
 		Rail customTexture = new Rail();
-		customTexture.setId(dto.getId());
 		customTexture.setX(dto.getX());
 		customTexture.setY(dto.getY());
 		return customTexture;

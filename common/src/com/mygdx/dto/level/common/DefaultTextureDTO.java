@@ -19,4 +19,9 @@ public class DefaultTextureDTO implements Serializable {
 
 	private SpriteEnum animation;
 	private int index;
+
+	public DefaultTextureDTO(DefaultTextureDTO original) {
+		this.animation = original.animation;
+		this.index = original.index;
+	}
 }

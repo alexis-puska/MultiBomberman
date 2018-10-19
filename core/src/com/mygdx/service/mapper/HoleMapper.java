@@ -10,7 +10,6 @@ public class HoleMapper {
 
 	public Hole toEntity(PositionableDTO dto) {
 		Hole hole = new Hole();
-		hole.setId(dto.getId());
 		hole.setX(dto.getX());
 		hole.setY(dto.getY());
 		return hole;

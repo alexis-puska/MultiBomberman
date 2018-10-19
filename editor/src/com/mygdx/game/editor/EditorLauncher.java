@@ -185,6 +185,7 @@ public class EditorLauncher extends JFrame {
 	private GridLayout currentLevelLayout;
 	private transient Border currentLevelBorder;
 	private JButton addLevel;
+	private JButton copyLevel;
 	private JButton delLevel;
 	private JButton nextLevel;
 	private JButton previousLevel;
@@ -193,6 +194,7 @@ public class EditorLauncher extends JFrame {
 	private GridLayout currentVarianteLayout;
 	private transient Border currentVarianteBorder;
 	private JButton addVariante;
+	private JButton copyVariante;
 	private JButton delVariante;
 	private JButton nextVariante;
 	private JButton previousVariante;
@@ -358,12 +360,14 @@ public class EditorLauncher extends JFrame {
 		currentLevelPanel.add(previousLevel);
 		currentLevelPanel.add(nextLevel);
 		currentLevelPanel.add(addLevel);
+		currentLevelPanel.add(copyLevel);
 		currentLevelPanel.add(delLevel);
 		currentVariantePanel.setLayout(currentVarianteLayout);
 		currentVariantePanel.setBorder(currentVarianteBorder);
 		currentVariantePanel.add(previousVariante);
 		currentVariantePanel.add(nextVariante);
 		currentVariantePanel.add(addVariante);
+		currentVariantePanel.add(copyVariante);
 		currentVariantePanel.add(delVariante);
 		filePanel.setLayout(fileLayout);
 		filePanel.setBorder(fileBorder);
@@ -499,6 +503,7 @@ public class EditorLauncher extends JFrame {
 		currentLevelLayout = new GridLayout();
 		currentLevelBorder = BorderFactory.createTitledBorder(message.getString("editor.border.currentLevel"));
 		addLevel = new JButton(message.getString("editor.button.currentLevel.add"));
+		copyLevel = new JButton(message.getString("editor.button.currentLevel.copy"));
 		delLevel = new JButton(message.getString("editor.button.currentLevel.delete"));
 		nextLevel = new JButton(message.getString("editor.button.currentLevel.next"));
 		previousLevel = new JButton(message.getString("editor.button.currentLevel.previous"));
@@ -506,6 +511,7 @@ public class EditorLauncher extends JFrame {
 		currentVarianteLayout = new GridLayout();
 		currentVarianteBorder = BorderFactory.createTitledBorder(message.getString("editor.border.currentVariante"));
 		addVariante = new JButton(message.getString("editor.button.currentVariante.add"));
+		copyVariante = new JButton(message.getString("editor.button.currentVariante.copy"));
 		delVariante = new JButton(message.getString("editor.button.currentVariante.delete"));
 		nextVariante = new JButton(message.getString("editor.button.currentVariante.next"));
 		previousVariante = new JButton(message.getString("editor.button.currentVariante.previous"));
@@ -881,6 +887,11 @@ public class EditorLauncher extends JFrame {
 			loadPropertiesLevel();
 			repaint();
 		});
+		copyLevel.addActionListener(e -> {
+			levelService2.copyLevelAndSelectIt();
+			loadPropertiesLevel();
+			repaint();
+		});
 		delLevel.addActionListener(e -> {
 			levelService2.deleteLevel();
 			loadPropertiesLevel();
@@ -898,6 +909,11 @@ public class EditorLauncher extends JFrame {
 		});
 		addVariante.addActionListener(e -> {
 			levelService2.addVariante();
+			loadPropertiesLevel();
+			repaint();
+		});
+		copyVariante.addActionListener(e -> {
+			levelService2.copyVarianteAndSelectIt();
 			loadPropertiesLevel();
 			repaint();
 		});

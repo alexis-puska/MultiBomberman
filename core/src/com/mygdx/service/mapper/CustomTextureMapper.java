@@ -10,7 +10,6 @@ public class CustomTextureMapper {
 
 	public CustomTexture toEntity(CustomTextureDTO dto) {
 		CustomTexture customTexture = new CustomTexture();
-		customTexture.setId(dto.getId());
 		customTexture.setX(dto.getX());
 		customTexture.setY(dto.getY());
 		customTexture.setAnimation(dto.getAnimation());

@@ -10,7 +10,6 @@ public class InterrupterMapper {
 
 	public Interrupter toEntity(PositionableDTO dto) {
 		Interrupter interrupter = new Interrupter();
-		interrupter.setId(dto.getId());
 		interrupter.setX(dto.getX());
 		interrupter.setY(dto.getY());
 		return interrupter;

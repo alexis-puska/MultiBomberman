@@ -24,4 +24,10 @@ public class CustomTextureDTO extends PositionableDTO implements Serializable {
 		this.animation = animation;
 		this.index = index;
 	}
+
+	public CustomTextureDTO(CustomTextureDTO orignial) {
+		super(orignial.getX(), orignial.getY());
+		this.animation = orignial.animation;
+		this.index = orignial.index;
+	}
 }

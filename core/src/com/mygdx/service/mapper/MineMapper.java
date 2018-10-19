@@ -11,7 +11,6 @@ public class MineMapper {
 	
 	public Mine toEntity(PositionableDTO dto) {
 		Mine customTexture = new Mine();
-		customTexture.setId(dto.getId());
 		customTexture.setX(dto.getX());
 		customTexture.setY(dto.getY());
 		return customTexture;

@@ -10,7 +10,6 @@ public class TeleporterMapper {
 
 	public Teleporter toEntity(PositionableDTO dto) {
 		Teleporter customTexture = new Teleporter();
-		customTexture.setId(dto.getId());
 		customTexture.setX(dto.getX());
 		customTexture.setY(dto.getY());
 		return customTexture;

@@ -10,7 +10,6 @@ public class TrolleyMapper {
 
 	public Trolley toEntity(PositionableDTO dto) {
 		Trolley trolley = new Trolley();
-		trolley.setId(dto.getId());
 		trolley.setX(dto.getX());
 		trolley.setY(dto.getY());
 		return trolley;

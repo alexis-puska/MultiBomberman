@@ -10,7 +10,6 @@ public class WallMapper {
 
 	public Wall toEntity(WallDTO dto) {
 		Wall wall = new Wall();
-		wall.setId(dto.getId());
 		wall.setX(dto.getX());
 		wall.setY(dto.getY());
 		if (dto.getTexture() != null) {

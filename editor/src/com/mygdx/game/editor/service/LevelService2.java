@@ -156,6 +156,23 @@ public class LevelService2 {
 		}
 	}
 
+	public void copyLevelAndSelectIt() {
+		if (currentLevel != null) {
+			LevelDTO copy = new LevelDTO(currentLevel);
+			levelFileDTO.getLevels().add(copy);
+			currentLevel = levelFileDTO.getLevels().get(levelFileDTO.getLevels().size() - 1);
+			currentVariante = currentLevel.getVariante().get(0);
+		}
+	}
+
+	public void copyVarianteAndSelectIt() {
+		if (currentLevel != null) {
+			VarianteDTO copy = new VarianteDTO(currentVariante);
+			currentLevel.getVariante().add(copy);
+			currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
+		}
+	}
+
 	private void createLevelFileDTO() {
 		this.levelFileDTO = new LevelFileDTO();
 		this.levelFileDTO.setLevels(new ArrayList<>());
@@ -465,7 +482,7 @@ public class LevelService2 {
 		if (currentVariante.getTeleporter().contains(tmp)) {
 			return false;
 		}
-		return currentVariante.getTrolley().contains(tmp);
+		return !currentVariante.getTrolley().contains(tmp);
 	}
 
 	public void addHole(int x, int y) {

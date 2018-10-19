@@ -19,4 +19,9 @@ public class TextDTO implements Serializable {
 
 	private LocaleEnum lang;
 	private String value;
+
+	public TextDTO(TextDTO original) {
+		this.lang = original.lang;
+		this.value = original.value;
+	}
 }
