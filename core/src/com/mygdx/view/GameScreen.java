@@ -202,7 +202,6 @@ public class GameScreen implements Screen, MenuListener {
 				}
 			}
 		}
-
 	}
 
 	/******************************
@@ -249,10 +248,10 @@ public class GameScreen implements Screen, MenuListener {
 				Constante.GAME_SCREEN_SIZE_Y);
 		game.getBatch().end();
 
-//		if (Constante.DEBUG) {
-//			debugCamera.update();
-//			debugRenderer.render(world, debugCamera.combined);
-//		}
+		if (Constante.DEBUG) {
+			debugCamera.update();
+			debugRenderer.render(world, debugCamera.combined);
+		}
 
 		world.step(1 / 25f, 6, 2);
 	}

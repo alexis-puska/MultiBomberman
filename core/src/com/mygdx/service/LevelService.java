@@ -10,7 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.Variante;
+import com.mygdx.dto.level.LevelDTO;
 import com.mygdx.dto.level.LevelFileDTO;
+import com.mygdx.dto.level.VarianteDTO;
 import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.mapper.LevelMapper;
 
@@ -27,6 +29,9 @@ public class LevelService {
 	private int[] bonus;
 	private Level level;
 	private Variante variante;
+	private VarianteDTO currentVariante;
+	private LevelDTO currentLevel;
+	private LevelFileDTO levelFileDTO;
 
 	public LevelService(final MultiBombermanGame game) {
 		Gdx.app.debug(CLASS_NAME, "Init");
@@ -36,12 +41,11 @@ public class LevelService {
 
 		objectMapper = new ObjectMapper();
 		levelJsonFile = Gdx.files.internal(SPRITE_JSON_FILE);
-		LevelFileDTO levelFileContent = null;
 		try {
-			levelFileContent = objectMapper.readValue(levelJsonFile.read(), LevelFileDTO.class);
-			Gdx.app.log(CLASS_NAME, "Nb level found : " + levelFileContent.getLevels().size());
+			levelFileDTO = objectMapper.readValue(levelJsonFile.read(), LevelFileDTO.class);
+			Gdx.app.log(CLASS_NAME, "Nb level found : " + levelFileDTO.getLevels().size());
 
-			level = levelMapper.toEntity(levelFileContent.getLevels().get(0));
+			level = levelMapper.toEntity(levelFileDTO.getLevels().get(0));
 			variante = level.getVariante().get(0);
 			Gdx.app.log(CLASS_NAME, level.getName().get(0).getValue());
 			Gdx.app.log(CLASS_NAME, variante.getName().get(0).getValue());
@@ -79,24 +83,72 @@ public class LevelService {
 		return this.bonus[i];
 	}
 
-	public void previousLevel() {
-		// make
-	}
-
 	public void nextLevel() {
-		// make
+		if (currentLevel != null) {
+			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
+			if (pos != levelFileDTO.getLevels().size() - 1) {
+				currentLevel = levelFileDTO.getLevels().get(pos + 1);
+				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				} else {
+					currentVariante = null;
+				}
+			} else {
+				currentLevel = levelFileDTO.getLevels().get(0);
+				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				} else {
+					currentVariante = null;
+				}
+			}
+		}
 	}
 
-	public void previousVariante() {
-		// make
+	public void previousLevel() {
+		if (currentLevel != null) {
+			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
+			if (pos > 0) {
+				currentLevel = levelFileDTO.getLevels().get(pos - 1);
+				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				} else {
+					currentVariante = null;
+				}
+			} else {
+				currentLevel = levelFileDTO.getLevels().get(levelFileDTO.getLevels().size() - 1);
+				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
+					currentVariante = currentLevel.getVariante().get(0);
+				} else {
+					currentVariante = null;
+				}
+			}
+		}
 	}
 
 	public void nextVariante() {
-		// make
+		if (currentVariante != null) {
+			int pos = currentLevel.getVariante().indexOf(currentVariante);
+			if (pos == currentLevel.getVariante().size() - 1) {
+				currentVariante = currentLevel.getVariante().get(0);
+			} else {
+				currentVariante = currentLevel.getVariante().get(pos + 1);
+			}
+		}
+	}
+
+	public void previousVariante() {
+		if (currentVariante != null) {
+			int pos = currentLevel.getVariante().indexOf(currentVariante);
+			if (pos == 0) {
+				currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
+			} else {
+				currentVariante = currentLevel.getVariante().get(pos - 1);
+			}
+		}
 	}
 
 	public void loadLevel() {
-		// make
+		Level level = this.levelMapper.toEntity(currentLevel);
 	}
 
 }
