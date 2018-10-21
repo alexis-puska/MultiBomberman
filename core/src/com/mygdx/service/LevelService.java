@@ -13,7 +13,6 @@ import com.mygdx.domain.level.Variante;
 import com.mygdx.dto.level.LevelDTO;
 import com.mygdx.dto.level.LevelFileDTO;
 import com.mygdx.dto.level.VarianteDTO;
-import com.mygdx.game.MultiBombermanGame;
 import com.mygdx.service.mapper.LevelMapper;
 
 public class LevelService {
@@ -21,7 +20,6 @@ public class LevelService {
 	private static final String CLASS_NAME = "LevelService.class";
 	private static final String SPRITE_JSON_FILE = "json/levels.json";
 
-	private final MultiBombermanGame game;
 	private FileHandle levelJsonFile;
 	private final ObjectMapper objectMapper;
 	private final LevelMapper levelMapper;
@@ -33,9 +31,8 @@ public class LevelService {
 	private LevelDTO currentLevel;
 	private LevelFileDTO levelFileDTO;
 
-	public LevelService(final MultiBombermanGame game) {
+	public LevelService() {
 		Gdx.app.debug(CLASS_NAME, "Init");
-		this.game = game;
 		this.levelMapper = new LevelMapper();
 		bonus = new int[Constante.MAX_BONUS];
 
@@ -147,8 +144,8 @@ public class LevelService {
 		}
 	}
 
-	public void loadLevel() {
-		Level level = this.levelMapper.toEntity(currentLevel);
+	public Level loadLevel() {
+		return this.levelMapper.toEntity(currentLevel);
 	}
 
 }

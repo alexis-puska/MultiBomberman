@@ -52,7 +52,7 @@ public class MultiBombermanGame extends Game {
 		Gdx.app.setLogLevel(Constante.LIBGDX_LOG_LEVEL);
 		networkService = new NetworkService(this);
 		playerService = new PlayerService(this);
-		levelService = new LevelService(this);
+		levelService = new LevelService();
 		SpriteService.getInstance();
 
 		/****************************************
