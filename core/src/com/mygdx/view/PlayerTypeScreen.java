@@ -181,6 +181,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
+		mbGame.getScreen().dispose();
 		mbGame.setScreen(new MainScreen(mbGame));
 	}
 

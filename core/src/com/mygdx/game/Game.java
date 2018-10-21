@@ -26,10 +26,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
+import com.mygdx.domain.level.Level;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
+import com.mygdx.service.Context;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
+import com.mygdx.service.mapper.LevelMapper;
 
 public class Game {
 
@@ -78,11 +81,15 @@ public class Game {
 
 	private List<Player> players;
 
+	private Level level;
+
 	public Game(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 
+		LevelMapper levelMapper = new LevelMapper();
+		this.level = levelMapper.toEntity(Context.getLevel());
 		/********************
 		 * --- DRAW ---
 		 ********************/
@@ -261,7 +268,9 @@ public class Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		for (int x = 0; x < 35; x++) {
 			for (int y = 0; y < 21; y++) {
-				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL, 2), x * 18, y * 16);
+				mbGame.getBatch()
+						.draw(SpriteService.getInstance().getSprite(this.level.getDefaultBackground().getAnimation(),
+								this.level.getDefaultBackground().getIndex()), x * 18, y * 16);
 			}
 		}
 		mbGame.getBatch().end();
@@ -277,21 +286,27 @@ public class Game {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		for (int i = 0; i < 35; i++) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, 0);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
+					this.level.getDefaultWall().getIndex()), i * 18, 0);
 		}
 		for (int i = 0; i < 35; i++) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, 20 * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
+					this.level.getDefaultWall().getIndex()), i * 18, 20 * 16);
 		}
 		for (int j = 0; j < 21; j++) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), 0, j * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
+					this.level.getDefaultWall().getIndex()), 0, j * 16);
 		}
 		for (int j = 0; j < 21; j++) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), 34 * 18, j * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
+					this.level.getDefaultWall().getIndex()), 34 * 18, j * 16);
 		}
 		for (int j = 1; j < 19; j++) {
 			for (int i = 0; i < 35; i++) {
 				if (i % 2 == 0 && j % 2 == 0) {
-					mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, j * 16);
+					mbGame.getBatch()
+							.draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
+									this.level.getDefaultWall().getIndex()), i * 18, j * 16);
 				}
 			}
 		}
@@ -329,7 +344,7 @@ public class Game {
 		shadowLayer.begin();
 		mbGame.getBatch().begin();
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
-		Gdx.gl.glClearColor(0f, 0f, 0f, 0.5f);
+		Gdx.gl.glClearColor(0f, 0f, 0f, this.level.getShadow());
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		Gdx.gl.glColorMask(false, false, false, true);
@@ -378,5 +393,7 @@ public class Game {
 		this.playerLayerTexture.dispose();
 		this.frontLayerTexture.dispose();
 		this.shadowLayerTexture.dispose();
+		this.world.dispose();
+		this.debugRenderer.dispose();
 	}
 }

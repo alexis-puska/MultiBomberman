@@ -105,6 +105,7 @@ public class GameScreen implements Screen, MenuListener {
 
 	@Override
 	public void dispose() {
+		shapeRenderer.dispose();
 		font.dispose();
 	}
 
@@ -122,6 +123,7 @@ public class GameScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
+		this.game.dispose();
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new LevelScreen(mbGame));
 	}
