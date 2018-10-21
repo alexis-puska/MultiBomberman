@@ -1,5 +1,5 @@
 {
-  "levels" : [ {
+  "levelGroups" : [ {
     "name" : [ {
       "lang" : "ENGLISH",
       "value" : "CHANGE !!!"
@@ -7,7 +7,7 @@
       "lang" : "FRENCH",
       "value" : "CHANGE !!!"
     } ],
-    "variante" : [ {
+    "level" : [ {
       "name" : [ {
         "lang" : "ENGLISH",
         "value" : "names"

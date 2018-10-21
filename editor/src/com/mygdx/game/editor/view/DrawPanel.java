@@ -52,7 +52,7 @@ public class DrawPanel extends Canvas {
 	}
 
 	/**
-	 * Draw the level if exists, draw message if level doesn't exists
+	 * Draw the levelGroup if exists, draw message if levelGroup doesn't exists
 	 * 
 	 * @param g2 graphics
 	 */
@@ -64,7 +64,7 @@ public class DrawPanel extends Canvas {
 			bs = getBufferStrategy();
 		}
 		Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
-		if (levelService.getCurrentLevel() != null) {
+		if (levelService.getCurrentLevelGroup() != null) {
 			drawBackground(g2);
 			drawCustomBackground(g2);
 			drawWall(g2);
@@ -105,7 +105,7 @@ public class DrawPanel extends Canvas {
 	}
 
 	/**
-	 * Draw the level
+	 * Draw the levelGroup
 	 * 
 	 * @param g2 graphics2D
 	 */
@@ -136,13 +136,13 @@ public class DrawPanel extends Canvas {
 	}
 
 	/**
-	 * Draw the background of the level
+	 * Draw the background of the levelGroup
 	 * 
 	 * @param g2
 	 */
 	private void drawBackground(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.LEVEL,
-				levelService.getCurrentVariante().getDefaultBackground().getIndex());
+				levelService.getCurrentLevel().getDefaultBackground().getIndex());
 		int x = 0;
 		int y = 0;
 		while (x < EditorConstante.SCREEN_SIZE_X) {
@@ -157,7 +157,7 @@ public class DrawPanel extends Canvas {
 
 	private void drawHole(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.HOLE, 0);
-		List<PositionableDTO> hole = levelService.getCurrentVariante().getHole();
+		List<PositionableDTO> hole = levelService.getCurrentLevel().getHole();
 		if (hole != null) {
 			hole.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
 					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
@@ -166,7 +166,7 @@ public class DrawPanel extends Canvas {
 
 	private void drawRail(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.RAIL, 0);
-		List<PositionableDTO> rail = levelService.getCurrentVariante().getRail();
+		List<PositionableDTO> rail = levelService.getCurrentLevel().getRail();
 		if (rail != null) {
 			rail.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
 					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
@@ -175,7 +175,7 @@ public class DrawPanel extends Canvas {
 
 	private void drawInterrupter(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.BUTTON, 0);
-		List<PositionableDTO> interrupter = levelService.getCurrentVariante().getInterrupter();
+		List<PositionableDTO> interrupter = levelService.getCurrentLevel().getInterrupter();
 		if (interrupter != null) {
 			interrupter.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
 					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
@@ -184,7 +184,7 @@ public class DrawPanel extends Canvas {
 
 	private void drawMine(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.MINE, 0);
-		List<PositionableDTO> mine = levelService.getCurrentVariante().getMine();
+		List<PositionableDTO> mine = levelService.getCurrentLevel().getMine();
 		if (mine != null) {
 			mine.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
 					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
@@ -193,7 +193,7 @@ public class DrawPanel extends Canvas {
 
 	private void drawTrolley(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.TROLLEY, 0);
-		List<PositionableDTO> trolley = levelService.getCurrentVariante().getTrolley();
+		List<PositionableDTO> trolley = levelService.getCurrentLevel().getTrolley();
 		if (trolley != null) {
 			trolley.stream().forEach(w -> g2.drawImage(bf, null, (w.getX() * EditorConstante.GRID_SIZE_X) - 6,
 					(CoordinateUtils.invGridY(w.getY()) * EditorConstante.GRID_SIZE_Y) - 26));
@@ -202,7 +202,7 @@ public class DrawPanel extends Canvas {
 
 	private void drawTeleporter(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.TELEPORTER, 0);
-		List<PositionableDTO> teleporter = levelService.getCurrentVariante().getTeleporter();
+		List<PositionableDTO> teleporter = levelService.getCurrentLevel().getTeleporter();
 		if (teleporter != null) {
 			teleporter.stream().forEach(w -> g2.drawImage(bf, null, w.getX() * bf.getWidth(),
 					CoordinateUtils.invGridY(w.getY()) * bf.getHeight()));
@@ -211,8 +211,8 @@ public class DrawPanel extends Canvas {
 
 	private void drawWall(Graphics2D g2) {
 		BufferedImage bf = spriteService.getSprite(SpriteEnum.LEVEL,
-				levelService.getCurrentVariante().getDefaultWall().getIndex());
-		List<WallDTO> wall = levelService.getCurrentVariante().getWall();
+				levelService.getCurrentLevel().getDefaultWall().getIndex());
+		List<WallDTO> wall = levelService.getCurrentLevel().getWall();
 		if (wall != null) {
 			wall.stream().forEach(w -> {
 				if (w.isDraw()) {
@@ -240,14 +240,14 @@ public class DrawPanel extends Canvas {
 	}
 
 	private void drawShadow(Graphics2D g2) {
-		if (levelService.getCurrentVariante() != null) {
+		if (levelService.getCurrentLevel() != null) {
 			BufferedImage bf = new BufferedImage(630, 336, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = bf.createGraphics();
-			float shadow = levelService.getCurrentVariante().getShadow();
+			float shadow = levelService.getCurrentLevel().getShadow();
 			g.setColor(new Color(0, 0, 0, (int) (shadow * 255f)));
 			Rectangle2D r = new Rectangle2D.Double(0, 0, 630, 360);
 			Area areaRect = new Area(r);
-			levelService.getCurrentVariante().getStartPlayer().stream().forEach(d -> {
+			levelService.getCurrentLevel().getStartPlayer().stream().forEach(d -> {
 				Ellipse2D e = new Ellipse2D.Double(d.getX() * EditorConstante.GRID_SIZE_X -18,
 						CoordinateUtils.invGridY(d.getY()) * EditorConstante.GRID_SIZE_Y - 16, 54, 48);
 				Area area = new Area(e);
@@ -259,7 +259,7 @@ public class DrawPanel extends Canvas {
 	}
 
 	private void drawCustomBackground(Graphics2D g2) {
-		List<CustomTextureDTO> customBackgroundTexture = levelService.getCurrentVariante().getCustomBackgroundTexture();
+		List<CustomTextureDTO> customBackgroundTexture = levelService.getCurrentLevel().getCustomBackgroundTexture();
 		if (customBackgroundTexture != null) {
 			customBackgroundTexture.stream().forEach(w -> {
 				BufferedImage bf = spriteService.getSprite(w.getAnimation(), w.getIndex());
@@ -270,7 +270,7 @@ public class DrawPanel extends Canvas {
 	}
 
 	private void drawCustomForeground(Graphics2D g2) {
-		List<CustomTextureDTO> customForegroundTexture = levelService.getCurrentVariante().getCustomForegroundTexture();
+		List<CustomTextureDTO> customForegroundTexture = levelService.getCurrentLevel().getCustomForegroundTexture();
 		if (customForegroundTexture != null) {
 			customForegroundTexture.stream().forEach(w -> {
 				BufferedImage bf = spriteService.getSprite(w.getAnimation(), w.getIndex());
@@ -281,7 +281,7 @@ public class DrawPanel extends Canvas {
 	}
 
 	private void drawStartPlayer(Graphics2D g2) {
-		List<PositionableDTO> sps = levelService.getCurrentVariante().getStartPlayer();
+		List<PositionableDTO> sps = levelService.getCurrentLevel().getStartPlayer();
 		if (sps != null) {
 			sps.stream().forEach(sp -> {
 				Stroke savedStrock = g2.getStroke();

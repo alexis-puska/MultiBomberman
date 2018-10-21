@@ -2,7 +2,7 @@ package com.mygdx.domain.level;
 
 import java.util.List;
 
-import com.mygdx.domain.common.Identifiable;
+import com.mygdx.enumeration.SpriteEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +13,25 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Level extends Identifiable {
-
-	protected List<Text> name;
-	protected List<Variante> variante;
+public class Level {
+	private List<Text> name;
+	private List<Text> description;
+	private int bombe;
+	private int strenght;
+	private float shadow;
+	private Integer[] bonus;
+	private boolean fillWithBrick;
+	private DefaultTexture defaultBackground;
+	private DefaultTexture defaultWall;
+	private SpriteEnum defaultBrickAnimation;
+	private List<Hole> hole;
+	private List<Rail> rail;
+	private List<Interrupter> interrupter;
+	private List<Mine> mine;
+	private List<Trolley> trolley;
+	private List<Teleporter> teleporter;
+	private List<Wall> wall;
+	private List<CustomTexture> customBackgroundTexture;
+	private List<CustomTexture> customForegroundTexture;
+	private List<StartPlayer> startPlayer;
 }

@@ -87,9 +87,9 @@ public class EditorLauncher extends JFrame {
 	private JPanel propertiesPanel;
 	private BorderLayout propertiesPanelLayout;
 	private transient Border propertiesPanelBorder;
-	private JPanel levelPropertiesPanel;
-	private transient SpringLayout levelPropertiesPanelLayout;
-	private TitledBorder levelPropertiesPanelBorder;
+	private JPanel levelGroupPropertiesPanel;
+	private transient SpringLayout levelGroupPropertiesPanelLayout;
+	private TitledBorder levelGroupPropertiesPanelBorder;
 	private JPanel bonusPanel;
 	private transient SpringLayout bonusLayout;
 	private TitledBorder bonusBorder;
@@ -106,14 +106,14 @@ public class EditorLauncher extends JFrame {
 	/********************
 	 * LEVEL PROPERTIES
 	 *******************/
+	private JLabel levelGroupNameFrLabel;
+	private JTextField levelGroupNameFrTextField;
+	private JLabel levelGroupNameEnLabel;
+	private JTextField levelGroupNameEnTextField;
 	private JLabel levelNameFrLabel;
 	private JTextField levelNameFrTextField;
 	private JLabel levelNameEnLabel;
 	private JTextField levelNameEnTextField;
-	private JLabel varianteNameFrLabel;
-	private JTextField varianteNameFrTextField;
-	private JLabel varianteNameEnLabel;
-	private JTextField varianteNameEnTextField;
 	private JLabel descriptionFrLabel;
 	private JTextField descriptionFrTextField;
 	private JLabel descriptionEnLabel;
@@ -180,7 +180,16 @@ public class EditorLauncher extends JFrame {
 	private JPanel panelNavigation;
 	private transient Border borderNavigation;
 	private GridLayout layoutNavigation;
-	// currentLevelIndex
+	// currentLevelGroupIndex
+	private JPanel currentLevelGroupPanel;
+	private GridLayout currentLevelGroupLayout;
+	private transient Border currentLevelGroupBorder;
+	private JButton addLevelGroup;
+	private JButton copyLevelGroup;
+	private JButton delLevelGroup;
+	private JButton nextLevelGroup;
+	private JButton previousLevelGroup;
+	// currentLevelGroupIndex
 	private JPanel currentLevelPanel;
 	private GridLayout currentLevelLayout;
 	private transient Border currentLevelBorder;
@@ -189,15 +198,6 @@ public class EditorLauncher extends JFrame {
 	private JButton delLevel;
 	private JButton nextLevel;
 	private JButton previousLevel;
-	// currentLevelIndex
-	private JPanel currentVariantePanel;
-	private GridLayout currentVarianteLayout;
-	private transient Border currentVarianteBorder;
-	private JButton addVariante;
-	private JButton copyVariante;
-	private JButton delVariante;
-	private JButton nextVariante;
-	private JButton previousVariante;
 
 	// file
 	private JPanel filePanel;
@@ -305,11 +305,11 @@ public class EditorLauncher extends JFrame {
 		texturePanel.add(foregroundPanel);
 		texturePanel.add(backgroundPanel);
 
-		levelPropertiesPanel.setLayout(levelPropertiesPanelLayout);
+		levelGroupPropertiesPanel.setLayout(levelGroupPropertiesPanelLayout);
 		bonusPanel.setLayout(bonusLayout);
 		propertiesPanel.setLayout(propertiesPanelLayout);
 		propertiesPanel.setBorder(propertiesPanelBorder);
-		propertiesPanel.add(levelPropertiesPanel, BorderLayout.NORTH);
+		propertiesPanel.add(levelGroupPropertiesPanel, BorderLayout.NORTH);
 		propertiesPanel.add(bonusPanel, BorderLayout.CENTER);
 
 		eastPanelLayout.setColumns(2);
@@ -355,6 +355,13 @@ public class EditorLauncher extends JFrame {
 	}
 
 	private void buildNavigationPanelButton() {
+		currentLevelGroupPanel.setLayout(currentLevelGroupLayout);
+		currentLevelGroupPanel.setBorder(currentLevelGroupBorder);
+		currentLevelGroupPanel.add(previousLevelGroup);
+		currentLevelGroupPanel.add(nextLevelGroup);
+		currentLevelGroupPanel.add(addLevelGroup);
+		currentLevelGroupPanel.add(copyLevelGroup);
+		currentLevelGroupPanel.add(delLevelGroup);
 		currentLevelPanel.setLayout(currentLevelLayout);
 		currentLevelPanel.setBorder(currentLevelBorder);
 		currentLevelPanel.add(previousLevel);
@@ -362,13 +369,6 @@ public class EditorLauncher extends JFrame {
 		currentLevelPanel.add(addLevel);
 		currentLevelPanel.add(copyLevel);
 		currentLevelPanel.add(delLevel);
-		currentVariantePanel.setLayout(currentVarianteLayout);
-		currentVariantePanel.setBorder(currentVarianteBorder);
-		currentVariantePanel.add(previousVariante);
-		currentVariantePanel.add(nextVariante);
-		currentVariantePanel.add(addVariante);
-		currentVariantePanel.add(copyVariante);
-		currentVariantePanel.add(delVariante);
 		filePanel.setLayout(fileLayout);
 		filePanel.setBorder(fileBorder);
 		filePanel.add(openLoadFileChooser);
@@ -376,54 +376,54 @@ public class EditorLauncher extends JFrame {
 		panelNavigation.setBorder(borderNavigation);
 		panelNavigation.setLayout(layoutNavigation);
 		panelNavigation.add(filePanel);
+		panelNavigation.add(currentLevelGroupPanel);
 		panelNavigation.add(currentLevelPanel);
-		panelNavigation.add(currentVariantePanel);
 		this.getContentPane().add(panelNavigation, BorderLayout.NORTH);
 	}
 
 	private void buildParameterPanelButton() {
-		levelPropertiesPanel.setBorder(levelPropertiesPanelBorder);
-		levelPropertiesPanel.setLayout(levelPropertiesPanelLayout);
-		levelNameFrLabel.setLabelFor(levelNameFrTextField);
-		levelNameEnLabel.setLabelFor(levelNameEnTextField);
-		varianteNameFrLabel.setLabelFor(levelNameFrLabel);
-		varianteNameEnLabel.setLabelFor(levelNameFrLabel);
-		descriptionFrLabel.setLabelFor(levelNameFrLabel);
-		descriptionEnLabel.setLabelFor(levelNameFrLabel);
-		shadowLabel.setLabelFor(levelNameFrLabel);
-		bombeLabel.setLabelFor(levelNameFrLabel);
+		levelGroupPropertiesPanel.setBorder(levelGroupPropertiesPanelBorder);
+		levelGroupPropertiesPanel.setLayout(levelGroupPropertiesPanelLayout);
+		levelGroupNameFrLabel.setLabelFor(levelGroupNameFrTextField);
+		levelGroupNameEnLabel.setLabelFor(levelGroupNameEnTextField);
+		levelNameFrLabel.setLabelFor(levelGroupNameFrLabel);
+		levelNameEnLabel.setLabelFor(levelGroupNameFrLabel);
+		descriptionFrLabel.setLabelFor(levelGroupNameFrLabel);
+		descriptionEnLabel.setLabelFor(levelGroupNameFrLabel);
+		shadowLabel.setLabelFor(levelGroupNameFrLabel);
+		bombeLabel.setLabelFor(levelGroupNameFrLabel);
 		strenghtLabel.setLabelFor(strenghtSpinner);
 		fillWithBrickLabel.setLabelFor(fillWithBrickCheckbox);
 		defaultBackgroundLabel.setLabelFor(defaultBackGround);
 		defaultWallLabel.setLabelFor(defaultWall);
 		defaultBrickAnimationLabel.setLabelFor(defaultBrickAnimationComboBox);
-		levelPropertiesPanel.add(levelNameFrLabel);
-		levelPropertiesPanel.add(levelNameFrTextField);
-		levelPropertiesPanel.add(levelNameEnLabel);
-		levelPropertiesPanel.add(levelNameEnTextField);
-		levelPropertiesPanel.add(varianteNameFrLabel);
-		levelPropertiesPanel.add(varianteNameFrTextField);
-		levelPropertiesPanel.add(varianteNameEnLabel);
-		levelPropertiesPanel.add(varianteNameEnTextField);
-		levelPropertiesPanel.add(descriptionFrLabel);
-		levelPropertiesPanel.add(descriptionFrTextField);
-		levelPropertiesPanel.add(descriptionEnLabel);
-		levelPropertiesPanel.add(descriptionEnTextField);
-		levelPropertiesPanel.add(shadowLabel);
-		levelPropertiesPanel.add(shadowSpinner);
-		levelPropertiesPanel.add(bombeLabel);
-		levelPropertiesPanel.add(bombeSpinner);
-		levelPropertiesPanel.add(strenghtLabel);
-		levelPropertiesPanel.add(strenghtSpinner);
-		levelPropertiesPanel.add(fillWithBrickLabel);
-		levelPropertiesPanel.add(fillWithBrickCheckbox);
-		levelPropertiesPanel.add(defaultBackgroundLabel);
-		levelPropertiesPanel.add(defaultBackGround);
-		levelPropertiesPanel.add(defaultWallLabel);
-		levelPropertiesPanel.add(defaultWall);
-		levelPropertiesPanel.add(defaultBrickAnimationLabel);
-		levelPropertiesPanel.add(defaultBrickAnimationComboBox);
-		SpringUtilities.makeGrid(levelPropertiesPanel, 13, 2, 2, 2, 2, 2);
+		levelGroupPropertiesPanel.add(levelGroupNameFrLabel);
+		levelGroupPropertiesPanel.add(levelGroupNameFrTextField);
+		levelGroupPropertiesPanel.add(levelGroupNameEnLabel);
+		levelGroupPropertiesPanel.add(levelGroupNameEnTextField);
+		levelGroupPropertiesPanel.add(levelNameFrLabel);
+		levelGroupPropertiesPanel.add(levelNameFrTextField);
+		levelGroupPropertiesPanel.add(levelNameEnLabel);
+		levelGroupPropertiesPanel.add(levelNameEnTextField);
+		levelGroupPropertiesPanel.add(descriptionFrLabel);
+		levelGroupPropertiesPanel.add(descriptionFrTextField);
+		levelGroupPropertiesPanel.add(descriptionEnLabel);
+		levelGroupPropertiesPanel.add(descriptionEnTextField);
+		levelGroupPropertiesPanel.add(shadowLabel);
+		levelGroupPropertiesPanel.add(shadowSpinner);
+		levelGroupPropertiesPanel.add(bombeLabel);
+		levelGroupPropertiesPanel.add(bombeSpinner);
+		levelGroupPropertiesPanel.add(strenghtLabel);
+		levelGroupPropertiesPanel.add(strenghtSpinner);
+		levelGroupPropertiesPanel.add(fillWithBrickLabel);
+		levelGroupPropertiesPanel.add(fillWithBrickCheckbox);
+		levelGroupPropertiesPanel.add(defaultBackgroundLabel);
+		levelGroupPropertiesPanel.add(defaultBackGround);
+		levelGroupPropertiesPanel.add(defaultWallLabel);
+		levelGroupPropertiesPanel.add(defaultWall);
+		levelGroupPropertiesPanel.add(defaultBrickAnimationLabel);
+		levelGroupPropertiesPanel.add(defaultBrickAnimationComboBox);
+		SpringUtilities.makeGrid(levelGroupPropertiesPanel, 13, 2, 2, 2, 2, 2);
 	}
 
 	private void buildBonusPanel() {
@@ -499,6 +499,14 @@ public class EditorLauncher extends JFrame {
 		layoutNavigation = new GridLayout();
 		layoutNavigation.setColumns(EditorConstante.NB_COLUMN_NAVIGATION);
 		layoutNavigation.setRows(EditorConstante.NB_ROW_NAVIGATION);
+		currentLevelGroupPanel = new JPanel();
+		currentLevelGroupLayout = new GridLayout();
+		currentLevelGroupBorder = BorderFactory.createTitledBorder(message.getString("editor.border.currentLevelGroup"));
+		addLevelGroup = new JButton(message.getString("editor.button.currentLevelGroup.add"));
+		copyLevelGroup = new JButton(message.getString("editor.button.currentLevelGroup.copy"));
+		delLevelGroup = new JButton(message.getString("editor.button.currentLevelGroup.delete"));
+		nextLevelGroup = new JButton(message.getString("editor.button.currentLevelGroup.next"));
+		previousLevelGroup = new JButton(message.getString("editor.button.currentLevelGroup.previous"));
 		currentLevelPanel = new JPanel();
 		currentLevelLayout = new GridLayout();
 		currentLevelBorder = BorderFactory.createTitledBorder(message.getString("editor.border.currentLevel"));
@@ -507,14 +515,6 @@ public class EditorLauncher extends JFrame {
 		delLevel = new JButton(message.getString("editor.button.currentLevel.delete"));
 		nextLevel = new JButton(message.getString("editor.button.currentLevel.next"));
 		previousLevel = new JButton(message.getString("editor.button.currentLevel.previous"));
-		currentVariantePanel = new JPanel();
-		currentVarianteLayout = new GridLayout();
-		currentVarianteBorder = BorderFactory.createTitledBorder(message.getString("editor.border.currentVariante"));
-		addVariante = new JButton(message.getString("editor.button.currentVariante.add"));
-		copyVariante = new JButton(message.getString("editor.button.currentVariante.copy"));
-		delVariante = new JButton(message.getString("editor.button.currentVariante.delete"));
-		nextVariante = new JButton(message.getString("editor.button.currentVariante.next"));
-		previousVariante = new JButton(message.getString("editor.button.currentVariante.previous"));
 
 		/*********************
 		 * --- FILE : NORTH ---
@@ -574,9 +574,9 @@ public class EditorLauncher extends JFrame {
 		eastPanel = new JPanel();
 		eastPanelLayout = new GridLayout();
 		eastPanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.tools"));
-		levelPropertiesPanel = new JPanel();
-		levelPropertiesPanelLayout = new SpringLayout();
-		levelPropertiesPanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.level"));
+		levelGroupPropertiesPanel = new JPanel();
+		levelGroupPropertiesPanelLayout = new SpringLayout();
+		levelGroupPropertiesPanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.levelGroup"));
 		bonusPanel = new JPanel();
 		bonusLayout = new SpringLayout();
 		bonusBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.bonus"));
@@ -596,35 +596,35 @@ public class EditorLauncher extends JFrame {
 		/*********************
 		 * --- PROPERTIES ---
 		 *********************/
+		levelGroupNameFrLabel = new JLabel(this.message.getString("editor.label.levelGroup.name.fr"));
+		levelGroupNameFrTextField = new JTextField();
+		levelGroupNameEnLabel = new JLabel(this.message.getString("editor.label.levelGroup.name.en"));
+		levelGroupNameEnTextField = new JTextField();
 		levelNameFrLabel = new JLabel(this.message.getString("editor.label.level.name.fr"));
 		levelNameFrTextField = new JTextField();
 		levelNameEnLabel = new JLabel(this.message.getString("editor.label.level.name.en"));
 		levelNameEnTextField = new JTextField();
-		varianteNameFrLabel = new JLabel(this.message.getString("editor.label.variante.name.fr"));
-		varianteNameFrTextField = new JTextField();
-		varianteNameEnLabel = new JLabel(this.message.getString("editor.label.variante.name.en"));
-		varianteNameEnTextField = new JTextField();
-		descriptionFrLabel = new JLabel(this.message.getString("editor.label.variante.description.fr"));
+		descriptionFrLabel = new JLabel(this.message.getString("editor.label.level.description.fr"));
 		descriptionFrTextField = new JTextField();
-		descriptionEnLabel = new JLabel(this.message.getString("editor.label.variante.description.en"));
+		descriptionEnLabel = new JLabel(this.message.getString("editor.label.level.description.en"));
 		descriptionEnTextField = new JTextField();
-		shadowLabel = new JLabel(this.message.getString("editor.label.variante.shadow"));
+		shadowLabel = new JLabel(this.message.getString("editor.label.level.shadow"));
 		SpinnerNumberModel shadowSpinnerModel = new SpinnerNumberModel(new Float(0.0), new Float(0.0), new Float(1.0),
 				new Float(0.05));
 		shadowSpinner = new JSpinner(shadowSpinnerModel);
-		bombeLabel = new JLabel(this.message.getString("editor.label.variante.bombe"));
+		bombeLabel = new JLabel(this.message.getString("editor.label.level.bombe"));
 		SpinnerNumberModel bombeSpinnerModel = new SpinnerNumberModel(2, 1, 6, 1);
 		bombeSpinner = new JSpinner(bombeSpinnerModel);
-		strenghtLabel = new JLabel(this.message.getString("editor.label.variante.strength"));
+		strenghtLabel = new JLabel(this.message.getString("editor.label.level.strength"));
 		SpinnerNumberModel strenghtSpinnerModel = new SpinnerNumberModel(2, 1, 20, 1);
 		strenghtSpinner = new JSpinner(strenghtSpinnerModel);
-		fillWithBrickLabel = new JLabel(this.message.getString("editor.label.variante.fillBrick"));
+		fillWithBrickLabel = new JLabel(this.message.getString("editor.label.level.fillBrick"));
 		fillWithBrickCheckbox = new JCheckBox();
-		defaultBackgroundLabel = new JLabel(this.message.getString("editor.label.variante.defaultBackgroundTexture"));
+		defaultBackgroundLabel = new JLabel(this.message.getString("editor.label.level.defaultBackgroundTexture"));
 		defaultBackGround = new JButton();
-		defaultWallLabel = new JLabel(this.message.getString("editor.label.variante.defaultWallTexture"));
+		defaultWallLabel = new JLabel(this.message.getString("editor.label.level.defaultWallTexture"));
 		defaultWall = new JButton();
-		defaultBrickAnimationLabel = new JLabel(this.message.getString("editor.label.variante.defaultBrickAnimation"));
+		defaultBrickAnimationLabel = new JLabel(this.message.getString("editor.label.level.defaultBrickAnimation"));
 		defaultBrickAnimationComboBox = new JComboBox<>(BrickBurnEnum.values());
 		defaultBrickAnimationComboBox.setRenderer(new BrickComboboxRenderer(spriteService));
 
@@ -633,49 +633,49 @@ public class EditorLauncher extends JFrame {
 		 *****************/
 		SpinnerNumberModel bonus0SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus0Spinner = new JSpinner(bonus0SpinnerModel);
-		bonus0Label = new JLabel(this.message.getString("editor.label.variante.bonus.death"));
+		bonus0Label = new JLabel(this.message.getString("editor.label.level.bonus.death"));
 		SpinnerNumberModel bonus1SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus1Spinner = new JSpinner(bonus1SpinnerModel);
-		bonus1Label = new JLabel(this.message.getString("editor.label.variante.bonus.roller"));
+		bonus1Label = new JLabel(this.message.getString("editor.label.level.bonus.roller"));
 		SpinnerNumberModel bonus2SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus2Spinner = new JSpinner(bonus2SpinnerModel);
-		bonus2Label = new JLabel(this.message.getString("editor.label.variante.bonus.fire"));
+		bonus2Label = new JLabel(this.message.getString("editor.label.level.bonus.fire"));
 		SpinnerNumberModel bonus3SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus3Spinner = new JSpinner(bonus3SpinnerModel);
-		bonus3Label = new JLabel(this.message.getString("editor.label.variante.bonus.fire+"));
+		bonus3Label = new JLabel(this.message.getString("editor.label.level.bonus.fire+"));
 		SpinnerNumberModel bonus4SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus4Spinner = new JSpinner(bonus4SpinnerModel);
-		bonus4Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombe"));
+		bonus4Label = new JLabel(this.message.getString("editor.label.level.bonus.bombe"));
 		SpinnerNumberModel bonus5SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus5Spinner = new JSpinner(bonus5SpinnerModel);
-		bonus5Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombep"));
+		bonus5Label = new JLabel(this.message.getString("editor.label.level.bonus.bombep"));
 		SpinnerNumberModel bonus6SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus6Spinner = new JSpinner(bonus6SpinnerModel);
-		bonus6Label = new JLabel(this.message.getString("editor.label.variante.bonus.kick"));
+		bonus6Label = new JLabel(this.message.getString("editor.label.level.bonus.kick"));
 		SpinnerNumberModel bonus7SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus7Spinner = new JSpinner(bonus7SpinnerModel);
-		bonus7Label = new JLabel(this.message.getString("editor.label.variante.bonus.glove"));
+		bonus7Label = new JLabel(this.message.getString("editor.label.level.bonus.glove"));
 		SpinnerNumberModel bonus8SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus8Spinner = new JSpinner(bonus8SpinnerModel);
-		bonus8Label = new JLabel(this.message.getString("editor.label.variante.bonus.rubber"));
+		bonus8Label = new JLabel(this.message.getString("editor.label.level.bonus.rubber"));
 		SpinnerNumberModel bonus9SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus9Spinner = new JSpinner(bonus9SpinnerModel);
-		bonus9Label = new JLabel(this.message.getString("editor.label.variante.bonus.superBombe"));
+		bonus9Label = new JLabel(this.message.getString("editor.label.level.bonus.superBombe"));
 		SpinnerNumberModel bonus10SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus10Spinner = new JSpinner(bonus10SpinnerModel);
-		bonus10Label = new JLabel(this.message.getString("editor.label.variante.bonus.shoes"));
+		bonus10Label = new JLabel(this.message.getString("editor.label.level.bonus.shoes"));
 		SpinnerNumberModel bonus11SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus11Spinner = new JSpinner(bonus11SpinnerModel);
-		bonus11Label = new JLabel(this.message.getString("editor.label.variante.bonus.wall"));
+		bonus11Label = new JLabel(this.message.getString("editor.label.level.bonus.wall"));
 		SpinnerNumberModel bonus12SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus12Spinner = new JSpinner(bonus12SpinnerModel);
-		bonus12Label = new JLabel(this.message.getString("editor.label.variante.bonus.egg"));
+		bonus12Label = new JLabel(this.message.getString("editor.label.level.bonus.egg"));
 		SpinnerNumberModel bonus13SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus13Spinner = new JSpinner(bonus13SpinnerModel);
-		bonus13Label = new JLabel(this.message.getString("editor.label.variante.bonus.shield"));
+		bonus13Label = new JLabel(this.message.getString("editor.label.level.bonus.shield"));
 		SpinnerNumberModel bonus14SpinnerModel = new SpinnerNumberModel(10, 0, 150, 1);
 		bonus14Spinner = new JSpinner(bonus14SpinnerModel);
-		bonus14Label = new JLabel(this.message.getString("editor.label.variante.bonus.bombeLine"));
+		bonus14Label = new JLabel(this.message.getString("editor.label.level.bonus.bombeLine"));
 
 	}
 
@@ -692,7 +692,7 @@ public class EditorLauncher extends JFrame {
 
 					levelService2.load(new FileInputStream(new File(absolutePathFile)));
 					centerPanel.updateUI();
-					loadPropertiesLevel();
+					loadPropertiesLevelGroup();
 					repaint();
 				} catch (FileNotFoundException e) {
 					LOG.error("", e.getMessage());
@@ -712,7 +712,7 @@ public class EditorLauncher extends JFrame {
 				}
 				levelService2.save(new File(absolutePathFile));
 				centerPanel.updateUI();
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				repaint();
 				LOG.info("You chose to open this file: ", absolutePathFile);
 			}
@@ -872,60 +872,102 @@ public class EditorLauncher extends JFrame {
 		/***********************
 		 * --- NAVIGATION ---
 		 ***********************/
+		nextLevelGroup.addActionListener(e -> {
+			levelService2.nextLevelGroup();
+			loadPropertiesLevelGroup();
+			repaint();
+		});
+		previousLevelGroup.addActionListener(e -> {
+			levelService2.previousLevelGroup();
+			loadPropertiesLevelGroup();
+			repaint();
+		});
+		addLevelGroup.addActionListener(e -> {
+			levelService2.addLevelGroup();
+			loadPropertiesLevelGroup();
+			repaint();
+		});
+		copyLevelGroup.addActionListener(e -> {
+			levelService2.copyLevelGroupAndSelectIt();
+			loadPropertiesLevelGroup();
+			repaint();
+		});
+		delLevelGroup.addActionListener(e -> {
+			levelService2.deleteLevelGroup();
+			loadPropertiesLevelGroup();
+			repaint();
+		});
 		nextLevel.addActionListener(e -> {
 			levelService2.nextLevel();
-			loadPropertiesLevel();
+			loadPropertiesLevelGroup();
 			repaint();
 		});
 		previousLevel.addActionListener(e -> {
 			levelService2.previousLevel();
-			loadPropertiesLevel();
+			loadPropertiesLevelGroup();
 			repaint();
 		});
 		addLevel.addActionListener(e -> {
 			levelService2.addLevel();
-			loadPropertiesLevel();
+			loadPropertiesLevelGroup();
 			repaint();
 		});
 		copyLevel.addActionListener(e -> {
 			levelService2.copyLevelAndSelectIt();
-			loadPropertiesLevel();
+			loadPropertiesLevelGroup();
 			repaint();
 		});
 		delLevel.addActionListener(e -> {
 			levelService2.deleteLevel();
-			loadPropertiesLevel();
-			repaint();
-		});
-		nextVariante.addActionListener(e -> {
-			levelService2.nextVariante();
-			loadPropertiesLevel();
-			repaint();
-		});
-		previousVariante.addActionListener(e -> {
-			levelService2.previousVariante();
-			loadPropertiesLevel();
-			repaint();
-		});
-		addVariante.addActionListener(e -> {
-			levelService2.addVariante();
-			loadPropertiesLevel();
-			repaint();
-		});
-		copyVariante.addActionListener(e -> {
-			levelService2.copyVarianteAndSelectIt();
-			loadPropertiesLevel();
-			repaint();
-		});
-		delVariante.addActionListener(e -> {
-			levelService2.deleteVariante();
-			loadPropertiesLevel();
+			loadPropertiesLevelGroup();
 			repaint();
 		});
 
 		/***************************
 		 * --- PROPERTIES LEVEL ---
 		 ***************************/
+		levelGroupNameEnTextField.getDocument().addDocumentListener(new DocumentListener() {
+			private void updateData() {
+				levelService2.setLevelGroupName(LocaleEnum.ENGLISH, levelGroupNameEnTextField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateData();
+			}
+		});
+
+		levelGroupNameFrTextField.getDocument().addDocumentListener(new DocumentListener() {
+			private void updateData() {
+				levelService2.setLevelGroupName(LocaleEnum.FRENCH, levelGroupNameFrTextField.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateData();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateData();
+			}
+		});
+
 		levelNameEnTextField.getDocument().addDocumentListener(new DocumentListener() {
 			private void updateData() {
 				levelService2.setLevelName(LocaleEnum.ENGLISH, levelNameEnTextField.getText());
@@ -946,7 +988,6 @@ public class EditorLauncher extends JFrame {
 				updateData();
 			}
 		});
-
 		levelNameFrTextField.getDocument().addDocumentListener(new DocumentListener() {
 			private void updateData() {
 				levelService2.setLevelName(LocaleEnum.FRENCH, levelNameFrTextField.getText());
@@ -968,50 +1009,9 @@ public class EditorLauncher extends JFrame {
 			}
 		});
 
-		varianteNameEnTextField.getDocument().addDocumentListener(new DocumentListener() {
-			private void updateData() {
-				levelService2.setVarianteName(LocaleEnum.ENGLISH, varianteNameEnTextField.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				updateData();
-			}
-		});
-		varianteNameFrTextField.getDocument().addDocumentListener(new DocumentListener() {
-			private void updateData() {
-				levelService2.setVarianteName(LocaleEnum.FRENCH, varianteNameFrTextField.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateData();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				updateData();
-			}
-		});
-
 		descriptionEnTextField.getDocument().addDocumentListener(new DocumentListener() {
 			private void updateData() {
-				levelService2.setVarianteDescription(LocaleEnum.ENGLISH, descriptionEnTextField.getText());
+				levelService2.setLevelDescription(LocaleEnum.ENGLISH, descriptionEnTextField.getText());
 			}
 
 			@Override
@@ -1032,7 +1032,7 @@ public class EditorLauncher extends JFrame {
 
 		descriptionFrTextField.getDocument().addDocumentListener(new DocumentListener() {
 			private void updateData() {
-				levelService2.setVarianteDescription(LocaleEnum.FRENCH, descriptionFrTextField.getText());
+				levelService2.setLevelDescription(LocaleEnum.FRENCH, descriptionFrTextField.getText());
 			}
 
 			@Override
@@ -1056,7 +1056,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Float f = (Float) text.getValue();
 				levelService2.setShadow(f.floatValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1065,7 +1065,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBombe(f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1074,7 +1074,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setStrenght(f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1123,7 +1123,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(0, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1132,7 +1132,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(1, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1141,7 +1141,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(2, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1150,7 +1150,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(3, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1159,7 +1159,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(4, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1168,7 +1168,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(5, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1177,7 +1177,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(6, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1186,7 +1186,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(7, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1195,7 +1195,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(8, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1204,7 +1204,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(9, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1213,7 +1213,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(10, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1222,7 +1222,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(11, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1231,7 +1231,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(12, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1240,7 +1240,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(13, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1249,7 +1249,7 @@ public class EditorLauncher extends JFrame {
 			if (text.getValue() != null) {
 				Integer f = (Integer) text.getValue();
 				levelService2.setBonus(14, f.intValue());
-				loadPropertiesLevel();
+				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
 		});
@@ -1360,22 +1360,22 @@ public class EditorLauncher extends JFrame {
 		drawPanel.updatePoint(posX, posY);
 	}
 
-	public void loadPropertiesLevel() {
+	public void loadPropertiesLevelGroup() {
+		levelGroupNameEnTextField.setText(levelService2.getLevelGroupName(LocaleEnum.ENGLISH));
+		levelGroupNameFrTextField.setText(levelService2.getLevelGroupName(LocaleEnum.FRENCH));
 		levelNameEnTextField.setText(levelService2.getLevelName(LocaleEnum.ENGLISH));
 		levelNameFrTextField.setText(levelService2.getLevelName(LocaleEnum.FRENCH));
-		varianteNameEnTextField.setText(levelService2.getVarianteName(LocaleEnum.ENGLISH));
-		varianteNameFrTextField.setText(levelService2.getVarianteName(LocaleEnum.FRENCH));
-		descriptionEnTextField.setText(levelService2.getVarianteDescription(LocaleEnum.ENGLISH));
-		descriptionFrTextField.setText(levelService2.getVarianteDescription(LocaleEnum.FRENCH));
+		descriptionEnTextField.setText(levelService2.getLevelDescription(LocaleEnum.ENGLISH));
+		descriptionFrTextField.setText(levelService2.getLevelDescription(LocaleEnum.FRENCH));
 		shadowSpinner.setValue(Float.valueOf(levelService2.getShadow()));
 		bombeSpinner.setValue(Integer.valueOf(levelService2.getBombe()));
 		defaultBrickAnimationComboBox
 				.setSelectedItem(BrickBurnEnum.getBrickFromSprite(levelService2.getDefaultBrickAnimation()));
 		strenghtSpinner.setValue(Integer.valueOf(levelService2.getStrenght()));
 		fillWithBrickCheckbox.setSelected(levelService2.isFillWithBrick());
-		levelPropertiesPanelBorder.setTitle(
-				"Level : " + levelService2.getLevelPosition() + ", variante : " + levelService2.getVariantePosition());
-		levelPropertiesPanel.repaint();
+		levelGroupPropertiesPanelBorder.setTitle(
+				"LevelGroup : " + levelService2.getLevelGroupPosition() + ", level : " + levelService2.getLevelPosition());
+		levelGroupPropertiesPanel.repaint();
 		bonus0Spinner.setValue(Integer.valueOf(levelService2.getBonus(0)));
 		bonus1Spinner.setValue(Integer.valueOf(levelService2.getBonus(1)));
 		bonus2Spinner.setValue(Integer.valueOf(levelService2.getBonus(2)));

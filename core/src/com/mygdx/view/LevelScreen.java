@@ -72,11 +72,11 @@ public class LevelScreen implements Screen, MenuListener {
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 6));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.strenght"));
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 5));
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.level"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.levelGroup"));
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 4));
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.variante"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.level"));
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 3));
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.levelName"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.levelGroupName"));
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 2));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.description"));
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 1));
@@ -364,10 +364,10 @@ public class LevelScreen implements Screen, MenuListener {
 			Context.incStrength();
 			break;
 		case 2:
-			game.getLevelService().nextLevel();
+			game.getLevelService().nextLevelGroup();
 			break;
 		case 3:
-			game.getLevelService().nextVariante();
+			game.getLevelService().nextLevel();
 			break;
 		case 4:
 			game.getLevelService().incBonus(0, 1);
@@ -429,10 +429,10 @@ public class LevelScreen implements Screen, MenuListener {
 			Context.decStrength();
 			break;
 		case 2:
-			game.getLevelService().previousLevel();
+			game.getLevelService().previousLevelGroup();
 			break;
 		case 3:
-			game.getLevelService().previousVariante();
+			game.getLevelService().previousLevel();
 			break;
 		case 4:
 			game.getLevelService().decBonus(0, 1);

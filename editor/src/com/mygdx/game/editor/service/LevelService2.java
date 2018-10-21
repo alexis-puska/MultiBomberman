@@ -17,8 +17,8 @@ import com.mygdx.constante.Constante;
 import com.mygdx.dto.level.CustomTextureDTO;
 import com.mygdx.dto.level.LevelDTO;
 import com.mygdx.dto.level.LevelFileDTO;
+import com.mygdx.dto.level.LevelGroupDTO;
 import com.mygdx.dto.level.TextureDTO;
-import com.mygdx.dto.level.VarianteDTO;
 import com.mygdx.dto.level.WallDTO;
 import com.mygdx.dto.level.common.DefaultTextureDTO;
 import com.mygdx.dto.level.common.PositionableDTO;
@@ -35,30 +35,30 @@ public class LevelService2 {
 	private final ObjectMapper objectMapper;
 	private LevelFileDTO levelFileDTO;
 
+	private LevelGroupDTO currentLevelGroup;
 	private LevelDTO currentLevel;
-	private VarianteDTO currentVariante;
 
 	public LevelService2() {
 		this.objectMapper = new ObjectMapper();
 	}
 
 	/**
-	 * Load JSON Level file and init map with all level and variante
+	 * Load JSON LevelGroup file and init map with all levelGroup and level
 	 * 
 	 * @param in inputStream of file
-	 * @return Level to Edit
+	 * @return LevelGroup to Edit
 	 */
 	public void load(InputStream in) {
 		levelFileDTO = null;
 		try {
 			levelFileDTO = objectMapper.readValue(in, LevelFileDTO.class);
-			if (!levelFileDTO.getLevels().isEmpty()) {
-				currentLevel = levelFileDTO.getLevels().get(0);
-				if (!currentLevel.getVariante().isEmpty()) {
-					currentVariante = currentLevel.getVariante().get(0);
+			if (!levelFileDTO.getLevelGroups().isEmpty()) {
+				currentLevelGroup = levelFileDTO.getLevelGroups().get(0);
+				if (!currentLevelGroup.getLevel().isEmpty()) {
+					currentLevel = currentLevelGroup.getLevel().get(0);
 				}
 			} else {
-				addLevel();
+				addLevelGroup();
 			}
 		} catch (JsonParseException e) {
 			LOG.error("JsonParseException : " + e.getMessage());
@@ -71,234 +71,274 @@ public class LevelService2 {
 
 	public void save(File file) {
 		try {
-			LOG.info("START Write level json file : " + file.getAbsolutePath());
+			LOG.info("START Write levelGroup json file : " + file.getAbsolutePath());
 			objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, levelFileDTO);
 		} catch (JsonProcessingException e) {
 			LOG.error("JsonProcessingException : " + e.getMessage());
 		} catch (IOException e) {
 			LOG.error("IOException : " + e.getMessage());
 		}
-		LOG.info("Write level json file : SUCCESS");
+		LOG.info("Write levelGroup json file : SUCCESS");
+	}
+
+	public LevelGroupDTO getCurrentLevelGroup() {
+		return this.currentLevelGroup;
 	}
 
 	public LevelDTO getCurrentLevel() {
 		return this.currentLevel;
 	}
 
-	public VarianteDTO getCurrentVariante() {
-		return this.currentVariante;
+	public void nextLevelGroup() {
+		if (currentLevelGroup != null) {
+			int pos = levelFileDTO.getLevelGroups().indexOf(currentLevelGroup);
+			if (pos != levelFileDTO.getLevelGroups().size() - 1) {
+				currentLevelGroup = levelFileDTO.getLevelGroups().get(pos + 1);
+				if (currentLevelGroup.getLevel() != null && !currentLevelGroup.getLevel().isEmpty()) {
+					currentLevel = currentLevelGroup.getLevel().get(0);
+				} else {
+					currentLevel = null;
+				}
+			} else {
+				currentLevelGroup = levelFileDTO.getLevelGroups().get(0);
+				if (currentLevelGroup.getLevel() != null && !currentLevelGroup.getLevel().isEmpty()) {
+					currentLevel = currentLevelGroup.getLevel().get(0);
+				} else {
+					currentLevel = null;
+				}
+			}
+		}
+	}
+
+	public void previousLevelGroup() {
+		if (currentLevelGroup != null) {
+			int pos = levelFileDTO.getLevelGroups().indexOf(currentLevelGroup);
+			if (pos > 0) {
+				currentLevelGroup = levelFileDTO.getLevelGroups().get(pos - 1);
+				if (currentLevelGroup.getLevel() != null && !currentLevelGroup.getLevel().isEmpty()) {
+					currentLevel = currentLevelGroup.getLevel().get(0);
+				} else {
+					currentLevel = null;
+				}
+			} else {
+				currentLevelGroup = levelFileDTO.getLevelGroups().get(levelFileDTO.getLevelGroups().size() - 1);
+				if (currentLevelGroup.getLevel() != null && !currentLevelGroup.getLevel().isEmpty()) {
+					currentLevel = currentLevelGroup.getLevel().get(0);
+				} else {
+					currentLevel = null;
+				}
+			}
+		}
+	}
+
+	public void addLevelGroup() {
+		if (levelFileDTO == null) {
+			createLevelFileDTO();
+		}
+		levelFileDTO.getLevelGroups().add(createNewLevelGroup());
+		currentLevelGroup = levelFileDTO.getLevelGroups().get(levelFileDTO.getLevelGroups().size() - 1);
+		currentLevel = currentLevelGroup.getLevel().get(0);
+	}
+
+	public void deleteLevelGroup() {
+		if (currentLevelGroup != null) {
+			levelFileDTO.getLevelGroups().remove(currentLevelGroup);
+			if (levelFileDTO.getLevelGroups().size() > 0) {
+				currentLevelGroup = levelFileDTO.getLevelGroups().get(0);
+			} else {
+				currentLevelGroup = null;
+			}
+			if (currentLevelGroup != null && currentLevelGroup.getLevel() != null
+					&& !currentLevelGroup.getLevel().isEmpty()) {
+				currentLevel = currentLevelGroup.getLevel().get(0);
+			} else {
+				currentLevel = null;
+			}
+		}
+	}
+
+	public void copyLevelGroupAndSelectIt() {
+		if (currentLevelGroup != null) {
+			LevelGroupDTO copy = new LevelGroupDTO(currentLevelGroup);
+			levelFileDTO.getLevelGroups().add(copy);
+			currentLevelGroup = levelFileDTO.getLevelGroups().get(levelFileDTO.getLevelGroups().size() - 1);
+			currentLevel = currentLevelGroup.getLevel().get(0);
+		}
+	}
+
+	public void copyLevelAndSelectIt() {
+		if (currentLevelGroup != null) {
+			LevelDTO copy = new LevelDTO(currentLevel);
+			currentLevelGroup.getLevel().add(copy);
+			currentLevel = currentLevelGroup.getLevel().get(currentLevelGroup.getLevel().size() - 1);
+		}
+	}
+
+	private void createLevelFileDTO() {
+		this.levelFileDTO = new LevelFileDTO();
+		this.levelFileDTO.setLevelGroups(new ArrayList<>());
+	}
+
+	private LevelGroupDTO createNewLevelGroup() {
+		LevelGroupDTO levelGroup = new LevelGroupDTO();
+		List<TextDTO> names = new ArrayList<>();
+		for (LocaleEnum val : LocaleEnum.values()) {
+			names.add(new TextDTO(val, CHANGE_IT));
+		}
+		levelGroup.setName(names);
+		levelGroup.setLevel(new ArrayList<>());
+		levelGroup.getLevel().add(createNewLevel());
+		return levelGroup;
 	}
 
 	public void nextLevel() {
 		if (currentLevel != null) {
-			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
-			if (pos != levelFileDTO.getLevels().size() - 1) {
-				currentLevel = levelFileDTO.getLevels().get(pos + 1);
-				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
-					currentVariante = currentLevel.getVariante().get(0);
-				} else {
-					currentVariante = null;
-				}
+			int pos = currentLevelGroup.getLevel().indexOf(currentLevel);
+			if (pos == currentLevelGroup.getLevel().size() - 1) {
+				currentLevel = currentLevelGroup.getLevel().get(0);
 			} else {
-				currentLevel = levelFileDTO.getLevels().get(0);
-				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
-					currentVariante = currentLevel.getVariante().get(0);
-				} else {
-					currentVariante = null;
-				}
+				currentLevel = currentLevelGroup.getLevel().get(pos + 1);
 			}
 		}
 	}
 
 	public void previousLevel() {
 		if (currentLevel != null) {
-			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
-			if (pos > 0) {
-				currentLevel = levelFileDTO.getLevels().get(pos - 1);
-				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
-					currentVariante = currentLevel.getVariante().get(0);
-				} else {
-					currentVariante = null;
-				}
+			int pos = currentLevelGroup.getLevel().indexOf(currentLevel);
+			if (pos == 0) {
+				currentLevel = currentLevelGroup.getLevel().get(currentLevelGroup.getLevel().size() - 1);
 			} else {
-				currentLevel = levelFileDTO.getLevels().get(levelFileDTO.getLevels().size() - 1);
-				if (currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
-					currentVariante = currentLevel.getVariante().get(0);
-				} else {
-					currentVariante = null;
-				}
+				currentLevel = currentLevelGroup.getLevel().get(pos - 1);
 			}
 		}
 	}
 
 	public void addLevel() {
-		if (levelFileDTO == null) {
-			createLevelFileDTO();
+		if (currentLevelGroup != null) {
+			currentLevelGroup.getLevel().add(createNewLevel());
+			currentLevel = currentLevelGroup.getLevel().get(currentLevelGroup.getLevel().size() - 1);
 		}
-		levelFileDTO.getLevels().add(createNewLevel());
-		currentLevel = levelFileDTO.getLevels().get(levelFileDTO.getLevels().size() - 1);
-		currentVariante = currentLevel.getVariante().get(0);
 	}
 
 	public void deleteLevel() {
 		if (currentLevel != null) {
-			levelFileDTO.getLevels().remove(currentLevel);
-			if (levelFileDTO.getLevels().size() > 0) {
-				currentLevel = levelFileDTO.getLevels().get(0);
-			} else {
-				currentLevel = null;
-			}
-			if (currentLevel != null && currentLevel.getVariante() != null && !currentLevel.getVariante().isEmpty()) {
-				currentVariante = currentLevel.getVariante().get(0);
-			} else {
-				currentVariante = null;
+			currentLevelGroup.getLevel().remove(currentLevel);
+			if (currentLevelGroup.getLevel().size() > 0) {
+				currentLevel = currentLevelGroup.getLevel().get(0);
 			}
 		}
-	}
-
-	public void copyLevelAndSelectIt() {
-		if (currentLevel != null) {
-			LevelDTO copy = new LevelDTO(currentLevel);
-			levelFileDTO.getLevels().add(copy);
-			currentLevel = levelFileDTO.getLevels().get(levelFileDTO.getLevels().size() - 1);
-			currentVariante = currentLevel.getVariante().get(0);
-		}
-	}
-
-	public void copyVarianteAndSelectIt() {
-		if (currentLevel != null) {
-			VarianteDTO copy = new VarianteDTO(currentVariante);
-			currentLevel.getVariante().add(copy);
-			currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
-		}
-	}
-
-	private void createLevelFileDTO() {
-		this.levelFileDTO = new LevelFileDTO();
-		this.levelFileDTO.setLevels(new ArrayList<>());
 	}
 
 	private LevelDTO createNewLevel() {
 		LevelDTO level = new LevelDTO();
 		List<TextDTO> names = new ArrayList<>();
 		for (LocaleEnum val : LocaleEnum.values()) {
-			names.add(new TextDTO(val, CHANGE_IT));
-		}
-		level.setName(names);
-		level.setVariante(new ArrayList<>());
-		level.getVariante().add(createNewVariante());
-		return level;
-	}
-
-	public void nextVariante() {
-		if (currentVariante != null) {
-			int pos = currentLevel.getVariante().indexOf(currentVariante);
-			if (pos == currentLevel.getVariante().size() - 1) {
-				currentVariante = currentLevel.getVariante().get(0);
-			} else {
-				currentVariante = currentLevel.getVariante().get(pos + 1);
-			}
-		}
-	}
-
-	public void previousVariante() {
-		if (currentVariante != null) {
-			int pos = currentLevel.getVariante().indexOf(currentVariante);
-			if (pos == 0) {
-				currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
-			} else {
-				currentVariante = currentLevel.getVariante().get(pos - 1);
-			}
-		}
-	}
-
-	public void addVariante() {
-		if (currentLevel != null) {
-			currentLevel.getVariante().add(createNewVariante());
-			currentVariante = currentLevel.getVariante().get(currentLevel.getVariante().size() - 1);
-		}
-	}
-
-	public void deleteVariante() {
-		if (currentVariante != null) {
-			currentLevel.getVariante().remove(currentVariante);
-			if (currentLevel.getVariante().size() > 0) {
-				currentVariante = currentLevel.getVariante().get(0);
-			}
-		}
-	}
-
-	private VarianteDTO createNewVariante() {
-		VarianteDTO variante = new VarianteDTO();
-		List<TextDTO> names = new ArrayList<>();
-		for (LocaleEnum val : LocaleEnum.values()) {
 			names.add(new TextDTO(val, "names"));
 		}
-		variante.setName(names);
+		level.setName(names);
 		List<TextDTO> descriptions = new ArrayList<>();
 		for (LocaleEnum val : LocaleEnum.values()) {
 			descriptions.add(new TextDTO(val, CHANGE_IT));
 		}
-		variante.setDescription(descriptions);
-		variante.setBombe(2);
+		level.setDescription(descriptions);
+		level.setBombe(2);
 		Integer[] bonus = new Integer[Constante.MAX_BONUS];
 		for (int i = 0; i < Constante.MAX_BONUS; i++) {
 			bonus[i] = 0;
 		}
-		variante.setBonus(bonus);
-		variante.setShadow(0f);
-		variante.setDefaultBackground(new DefaultTextureDTO(SpriteEnum.LEVEL, 0));
-		variante.setDefaultBrickAnimation(SpriteEnum.LEVEL1);
-		variante.setDefaultWall(new DefaultTextureDTO(SpriteEnum.LEVEL, 0));
+		level.setBonus(bonus);
+		level.setShadow(0f);
+		level.setDefaultBackground(new DefaultTextureDTO(SpriteEnum.LEVEL, 0));
+		level.setDefaultBrickAnimation(SpriteEnum.LEVEL1);
+		level.setDefaultWall(new DefaultTextureDTO(SpriteEnum.LEVEL, 0));
 
-		variante.setCustomBackgroundTexture(new ArrayList<>());
-		variante.setCustomForegroundTexture(new ArrayList<>());
-		variante.setHole(new ArrayList<>());
-		variante.setInterrupter(new ArrayList<>());
-		variante.setMine(new ArrayList<>());
-		variante.setRail(new ArrayList<>());
-		variante.setStartPlayer(new ArrayList<>());
-		variante.setTeleporter(new ArrayList<>());
-		variante.setTrolley(new ArrayList<>());
-		variante.setWall(new ArrayList<>());
+		level.setCustomBackgroundTexture(new ArrayList<>());
+		level.setCustomForegroundTexture(new ArrayList<>());
+		level.setHole(new ArrayList<>());
+		level.setInterrupter(new ArrayList<>());
+		level.setMine(new ArrayList<>());
+		level.setRail(new ArrayList<>());
+		level.setStartPlayer(new ArrayList<>());
+		level.setTeleporter(new ArrayList<>());
+		level.setTrolley(new ArrayList<>());
+		level.setWall(new ArrayList<>());
 		for (int i = 0; i < 35; i++) {
-			variante.getWall().add(new WallDTO(i, 0));
-			variante.getWall().add(new WallDTO(i, 20));
+			level.getWall().add(new WallDTO(i, 0));
+			level.getWall().add(new WallDTO(i, 20));
 		}
 		for (int i = 1; i < 20; i++) {
-			variante.getWall().add(new WallDTO(0, i));
-			variante.getWall().add(new WallDTO(34, i));
+			level.getWall().add(new WallDTO(0, i));
+			level.getWall().add(new WallDTO(34, i));
 		}
 
 		for (int i = 0; i < 34; i++) {
-			variante.getWall().add(new WallDTO(i, 0));
-			variante.getWall().add(new WallDTO(i, 20));
+			level.getWall().add(new WallDTO(i, 0));
+			level.getWall().add(new WallDTO(i, 20));
 		}
 		for (int i = 1; i < 19; i++) {
 			for (int j = 1; j < 34; j++) {
 				if (i % 2 == 0 && j % 2 == 0) {
-					variante.getWall().add(new WallDTO(j, i));
+					level.getWall().add(new WallDTO(j, i));
 				}
 			}
 		}
-		return variante;
+		return level;
 	}
 
-	public String getLevelPosition() {
-		if (currentLevel != null) {
-			int pos = levelFileDTO.getLevels().indexOf(currentLevel);
-			return (pos + 1) + "/" + levelFileDTO.getLevels().size();
+	public String getLevelGroupPosition() {
+		if (currentLevelGroup != null) {
+			int pos = levelFileDTO.getLevelGroups().indexOf(currentLevelGroup);
+			return (pos + 1) + "/" + levelFileDTO.getLevelGroups().size();
 		} else {
 			return "0 / 0";
 		}
 	}
 
-	public String getVariantePosition() {
-		if (currentLevel != null && currentVariante != null) {
-			int pos = currentLevel.getVariante().indexOf(currentVariante);
-			return (pos + 1) + "/" + currentLevel.getVariante().size();
+	public String getLevelPosition() {
+		if (currentLevelGroup != null && currentLevel != null) {
+			int pos = currentLevelGroup.getLevel().indexOf(currentLevel);
+			return (pos + 1) + "/" + currentLevelGroup.getLevel().size();
 		} else {
 			return "0 / 0";
+		}
+	}
+
+	public String getLevelGroupName(LocaleEnum lang) {
+		if (this.currentLevelGroup != null) {
+			if (this.currentLevelGroup.getName() != null) {
+				for (TextDTO ln : this.currentLevelGroup.getName()) {
+					if (ln.getLang().equals(lang)) {
+						return ln.getValue();
+					}
+				}
+				this.currentLevelGroup.getName().add(new TextDTO(lang, CHANGE_IT));
+				return CHANGE_IT;
+			} else {
+				this.currentLevelGroup.setName(new ArrayList<>());
+				this.currentLevelGroup.getName().add(new TextDTO(LocaleEnum.ENGLISH, ""));
+				this.currentLevelGroup.getName().add(new TextDTO(LocaleEnum.FRENCH, ""));
+			}
+		}
+		return "";
+	}
+
+	public void setLevelGroupName(LocaleEnum lang, String name) {
+		if (this.currentLevelGroup != null) {
+			TextDTO tmp = null;
+			for (TextDTO ln : this.currentLevelGroup.getName()) {
+				if (ln.getLang().equals(lang)) {
+					tmp = ln;
+					break;
+				}
+			}
+			if (tmp != null) {
+				this.currentLevelGroup.getName().remove(tmp);
+				tmp.setValue(name);
+				this.currentLevelGroup.getName().add(tmp);
+			} else {
+				tmp = new TextDTO(lang, name);
+				this.currentLevelGroup.getName().add(tmp);
+			}
 		}
 	}
 
@@ -341,216 +381,177 @@ public class LevelService2 {
 		}
 	}
 
-	public String getVarianteName(LocaleEnum lang) {
-		if (this.currentVariante != null) {
-			if (this.currentVariante.getName() != null) {
-				for (TextDTO ln : this.currentVariante.getName()) {
+	public String getLevelDescription(LocaleEnum lang) {
+		if (this.currentLevel != null) {
+			if (this.currentLevel.getDescription() != null) {
+				for (TextDTO ln : this.currentLevel.getDescription()) {
 					if (ln.getLang().equals(lang)) {
 						return ln.getValue();
 					}
 				}
-				this.currentVariante.getName().add(new TextDTO(lang, CHANGE_IT));
+				this.currentLevel.getDescription().add(new TextDTO(lang, CHANGE_IT));
 				return CHANGE_IT;
 			} else {
-				this.currentVariante.setName(new ArrayList<>());
-				this.currentVariante.getName().add(new TextDTO(LocaleEnum.ENGLISH, ""));
-				this.currentVariante.getName().add(new TextDTO(LocaleEnum.FRENCH, ""));
+				this.currentLevel.setDescription(new ArrayList<>());
+				this.currentLevel.getDescription().add(new TextDTO(LocaleEnum.ENGLISH, ""));
+				this.currentLevel.getDescription().add(new TextDTO(LocaleEnum.FRENCH, ""));
 			}
 		}
 		return "";
 	}
 
-	public void setVarianteName(LocaleEnum lang, String name) {
-		if (this.currentVariante != null) {
+	public void setLevelDescription(LocaleEnum lang, String name) {
+		if (this.currentLevel != null) {
 			TextDTO tmp = null;
-			for (TextDTO ln : this.currentVariante.getName()) {
+			for (TextDTO ln : this.currentLevel.getDescription()) {
 				if (ln.getLang().equals(lang)) {
 					tmp = ln;
 					break;
 				}
 			}
 			if (tmp != null) {
-				this.currentVariante.getName().remove(tmp);
+				this.currentLevel.getDescription().remove(tmp);
 				tmp.setValue(name);
-				this.currentVariante.getName().add(tmp);
+				this.currentLevel.getDescription().add(tmp);
 			} else {
 				tmp = new TextDTO(lang, name);
-				this.currentVariante.getName().add(tmp);
-			}
-		}
-	}
-
-	public String getVarianteDescription(LocaleEnum lang) {
-		if (this.currentVariante != null) {
-			if (this.currentVariante.getDescription() != null) {
-				for (TextDTO ln : this.currentVariante.getDescription()) {
-					if (ln.getLang().equals(lang)) {
-						return ln.getValue();
-					}
-				}
-				this.currentVariante.getDescription().add(new TextDTO(lang, CHANGE_IT));
-				return CHANGE_IT;
-			} else {
-				this.currentVariante.setDescription(new ArrayList<>());
-				this.currentVariante.getDescription().add(new TextDTO(LocaleEnum.ENGLISH, ""));
-				this.currentVariante.getDescription().add(new TextDTO(LocaleEnum.FRENCH, ""));
-			}
-		}
-		return "";
-	}
-
-	public void setVarianteDescription(LocaleEnum lang, String name) {
-		if (this.currentVariante != null) {
-			TextDTO tmp = null;
-			for (TextDTO ln : this.currentVariante.getDescription()) {
-				if (ln.getLang().equals(lang)) {
-					tmp = ln;
-					break;
-				}
-			}
-			if (tmp != null) {
-				this.currentVariante.getDescription().remove(tmp);
-				tmp.setValue(name);
-				this.currentVariante.getDescription().add(tmp);
-			} else {
-				tmp = new TextDTO(lang, name);
-				this.currentVariante.getDescription().add(tmp);
+				this.currentLevel.getDescription().add(tmp);
 			}
 		}
 	}
 
 	public float getShadow() {
-		if (this.currentVariante != null) {
-			return this.currentVariante.getShadow();
+		if (this.currentLevel != null) {
+			return this.currentLevel.getShadow();
 		}
 		return 0f;
 	}
 
 	public void setShadow(Float value) {
-		if (this.currentVariante != null) {
-			this.currentVariante.setShadow(value);
+		if (this.currentLevel != null) {
+			this.currentLevel.setShadow(value);
 		}
 	}
 
 	public int getBombe() {
-		if (this.currentVariante != null && this.currentVariante.getBombe() >= 1) {
-			return this.currentVariante.getBombe();
+		if (this.currentLevel != null && this.currentLevel.getBombe() >= 1) {
+			return this.currentLevel.getBombe();
 		}
 		return 0;
 	}
 
 	public void setBombe(int value) {
-		if (this.currentVariante != null) {
-			this.currentVariante.setBombe(value);
+		if (this.currentLevel != null) {
+			this.currentLevel.setBombe(value);
 		}
 	}
 
 	public int getStrenght() {
-		if (this.currentVariante != null && this.currentVariante.getStrenght() >= 1) {
-			return this.currentVariante.getStrenght();
+		if (this.currentLevel != null && this.currentLevel.getStrenght() >= 1) {
+			return this.currentLevel.getStrenght();
 		}
 		return 1;
 	}
 
 	public void setStrenght(int value) {
-		if (this.currentVariante != null) {
-			this.currentVariante.setStrenght(value);
+		if (this.currentLevel != null) {
+			this.currentLevel.setStrenght(value);
 		}
 	}
 
 	private boolean positionContainsWall(int x, int y) {
-		return currentVariante.getWall().contains(new PositionableDTO(x, y));
+		return currentLevel.getWall().contains(new PositionableDTO(x, y));
 	}
 
 	private boolean canSetWall(int x, int y) {
 		PositionableDTO tmp = new PositionableDTO(x, y);
-		if (currentVariante.getHole().contains(tmp)) {
+		if (currentLevel.getHole().contains(tmp)) {
 			return false;
 		}
-		if (currentVariante.getInterrupter().contains(tmp)) {
+		if (currentLevel.getInterrupter().contains(tmp)) {
 			return false;
 		}
-		if (currentVariante.getMine().contains(tmp)) {
+		if (currentLevel.getMine().contains(tmp)) {
 			return false;
 		}
-		if (currentVariante.getRail().contains(tmp)) {
+		if (currentLevel.getRail().contains(tmp)) {
 			return false;
 		}
-		if (currentVariante.getStartPlayer().contains(tmp)) {
+		if (currentLevel.getStartPlayer().contains(tmp)) {
 			return false;
 		}
-		if (currentVariante.getTeleporter().contains(tmp)) {
+		if (currentLevel.getTeleporter().contains(tmp)) {
 			return false;
 		}
-		return !currentVariante.getTrolley().contains(tmp);
+		return !currentLevel.getTrolley().contains(tmp);
 	}
 
 	public void addHole(int x, int y) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getRail().contains(t) && !positionContainsWall(x, y)) {
-				currentVariante.getHole().add(t);
+			if (!currentLevel.getRail().contains(t) && !positionContainsWall(x, y)) {
+				currentLevel.getHole().add(t);
 			}
 		}
 	}
 
 	public void addRail(int x, int y) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getRail().contains(t) && !positionContainsWall(x, y)) {
-				currentVariante.getRail().add(t);
+			if (!currentLevel.getRail().contains(t) && !positionContainsWall(x, y)) {
+				currentLevel.getRail().add(t);
 			}
 		}
 	}
 
 	public void addTrolley(int x, int y) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getTrolley().contains(t) && !positionContainsWall(x, y)) {
-				currentVariante.getTrolley().add(new PositionableDTO(x, y));
+			if (!currentLevel.getTrolley().contains(t) && !positionContainsWall(x, y)) {
+				currentLevel.getTrolley().add(new PositionableDTO(x, y));
 			}
 		}
 	}
 
 	public void addInterrupter(int x, int y) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getInterrupter().contains(t) && !positionContainsWall(x, y)) {
-				currentVariante.getInterrupter().add(new PositionableDTO(x, y));
+			if (!currentLevel.getInterrupter().contains(t) && !positionContainsWall(x, y)) {
+				currentLevel.getInterrupter().add(new PositionableDTO(x, y));
 			}
 		}
 	}
 
 	public void addMine(int x, int y) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getMine().contains(t) && !positionContainsWall(x, y)) {
-				currentVariante.getMine().add(new PositionableDTO(x, y));
+			if (!currentLevel.getMine().contains(t) && !positionContainsWall(x, y)) {
+				currentLevel.getMine().add(new PositionableDTO(x, y));
 			}
 		}
 	}
 
 	public void addTeleporter(int x, int y) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getTeleporter().contains(t) && !positionContainsWall(x, y)) {
-				currentVariante.getTeleporter().add(new PositionableDTO(x, y));
+			if (!currentLevel.getTeleporter().contains(t) && !positionContainsWall(x, y)) {
+				currentLevel.getTeleporter().add(new PositionableDTO(x, y));
 			}
 		}
 	}
 
 	public void addWall(int x, int y) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getWall().contains(t) && canSetWall(x, y)) {
-				currentVariante.getWall().add(new WallDTO(x, y));
+			if (!currentLevel.getWall().contains(t) && canSetWall(x, y)) {
+				currentLevel.getWall().add(new WallDTO(x, y));
 			}
 		}
 	}
 
 	public void customizeWall(int x, int y, int textureIndex) {
-		if (currentVariante != null) {
-			currentVariante.getWall().stream().forEach(obj -> {
+		if (currentLevel != null) {
+			currentLevel.getWall().stream().forEach(obj -> {
 				if (obj.getX() == x && obj.getY() == y) {
 					obj.setDraw(true);
 					obj.setTexture(new TextureDTO(SpriteEnum.LEVEL, textureIndex));
@@ -560,96 +561,96 @@ public class LevelService2 {
 	}
 
 	public void addCustomBackgroundTexture(int x, int y, int index) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getCustomBackgroundTexture().contains(t)) {
-				currentVariante.getCustomBackgroundTexture().add(new CustomTextureDTO(x, y, SpriteEnum.LEVEL, index));
+			if (!currentLevel.getCustomBackgroundTexture().contains(t)) {
+				currentLevel.getCustomBackgroundTexture().add(new CustomTextureDTO(x, y, SpriteEnum.LEVEL, index));
 			}
 		}
 	}
 
 	public void addCustomForegroundTexture(int x, int y, int index) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getCustomForegroundTexture().contains(t)) {
-				currentVariante.getCustomForegroundTexture().add(new CustomTextureDTO(x, y, SpriteEnum.SKY, index));
+			if (!currentLevel.getCustomForegroundTexture().contains(t)) {
+				currentLevel.getCustomForegroundTexture().add(new CustomTextureDTO(x, y, SpriteEnum.SKY, index));
 			}
 		}
 	}
 
 	public void addStartPlayer(int x, int y) {
-		if (currentVariante != null) {
+		if (currentLevel != null) {
 			PositionableDTO t = new PositionableDTO(x, y);
-			if (!currentVariante.getStartPlayer().contains(t) && !positionContainsWall(x, y)
-					&& currentVariante.getStartPlayer().size() < 16) {
-				currentVariante.getStartPlayer().add(new PositionableDTO(x, y));
+			if (!currentLevel.getStartPlayer().contains(t) && !positionContainsWall(x, y)
+					&& currentLevel.getStartPlayer().size() < 16) {
+				currentLevel.getStartPlayer().add(new PositionableDTO(x, y));
 			}
 		}
 	}
 
 	public void removeHole(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getHole().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getHole().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeRail(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getRail().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getRail().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeTrolley(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getTrolley().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getTrolley().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeInterrupter(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getInterrupter().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getInterrupter().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeMine(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getMine().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getMine().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeTeleporter(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getTeleporter().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getTeleporter().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeWall(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getWall().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getWall().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeCustomBackgroundTexture(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getCustomBackgroundTexture().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getCustomBackgroundTexture().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeCustomForegroundTexture(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getCustomForegroundTexture().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getCustomForegroundTexture().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeStartPlayer(int x, int y) {
-		if (currentVariante != null) {
-			currentVariante.getStartPlayer().removeIf(el -> el.getX() == x && el.getY() == y);
+		if (currentLevel != null) {
+			currentLevel.getStartPlayer().removeIf(el -> el.getX() == x && el.getY() == y);
 		}
 	}
 
 	public void removeCustomizationWall(int posX, int posY) {
-		if (currentVariante != null) {
-			currentVariante.getWall().stream().forEach(obj -> {
+		if (currentLevel != null) {
+			currentLevel.getWall().stream().forEach(obj -> {
 				if (obj.getX() == posX && obj.getY() == posY) {
 					obj.setDraw(true);
 					obj.setTexture(null);
@@ -659,8 +660,8 @@ public class LevelService2 {
 	}
 
 	public void setWallTransparent(int posX, int posY) {
-		if (currentVariante != null) {
-			currentVariante.getWall().stream().forEach(obj -> {
+		if (currentLevel != null) {
+			currentLevel.getWall().stream().forEach(obj -> {
 				if (obj.getX() == posX && obj.getY() == posY) {
 					obj.setDraw(false);
 					obj.setTexture(null);
@@ -670,57 +671,57 @@ public class LevelService2 {
 	}
 
 	public void setFillWithBrick(boolean selected) {
-		if (currentVariante != null) {
-			currentVariante.setFillWithBrick(selected);
+		if (currentLevel != null) {
+			currentLevel.setFillWithBrick(selected);
 		}
 	}
 
 	public boolean isFillWithBrick() {
-		if (currentVariante != null) {
-			return currentVariante.isFillWithBrick();
+		if (currentLevel != null) {
+			return currentLevel.isFillWithBrick();
 		}
 		return false;
 	}
 
 	public void setDefaultBackgroungTexture(int index) {
-		if (currentVariante != null) {
-			currentVariante.setDefaultBackground(new DefaultTextureDTO(SpriteEnum.LEVEL, index));
+		if (currentLevel != null) {
+			currentLevel.setDefaultBackground(new DefaultTextureDTO(SpriteEnum.LEVEL, index));
 		}
 	}
 
 	public void setDefaultWallTexture(int index) {
-		if (currentVariante != null) {
-			currentVariante.setDefaultWall(new DefaultTextureDTO(SpriteEnum.LEVEL, index));
+		if (currentLevel != null) {
+			currentLevel.setDefaultWall(new DefaultTextureDTO(SpriteEnum.LEVEL, index));
 		}
 	}
 
 	public void setBonus(int i, int intValue) {
-		if (currentVariante != null) {
-			if (currentVariante.getBonus() == null) {
-				currentVariante.setBonus(new Integer[Constante.MAX_BONUS]);
+		if (currentLevel != null) {
+			if (currentLevel.getBonus() == null) {
+				currentLevel.setBonus(new Integer[Constante.MAX_BONUS]);
 			}
-			Integer[] bonus = currentVariante.getBonus();
+			Integer[] bonus = currentLevel.getBonus();
 			bonus[i] = intValue;
-			currentVariante.setBonus(bonus);
+			currentLevel.setBonus(bonus);
 		}
 	}
 
 	public int getBonus(int i) {
-		if (currentVariante != null && currentVariante.getBonus() != null) {
-			return currentVariante.getBonus()[i];
+		if (currentLevel != null && currentLevel.getBonus() != null) {
+			return currentLevel.getBonus()[i];
 		}
 		return 0;
 	}
 
 	public void setDefaultBrickAnimtion(SpriteEnum se) {
-		if (currentVariante != null) {
-			currentVariante.setDefaultBrickAnimation(se);
+		if (currentLevel != null) {
+			currentLevel.setDefaultBrickAnimation(se);
 		}
 	}
 
 	public SpriteEnum getDefaultBrickAnimation() {
-		if (currentVariante != null) {
-			return currentVariante.getDefaultBrickAnimation();
+		if (currentLevel != null) {
+			return currentLevel.getDefaultBrickAnimation();
 		}
 		return null;
 	}

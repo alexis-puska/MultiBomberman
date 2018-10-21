@@ -12,6 +12,6 @@ public class LevelFileDTO implements Serializable {
 
 	private static final long serialVersionUID = -2962754568139006753L;
 
-	private List<LevelDTO> levels;
+	private List<LevelGroupDTO> levelGroups;
 
 }
