@@ -10,7 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.net.Socket;
 import com.mygdx.enumeration.NetworkControllerEventEnum;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.PlayerService;
 

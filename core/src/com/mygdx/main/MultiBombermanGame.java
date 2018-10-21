@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.main;
 
 import java.io.IOException;
 import java.util.UUID;

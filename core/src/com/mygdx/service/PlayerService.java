@@ -18,7 +18,7 @@ import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.input_processor.ControlEventListener;
 import com.mygdx.service.input_processor.MenuListener;
 import com.mygdx.service.network.server.NetworkConnexion;

@@ -725,4 +725,17 @@ public class LevelService2 {
 		}
 		return null;
 	}
+
+	public void setPreviewIndex(int index) {
+		if (currentLevel != null) {
+			currentLevel.setIndexPreview(index);
+		}
+	}
+
+	public int getPreviewIndex() {
+		if (currentLevel != null) {
+			return currentLevel.getIndexPreview();
+		}
+		return 0;
+	}
 }

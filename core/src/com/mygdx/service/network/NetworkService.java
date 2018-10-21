@@ -15,7 +15,7 @@ import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.constante.Constante;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.network.client.Client;
 import com.mygdx.service.network.server.Server;

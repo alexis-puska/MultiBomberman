@@ -13,7 +13,7 @@ import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 
 public class Server extends Thread {

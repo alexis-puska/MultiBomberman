@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Cursor;
 import com.mygdx.enumeration.SpriteEnum;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.SpriteService;
@@ -76,8 +76,6 @@ public class LevelScreen implements Screen, MenuListener {
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 4));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.level"));
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 3));
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.levelGroupName"));
-		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 2));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.description"));
 		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 1));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.bonus"));
@@ -87,25 +85,24 @@ public class LevelScreen implements Screen, MenuListener {
 		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 6));
 		layout.setText(font, Integer.toString(Context.getStrength()));
 		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 5));
-		layout.setText(font, Integer.toString(Context.getBombe()));
+		layout.setText(font, game.getLevelService().getLevelGroupName());
 		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 4));
-		layout.setText(font, Integer.toString(Context.getBombe()));
+		layout.setText(font, game.getLevelService().getLevelName());
 		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 3));
-		layout.setText(font, Integer.toString(Context.getBombe()));
-		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 2));
-		layout.setText(font, Integer.toString(Context.getBombe()));
+		layout.setText(font, game.getLevelService().getLevelDescription());
 		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 1));
 		for (int i = 0; i < Constante.MAX_BONUS; i++) {
 			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, i),
 					START_BONUS_X + (i * BONUS_SPACE), START_BONUS_Y);
-			layout.setText(font, Integer.toString(game.getLevelService().getBonus(i)));
+			layout.setText(font, Integer.toString(Context.getBonus(i)));
 			font.draw(game.getBatch(), layout, (START_BONUS_X + (i * BONUS_SPACE) + 8) - (layout.width / 2),
 					START_BONUS_Y - 5);
 
 		}
 		cursor.draw(game.getBatch());
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.PREVIEW, 0), LEVEL_PREVIEW_X,
-				LEVEL_PREVIEW_Y);
+		game.getBatch().draw(
+				SpriteService.getInstance().getSprite(SpriteEnum.PREVIEW, Context.getLevel().getIndexPreview()),
+				LEVEL_PREVIEW_X, LEVEL_PREVIEW_Y);
 		game.getBatch().end();
 	}
 
@@ -370,49 +367,49 @@ public class LevelScreen implements Screen, MenuListener {
 			game.getLevelService().nextLevel();
 			break;
 		case 4:
-			game.getLevelService().incBonus(0, 1);
+			Context.incBonus(0, 1);
 			break;
 		case 5:
-			game.getLevelService().incBonus(1, 1);
+			Context.incBonus(1, 1);
 			break;
 		case 6:
-			game.getLevelService().incBonus(2, 1);
+			Context.incBonus(2, 1);
 			break;
 		case 7:
-			game.getLevelService().incBonus(3, 1);
+			Context.incBonus(3, 1);
 			break;
 		case 8:
-			game.getLevelService().incBonus(4, 1);
+			Context.incBonus(4, 1);
 			break;
 		case 9:
-			game.getLevelService().incBonus(5, 1);
+			Context.incBonus(5, 1);
 			break;
 		case 10:
-			game.getLevelService().incBonus(6, 1);
+			Context.incBonus(6, 1);
 			break;
 		case 11:
-			game.getLevelService().incBonus(7, 1);
+			Context.incBonus(7, 1);
 			break;
 		case 12:
-			game.getLevelService().incBonus(8, 1);
+			Context.incBonus(8, 1);
 			break;
 		case 13:
-			game.getLevelService().incBonus(9, 1);
+			Context.incBonus(9, 1);
 			break;
 		case 14:
-			game.getLevelService().incBonus(10, 1);
+			Context.incBonus(10, 1);
 			break;
 		case 15:
-			game.getLevelService().incBonus(11, 1);
+			Context.incBonus(11, 1);
 			break;
 		case 16:
-			game.getLevelService().incBonus(12, 1);
+			Context.incBonus(12, 1);
 			break;
 		case 17:
-			game.getLevelService().incBonus(13, 1);
+			Context.incBonus(13, 1);
 			break;
 		case 18:
-			game.getLevelService().incBonus(14, 1);
+			Context.incBonus(14, 1);
 			break;
 		default:
 			break;
@@ -435,49 +432,49 @@ public class LevelScreen implements Screen, MenuListener {
 			game.getLevelService().previousLevel();
 			break;
 		case 4:
-			game.getLevelService().decBonus(0, 1);
+			Context.decBonus(0, 1);
 			break;
 		case 5:
-			game.getLevelService().decBonus(1, 1);
+			Context.decBonus(1, 1);
 			break;
 		case 6:
-			game.getLevelService().decBonus(2, 1);
+			Context.decBonus(2, 1);
 			break;
 		case 7:
-			game.getLevelService().decBonus(3, 1);
+			Context.decBonus(3, 1);
 			break;
 		case 8:
-			game.getLevelService().decBonus(4, 1);
+			Context.decBonus(4, 1);
 			break;
 		case 9:
-			game.getLevelService().decBonus(5, 1);
+			Context.decBonus(5, 1);
 			break;
 		case 10:
-			game.getLevelService().decBonus(6, 1);
+			Context.decBonus(6, 1);
 			break;
 		case 11:
-			game.getLevelService().decBonus(7, 1);
+			Context.decBonus(7, 1);
 			break;
 		case 12:
-			game.getLevelService().decBonus(8, 1);
+			Context.decBonus(8, 1);
 			break;
 		case 13:
-			game.getLevelService().decBonus(9, 1);
+			Context.decBonus(9, 1);
 			break;
 		case 14:
-			game.getLevelService().decBonus(10, 1);
+			Context.decBonus(10, 1);
 			break;
 		case 15:
-			game.getLevelService().decBonus(11, 1);
+			Context.decBonus(11, 1);
 			break;
 		case 16:
-			game.getLevelService().decBonus(12, 1);
+			Context.decBonus(12, 1);
 			break;
 		case 17:
-			game.getLevelService().decBonus(13, 1);
+			Context.decBonus(13, 1);
 			break;
 		case 18:
-			game.getLevelService().decBonus(14, 1);
+			Context.decBonus(14, 1);
 			break;
 		default:
 			break;
@@ -493,49 +490,49 @@ public class LevelScreen implements Screen, MenuListener {
 		case 3:
 			break;
 		case 4:
-			game.getLevelService().incBonus(0, 10);
+			Context.incBonus(0, 10);
 			break;
 		case 5:
-			game.getLevelService().incBonus(1, 10);
+			Context.incBonus(1, 10);
 			break;
 		case 6:
-			game.getLevelService().incBonus(2, 10);
+			Context.incBonus(2, 10);
 			break;
 		case 7:
-			game.getLevelService().incBonus(3, 10);
+			Context.incBonus(3, 10);
 			break;
 		case 8:
-			game.getLevelService().incBonus(4, 10);
+			Context.incBonus(4, 10);
 			break;
 		case 9:
-			game.getLevelService().incBonus(5, 10);
+			Context.incBonus(5, 10);
 			break;
 		case 10:
-			game.getLevelService().incBonus(6, 10);
+			Context.incBonus(6, 10);
 			break;
 		case 11:
-			game.getLevelService().incBonus(7, 10);
+			Context.incBonus(7, 10);
 			break;
 		case 12:
-			game.getLevelService().incBonus(8, 10);
+			Context.incBonus(8, 10);
 			break;
 		case 13:
-			game.getLevelService().incBonus(9, 10);
+			Context.incBonus(9, 10);
 			break;
 		case 14:
-			game.getLevelService().incBonus(10, 10);
+			Context.incBonus(10, 10);
 			break;
 		case 15:
-			game.getLevelService().incBonus(11, 10);
+			Context.incBonus(11, 10);
 			break;
 		case 16:
-			game.getLevelService().incBonus(12, 10);
+			Context.incBonus(12, 10);
 			break;
 		case 17:
-			game.getLevelService().incBonus(13, 10);
+			Context.incBonus(13, 10);
 			break;
 		case 18:
-			game.getLevelService().incBonus(14, 10);
+			Context.incBonus(14, 10);
 			break;
 		default:
 			break;
@@ -551,49 +548,49 @@ public class LevelScreen implements Screen, MenuListener {
 		case 3:
 			break;
 		case 4:
-			game.getLevelService().decBonus(0, 10);
+			Context.decBonus(0, 10);
 			break;
 		case 5:
-			game.getLevelService().decBonus(1, 10);
+			Context.decBonus(1, 10);
 			break;
 		case 6:
-			game.getLevelService().decBonus(2, 10);
+			Context.decBonus(2, 10);
 			break;
 		case 7:
-			game.getLevelService().decBonus(3, 10);
+			Context.decBonus(3, 10);
 			break;
 		case 8:
-			game.getLevelService().decBonus(4, 10);
+			Context.decBonus(4, 10);
 			break;
 		case 9:
-			game.getLevelService().decBonus(5, 10);
+			Context.decBonus(5, 10);
 			break;
 		case 10:
-			game.getLevelService().decBonus(6, 10);
+			Context.decBonus(6, 10);
 			break;
 		case 11:
-			game.getLevelService().decBonus(7, 10);
+			Context.decBonus(7, 10);
 			break;
 		case 12:
-			game.getLevelService().decBonus(8, 10);
+			Context.decBonus(8, 10);
 			break;
 		case 13:
-			game.getLevelService().decBonus(9, 10);
+			Context.decBonus(9, 10);
 			break;
 		case 14:
-			game.getLevelService().decBonus(10, 10);
+			Context.decBonus(10, 10);
 			break;
 		case 15:
-			game.getLevelService().decBonus(11, 10);
+			Context.decBonus(11, 10);
 			break;
 		case 16:
-			game.getLevelService().decBonus(12, 10);
+			Context.decBonus(12, 10);
 			break;
 		case 17:
-			game.getLevelService().decBonus(13, 10);
+			Context.decBonus(13, 10);
 			break;
 		case 18:
-			game.getLevelService().decBonus(14, 10);
+			Context.decBonus(14, 10);
 			break;
 		default:
 			break;
@@ -603,12 +600,10 @@ public class LevelScreen implements Screen, MenuListener {
 	@Override
 	public void pressL() {
 		// unused method
-
 	}
 
 	@Override
 	public void pressR() {
 		// unused method
-
 	}
 }

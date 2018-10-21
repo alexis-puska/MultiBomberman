@@ -1,6 +1,7 @@
 package com.mygdx.service;
 
 import com.mygdx.constante.Constante;
+import com.mygdx.dto.level.LevelDTO;
 import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.enumeration.TimeEnum;
@@ -29,8 +30,7 @@ public class Context {
 	private static int iaLevel;
 
 	// Game
-	private static int bombe;
-	private static int strength;
+	private static LevelDTO level;
 
 	private Context() {
 		// empty constructor
@@ -48,8 +48,6 @@ public class Context {
 		suddenDeath = Constante.SUDDEN_DEATH;
 		badBomber = Constante.BAD_BOMBER;
 		iaLevel = Constante.MIN_IA_LEVEL;
-		bombe = Constante.DEFAULT_BOMBE;
-		strength = Constante.DEFAULT_STRENGTH;
 	}
 
 	public static String getUuid() {
@@ -255,39 +253,71 @@ public class Context {
 	}
 
 	public static void decBombe() {
-		bombe--;
-		if (bombe < Constante.MIN_BOMBE) {
-			bombe = Constante.MAX_BOMBE;
+		level.setBombe(level.getBombe() - 1);
+		if (level.getBombe() < Constante.MIN_BOMBE) {
+			level.setBombe(Constante.MAX_BOMBE);
 		}
 	}
 
 	public static void incBombe() {
-		bombe++;
-		if (bombe > Constante.MAX_BOMBE) {
-			bombe = Constante.MIN_BOMBE;
+		level.setBombe(level.getBombe() + 1);
+		if (level.getBombe() > Constante.MAX_BOMBE) {
+			level.setBombe(Constante.MAX_BOMBE);
 		}
 	}
 
 	public static void decStrength() {
-		strength--;
-		if (strength < Constante.MIN_STRENGTH) {
-			strength = Constante.MAX_STRENGTH;
+		level.setStrenght(level.getStrenght() - 1);
+		if (level.getStrenght() < Constante.MIN_STRENGTH) {
+			level.setStrenght(Constante.MAX_STRENGTH);
 		}
 	}
 
 	public static void incStrength() {
-		strength++;
-		if (strength > Constante.MAX_STRENGTH) {
-			strength = Constante.MIN_STRENGTH;
+		level.setStrenght(level.getStrenght() + 1);
+		if (level.getStrenght() > Constante.MAX_STRENGTH) {
+			level.setStrenght(Constante.MIN_STRENGTH);
 		}
 	}
 
 	public static int getBombe() {
-		return bombe;
+		return level.getBombe();
 	}
 
 	public static int getStrength() {
-		return strength;
+		return level.getStrenght();
 	}
 
+	public static void setLevel(LevelDTO levelDTO) {
+		level = levelDTO;
+	}
+
+	public static LevelDTO getLevel() {
+		return level;
+	}
+
+	public static void incBonus(int i, int n) {
+		int nb = 0;
+		for (int j = 0; j < Constante.MAX_BONUS; j++) {
+			nb += level.getBonus()[j];
+		}
+
+		if ((nb + n) < Constante.MAX_BONUS_PER_LEVEL) {
+			level.getBonus()[i] += n;
+		} else {
+			level.getBonus()[i] += Constante.MAX_BONUS_PER_LEVEL - nb;
+		}
+
+	}
+
+	public static void decBonus(int i, int n) {
+		level.getBonus()[i] -= n;
+		if (level.getBonus()[i] < 0) {
+			level.getBonus()[i] = 0;
+		}
+	}
+
+	public static int getBonus(int i) {
+		return level.getBonus()[i];
+	}
 }

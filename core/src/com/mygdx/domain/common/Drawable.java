@@ -1,6 +1,6 @@
 package com.mygdx.domain.common;
 
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 
 public abstract class Drawable extends Identifiable {
 

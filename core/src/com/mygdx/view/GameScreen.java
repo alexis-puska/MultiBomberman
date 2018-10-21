@@ -27,7 +27,7 @@ import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.enumeration.SpriteEnum;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
 import com.mygdx.service.input_processor.MenuListener;
@@ -88,7 +88,6 @@ public class GameScreen implements Screen, MenuListener {
 		/********************
 		 * --- DRAW ---
 		 ********************/
-
 		this.gameCamera = new OrthographicCamera(Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
 		this.gameCamera.position.set(Constante.GAME_SCREEN_SIZE_X / 2, Constante.GAME_SCREEN_SIZE_Y / 2, 0);
 		this.gameCamera.update();

@@ -16,7 +16,7 @@ import com.mygdx.domain.common.BodyAble;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
 

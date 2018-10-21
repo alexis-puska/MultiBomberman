@@ -41,6 +41,7 @@ import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.game.editor.enumeration.ActionEnum;
 import com.mygdx.game.editor.enumeration.BrickBurnEnum;
 import com.mygdx.game.editor.renderer.BrickComboboxRenderer;
+import com.mygdx.game.editor.renderer.PreviewComboboxRenderer;
 import com.mygdx.game.editor.service.LevelService2;
 import com.mygdx.game.editor.service.SpriteService;
 import com.mygdx.game.editor.utils.CoordinateUtils;
@@ -132,6 +133,8 @@ public class EditorLauncher extends JFrame {
 	private JButton defaultWall;
 	private JLabel defaultBrickAnimationLabel;
 	private JComboBox<BrickBurnEnum> defaultBrickAnimationComboBox;
+	private JLabel previewIndexLabel;
+	private JComboBox<Integer> previewIndexComboBox;
 
 	/*********************************
 	 * --- BONUS ---
@@ -397,6 +400,7 @@ public class EditorLauncher extends JFrame {
 		defaultBackgroundLabel.setLabelFor(defaultBackGround);
 		defaultWallLabel.setLabelFor(defaultWall);
 		defaultBrickAnimationLabel.setLabelFor(defaultBrickAnimationComboBox);
+		previewIndexLabel.setLabelFor(previewIndexComboBox);
 		levelGroupPropertiesPanel.add(levelGroupNameFrLabel);
 		levelGroupPropertiesPanel.add(levelGroupNameFrTextField);
 		levelGroupPropertiesPanel.add(levelGroupNameEnLabel);
@@ -423,7 +427,9 @@ public class EditorLauncher extends JFrame {
 		levelGroupPropertiesPanel.add(defaultWall);
 		levelGroupPropertiesPanel.add(defaultBrickAnimationLabel);
 		levelGroupPropertiesPanel.add(defaultBrickAnimationComboBox);
-		SpringUtilities.makeGrid(levelGroupPropertiesPanel, 13, 2, 2, 2, 2, 2);
+		levelGroupPropertiesPanel.add(previewIndexLabel);
+		levelGroupPropertiesPanel.add(previewIndexComboBox);
+		SpringUtilities.makeGrid(levelGroupPropertiesPanel, 14, 2, 2, 2, 2, 2);
 	}
 
 	private void buildBonusPanel() {
@@ -501,7 +507,8 @@ public class EditorLauncher extends JFrame {
 		layoutNavigation.setRows(EditorConstante.NB_ROW_NAVIGATION);
 		currentLevelGroupPanel = new JPanel();
 		currentLevelGroupLayout = new GridLayout();
-		currentLevelGroupBorder = BorderFactory.createTitledBorder(message.getString("editor.border.currentLevelGroup"));
+		currentLevelGroupBorder = BorderFactory
+				.createTitledBorder(message.getString("editor.border.currentLevelGroup"));
 		addLevelGroup = new JButton(message.getString("editor.button.currentLevelGroup.add"));
 		copyLevelGroup = new JButton(message.getString("editor.button.currentLevelGroup.copy"));
 		delLevelGroup = new JButton(message.getString("editor.button.currentLevelGroup.delete"));
@@ -576,7 +583,8 @@ public class EditorLauncher extends JFrame {
 		eastPanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.tools"));
 		levelGroupPropertiesPanel = new JPanel();
 		levelGroupPropertiesPanelLayout = new SpringLayout();
-		levelGroupPropertiesPanelBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.levelGroup"));
+		levelGroupPropertiesPanelBorder = BorderFactory
+				.createTitledBorder(this.message.getString("editor.border.levelGroup"));
 		bonusPanel = new JPanel();
 		bonusLayout = new SpringLayout();
 		bonusBorder = BorderFactory.createTitledBorder(this.message.getString("editor.border.bonus"));
@@ -627,6 +635,13 @@ public class EditorLauncher extends JFrame {
 		defaultBrickAnimationLabel = new JLabel(this.message.getString("editor.label.level.defaultBrickAnimation"));
 		defaultBrickAnimationComboBox = new JComboBox<>(BrickBurnEnum.values());
 		defaultBrickAnimationComboBox.setRenderer(new BrickComboboxRenderer(spriteService));
+		previewIndexLabel = new JLabel(this.message.getString("editor.label.level.previewIndex"));
+		Integer[] previewIndex = new Integer[12];
+		for (int i = 0; i < 11; i++) {
+			previewIndex[i] = i;
+		}
+		previewIndexComboBox = new JComboBox<>(previewIndex);
+		previewIndexComboBox.setRenderer(new PreviewComboboxRenderer(spriteService));
 
 		/*****************
 		 * --- BONUS ---
@@ -1087,6 +1102,10 @@ public class EditorLauncher extends JFrame {
 					BrickBurnEnum.getSpriteFromBrick((BrickBurnEnum) defaultBrickAnimationComboBox.getSelectedItem()));
 			drawPanel.repaint();
 		});
+		previewIndexComboBox.addItemListener(event -> {
+			levelService2.setPreviewIndex(previewIndexComboBox.getSelectedIndex());
+			drawPanel.repaint();
+		});
 
 		/********************
 		 * --- ACTION ---
@@ -1369,12 +1388,13 @@ public class EditorLauncher extends JFrame {
 		descriptionFrTextField.setText(levelService2.getLevelDescription(LocaleEnum.FRENCH));
 		shadowSpinner.setValue(Float.valueOf(levelService2.getShadow()));
 		bombeSpinner.setValue(Integer.valueOf(levelService2.getBombe()));
+		previewIndexComboBox.setSelectedItem(levelService2.getPreviewIndex());
 		defaultBrickAnimationComboBox
 				.setSelectedItem(BrickBurnEnum.getBrickFromSprite(levelService2.getDefaultBrickAnimation()));
 		strenghtSpinner.setValue(Integer.valueOf(levelService2.getStrenght()));
 		fillWithBrickCheckbox.setSelected(levelService2.isFillWithBrick());
-		levelGroupPropertiesPanelBorder.setTitle(
-				"LevelGroup : " + levelService2.getLevelGroupPosition() + ", level : " + levelService2.getLevelPosition());
+		levelGroupPropertiesPanelBorder.setTitle("LevelGroup : " + levelService2.getLevelGroupPosition() + ", level : "
+				+ levelService2.getLevelPosition());
 		levelGroupPropertiesPanel.repaint();
 		bonus0Spinner.setValue(Integer.valueOf(levelService2.getBonus(0)));
 		bonus1Spinner.setValue(Integer.valueOf(levelService2.getBonus(1)));

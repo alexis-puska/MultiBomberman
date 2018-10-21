@@ -26,6 +26,7 @@ public class LevelDTO implements Serializable {
 	private List<TextDTO> name;
 	private List<TextDTO> description;
 
+	private int indexPreview;
 	private int bombe;
 	private int strenght;
 	private float shadow;
@@ -53,6 +54,7 @@ public class LevelDTO implements Serializable {
 		original.getName().stream().forEach(n -> this.name.add(new TextDTO(n)));
 		this.description = new ArrayList<>();
 		original.getDescription().stream().forEach(n -> this.description.add(new TextDTO(n)));
+		this.indexPreview = original.indexPreview;
 		this.bombe = original.bombe;
 		this.strenght = original.strenght;
 		this.shadow = original.shadow;

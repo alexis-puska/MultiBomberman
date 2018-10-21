@@ -3,7 +3,7 @@ package com.mygdx.game.raspberry;
 import com.badlogic.gdx.backends.jogamp.JoglNewtApplication;
 import com.badlogic.gdx.backends.jogamp.JoglNewtApplicationConfiguration;
 import com.mygdx.constante.Constante;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 
 public class RaspberryLauncher {
 	public static void main(String[] arg) {

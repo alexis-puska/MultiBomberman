@@ -2,7 +2,7 @@ package com.mygdx.domain.common;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.MultiBombermanGame;
+import com.mygdx.main.MultiBombermanGame;
 
 public abstract class BodyAble extends Drawable {
 
