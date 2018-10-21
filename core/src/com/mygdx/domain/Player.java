@@ -60,8 +60,7 @@ public class Player extends BodyAble implements ControlEventListener {
 		vertices[2] = new Vector2(RADIUS, 0);
 		vertices[3] = new Vector2(0, -RADIUS);
 		bodyCircle.set(vertices);
-		
-		
+
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = bodyCircle;
 		fixtureDef.density = 0;
@@ -104,8 +103,17 @@ public class Player extends BodyAble implements ControlEventListener {
 		}
 
 //		Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " + body.getPosition().y);
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
+		mbGame.getBatch().draw(
+				SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+	}
+
+	public int getX() {
+		return (int) (body.getPosition().x * 18f);
+	}
+
+	public int getY() {
+		return (int) (body.getPosition().y * 16f);
 	}
 
 	@Override

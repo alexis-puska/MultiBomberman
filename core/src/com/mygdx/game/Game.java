@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -39,7 +40,6 @@ public class Game {
 	 ********************/
 	private GlyphLayout layout;
 	private BitmapFont font;
-	private BitmapFont fontScore;
 
 	/********************
 	 * --- DRAW ---
@@ -232,12 +232,14 @@ public class Game {
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
 		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(playerLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(frontLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(frontLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().end();
@@ -246,7 +248,7 @@ public class Game {
 			debugRenderer.render(world, debugCamera.combined);
 		}
 	}
-	
+
 	public void step() {
 		world.step(1 / 25f, 6, 2);
 	}
@@ -327,8 +329,21 @@ public class Game {
 		shadowLayer.begin();
 		mbGame.getBatch().begin();
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
-		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0.5f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		Gdx.gl.glColorMask(false, false, false, true);
+		shapeRenderer.setProjectionMatrix(gameCamera.combined);
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
+
+		players.stream().forEach(p -> {
+			shapeRenderer.circle(p.getX(), p.getY(), 24);
+		});
+
+		shapeRenderer.end();
+		Gdx.gl.glColorMask(true, true, true, true);
+
 		mbGame.getBatch().end();
 		shadowLayerTextureRegion = new TextureRegion(shadowLayerTexture);
 		shadowLayerTextureRegion.flip(false, true);

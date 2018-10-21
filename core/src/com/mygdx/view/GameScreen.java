@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.mygdx.constante.Constante;
 import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
+import com.mygdx.service.MessageService;
 import com.mygdx.service.input_processor.MenuListener;
 
 public class GameScreen implements Screen, MenuListener {
@@ -22,7 +24,6 @@ public class GameScreen implements Screen, MenuListener {
 	 ********************/
 	private GlyphLayout layout;
 	private BitmapFont font;
-	private BitmapFont fontScore;
 	private ShapeRenderer shapeRenderer;
 
 	private Game game;
@@ -35,6 +36,7 @@ public class GameScreen implements Screen, MenuListener {
 		this.layout = new GlyphLayout();
 		this.game = new Game(mbGame);
 		this.shapeRenderer = new ShapeRenderer();
+		initFont();
 	}
 
 	/******************************
@@ -66,6 +68,20 @@ public class GameScreen implements Screen, MenuListener {
 		}
 	}
 
+	private void drawPause() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(0, 0, 0, 0.5f);
+		shapeRenderer.rect(0, 0, 640, 360);
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		mbGame.getBatch().begin();
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen"));
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		mbGame.getBatch().end();
+	}
+
 	@Override
 	public void show() {// unused method
 	}
@@ -90,7 +106,6 @@ public class GameScreen implements Screen, MenuListener {
 	@Override
 	public void dispose() {
 		font.dispose();
-		fontScore.dispose();
 	}
 
 	/**************************************************
@@ -149,15 +164,5 @@ public class GameScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressR() {// unused method
-	}
-
-	private void drawPause() {
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(0, 0, 0, 0.5f);
-		shapeRenderer.rect(0, 0, 640, 360);
-		shapeRenderer.end();
-		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 }
