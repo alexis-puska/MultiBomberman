@@ -34,7 +34,7 @@ public class PlayerService {
 
 	private static final String CLASS_NAME = "PlayerService.class";
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 
 	private Map<Integer, PlayerDefinition> definitions;
 	private Map<Integer, ControlEventListener> controlEventListeners;
@@ -61,8 +61,8 @@ public class PlayerService {
 		this.menuListener = menuListener;
 	}
 
-	public PlayerService(MultiBombermanGame game) {
-		this.game = game;
+	public PlayerService(MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		definitions = new HashMap<>();
 		definitions.put(0, new PlayerDefinition(0, PlayerTypeEnum.HUMAN));
 		for (int i = 1; i < 16; i++) {
@@ -134,7 +134,7 @@ public class PlayerService {
 	public void valideNetWorkPlayerType() {
 		validePlayerType();
 		networkController = new HashMap<>();
-		Map<String, NetworkConnexion> lnc = game.getNetworkService().getServer().getConnexions();
+		Map<String, NetworkConnexion> lnc = mbGame.getNetworkService().getServer().getConnexions();
 		int indexDefinition = 0;
 		for (Entry<String, NetworkConnexion> nc : lnc.entrySet()) {
 			Map<Integer, Integer> networkConnexionMapping = new HashMap<>();
@@ -182,7 +182,7 @@ public class PlayerService {
 					"GENERATE PLAYER : " + def.getValue().getPosition() + ",  "
 							+ def.getValue().getPlayerType().toString() + ",  "
 							+ def.getValue().getCharacter().toString() + ",  " + def.getValue().getColor().toString());
-			Player p = new Player(world, game, def.getValue().getCharacter(), def.getValue().getColor());
+			Player p = new Player(world, mbGame, def.getValue().getCharacter(), def.getValue().getColor());
 			players.add(p);
 			controlEventListeners.put(def.getKey(), p);
 		}
@@ -194,12 +194,12 @@ public class PlayerService {
 	 **************************************/
 	public void move(String uuid, int index, PovDirection direction) {
 		if (this.networkController != null) {
-			if (game.getScreen().getClass() == GameScreen.class) {
+			if (mbGame.getScreen().getClass() == GameScreen.class) {
 				Gdx.app.debug(CLASS_NAME, "GameScreen specifique code");
 				if (networkController.containsKey(uuid)) {
 					controlEventListeners.get(this.networkController.get(uuid).get(index)).move(direction);
 				}
-			} else if (game.getScreen().getClass() == SkinScreen.class) {
+			} else if (mbGame.getScreen().getClass() == SkinScreen.class) {
 				switch (direction) {
 				case east:
 					definitions.get(networkController.get(uuid).get(index)).incCharacter();
@@ -240,70 +240,70 @@ public class PlayerService {
 	}
 
 	public void pressA(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).pressA();
 		}
 	}
 
 	public void pressB(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).pressB();
 		}
 	}
 
 	public void pressX(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).pressX();
 		}
 	}
 
 	public void pressY(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).pressY();
 		}
 	}
 
 	public void pressL(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).pressL();
 		}
 	}
 
 	public void pressR(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).pressR();
 		}
 	}
 
 	public void releaseL(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).releaseL();
 		}
 	}
 
 	public void releaseR(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).releaseR();
 		}
 	}
 
 	public void pressSelect(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).pressSelect();
 		}
 	}
 
 	public void pressStart(String uuid, int index) {
-		if (this.networkController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.networkController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& networkController.containsKey(uuid)) {
 			controlEventListeners.get(this.networkController.get(uuid).get(index)).pressStart();
 		}
@@ -313,10 +313,10 @@ public class PlayerService {
 	 * --- LOCAL CONTROLLER ---
 	 **************************************/
 	public void move(Controller controller, PovDirection direction) {
-		if (game.getScreen().getClass() == GameScreen.class && this.localController.containsKey(controller)
+		if (mbGame.getScreen().getClass() == GameScreen.class && this.localController.containsKey(controller)
 				&& controlEventListeners.get(this.localController.get(controller)) != null) {
 			controlEventListeners.get(this.localController.get(controller)).move(direction);
-		} else if (game.getScreen().getClass() == SkinScreen.class && this.localController.containsKey(controller)) {
+		} else if (mbGame.getScreen().getClass() == SkinScreen.class && this.localController.containsKey(controller)) {
 			switch (direction) {
 			case east:
 				definitions.get(localController.get(controller)).incCharacter();
@@ -350,10 +350,10 @@ public class PlayerService {
 			default:
 				break;
 			}
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendDirection(controllerToIndex.get(controller), direction);
+			mbGame.getNetworkService().sendDirection(controllerToIndex.get(controller), direction);
 		} else {
 			if (Controllers.getControllers().first() != null
 					&& Controllers.getControllers().first().equals(controller)) {
@@ -387,120 +387,120 @@ public class PlayerService {
 	}
 
 	public void pressX(Controller controller) {
-		if (this.localController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.localController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& this.localController.containsKey(controller)) {
 			controlEventListeners.get(this.localController.get(controller)).pressX();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendPressX(controllerToIndex.get(controller));
-		} else if (game.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
+			mbGame.getNetworkService().sendPressX(controllerToIndex.get(controller));
+		} else if (mbGame.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
 				&& Controllers.getControllers().first().equals(controller)) {
 			menuListener.pressX();
 		}
 	}
 
 	public void pressY(Controller controller) {
-		if (this.localController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.localController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& this.localController.containsKey(controller)) {
 			controlEventListeners.get(this.localController.get(controller)).pressY();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendPressY(controllerToIndex.get(controller));
-		} else if (game.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
+			mbGame.getNetworkService().sendPressY(controllerToIndex.get(controller));
+		} else if (mbGame.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
 				&& Controllers.getControllers().first().equals(controller)) {
 			menuListener.pressY();
 		}
 	}
 
 	public void pressL(Controller controller) {
-		if (this.localController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.localController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& this.localController.containsKey(controller)) {
 			controlEventListeners.get(this.localController.get(controller)).pressL();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendPressL(controllerToIndex.get(controller));
-		} else if (game.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
+			mbGame.getNetworkService().sendPressL(controllerToIndex.get(controller));
+		} else if (mbGame.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
 				&& Controllers.getControllers().first().equals(controller)) {
 			menuListener.pressL();
 		}
 	}
 
 	public void pressR(Controller controller) {
-		if (this.localController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.localController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& this.localController.containsKey(controller)) {
 			controlEventListeners.get(this.localController.get(controller)).pressR();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendPressR(controllerToIndex.get(controller));
-		} else if (game.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
+			mbGame.getNetworkService().sendPressR(controllerToIndex.get(controller));
+		} else if (mbGame.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
 				&& Controllers.getControllers().first().equals(controller)) {
 			menuListener.pressR();
 		}
 	}
 
 	public void releaseL(Controller controller) {
-		if (this.localController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.localController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& this.localController.containsKey(controller)) {
 			controlEventListeners.get(this.localController.get(controller)).releaseL();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendReleaseL(controllerToIndex.get(controller));
+			mbGame.getNetworkService().sendReleaseL(controllerToIndex.get(controller));
 		}
 	}
 
 	public void releaseR(Controller controller) {
-		if (this.localController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.localController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& this.localController.containsKey(controller)) {
 			controlEventListeners.get(this.localController.get(controller)).releaseR();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendReleaseR(controllerToIndex.get(controller));
+			mbGame.getNetworkService().sendReleaseR(controllerToIndex.get(controller));
 		}
 	}
 
 	public void pressSelect(Controller controller) {
-		if (game.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
+		if (mbGame.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
 				&& Controllers.getControllers().first().equals(controller)) {
 			menuListener.pressSelect();
 		}
 	}
 
 	public void pressStart(Controller controller) {
-		if (game.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
+		if (mbGame.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
 				&& Controllers.getControllers().first().equals(controller)) {
 			menuListener.pressStart();
 		}
 	}
 
 	public void pressA(Controller controller) {
-		if (this.localController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.localController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& this.localController.containsKey(controller)) {
 			controlEventListeners.get(this.localController.get(controller)).pressA();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendPressA(controllerToIndex.get(controller));
-		} else if (game.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
+			mbGame.getNetworkService().sendPressA(controllerToIndex.get(controller));
+		} else if (mbGame.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
 				&& Controllers.getControllers().first().equals(controller)) {
 			menuListener.pressA();
 		}
 	}
 
 	public void pressB(Controller controller) {
-		if (this.localController != null && game.getScreen().getClass() == GameScreen.class
+		if (this.localController != null && mbGame.getScreen().getClass() == GameScreen.class
 				&& this.localController.containsKey(controller)) {
 			controlEventListeners.get(this.localController.get(controller)).pressB();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
-			game.getNetworkService().sendPressB(controllerToIndex.get(controller));
-		} else if (game.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
+			mbGame.getNetworkService().sendPressB(controllerToIndex.get(controller));
+		} else if (mbGame.getScreen().getClass() != GameScreen.class && Controllers.getControllers().first() != null
 				&& Controllers.getControllers().first().equals(controller)) {
 			menuListener.pressB();
 		}
@@ -513,7 +513,7 @@ public class PlayerService {
 	 ************************************************/
 	public void move(PovDirection direction) {
 		Gdx.app.debug(CLASS_NAME, "keyboard move event");
-		if (game.getScreen().getClass() == SkinScreen.class && firstHumanIdx != -1) {
+		if (mbGame.getScreen().getClass() == SkinScreen.class && firstHumanIdx != -1) {
 			Gdx.app.debug(CLASS_NAME, "keyboard move event skin screen");
 			switch (direction) {
 			case east:
@@ -536,11 +536,11 @@ public class PlayerService {
 			default:
 				break;
 			}
-		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1
+		} else if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1
 				&& controlEventListeners.get(firstHumanIdx) != null) {
 			controlEventListeners.get(firstHumanIdx).move(direction);
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendDirection(0, direction);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendDirection(0, direction);
 		} else {
 			switch (direction) {
 			case east:
@@ -575,78 +575,78 @@ public class PlayerService {
 	}
 
 	public void pressA() {
-		if (game.getScreen().getClass() != GameScreen.class) {
+		if (mbGame.getScreen().getClass() != GameScreen.class) {
 			menuListener.pressA();
-		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		} else if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
 			controlEventListeners.get(firstHumanIdx).pressA();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendPressA(0);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendPressA(0);
 		}
 	}
 
 	public void pressB() {
-		if (game.getScreen().getClass() != GameScreen.class) {
+		if (mbGame.getScreen().getClass() != GameScreen.class) {
 			menuListener.pressB();
-		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		} else if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
 			controlEventListeners.get(firstHumanIdx).pressB();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendPressB(0);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendPressB(0);
 		}
 	}
 
 	public void pressX() {
-		if (game.getScreen().getClass() != GameScreen.class) {
+		if (mbGame.getScreen().getClass() != GameScreen.class) {
 			menuListener.pressX();
-		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		} else if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
 			controlEventListeners.get(firstHumanIdx).pressX();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendPressX(0);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendPressX(0);
 		}
 	}
 
 	public void pressY() {
-		if (game.getScreen().getClass() != GameScreen.class) {
+		if (mbGame.getScreen().getClass() != GameScreen.class) {
 			menuListener.pressY();
-		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		} else if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
 			controlEventListeners.get(firstHumanIdx).pressY();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendPressY(0);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendPressY(0);
 		}
 	}
 
 	public void pressL() {
-		if (game.getScreen().getClass() != GameScreen.class) {
+		if (mbGame.getScreen().getClass() != GameScreen.class) {
 			menuListener.pressL();
-		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		} else if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
 			controlEventListeners.get(firstHumanIdx).pressL();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendPressL(0);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendPressL(0);
 		}
 	}
 
 	public void pressR() {
-		if (game.getScreen().getClass() != GameScreen.class) {
+		if (mbGame.getScreen().getClass() != GameScreen.class) {
 			menuListener.pressR();
-		} else if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		} else if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
 			controlEventListeners.get(firstHumanIdx).pressR();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendPressR(0);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendPressR(0);
 		}
 	}
 
 	public void releaseL() {
-		if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
 			controlEventListeners.get(firstHumanIdx).releaseL();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendReleaseL(0);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendReleaseL(0);
 		}
 	}
 
 	public void releaseR() {
-		if (game.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
+		if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1) {
 			controlEventListeners.get(firstHumanIdx).releaseR();
-		} else if (game.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
-			game.getNetworkService().sendReleaseR(0);
+		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
+			mbGame.getNetworkService().sendReleaseR(0);
 		}
 	}
 }

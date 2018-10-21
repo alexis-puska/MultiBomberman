@@ -27,7 +27,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 	private static final int COL_SIZE = 120;
 	private static final int ROW_SIZE = 30;
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
@@ -37,13 +37,13 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 	private BitmapFont fontBlue;
 	private int cursorPosition;
 
-	public PlayerTypeScreen(final MultiBombermanGame game) {
-		this.game = game;
+	public PlayerTypeScreen(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.cursorPosition = 0;
-		this.game.getPlayerService().setMenuListener(this);
+		this.mbGame.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 
@@ -51,60 +51,60 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getScreenCamera().update();
+		mbGame.getScreenCamera().update();
 		updateCursorPosition();
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
-		game.getBatch().end();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
+		mbGame.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
 
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
-		game.getBatch().begin();
+		mbGame.getBatch().begin();
 		layout.setText(fontRed, MessageService.getInstance().getMessage("game.menu.player.configuration"));
-		fontRed.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		fontRed.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
 				layout.setText(fontRed, MessageService.getInstance().getMessage("game.menu.player") + pos + " : ");
-				fontRed.draw(game.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
+				fontRed.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
 			}
 		}
 
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
-				switch (game.getPlayerService().getPlayerType(pos)) {
+				switch (mbGame.getPlayerService().getPlayerType(pos)) {
 				case CPU:
 					layout.setText(fontGreen, MessageService.getInstance()
-							.getMessage(game.getPlayerService().getPlayerType(pos).getKey()));
-					fontGreen.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+							.getMessage(mbGame.getPlayerService().getPlayerType(pos).getKey()));
+					fontGreen.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
 					break;
 				case HUMAN:
 					layout.setText(fontBlue, MessageService.getInstance()
-							.getMessage(game.getPlayerService().getPlayerType(pos).getKey()));
-					fontBlue.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+							.getMessage(mbGame.getPlayerService().getPlayerType(pos).getKey()));
+					fontBlue.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
 					break;
 				case NET:
 					layout.setText(fontGold, MessageService.getInstance()
-							.getMessage(game.getPlayerService().getPlayerType(pos).getKey()));
-					fontGold.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+							.getMessage(mbGame.getPlayerService().getPlayerType(pos).getKey()));
+					fontGold.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
 					break;
 				case NONE:
 				default:
 					layout.setText(fontRed, MessageService.getInstance()
-							.getMessage(game.getPlayerService().getPlayerType(pos).getKey()));
-					fontRed.draw(game.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+							.getMessage(mbGame.getPlayerService().getPlayerType(pos).getKey()));
+					fontRed.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
 					break;
 				}
 			}
 		}
-		cursor.draw(game.getBatch());
-		game.getBatch().end();
+		cursor.draw(mbGame.getBatch());
+		mbGame.getBatch().end();
 	}
 
 	@Override
@@ -170,28 +170,28 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 	@Override
 	public void pressStart() {
 		if (Context.getGameMode() == GameModeEnum.SERVER) {
-			game.getScreen().dispose();
-			game.setScreen(new ServerParamScreen(game));
+			mbGame.getScreen().dispose();
+			mbGame.setScreen(new ServerParamScreen(mbGame));
 		} else if (Context.getGameMode() == GameModeEnum.LOCAL) {
-			game.getPlayerService().validePlayerType();
-			game.getScreen().dispose();
-			game.setScreen(new SkinScreen(game));
+			mbGame.getPlayerService().validePlayerType();
+			mbGame.getScreen().dispose();
+			mbGame.setScreen(new SkinScreen(mbGame));
 		}
 	}
 
 	@Override
 	public void pressSelect() {
-		game.setScreen(new MainScreen(game));
+		mbGame.setScreen(new MainScreen(mbGame));
 	}
 
 	@Override
 	public void pressA() {
-		game.getPlayerService().incPlayerType(cursorPosition);
+		mbGame.getPlayerService().incPlayerType(cursorPosition);
 	}
 	
 	@Override
 	public void pressB() {
-		game.getPlayerService().decPlayerType(cursorPosition);
+		mbGame.getPlayerService().decPlayerType(cursorPosition);
 	}
 
 	@Override

@@ -20,18 +20,18 @@ import com.mygdx.service.input_processor.MenuListener;
 
 public class MainScreen implements Screen, MenuListener {
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
 
-	public MainScreen(final MultiBombermanGame game) {
-		this.game = game;
+	public MainScreen(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getPlayerService().setMenuListener(this);
+		this.mbGame.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 
@@ -39,29 +39,29 @@ public class MainScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getScreenCamera().update();
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
-		game.getBatch().end();
+		mbGame.getScreenCamera().update();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
+		mbGame.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 0), 110, 70);
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 1), 252, 70);
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 2), 394, 70);
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 0), 110, 70);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 1), 252, 70);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 2), 394, 70);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network"));
-		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.local"));
-		font.draw(game.getBatch(), layout, 176 - (layout.width / 2), 62);
+		font.draw(mbGame.getBatch(), layout, 176 - (layout.width / 2), 62);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.server"));
-		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 62);
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 62);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.client"));
-		font.draw(game.getBatch(), layout, 460 - (layout.width / 2), 62);
+		font.draw(mbGame.getBatch(), layout, 460 - (layout.width / 2), 62);
 		switch (Context.getGameMode()) {
 		case LOCAL:
 			cursor.updateCursorPosition(166, 20);
@@ -76,8 +76,8 @@ public class MainScreen implements Screen, MenuListener {
 			cursor.updateCursorPosition(166, 20);
 			break;
 		}
-		cursor.draw(game.getBatch());
-		game.getBatch().end();
+		cursor.draw(mbGame.getBatch());
+		mbGame.getBatch().end();
 	}
 
 	@Override
@@ -124,27 +124,27 @@ public class MainScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
-		game.getScreen().dispose();
+		mbGame.getScreen().dispose();
 		switch (Context.getGameMode()) {
 		case LOCAL:
-			game.setScreen(new PlayerTypeScreen(game));
+			mbGame.setScreen(new PlayerTypeScreen(mbGame));
 			break;
 		case SERVER:
-			game.setScreen(new PlayerTypeScreen(game));
+			mbGame.setScreen(new PlayerTypeScreen(mbGame));
 			break;
 		case CLIENT:
-			game.setScreen(new ClientConnexionScreen(game));
+			mbGame.setScreen(new ClientConnexionScreen(mbGame));
 			break;
 		default:
-			game.setScreen(new PlayerTypeScreen(game));
+			mbGame.setScreen(new PlayerTypeScreen(mbGame));
 			break;
 		}
 	}
 
 	@Override
 	public void pressSelect() {
-		game.getScreen().dispose();
-		game.setScreen(new LangueScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new LangueScreen(mbGame));
 	}
 
 	@Override

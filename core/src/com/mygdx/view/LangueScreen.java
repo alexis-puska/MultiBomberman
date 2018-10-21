@@ -20,18 +20,18 @@ import com.mygdx.service.input_processor.MenuListener;
 
 public class LangueScreen implements Screen, MenuListener {
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
 
-	public LangueScreen(final MultiBombermanGame game) {
-		this.game = game;
+	public LangueScreen(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getPlayerService().setMenuListener(this);
+		this.mbGame.getPlayerService().setMenuListener(this);
 		initFont();
 	}
 
@@ -39,22 +39,22 @@ public class LangueScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getScreenCamera().update();
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
-		game.getBatch().end();
+		mbGame.getScreenCamera().update();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
+		mbGame.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 0), 165, 100);
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 1), 400, 100);
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 0), 165, 100);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.FLAG, 1), 400, 100);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.lang.title"));
-		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		switch (Context.getLocale()) {
 		case ENGLISH:
 			cursor.updateCursorPosition(430, 70);
@@ -66,8 +66,8 @@ public class LangueScreen implements Screen, MenuListener {
 			cursor.updateCursorPosition(198, 70);
 			break;
 		}
-		cursor.draw(game.getBatch());
-		game.getBatch().end();
+		cursor.draw(mbGame.getBatch());
+		mbGame.getBatch().end();
 	}
 
 	@Override
@@ -114,14 +114,14 @@ public class LangueScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
-		game.getScreen().dispose();
-		game.setScreen(new MainScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new MainScreen(mbGame));
 	}
 
 	@Override
 	public void pressSelect() {
-		game.getScreen().dispose();
-		game.setScreen(new SplashScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new SplashScreen(mbGame));
 	}
 
 	@Override

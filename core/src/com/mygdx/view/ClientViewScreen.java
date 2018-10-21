@@ -12,26 +12,26 @@ public class ClientViewScreen implements Screen, MenuListener {
 
 	private static final String CLASS_NAME = "ClientViewScreen.class";
 
-	final MultiBombermanGame game;
+	final MultiBombermanGame mbGame;
 
-	public ClientViewScreen(final MultiBombermanGame game) {
-		this.game = game;
-		this.game.getPlayerService().setMenuListener(this);
-		this.game.getNetworkService().setClientViewScreen(this);
+	public ClientViewScreen(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
+		this.mbGame.getPlayerService().setMenuListener(this);
+		this.mbGame.getNetworkService().setClientViewScreen(this);
 	}
 
 	@Override
 	public void render(float delta) {
-		if (!game.getNetworkService().getClient().isStatus()) {
-			game.getScreen().dispose();
-			game.setScreen(new ClientConnexionScreen(game));
+		if (!mbGame.getNetworkService().getClient().isStatus()) {
+			mbGame.getScreen().dispose();
+			mbGame.setScreen(new ClientConnexionScreen(mbGame));
 		}
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getScreenCamera().update();
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
-		game.getBatch().end();
+		mbGame.getScreenCamera().update();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
+		mbGame.getBatch().end();
 
 	}
 
@@ -72,9 +72,9 @@ public class ClientViewScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
-		game.getNetworkService().disconnectFromServer();
-		game.getScreen().dispose();
-		game.setScreen(new ClientConnexionScreen(game));
+		mbGame.getNetworkService().disconnectFromServer();
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new ClientConnexionScreen(mbGame));
 	}
 
 	@Override

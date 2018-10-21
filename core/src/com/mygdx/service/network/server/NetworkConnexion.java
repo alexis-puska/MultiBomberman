@@ -33,12 +33,12 @@ public class NetworkConnexion extends Thread {
 
 	private int player;
 
-	public NetworkConnexion(Socket socket, final Server server, final MultiBombermanGame game) {
+	public NetworkConnexion(Socket socket, final Server server, final MultiBombermanGame mbGame) {
 		this.status = true;
 		this.socket = socket;
 		this.server = server;
 
-		this.playerService = game.getPlayerService();
+		this.playerService = mbGame.getPlayerService();
 		this.remoteAddress = socket.getRemoteAddress();
 		Gdx.app.debug(CLASS_NAME, String.format("new client connexion : %s", remoteAddress));
 	}

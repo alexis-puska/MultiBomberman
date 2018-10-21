@@ -4,10 +4,10 @@ import com.mygdx.main.MultiBombermanGame;
 
 public abstract class Drawable extends Identifiable {
 
-	protected MultiBombermanGame game;
+	protected MultiBombermanGame mbGame;
 
-	public void init(MultiBombermanGame game) {
-		this.game = game;
+	public void init(MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 	}
 
 	public abstract void drawIt();

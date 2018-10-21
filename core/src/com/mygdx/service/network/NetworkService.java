@@ -27,7 +27,7 @@ public class NetworkService {
 	private static final String CLASS_NAME = "NetworkService";
 
 	private static final String EVENT = "event:";
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 	private Server server;
 	private Client client;
 	private UpnpService upnpService;
@@ -38,8 +38,8 @@ public class NetworkService {
 
 	private String lastClientError;
 
-	public NetworkService(final MultiBombermanGame game) {
-		this.game = game;
+	public NetworkService(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		upnpService = new UpnpService();
 		Context.setPort(Constante.NETWORK_PORT);
 		retrieveIp();
@@ -49,7 +49,7 @@ public class NetworkService {
 	 * ----- Server part -----
 	 ***********************************/
 	public boolean initServer() {
-		server = new Server(game);
+		server = new Server(mbGame);
 		try {
 			server.init();
 			server.start();

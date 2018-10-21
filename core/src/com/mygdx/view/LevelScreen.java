@@ -30,19 +30,19 @@ public class LevelScreen implements Screen, MenuListener {
 	private static final int START_BONUS_Y = 60;
 	private static final int BONUS_SPACE = 25;
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
 	private int cursorPosition;
 
-	public LevelScreen(final MultiBombermanGame game) {
-		this.game = game;
+	public LevelScreen(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getPlayerService().setMenuListener(this);
+		this.mbGame.getPlayerService().setMenuListener(this);
 		cursorPosition = 0;
 		initFont();
 	}
@@ -51,59 +51,59 @@ public class LevelScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getScreenCamera().update();
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
-		game.getBatch().end();
+		mbGame.getScreenCamera().update();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
+		mbGame.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
 		updateCursorPosition();
 
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
-		game.getBatch().begin();
+		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen"));
-		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.bombe"));
-		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 6));
+		font.draw(mbGame.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 6));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.strenght"));
-		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 5));
+		font.draw(mbGame.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 5));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.levelGroup"));
-		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 4));
+		font.draw(mbGame.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 4));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.level"));
-		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 3));
+		font.draw(mbGame.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 3));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.description"));
-		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 1));
+		font.draw(mbGame.getBatch(), layout, START_GRID_X, START_GRID_Y + (ROW_GRID_SPACE * 1));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.bonus"));
-		font.draw(game.getBatch(), layout, START_GRID_X, START_GRID_Y);
+		font.draw(mbGame.getBatch(), layout, START_GRID_X, START_GRID_Y);
 
 		layout.setText(font, Integer.toString(Context.getBombe()));
-		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 6));
+		font.draw(mbGame.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 6));
 		layout.setText(font, Integer.toString(Context.getStrength()));
-		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 5));
-		layout.setText(font, game.getLevelService().getLevelGroupName());
-		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 4));
-		layout.setText(font, game.getLevelService().getLevelName());
-		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 3));
-		layout.setText(font, game.getLevelService().getLevelDescription());
-		font.draw(game.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 1));
+		font.draw(mbGame.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 5));
+		layout.setText(font, mbGame.getLevelService().getLevelGroupName());
+		font.draw(mbGame.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 4));
+		layout.setText(font, mbGame.getLevelService().getLevelName());
+		font.draw(mbGame.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 3));
+		layout.setText(font, mbGame.getLevelService().getLevelDescription());
+		font.draw(mbGame.getBatch(), layout, START_GRID_X + COLUMN_GRID_SPACE, START_GRID_Y + (ROW_GRID_SPACE * 1));
 		for (int i = 0; i < Constante.MAX_BONUS; i++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, i),
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, i),
 					START_BONUS_X + (i * BONUS_SPACE), START_BONUS_Y);
 			layout.setText(font, Integer.toString(Context.getBonus(i)));
-			font.draw(game.getBatch(), layout, (START_BONUS_X + (i * BONUS_SPACE) + 8) - (layout.width / 2),
+			font.draw(mbGame.getBatch(), layout, (START_BONUS_X + (i * BONUS_SPACE) + 8) - (layout.width / 2),
 					START_BONUS_Y - 5);
 
 		}
-		cursor.draw(game.getBatch());
-		game.getBatch().draw(
+		cursor.draw(mbGame.getBatch());
+		mbGame.getBatch().draw(
 				SpriteService.getInstance().getSprite(SpriteEnum.PREVIEW, Context.getLevel().getIndexPreview()),
 				LEVEL_PREVIEW_X, LEVEL_PREVIEW_Y);
-		game.getBatch().end();
+		mbGame.getBatch().end();
 	}
 
 	@Override
@@ -214,14 +214,14 @@ public class LevelScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
-		game.getScreen().dispose();
-		game.setScreen(new GameScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new GameScreen(mbGame));
 	}
 
 	@Override
 	public void pressSelect() {
-		game.getScreen().dispose();
-		game.setScreen(new RulesScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new RulesScreen(mbGame));
 	}
 
 	@Override
@@ -361,10 +361,10 @@ public class LevelScreen implements Screen, MenuListener {
 			Context.incStrength();
 			break;
 		case 2:
-			game.getLevelService().nextLevelGroup();
+			mbGame.getLevelService().nextLevelGroup();
 			break;
 		case 3:
-			game.getLevelService().nextLevel();
+			mbGame.getLevelService().nextLevel();
 			break;
 		case 4:
 			Context.incBonus(0, 1);
@@ -426,10 +426,10 @@ public class LevelScreen implements Screen, MenuListener {
 			Context.decStrength();
 			break;
 		case 2:
-			game.getLevelService().previousLevelGroup();
+			mbGame.getLevelService().previousLevelGroup();
 			break;
 		case 3:
-			game.getLevelService().previousLevel();
+			mbGame.getLevelService().previousLevel();
 			break;
 		case 4:
 			Context.decBonus(0, 1);

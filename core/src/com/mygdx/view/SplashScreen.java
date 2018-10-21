@@ -10,21 +10,21 @@ import com.mygdx.service.input_processor.MenuListener;
 
 public class SplashScreen implements MenuListener, Screen {
 
-	final MultiBombermanGame game;
+	final MultiBombermanGame mbGame;
 
-	public SplashScreen(final MultiBombermanGame game) {
-		this.game = game;
-		this.game.getPlayerService().setMenuListener(this);
+	public SplashScreen(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
+		this.mbGame.getPlayerService().setMenuListener(this);
 	}
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getScreenCamera().update();
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
-		game.getBatch().end();
+		mbGame.getScreenCamera().update();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
+		mbGame.getBatch().end();
 	}
 
 	@Override
@@ -59,8 +59,8 @@ public class SplashScreen implements MenuListener, Screen {
 
 	@Override
 	public void pressStart() {
-		game.getScreen().dispose();
-		game.setScreen(new LangueScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new LangueScreen(mbGame));
 	}
 
 	@Override

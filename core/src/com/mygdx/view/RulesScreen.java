@@ -25,19 +25,19 @@ public class RulesScreen implements Screen, MenuListener {
 	private static final int ROW_START_Y = 120;
 	private static final int ROW_SPACE = 20;
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 	private final Cursor cursor;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private int cursorPosition;
 	private BitmapFont font;
 
-	public RulesScreen(final MultiBombermanGame game) {
-		this.game = game;
+	public RulesScreen(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getPlayerService().setMenuListener(this);
+		this.mbGame.getPlayerService().setMenuListener(this);
 		this.cursorPosition = 0;
 		initFont();
 	}
@@ -46,46 +46,46 @@ public class RulesScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getScreenCamera().update();
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
-		game.getBatch().end();
+		mbGame.getScreenCamera().update();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
+		mbGame.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
 
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
-		game.getBatch().begin();
+		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen"));
-		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.suddenDeath"));
-		font.draw(game.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 3));
+		font.draw(mbGame.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 3));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.badBomber"));
-		font.draw(game.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 2));
+		font.draw(mbGame.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 2));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.iaLevel"));
-		font.draw(game.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 1));
+		font.draw(mbGame.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 1));
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.time"));
-		font.draw(game.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 0));
+		font.draw(mbGame.getBatch(), layout, COLUMN_START_X, ROW_START_Y + (ROW_SPACE * 0));
 
 		layout.setText(font, Context.isSuddenDeath() ? MessageService.getInstance().getMessage("game.menu.yes")
 				: MessageService.getInstance().getMessage("game.menu.no"));
-		font.draw(game.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 3));
+		font.draw(mbGame.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 3));
 		layout.setText(font, Context.isBadBomber() ? MessageService.getInstance().getMessage("game.menu.yes")
 				: MessageService.getInstance().getMessage("game.menu.no"));
-		font.draw(game.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 2));
+		font.draw(mbGame.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 2));
 		layout.setText(font, Integer.toString(Context.getIaLevel()));
-		font.draw(game.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 1));
+		font.draw(mbGame.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 1));
 		layout.setText(font, MessageService.getInstance().getMessage(Context.getTime().getKey()));
-		font.draw(game.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 0));
+		font.draw(mbGame.getBatch(), layout, COLUMN_START_X + COLUMN_SPACE, ROW_START_Y + (ROW_SPACE * 0));
 
 		this.updateCursorPosition();
 
-		cursor.draw(game.getBatch());
-		game.getBatch().end();
+		cursor.draw(mbGame.getBatch());
+		mbGame.getBatch().end();
 	}
 
 	private void updateCursorPosition() {
@@ -150,14 +150,14 @@ public class RulesScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
-		game.getScreen().dispose();
-		game.setScreen(new LevelScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new LevelScreen(mbGame));
 	}
 
 	@Override
 	public void pressSelect() {
-		game.getScreen().dispose();
-		game.setScreen(new SkinScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new SkinScreen(mbGame));
 	}
 
 	@Override

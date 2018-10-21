@@ -26,7 +26,6 @@ import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControllerAdapter;
 import com.mygdx.service.input_processor.MenuInputProcessor;
 import com.mygdx.service.network.NetworkService;
-import com.mygdx.view.MainScreen;
 import com.mygdx.view.SplashScreen;
 
 import lombok.Getter;
@@ -131,10 +130,5 @@ public class MultiBombermanGame extends Game {
 			Gdx.app.error("MultiBomberman", "Resize thread error");
 			Thread.currentThread().interrupt();
 		}
-	}
-
-	public void changeScreen() {
-		this.getScreen().dispose();
-		this.setScreen(new MainScreen(this));
 	}
 }

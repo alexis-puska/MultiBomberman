@@ -31,8 +31,8 @@ public class Player extends BodyAble implements ControlEventListener {
 	private final CharacterColorEnum color;
 	private PovDirection direction;
 
-	public Player(World world, MultiBombermanGame game, CharacterEnum character, CharacterColorEnum color) {
-		init(world, game);
+	public Player(World world, MultiBombermanGame mbGame, CharacterEnum character, CharacterColorEnum color) {
+		init(world, mbGame);
 		this.character = character;
 		this.color = color;
 		this.direction = PovDirection.center;
@@ -104,7 +104,7 @@ public class Player extends BodyAble implements ControlEventListener {
 		}
 
 //		Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " + body.getPosition().y);
-		game.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 

@@ -20,7 +20,7 @@ public class Server extends Thread {
 
 	private static final String CLASS_NAME = "Server.class";
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 	private ServerSocket serverSocket;
 	private List<NetworkConnexion> connexions;
 	private Map<String, NetworkConnexion> connexionsValide;
@@ -28,8 +28,8 @@ public class Server extends Thread {
 	private boolean acceptNewConnexion;
 	private int player;
 
-	public Server(final MultiBombermanGame game) {
-		this.game = game;
+	public Server(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		this.acceptNewConnexion = true;
 	}
 
@@ -40,7 +40,7 @@ public class Server extends Thread {
 			// Create a socket
 			try {
 				Socket socket = serverSocket.accept(null);
-				NetworkConnexion nc = new NetworkConnexion(socket, this, game);
+				NetworkConnexion nc = new NetworkConnexion(socket, this, mbGame);
 				nc.start();
 				connexions.add(nc);
 			} catch (GdxRuntimeException ex) {
@@ -120,7 +120,7 @@ public class Server extends Thread {
 	}
 
 	public void updateConnexion() {
-		player = game.getPlayerService().getNbHumanPlayerFromDefinition();		
+		player = mbGame.getPlayerService().getNbHumanPlayerFromDefinition();		
 		List<String> del = new ArrayList<>();
 		for (Entry<String, NetworkConnexion> valide : connexionsValide.entrySet()) {
 			if (!valide.getValue().isStatus()) {

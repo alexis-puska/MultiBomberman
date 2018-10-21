@@ -26,18 +26,18 @@ public class SkinScreen implements Screen, MenuListener {
 	private static final int COL_SIZE = 140;
 	private static final int ROW_SIZE = 40;
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 	private final GlyphLayout layout;
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
 
-	public SkinScreen(final MultiBombermanGame game) {
-		this.game = game;
+	public SkinScreen(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
-		this.game.getPlayerService().setMenuListener(this);
+		this.mbGame.getPlayerService().setMenuListener(this);
 		if (Context.getGameMode() == GameModeEnum.SERVER) {
-			game.getNetworkService().sendToClient("draw:test");
+			mbGame.getNetworkService().sendToClient("draw:test");
 		}
 		initFont();
 	}
@@ -46,33 +46,33 @@ public class SkinScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.getScreenCamera().update();
-		game.getBatch().begin();
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
-		game.getBatch().end();
+		mbGame.getScreenCamera().update();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 1), 0, 0);
+		mbGame.getBatch().end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setProjectionMatrix(game.getBatch().getProjectionMatrix());
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
 		shapeRenderer.setColor(0, 0, 0, 0.5f);
 		shapeRenderer.rect(10, 10, 620, 210);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
-		game.getBatch().begin();
+		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.skinScreen"));
-		font.draw(game.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
 				layout.setText(font, MessageService.getInstance().getMessage("game.menu.player") + pos + " : ");
-				font.draw(game.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
-				game.getBatch()
+				font.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
+				mbGame.getBatch()
 						.draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN,
-								game.getPlayerService().getPlayerColor(pos),
-								game.getPlayerService().getPlayerCharacter(pos), 0), START_X + (i * COL_SIZE) + 60,
+								mbGame.getPlayerService().getPlayerColor(pos),
+								mbGame.getPlayerService().getPlayerCharacter(pos), 0), START_X + (i * COL_SIZE) + 60,
 								START_Y - (j * ROW_SIZE) - 10);
 			}
 		}
-		game.getBatch().end();
+		mbGame.getBatch().end();
 	}
 
 	@Override
@@ -119,19 +119,19 @@ public class SkinScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
-		game.getScreen().dispose();
-		game.setScreen(new RulesScreen(game));
+		mbGame.getScreen().dispose();
+		mbGame.setScreen(new RulesScreen(mbGame));
 	}
 
 	@Override
 	public void pressSelect() {
 		if (Context.getGameMode() == GameModeEnum.LOCAL) {
-			game.getScreen().dispose();
-			game.setScreen(new PlayerTypeScreen(game));
+			mbGame.getScreen().dispose();
+			mbGame.setScreen(new PlayerTypeScreen(mbGame));
 		} else if (Context.getGameMode() == GameModeEnum.SERVER) {
-			game.getScreen().dispose();
-			game.getNetworkService().acceptConnexion(true);
-			game.setScreen(new WaitConnexionScreen(game));
+			mbGame.getScreen().dispose();
+			mbGame.getNetworkService().acceptConnexion(true);
+			mbGame.setScreen(new WaitConnexionScreen(mbGame));
 		}
 	}
 

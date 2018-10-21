@@ -32,7 +32,7 @@ import com.mygdx.service.collision.CustomContactListener;
 
 public class Game {
 
-	private final MultiBombermanGame game;
+	private final MultiBombermanGame mbGame;
 
 	/********************
 	 * --- TEXT ---
@@ -78,8 +78,8 @@ public class Game {
 
 	private List<Player> players;
 
-	public Game(final MultiBombermanGame game) {
-		this.game = game;
+	public Game(final MultiBombermanGame mbGame) {
+		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 
@@ -129,7 +129,7 @@ public class Game {
 		this.debugCamera.update();
 		this.world = new World(new Vector2(0, 0), false);
 		this.world.setContactListener(new CustomContactListener());
-		this.players = this.game.getPlayerService().generatePlayer(this.world);
+		this.players = this.mbGame.getPlayerService().generatePlayer(this.world);
 		initFont();
 
 		for (int i = 0; i < 35; i++) {
@@ -220,138 +220,129 @@ public class Game {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.gameCamera.update();
-		game.getScreenCamera().update();
-
+		mbGame.getScreenCamera().update();
 		drawBackground();
 		drawBlocs();
 		drawBricks();
 		drawPlayer();
 		drawFront();
 		drawShadow();
-
-		game.getBatch().begin();
-		game.getBatch().setProjectionMatrix(game.getScreenCamera().combined);
-		game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
-		game.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
+		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(playerLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(playerLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(frontLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(frontLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		game.getBatch().end();
-
+		mbGame.getBatch().end();
 		if (Constante.DEBUG) {
 			debugCamera.update();
 			debugRenderer.render(world, debugCamera.combined);
 		}
-
+	}
+	
+	public void step() {
 		world.step(1 / 25f, 6, 2);
 	}
 
 	private void drawBackground() {
 		backgroundLayer.begin();
-		game.getBatch().begin();
-		game.getBatch().setProjectionMatrix(gameCamera.combined);
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		for (int x = 0; x < 35; x++) {
 			for (int y = 0; y < 21; y++) {
-				game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL, 2), x * 18, y * 16);
+				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL, 2), x * 18, y * 16);
 			}
 		}
-		game.getBatch().end();
+		mbGame.getBatch().end();
 		backgroundLayerTextureRegion = new TextureRegion(backgroundLayerTexture);
 		backgroundLayerTextureRegion.flip(false, true);
 		backgroundLayer.end();
-
 	}
 
 	private void drawBlocs() {
 		blocsLayer.begin();
-		game.getBatch().begin();
-		game.getBatch().setProjectionMatrix(gameCamera.combined);
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		for (int i = 0; i < 35; i++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, 0);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, 0);
 		}
 		for (int i = 0; i < 35; i++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, 20 * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, 20 * 16);
 		}
 		for (int j = 0; j < 21; j++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), 0, j * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), 0, j * 16);
 		}
 		for (int j = 0; j < 21; j++) {
-			game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), 34 * 18, j * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), 34 * 18, j * 16);
 		}
 		for (int j = 1; j < 19; j++) {
 			for (int i = 0; i < 35; i++) {
 				if (i % 2 == 0 && j % 2 == 0) {
-					game.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, j * 16);
+					mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.LEVEL1, 0), i * 18, j * 16);
 				}
 			}
 		}
-		game.getBatch().end();
+		mbGame.getBatch().end();
 		blocsLayerTextureRegion = new TextureRegion(blocsLayerTexture);
 		blocsLayerTextureRegion.flip(false, true);
 		blocsLayer.end();
-
 	}
 
 	private void drawBricks() {
 		bricksLayer.begin();
-		game.getBatch().begin();
-		game.getBatch().setProjectionMatrix(gameCamera.combined);
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		game.getBatch().end();
+		mbGame.getBatch().end();
 		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
 		bricksLayerTextureRegion.flip(false, true);
 		bricksLayer.end();
-
 	}
 
 	private void drawFront() {
 		frontLayer.begin();
-		game.getBatch().begin();
-		game.getBatch().setProjectionMatrix(gameCamera.combined);
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		game.getBatch().end();
+		mbGame.getBatch().end();
 		frontLayerTextureRegion = new TextureRegion(frontLayerTexture);
 		frontLayerTextureRegion.flip(false, true);
 		frontLayer.end();
-
 	}
 
 	private void drawShadow() {
 		shadowLayer.begin();
-		game.getBatch().begin();
-		game.getBatch().setProjectionMatrix(gameCamera.combined);
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		game.getBatch().end();
+		mbGame.getBatch().end();
 		shadowLayerTextureRegion = new TextureRegion(shadowLayerTexture);
 		shadowLayerTextureRegion.flip(false, true);
 		shadowLayer.end();
-
 	}
 
 	private void drawPlayer() {
 		playerLayer.begin();
-		game.getBatch().begin();
-		game.getBatch().setProjectionMatrix(gameCamera.combined);
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		players.stream().forEach(Player::drawIt);
-		game.getBatch().end();
+		mbGame.getBatch().end();
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);
 		playerLayerTextureRegion.flip(false, true);
 		playerLayer.end();
@@ -360,14 +351,12 @@ public class Game {
 	public void dispose() {
 		this.shapeRenderer.dispose();
 		this.font.dispose();
-
 		this.backgroundLayer.dispose();
 		this.blocsLayer.dispose();
 		this.bricksLayer.dispose();
 		this.playerLayer.dispose();
 		this.frontLayer.dispose();
 		this.shadowLayer.dispose();
-
 		this.backgroundLayerTexture.dispose();
 		this.blocsLayerTexture.dispose();
 		this.bricksLayerTexture.dispose();
@@ -375,5 +364,4 @@ public class Game {
 		this.frontLayerTexture.dispose();
 		this.shadowLayerTexture.dispose();
 	}
-
 }
