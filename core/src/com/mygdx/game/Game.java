@@ -21,9 +21,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Level;
+import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
 import com.mygdx.service.mapper.LevelMapper;
@@ -81,6 +83,7 @@ public class Game {
 		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
+		SoundService.getInstance().playMusic(MusicEnum.BATTLE);
 
 		/********************
 		 * --- FONT ---
@@ -157,6 +160,31 @@ public class Game {
 		generator.dispose();
 	}
 
+	public void dispose() {
+		SoundService.getInstance().playMusic(MusicEnum.MENU);
+		this.shapeRenderer.dispose();
+		this.font.dispose();
+		this.backgroundLayer.dispose();
+		this.blocsLayer.dispose();
+		this.bricksLayer.dispose();
+		this.playerLayer.dispose();
+		this.frontLayer.dispose();
+		this.shadowLayer.dispose();
+		this.backgroundLayerTexture.dispose();
+		this.blocsLayerTexture.dispose();
+		this.bricksLayerTexture.dispose();
+		this.playerLayerTexture.dispose();
+		this.frontLayerTexture.dispose();
+		this.shadowLayerTexture.dispose();
+		this.world.dispose();
+		this.debugRenderer.dispose();
+	}
+
+	/**
+	 * Render function
+	 * 
+	 * @param delta
+	 */
 	public void render(float delta) {
 		// clear screen
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
@@ -169,23 +197,7 @@ public class Game {
 		drawPlayer();
 		drawFront();
 		drawShadow();
-
-		mbGame.getBatch().begin();
-		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
-		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(playerLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(frontLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().end();
+		merge();
 		if (Constante.DEBUG) {
 			debugCamera.update();
 			debugRenderer.render(world, debugCamera.combined);
@@ -304,23 +316,23 @@ public class Game {
 		playerLayer.end();
 	}
 
-	public void dispose() {
-		this.shapeRenderer.dispose();
-		this.font.dispose();
-		this.backgroundLayer.dispose();
-		this.blocsLayer.dispose();
-		this.bricksLayer.dispose();
-		this.playerLayer.dispose();
-		this.frontLayer.dispose();
-		this.shadowLayer.dispose();
-		this.backgroundLayerTexture.dispose();
-		this.blocsLayerTexture.dispose();
-		this.bricksLayerTexture.dispose();
-		this.playerLayerTexture.dispose();
-		this.frontLayerTexture.dispose();
-		this.shadowLayerTexture.dispose();
-		this.world.dispose();
-		this.debugRenderer.dispose();
+	private void merge() {
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
+		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(playerLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(frontLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().end();
 	}
 
 	public MultiBombermanGame getMultiBombermanGame() {

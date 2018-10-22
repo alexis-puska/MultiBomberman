@@ -22,38 +22,25 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Wall extends BodyAble {
+public class Brick extends BodyAble {
 
 	protected int x;
 	protected int y;
-	private boolean draw;
-	private boolean customSkin;
 	private SpriteEnum animation;
-	private int index;
 
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
 
-	public void init(World world, MultiBombermanGame mbGame, SpriteEnum defaultAnimation, int defaultTexture) {
+	public void init(World world, MultiBombermanGame mbGame, SpriteEnum animation) {
 		this.world = world;
-		this.defaultAnimation = defaultAnimation;
-		this.defaultTexture = defaultTexture;
+		this.animation = animation;
 		this.init(mbGame);
 		createBody();
 	}
 
 	@Override
 	public void drawIt() {
-		if (draw) {
-			if (customSkin) {
-				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.index), this.x * 18,
-						this.y * 16);
-			} else {
-				mbGame.getBatch().draw(
-						SpriteService.getInstance().getSprite(this.defaultAnimation, this.defaultTexture), this.x * 18,
-						this.y * 16);
-			}
-		}
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, 0), this.x * 18, this.y * 16);
 	}
 
 	@Override
@@ -66,7 +53,7 @@ public class Wall extends BodyAble {
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);
 		Filter filter = new Filter();
-		filter.categoryBits = CollisionConstante.CATEGORY_WALL;
+		filter.categoryBits = CollisionConstante.CATEGORY_BRICKS;
 		fixture.setFilterData(filter);
 	}
 
