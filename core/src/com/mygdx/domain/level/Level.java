@@ -2,7 +2,9 @@ package com.mygdx.domain.level;
 
 import java.util.List;
 
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.game.Game;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,4 +36,11 @@ public class Level {
 	private List<CustomTexture> customBackgroundTexture;
 	private List<CustomTexture> customForegroundTexture;
 	private List<StartPlayer> startPlayer;
+
+	public void init(Game game, World world) {
+		wall.stream().forEach(w -> {
+			w.init(world, game.getMultiBombermanGame(), this.getDefaultWall().getAnimation(),
+					this.getDefaultWall().getIndex());
+		});
+	}
 }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.PlayerDefinition;
+import com.mygdx.domain.level.StartPlayer;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.GameModeEnum;
@@ -173,18 +174,23 @@ public class PlayerService {
 		return definitions.get(index).getColor();
 	}
 
-	public List<Player> generatePlayer(World world) {
+	public List<Player> generatePlayer(World world, List<StartPlayer> startPlayer) {
 		controlEventListeners = new HashMap<>();
 		List<Player> players = new ArrayList<>();
 		// TODO
+		int idx = 0;
 		for (Entry<Integer, PlayerDefinition> def : definitions.entrySet()) {
 			Gdx.app.log(CLASS_NAME,
 					"GENERATE PLAYER : " + def.getValue().getPosition() + ",  "
 							+ def.getValue().getPlayerType().toString() + ",  "
 							+ def.getValue().getCharacter().toString() + ",  " + def.getValue().getColor().toString());
-			Player p = new Player(world, mbGame, def.getValue().getCharacter(), def.getValue().getColor());
-			players.add(p);
-			controlEventListeners.put(def.getKey(), p);
+			if (idx < startPlayer.size()) {
+				Player p = new Player(world, mbGame, def.getValue().getCharacter(), def.getValue().getColor(),
+						startPlayer.get(idx));
+				players.add(p);
+				controlEventListeners.put(def.getKey(), p);
+				idx++;
+			}
 		}
 		return players;
 	}

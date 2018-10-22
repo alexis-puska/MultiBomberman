@@ -12,6 +12,7 @@ public class WallMapper {
 		Wall wall = new Wall();
 		wall.setX(dto.getX());
 		wall.setY(dto.getY());
+		wall.setDraw(dto.isDraw());
 		if (dto.getTexture() != null) {
 			wall.setCustomSkin(true);
 			wall.setAnimation(dto.getTexture().getAnimation());

@@ -16,14 +16,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Level;
@@ -88,8 +82,11 @@ public class Game {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 
-		LevelMapper levelMapper = new LevelMapper();
-		this.level = levelMapper.toEntity(Context.getLevel());
+		/********************
+		 * --- FONT ---
+		 ********************/
+		initFont();
+
 		/********************
 		 * --- DRAW ---
 		 ********************/
@@ -136,76 +133,14 @@ public class Game {
 		this.debugCamera.update();
 		this.world = new World(new Vector2(0, 0), false);
 		this.world.setContactListener(new CustomContactListener());
-		this.players = this.mbGame.getPlayerService().generatePlayer(this.world);
-		initFont();
 
-		for (int i = 0; i < 35; i++) {
-			BodyDef groundBodyDef = new BodyDef();
-			PolygonShape groundBox = new PolygonShape();
-			groundBox.setAsBox(0.5f, 0.5f);
-			groundBodyDef.position.set(new Vector2(i + 0.5f, 0.5f));
-			Body body = world.createBody(groundBodyDef);
-			Fixture fixture = body.createFixture(groundBox, 0.0f);
-			fixture.setFriction(0f);
-			Filter filter = new Filter();
-			filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
-			fixture.setFilterData(filter);
-		}
-		for (int i = 0; i < 35; i++) {
-			BodyDef groundBodyDef = new BodyDef();
-			PolygonShape groundBox = new PolygonShape();
-			groundBox.setAsBox(0.5f, 0.5f);
-			groundBodyDef.position.set(new Vector2(i + 0.5f, 20.5f));
-			Body body = world.createBody(groundBodyDef);
-			Fixture fixture = body.createFixture(groundBox, 0.0f);
-			fixture.setFriction(0f);
-			Filter filter = new Filter();
-			filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
-			fixture.setFilterData(filter);
-		}
-
-		for (int i = 0; i < 21; i++) {
-			BodyDef groundBodyDef = new BodyDef();
-			PolygonShape groundBox = new PolygonShape();
-			groundBox.setAsBox(0.5f, 0.5f);
-			groundBodyDef.position.set(new Vector2(0.5f, i + 0.5f));
-			Body body = world.createBody(groundBodyDef);
-			Fixture fixture = body.createFixture(groundBox, 0.0f);
-			fixture.setFriction(0f);
-			Filter filter = new Filter();
-			filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
-			fixture.setFilterData(filter);
-		}
-
-		for (int i = 0; i < 21; i++) {
-			BodyDef groundBodyDef = new BodyDef();
-			PolygonShape groundBox = new PolygonShape();
-			groundBox.setAsBox(0.5f, 0.5f);
-			groundBodyDef.position.set(new Vector2(34.5f, i + 0.5f));
-			Body body = world.createBody(groundBodyDef);
-			Fixture fixture = body.createFixture(groundBox, 0.0f);
-			fixture.setFriction(0f);
-			Filter filter = new Filter();
-			filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
-			fixture.setFilterData(filter);
-		}
-
-		for (int j = 1; j < 19; j++) {
-			for (int i = 1; i < 34; i++) {
-				if (i % 2 == 0 && j % 2 == 0) {
-					BodyDef groundBodyDef = new BodyDef();
-					PolygonShape groundBox = new PolygonShape();
-					groundBox.setAsBox(0.5f, 0.5f);
-					groundBodyDef.position.set(new Vector2(i + 0.5f, j + 0.5f));
-					Body body = world.createBody(groundBodyDef);
-					Fixture fixture = body.createFixture(groundBox, 0.0f);
-					fixture.setFriction(0f);
-					Filter filter = new Filter();
-					filter.categoryBits = CollisionConstante.CATEGORY_BLOCS;
-					fixture.setFilterData(filter);
-				}
-			}
-		}
+		/********************
+		 * --- INIT LEVEL ---
+		 ********************/
+		LevelMapper levelMapper = new LevelMapper();
+		this.level = levelMapper.toEntity(Context.getLevel());
+		this.level.init(this, world);
+		this.players = this.mbGame.getPlayerService().generatePlayer(this.world, this.level.getStartPlayer());
 	}
 
 	/******************************
@@ -229,11 +164,12 @@ public class Game {
 		this.gameCamera.update();
 		mbGame.getScreenCamera().update();
 		drawBackground();
-		drawBlocs();
+		drawWall();
 		drawBricks();
 		drawPlayer();
 		drawFront();
 		drawShadow();
+
 		mbGame.getBatch().begin();
 		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
@@ -273,43 +209,27 @@ public class Game {
 								this.level.getDefaultBackground().getIndex()), x * 18, y * 16);
 			}
 		}
+		this.level.getCustomBackgroundTexture().stream().forEach(cbt -> {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()),
+					cbt.getX() * 18, cbt.getY() * 16);
+		});
+
 		mbGame.getBatch().end();
+		backgroundLayer.end();
 		backgroundLayerTextureRegion = new TextureRegion(backgroundLayerTexture);
 		backgroundLayerTextureRegion.flip(false, true);
-		backgroundLayer.end();
+
 	}
 
-	private void drawBlocs() {
+	private void drawWall() {
 		blocsLayer.begin();
 		mbGame.getBatch().begin();
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		for (int i = 0; i < 35; i++) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
-					this.level.getDefaultWall().getIndex()), i * 18, 0);
-		}
-		for (int i = 0; i < 35; i++) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
-					this.level.getDefaultWall().getIndex()), i * 18, 20 * 16);
-		}
-		for (int j = 0; j < 21; j++) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
-					this.level.getDefaultWall().getIndex()), 0, j * 16);
-		}
-		for (int j = 0; j < 21; j++) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
-					this.level.getDefaultWall().getIndex()), 34 * 18, j * 16);
-		}
-		for (int j = 1; j < 19; j++) {
-			for (int i = 0; i < 35; i++) {
-				if (i % 2 == 0 && j % 2 == 0) {
-					mbGame.getBatch()
-							.draw(SpriteService.getInstance().getSprite(this.level.getDefaultWall().getAnimation(),
-									this.level.getDefaultWall().getIndex()), i * 18, j * 16);
-				}
-			}
-		}
+		this.level.getWall().stream().forEach(w -> {
+			w.drawIt();
+		});
 		mbGame.getBatch().end();
 		blocsLayerTextureRegion = new TextureRegion(blocsLayerTexture);
 		blocsLayerTextureRegion.flip(false, true);
@@ -334,6 +254,12 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		this.level.getCustomForegroundTexture().stream().forEach(cft -> {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(cft.getAnimation(), cft.getIndex()),
+					(cft.getX() * 18) - 18, (cft.getY() * 16) - 16);
+		});
+
 		mbGame.getBatch().end();
 		frontLayerTextureRegion = new TextureRegion(frontLayerTexture);
 		frontLayerTextureRegion.flip(false, true);
@@ -395,5 +321,9 @@ public class Game {
 		this.shadowLayerTexture.dispose();
 		this.world.dispose();
 		this.debugRenderer.dispose();
+	}
+
+	public MultiBombermanGame getMultiBombermanGame() {
+		return this.mbGame;
 	}
 }

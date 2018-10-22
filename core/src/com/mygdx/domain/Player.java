@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.domain.level.StartPlayer;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
@@ -31,28 +32,31 @@ public class Player extends BodyAble implements ControlEventListener {
 	private final CharacterColorEnum color;
 	private PovDirection direction;
 
-	public Player(World world, MultiBombermanGame mbGame, CharacterEnum character, CharacterColorEnum color) {
-		init(world, mbGame);
+	private StartPlayer startPlayer;
+
+	public Player(World world, MultiBombermanGame mbGame, CharacterEnum character, CharacterColorEnum color,
+			StartPlayer startPlayer) {
+		this.startPlayer = startPlayer;
 		this.character = character;
 		this.color = color;
 		this.direction = PovDirection.center;
+		init(world, mbGame);
+
 	}
 
 	@Override
 	public void createBody() {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(1, 1);
+		bodyDef.position.set(this.startPlayer.getX()+0.5f, this.startPlayer.getY()+0.5f);
 		body = world.createBody(bodyDef);
 		body.setFixedRotation(false);
 		MassData data = new MassData();
 		data.mass = 100f;
 		body.setMassData(data);
 		body.setUserData(this);
-		body.getPosition().x = 1f;
-		body.getPosition().y = 1f;
-//		CircleShape bodyCircle = new CircleShape();
-//		bodyCircle.setRadius(0.49f);
+		// CircleShape bodyCircle = new CircleShape();
+		// bodyCircle.setRadius(0.49f);
 		PolygonShape bodyCircle = new PolygonShape();
 		Vector2[] vertices = new Vector2[4];
 		vertices[0] = new Vector2(-RADIUS, 0);
@@ -102,7 +106,8 @@ public class Player extends BodyAble implements ControlEventListener {
 			break;
 		}
 
-//		Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " + body.getPosition().y);
+		// Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " +
+		// body.getPosition().y);
 		mbGame.getBatch().draw(
 				SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);

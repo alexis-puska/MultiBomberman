@@ -10,17 +10,17 @@
     "level" : [ {
       "name" : [ {
         "lang" : "ENGLISH",
-        "value" : "classique"
+        "value" : "xxx"
       }, {
         "lang" : "FRENCH",
-        "value" : "classique"
+        "value" : "xxx"
       } ],
       "description" : [ {
         "lang" : "ENGLISH",
-        "value" : "classique"
+        "value" : "xxx"
       }, {
         "lang" : "FRENCH",
-        "value" : "classique"
+        "value" : "xxx"
       } ],
       "indexPreview" : 0,
       "bombe" : 3,
@@ -925,11 +925,6 @@
         "texture" : null
       }, {
         "x" : 2,
-        "y" : 2,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 4,
         "y" : 2,
         "draw" : true,
         "texture" : null
@@ -2556,7 +2551,55 @@
         "index" : 1
       } ],
       "customForegroundTexture" : [ ],
-      "startPlayer" : [ ]
+      "startPlayer" : [ {
+        "x" : 1,
+        "y" : 19
+      }, {
+        "x" : 11,
+        "y" : 19
+      }, {
+        "x" : 23,
+        "y" : 19
+      }, {
+        "x" : 33,
+        "y" : 19
+      }, {
+        "x" : 1,
+        "y" : 10
+      }, {
+        "x" : 33,
+        "y" : 10
+      }, {
+        "x" : 1,
+        "y" : 1
+      }, {
+        "x" : 23,
+        "y" : 1
+      }, {
+        "x" : 33,
+        "y" : 1
+      }, {
+        "x" : 11,
+        "y" : 1
+      }, {
+        "x" : 7,
+        "y" : 5
+      }, {
+        "x" : 27,
+        "y" : 5
+      }, {
+        "x" : 7,
+        "y" : 13
+      }, {
+        "x" : 27,
+        "y" : 13
+      }, {
+        "x" : 17,
+        "y" : 13
+      }, {
+        "x" : 17,
+        "y" : 5
+      } ]
     }, {
       "name" : [ {
         "lang" : "ENGLISH",
@@ -2575,7 +2618,7 @@
       "indexPreview" : 0,
       "bombe" : 2,
       "strenght" : 3,
-      "shadow" : 0.35000002,
+      "shadow" : 0.8,
       "bonus" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 10, 10 ],
       "fillWithBrick" : false,
       "defaultBackground" : {
@@ -7128,6 +7171,1708 @@
       } ],
       "customBackgroundTexture" : [ ],
       "customForegroundTexture" : [ ],
+      "startPlayer" : [ {
+        "x" : 1,
+        "y" : 19
+      }, {
+        "x" : 3,
+        "y" : 19
+      }, {
+        "x" : 5,
+        "y" : 19
+      }, {
+        "x" : 7,
+        "y" : 19
+      }, {
+        "x" : 9,
+        "y" : 19
+      }, {
+        "x" : 13,
+        "y" : 19
+      }, {
+        "x" : 15,
+        "y" : 19
+      }, {
+        "x" : 17,
+        "y" : 19
+      }, {
+        "x" : 21,
+        "y" : 19
+      }, {
+        "x" : 23,
+        "y" : 19
+      }, {
+        "x" : 25,
+        "y" : 19
+      }, {
+        "x" : 27,
+        "y" : 19
+      }, {
+        "x" : 29,
+        "y" : 19
+      }, {
+        "x" : 31,
+        "y" : 19
+      }, {
+        "x" : 11,
+        "y" : 19
+      }, {
+        "x" : 19,
+        "y" : 19
+      } ]
+    } ]
+  }, {
+    "name" : [ {
+      "lang" : "ENGLISH",
+      "value" : "CHANGE !!!"
+    }, {
+      "lang" : "FRENCH",
+      "value" : "CHANGE !!!"
+    } ],
+    "level" : [ {
+      "name" : [ {
+        "lang" : "ENGLISH",
+        "value" : "names"
+      }, {
+        "lang" : "FRENCH",
+        "value" : "names"
+      } ],
+      "description" : [ {
+        "lang" : "ENGLISH",
+        "value" : "CHANGE !!!"
+      }, {
+        "lang" : "FRENCH",
+        "value" : "CHANGE !!!"
+      } ],
+      "indexPreview" : 0,
+      "bombe" : 2,
+      "strenght" : 1,
+      "shadow" : 0.0,
+      "bonus" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      "fillWithBrick" : false,
+      "defaultBackground" : {
+        "animation" : "LEVEL",
+        "index" : 20
+      },
+      "defaultWall" : {
+        "animation" : "LEVEL",
+        "index" : 28
+      },
+      "defaultBrickAnimation" : "LEVEL3",
+      "hole" : [ ],
+      "rail" : [ ],
+      "interrupter" : [ ],
+      "mine" : [ ],
+      "trolley" : [ ],
+      "teleporter" : [ ],
+      "wall" : [ {
+        "x" : 0,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 1,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 1,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 3,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 3,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 5,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 5,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 7,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 7,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 9,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 9,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 11,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 11,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 13,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 13,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 15,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 15,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 17,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 17,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 19,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 19,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 21,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 21,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 23,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 23,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 25,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 25,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 27,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 27,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 29,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 29,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 31,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 31,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 33,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 33,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 1,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 1,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 3,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 3,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 5,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 5,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 7,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 7,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 9,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 9,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 11,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 11,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 13,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 13,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 15,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 15,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 17,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 17,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 19,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 34,
+        "y" : 19,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 0,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 1,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 1,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 3,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 3,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 5,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 5,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 7,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 7,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 9,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 9,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 11,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 11,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 13,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 13,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 15,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 15,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 17,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 17,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 19,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 19,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 21,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 21,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 23,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 23,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 25,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 25,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 27,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 27,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 29,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 29,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 31,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 31,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 33,
+        "y" : 0,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 33,
+        "y" : 20,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 2,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 4,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 6,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 8,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 10,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 12,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 12,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 14,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 14,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      } ],
+      "customBackgroundTexture" : [ ],
+      "customForegroundTexture" : [ {
+        "x" : 3,
+        "y" : 13,
+        "animation" : "SKY",
+        "index" : 0
+      } ],
       "startPlayer" : [ ]
     } ]
   } ]
