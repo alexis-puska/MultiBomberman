@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
@@ -28,19 +29,29 @@ public class Brick extends BodyAble {
 	protected int y;
 	private SpriteEnum animation;
 
+	private BrickStateEnum state;
+	private int countdown;
+	private int indexAnimation;
+
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
 
-	public void init(World world, MultiBombermanGame mbGame, SpriteEnum animation) {
+	public void init(World world, MultiBombermanGame mbGame, SpriteEnum animation, int i, int j) {
+		this.x = i;
+		this.y = j;
 		this.world = world;
 		this.animation = animation;
 		this.init(mbGame);
+		this.state = BrickStateEnum.CREATED;
 		createBody();
 	}
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, 0), this.x * 18, this.y * 16);
+		if (this.state == BrickStateEnum.BURN || this.state == BrickStateEnum.CREATED) {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.indexAnimation),
+					this.x * 18, this.y * 16);
+		}
 	}
 
 	@Override
@@ -57,4 +68,23 @@ public class Brick extends BodyAble {
 		fixture.setFilterData(filter);
 	}
 
+	public void burn() {
+		this.state = BrickStateEnum.BURN;
+		this.countdown = 10;
+		this.indexAnimation++;
+	}
+
+	public void update() {
+		if (this.state == BrickStateEnum.BURN) {
+			this.countdown--;
+			if (this.countdown < 0) {
+				this.countdown = 10;
+				indexAnimation++;
+				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(this.animation)) {
+					this.state = BrickStateEnum.BURNED;
+					dispose();
+				}
+			}
+		}
+	}
 }

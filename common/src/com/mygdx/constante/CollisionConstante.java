@@ -22,6 +22,10 @@ public class CollisionConstante {
 											| CATEGORY_HOLE   | CATEGORY_BOMBE;
 	//@formatter:on
 
+	public static final short GROUP_PLAYER_BRICK = CATEGORY_WALL | CATEGORY_FIRE    | CATEGORY_BRICKS | CATEGORY_TELEPORTER
+			| CATEGORY_TROLLEY | CATEGORY_MINE | CATEGORY_BUTTONS
+			| CATEGORY_HOLE   | CATEGORY_BOMBE;
+	
 	private CollisionConstante() {
 		// empty private constructor
 	}
