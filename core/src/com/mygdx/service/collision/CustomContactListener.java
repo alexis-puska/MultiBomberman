@@ -35,15 +35,11 @@ public class CustomContactListener implements ContactListener {
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		//Gdx.app.log("contact3",
-		//		contact.getFixtureA().getUserData().getClass() + " " + contact.getFixtureB().getUserData().getClass());
 		// a definir
 	}
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-		//Gdx.app.log("contact4",
-		//		contact.getFixtureA().getUserData().getClass() + " " + contact.getFixtureB().getUserData().getClass());
 		// a definir
 	}
 

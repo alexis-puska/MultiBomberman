@@ -55,8 +55,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		data.mass = 100f;
 		body.setMassData(data);
 		body.setUserData(this);
-		// CircleShape bodyCircle = new CircleShape();
-		// bodyCircle.setRadius(0.49f);
 		PolygonShape bodyCircle = new PolygonShape();
 		Vector2[] vertices = new Vector2[4];
 		vertices[0] = new Vector2(-RADIUS, 0);
@@ -80,8 +78,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void drawIt() {
-		// unused method
-
 		switch (this.direction) {
 		case center:
 			this.body.setLinearVelocity(0f, 0f);
@@ -105,9 +101,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-
-		// Gdx.app.log("PLAYER", "draw : " + body.getPosition().x + " , " +
-		// body.getPosition().y);
 		mbGame.getBatch().draw(
 				SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);

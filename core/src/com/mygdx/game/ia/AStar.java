@@ -7,25 +7,25 @@ public class AStar {
 	private PriorityQueue<AStarCell> cells;
 	private boolean ignoreBombe;
 	private int searchlevel;
-	private int tab[];
-	private AStarCell grid[];
-	boolean closed[];
-	boolean inOpen[];
+	private int[] tab;
+	private AStarCell[] grid;
+	private boolean[] closed;
+	private boolean[] inOpen;
 	private int startX;
 	private int startY;
 	private int endX;
 	private int endY;
 
 	public AStar(int[] tab) {
-
+		this.tab = tab;
 	}
 
 	public void init(int startX, int startY, int endX, int endY, int searchlevel) {
-
+		// a definir
 	}
 
 	public void solve() {
-
+		// a definir
 	}
 
 	public boolean isSolved() {
