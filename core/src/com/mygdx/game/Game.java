@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -194,6 +195,7 @@ public class Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.gameCamera.update();
 		mbGame.getScreenCamera().update();
+		this.level.update();
 		drawBackground();
 		drawWall();
 		drawBricks();
@@ -292,6 +294,7 @@ public class Game {
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 
+		Collections.sort(players);
 		players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
 
 		shapeRenderer.end();

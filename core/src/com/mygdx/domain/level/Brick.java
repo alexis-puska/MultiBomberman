@@ -1,13 +1,14 @@
 package com.mygdx.domain.level;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.enumeration.SpriteEnum;
@@ -28,7 +29,7 @@ public class Brick extends BodyAble {
 	protected int x;
 	protected int y;
 	private SpriteEnum animation;
-	
+
 	private Level level;
 	private BrickStateEnum state;
 	private int countdown;
@@ -37,10 +38,12 @@ public class Brick extends BodyAble {
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
 
-	public void init(World world, MultiBombermanGame mbGame, SpriteEnum animation, int i, int j) {
+	public void init(final World world, final MultiBombermanGame mbGame, final Level level, SpriteEnum animation, int i,
+			int j) {
 		this.x = i;
 		this.y = j;
 		this.world = world;
+		this.level = level;
 		this.animation = animation;
 		this.init(mbGame);
 		this.state = BrickStateEnum.CREATED;
@@ -61,17 +64,19 @@ public class Brick extends BodyAble {
 		PolygonShape groundBox = new PolygonShape();
 		groundBox.setAsBox(0.5f, 0.5f);
 		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
-		Body body = world.createBody(groundBodyDef);
+		this.body = world.createBody(groundBodyDef);
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);
+		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_BRICKS;
+		filter.maskBits = CollisionConstante.CATEGORY_PLAYER;
 		fixture.setFilterData(filter);
 	}
 
 	public void burn() {
 		this.state = BrickStateEnum.BURN;
-		this.countdown = 10;
+		this.countdown = Constante.BURN_BRICK_COUNTDOWN;
 		this.indexAnimation++;
 	}
 
@@ -79,10 +84,12 @@ public class Brick extends BodyAble {
 		if (this.state == BrickStateEnum.BURN) {
 			this.countdown--;
 			if (this.countdown < 0) {
-				this.countdown = 10;
+				this.countdown = Constante.BURN_BRICK_COUNTDOWN;
 				indexAnimation++;
-				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(this.animation)) {
+				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(this.animation) - 1) {
+					Gdx.app.log("BRICK", "dispose");
 					this.state = BrickStateEnum.BURNED;
+					this.level.burnBricks(this);
 					dispose();
 				}
 			}

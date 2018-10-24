@@ -62,11 +62,14 @@ public class Wall extends BodyAble {
 		PolygonShape groundBox = new PolygonShape();
 		groundBox.setAsBox(0.5f, 0.5f);
 		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
-		Body body = world.createBody(groundBodyDef);
+		this.body = world.createBody(groundBodyDef);
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);
+		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_WALL;
+		filter.maskBits = 0x0000000000000000;
+		filter.maskBits = CollisionConstante.CATEGORY_PLAYER;
 		fixture.setFilterData(filter);
 	}
 

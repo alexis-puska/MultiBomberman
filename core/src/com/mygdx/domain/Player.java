@@ -21,7 +21,7 @@ import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
 
-public class Player extends BodyAble implements ControlEventListener {
+public class Player extends BodyAble implements ControlEventListener, Comparable<Player> {
 
 	private static final String CLASS_NAME = "Player.class";
 
@@ -48,7 +48,7 @@ public class Player extends BodyAble implements ControlEventListener {
 	public void createBody() {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(this.startPlayer.getX()+0.5f, this.startPlayer.getY()+0.5f);
+		bodyDef.position.set(this.startPlayer.getX() + 0.5f, this.startPlayer.getY() + 0.5f);
 		body = world.createBody(bodyDef);
 		body.setFixedRotation(false);
 		MassData data = new MassData();
@@ -64,13 +64,13 @@ public class Player extends BodyAble implements ControlEventListener {
 		vertices[2] = new Vector2(RADIUS, 0);
 		vertices[3] = new Vector2(0, -RADIUS);
 		bodyCircle.set(vertices);
-
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = bodyCircle;
 		fixtureDef.density = 0;
 		fixtureDef.restitution = 0f;
 		Fixture fixture = body.createFixture(fixtureDef);
 		fixture.setFriction(0f);
+		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_PLAYER;
 		filter.maskBits = CollisionConstante.GROUP_PLAYER;
@@ -185,6 +185,16 @@ public class Player extends BodyAble implements ControlEventListener {
 	public void releaseR() {
 		// unused method
 
+	}
+
+	@Override
+	public int compareTo(Player o) {
+		if (this.body.getPosition().y < o.body.getPosition().y) {
+			return 1;
+		} else if (this.body.getPosition().y > o.body.getPosition().y) {
+			return -1;
+		}
+		return 0;
 	}
 
 }
