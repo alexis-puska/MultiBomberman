@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AStarCell {
+public class AStarCell implements Comparable<AStarCell> {
 
 	private int finalCost;
 	private int heuristicCost;
@@ -29,4 +29,13 @@ public class AStarCell {
 		return this.x + this.y * Constante.GRID_SIZE_X;
 	}
 
+	@Override
+	public int compareTo(AStarCell o) {
+		if (this.getFinalCost() > o.getFinalCost()) {
+			return 1;
+		} else if (this.getFinalCost() < o.getFinalCost()) {
+			return -1;
+		}
+		return 0;
+	}
 }
