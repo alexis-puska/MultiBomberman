@@ -11,12 +11,14 @@ import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Level {
@@ -81,14 +83,14 @@ public class Level {
 		if (fillWithBrick) {
 			for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
 				for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
-					if (!occupedWallBrick[x][y] && !reservedStartPlayer[x][y]) {
-						if (ThreadLocalRandom.current().nextInt(0, 50) > 5) {
-							Brick b = new Brick();
-							b.init(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
-							brick.add(b);
-							occupedWallBrick[x][y] = true;
-						}
+					if (!occupedWallBrick[x][y] && !reservedStartPlayer[x][y]
+							&& ThreadLocalRandom.current().nextInt(0, 50) > 5) {
+						Brick b = new Brick();
+						b.init(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
+						brick.add(b);
+						occupedWallBrick[x][y] = true;
 					}
+
 				}
 			}
 		}

@@ -177,7 +177,7 @@ public class PlayerService {
 	public List<Player> generatePlayer(World world, List<StartPlayer> startPlayer) {
 		controlEventListeners = new HashMap<>();
 		List<Player> players = new ArrayList<>();
-		// TODO
+
 		int idx = 0;
 		for (Entry<Integer, PlayerDefinition> def : definitions.entrySet()) {
 			Gdx.app.log(CLASS_NAME,
