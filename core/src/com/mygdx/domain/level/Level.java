@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.constante.Constante;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 
@@ -44,10 +45,10 @@ public class Level {
 	private List<Brick> brick;
 
 	public void init(Game game, World world) {
-		this.reservedStartPlayer = new boolean[35][21];
-		this.occupedWallBrick = new boolean[35][21];
-		for (int x = 0; x < 35; x++) {
-			for (int y = 0; y < 21; y++) {
+		this.reservedStartPlayer = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
+		this.occupedWallBrick = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
+		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
+			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 				reservedStartPlayer[x][y] = false;
 				occupedWallBrick[x][y] = false;
 			}
@@ -77,17 +78,22 @@ public class Level {
 			reservedStartPlayer[sp.getX() + 1][sp.getY() + 1] = true;
 		});
 		if (fillWithBrick) {
-			for (int x = 0; x < 35; x++) {
-				for (int y = 0; y < 21; y++) {
+			for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
+				for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 					if (!occupedWallBrick[x][y] && !reservedStartPlayer[x][y]) {
 						if (ThreadLocalRandom.current().nextInt(0, 50) > 5) {
 							Brick b = new Brick();
 							b.init(world, game.getMultiBombermanGame(), this.defaultBrickAnimation, x, y);
 							brick.add(b);
+							occupedWallBrick[x][y] = true;
 						}
 					}
 				}
 			}
 		}
+	}
+
+	public void burnBricks(Brick brick) {
+		occupedWallBrick[brick.getX()][brick.getY()] = false;
 	}
 }

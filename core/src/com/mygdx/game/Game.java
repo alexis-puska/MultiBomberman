@@ -217,8 +217,8 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		for (int x = 0; x < 35; x++) {
-			for (int y = 0; y < 21; y++) {
+		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
+			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 				mbGame.getBatch()
 						.draw(SpriteService.getInstance().getSprite(this.level.getDefaultBackground().getAnimation(),
 								this.level.getDefaultBackground().getIndex()), x * 18, y * 16);

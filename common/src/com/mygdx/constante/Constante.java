@@ -25,7 +25,9 @@ public class Constante {
 	public static final int EDITOR_SIZE_Y = 800;
 	public static final int GAME_SCREEN_SIZE_X = 630;
 	public static final int GAME_SCREEN_SIZE_Y = 336;
-	
+
+	public static final int GRID_SIZE_X = 35;
+	public static final int GRID_SIZE_Y = 21;
 
 	// GAME PARAM DEFAULT VALUE
 	public static final int DEFAULT_LOCAL_PLAYER = 1;
@@ -44,7 +46,6 @@ public class Constante {
 	public static final int DEFAULT_STRENGTH = 1;
 	public static final int MIN_STRENGTH = 1;
 	public static final int MAX_STRENGTH = 6;
-	
 
 	private Constante() {
 		// empty private constructor

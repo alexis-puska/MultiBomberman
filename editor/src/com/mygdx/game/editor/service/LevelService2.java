@@ -45,7 +45,8 @@ public class LevelService2 {
 	/**
 	 * Load JSON LevelGroup file and init map with all levelGroup and level
 	 * 
-	 * @param in inputStream of file
+	 * @param in
+	 *            inputStream of file
 	 * @return LevelGroup to Edit
 	 */
 	public void load(InputStream in) {
@@ -262,20 +263,20 @@ public class LevelService2 {
 		level.setTeleporter(new ArrayList<>());
 		level.setTrolley(new ArrayList<>());
 		level.setWall(new ArrayList<>());
-		for (int i = 0; i < 35; i++) {
+		for (int i = 0; i < Constante.GRID_SIZE_X; i++) {
 			level.getWall().add(new WallDTO(i, 0));
 			level.getWall().add(new WallDTO(i, 20));
 		}
-		for (int i = 1; i < 20; i++) {
+		for (int i = 1; i < Constante.GRID_SIZE_Y - 1; i++) {
 			level.getWall().add(new WallDTO(0, i));
 			level.getWall().add(new WallDTO(34, i));
 		}
 
-		for (int i = 0; i < 34; i++) {
+		for (int i = 0; i < Constante.GRID_SIZE_X - 1; i++) {
 			level.getWall().add(new WallDTO(i, 0));
 			level.getWall().add(new WallDTO(i, 20));
 		}
-		for (int i = 1; i < 19; i++) {
+		for (int i = 1; i < Constante.GRID_SIZE_Y - 2; i++) {
 			for (int j = 1; j < 34; j++) {
 				if (i % 2 == 0 && j % 2 == 0) {
 					level.getWall().add(new WallDTO(j, i));
