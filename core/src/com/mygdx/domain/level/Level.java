@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
@@ -65,7 +64,7 @@ public class Level {
 					this.getDefaultWall().getIndex());
 			occupedWallBrick[w.getX()][w.getY()] = true;
 		});
-		
+
 		startPlayer.stream().forEach(sp -> {
 			reservedStartPlayer[sp.getX() - 1][sp.getY() - 1] = true;
 			reservedStartPlayer[sp.getX()][sp.getY() - 1] = true;
@@ -77,23 +76,18 @@ public class Level {
 			reservedStartPlayer[sp.getX()][sp.getY() + 1] = true;
 			reservedStartPlayer[sp.getX() + 1][sp.getY() + 1] = true;
 		});
-		Gdx.app.log("fill brick", "start");
 		if (fillWithBrick) {
 			for (int x = 0; x < 35; x++) {
 				for (int y = 0; y < 21; y++) {
 					if (!occupedWallBrick[x][y] && !reservedStartPlayer[x][y]) {
 						if (ThreadLocalRandom.current().nextInt(0, 50) > 5) {
-							Gdx.app.log("fill brick", "brick");
 							Brick b = new Brick();
 							b.init(world, game.getMultiBombermanGame(), this.defaultBrickAnimation, x, y);
 							brick.add(b);
-						}else {
-							Gdx.app.log("fill brick", "NOP");
 						}
 					}
 				}
 			}
 		}
-		Gdx.app.log("fill brick", "end");
 	}
 }

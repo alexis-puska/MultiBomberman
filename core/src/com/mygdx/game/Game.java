@@ -20,7 +20,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
+import com.mygdx.domain.level.Brick;
 import com.mygdx.domain.level.Level;
+import com.mygdx.domain.level.Wall;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
@@ -222,10 +224,10 @@ public class Game {
 								this.level.getDefaultBackground().getIndex()), x * 18, y * 16);
 			}
 		}
-		this.level.getCustomBackgroundTexture().stream().forEach(cbt -> {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()),
-					cbt.getX() * 18, cbt.getY() * 16);
-		});
+		this.level.getCustomBackgroundTexture().stream()
+				.forEach(cbt -> mbGame.getBatch().draw(
+						SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()), cbt.getX() * 18,
+						cbt.getY() * 16));
 
 		mbGame.getBatch().end();
 		backgroundLayer.end();
@@ -240,9 +242,7 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.level.getWall().stream().forEach(w -> {
-			w.drawIt();
-		});
+		this.level.getWall().stream().forEach(Wall::drawIt);
 		mbGame.getBatch().end();
 		blocsLayerTextureRegion = new TextureRegion(blocsLayerTexture);
 		blocsLayerTextureRegion.flip(false, true);
@@ -255,7 +255,7 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.level.getBrick().stream().forEach(b -> b.drawIt());
+		this.level.getBrick().stream().forEach(Brick::drawIt);
 		mbGame.getBatch().end();
 		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
 		bricksLayerTextureRegion.flip(false, true);
@@ -269,10 +269,10 @@ public class Game {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		this.level.getCustomForegroundTexture().stream().forEach(cft -> {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(cft.getAnimation(), cft.getIndex()),
-					(cft.getX() * 18) - 18, (cft.getY() * 16) - 16);
-		});
+		this.level.getCustomForegroundTexture().stream()
+				.forEach(cft -> mbGame.getBatch().draw(
+						SpriteService.getInstance().getSprite(cft.getAnimation(), cft.getIndex()),
+						(cft.getX() * 18) - 18, (cft.getY() * 16) - 16));
 
 		mbGame.getBatch().end();
 		frontLayerTextureRegion = new TextureRegion(frontLayerTexture);
@@ -292,9 +292,7 @@ public class Game {
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 
-		players.stream().forEach(p -> {
-			shapeRenderer.circle(p.getX(), p.getY(), 24);
-		});
+		players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
 
 		shapeRenderer.end();
 		Gdx.gl.glColorMask(true, true, true, true);
