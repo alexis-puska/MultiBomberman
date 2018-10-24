@@ -32,12 +32,9 @@ public class LevelService {
 		try {
 			levelFileDTO = objectMapper.readValue(levelJsonFile.read(), LevelFileDTO.class);
 			Gdx.app.log(CLASS_NAME, "Nb levelGroup found : " + levelFileDTO.getLevelGroups().size());
-
 			currentLevelGroupDTO = levelFileDTO.getLevelGroups().get(0);
 			currentLevelDTO = currentLevelGroupDTO.getLevel().get(0);
 			Context.setLevel(new LevelDTO(currentLevelDTO));
-			Gdx.app.log(CLASS_NAME, currentLevelGroupDTO.getName().get(0).getValue());
-			Gdx.app.log(CLASS_NAME, currentLevelDTO.getName().get(0).getValue());
 		} catch (JsonParseException e) {
 			Gdx.app.error(CLASS_NAME, "JsonParseException : ", e);
 		} catch (JsonMappingException e) {

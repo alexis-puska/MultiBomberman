@@ -1,6 +1,5 @@
 package com.mygdx.domain.common;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.domain.level.Level;
@@ -20,7 +19,6 @@ public abstract class BodyAble extends Drawable {
 
 	public void dispose() {
 		if (body != null) {
-			Gdx.app.log("dispose", "destroy");
 			this.world.destroyBody(body);
 			body = null;
 		}

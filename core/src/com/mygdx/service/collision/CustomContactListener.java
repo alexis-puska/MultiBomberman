@@ -1,6 +1,5 @@
 package com.mygdx.service.collision;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -12,7 +11,6 @@ public class CustomContactListener implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-		Gdx.app.log("contact1", "");
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Brick.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
@@ -29,7 +27,6 @@ public class CustomContactListener implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		Gdx.app.log("contact2", "");
 		// a definir
 	}
 
@@ -42,5 +39,4 @@ public class CustomContactListener implements ContactListener {
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// a definir
 	}
-
 }

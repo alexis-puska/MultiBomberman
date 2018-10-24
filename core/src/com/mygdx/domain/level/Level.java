@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 
@@ -98,10 +98,10 @@ public class Level {
 
 	public void update() {
 		brick.stream().forEach(Brick::update);
+		brick.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
 	}
 
 	public void burnBricks(Brick brick) {
-		Gdx.app.log("Level", "remove bricks !!!");
 		occupedWallBrick[brick.getX()][brick.getY()] = false;
 	}
 }

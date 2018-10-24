@@ -194,7 +194,7 @@ public class Game {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.gameCamera.update();
-		mbGame.getScreenCamera().update();
+		this.mbGame.getScreenCamera().update();
 		this.level.update();
 		drawBackground();
 		drawWall();

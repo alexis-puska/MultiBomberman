@@ -1,6 +1,5 @@
 package com.mygdx.domain.level;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -87,7 +86,6 @@ public class Brick extends BodyAble {
 				this.countdown = Constante.BURN_BRICK_COUNTDOWN;
 				indexAnimation++;
 				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(this.animation) - 1) {
-					Gdx.app.log("BRICK", "dispose");
 					this.state = BrickStateEnum.BURNED;
 					this.level.burnBricks(this);
 					dispose();
