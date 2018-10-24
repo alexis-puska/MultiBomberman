@@ -1,7 +1,10 @@
 package com.mygdx.domain.level;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
@@ -37,10 +40,60 @@ public class Level {
 	private List<CustomTexture> customForegroundTexture;
 	private List<StartPlayer> startPlayer;
 
+	private boolean[][] reservedStartPlayer;
+	private boolean[][] occupedWallBrick;
+	private List<Brick> brick;
+
 	public void init(Game game, World world) {
+		this.reservedStartPlayer = new boolean[35][21];
+		this.occupedWallBrick = new boolean[35][21];
+		for (int x = 0; x < 35; x++) {
+			for (int y = 0; y < 21; y++) {
+				reservedStartPlayer[x][y] = false;
+				occupedWallBrick[x][y] = false;
+			}
+		}
+		this.brick = new ArrayList<>();
+		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
+		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame()));
+		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
+		mine.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
+		trolley.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
+		teleporter.stream().forEach(w -> w.init(world, game.getMultiBombermanGame()));
 		wall.stream().forEach(w -> {
 			w.init(world, game.getMultiBombermanGame(), this.getDefaultWall().getAnimation(),
 					this.getDefaultWall().getIndex());
+			occupedWallBrick[w.getX()][w.getY()] = true;
 		});
+		
+		startPlayer.stream().forEach(sp -> {
+			reservedStartPlayer[sp.getX() - 1][sp.getY() - 1] = true;
+			reservedStartPlayer[sp.getX()][sp.getY() - 1] = true;
+			reservedStartPlayer[sp.getX() + 1][sp.getY() - 1] = true;
+			reservedStartPlayer[sp.getX() - 1][sp.getY()] = true;
+			reservedStartPlayer[sp.getX()][sp.getY()] = true;
+			reservedStartPlayer[sp.getX() + 1][sp.getY()] = true;
+			reservedStartPlayer[sp.getX() - 1][sp.getY() + 1] = true;
+			reservedStartPlayer[sp.getX()][sp.getY() + 1] = true;
+			reservedStartPlayer[sp.getX() + 1][sp.getY() + 1] = true;
+		});
+		Gdx.app.log("fill brick", "start");
+		if (fillWithBrick) {
+			for (int x = 0; x < 35; x++) {
+				for (int y = 0; y < 21; y++) {
+					if (!occupedWallBrick[x][y] && !reservedStartPlayer[x][y]) {
+						if (ThreadLocalRandom.current().nextInt(0, 50) > 5) {
+							Gdx.app.log("fill brick", "brick");
+							Brick b = new Brick();
+							b.init(world, game.getMultiBombermanGame(), this.defaultBrickAnimation, x, y);
+							brick.add(b);
+						}else {
+							Gdx.app.log("fill brick", "NOP");
+						}
+					}
+				}
+			}
+		}
+		Gdx.app.log("fill brick", "end");
 	}
 }

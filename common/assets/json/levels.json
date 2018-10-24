@@ -26,8 +26,8 @@
       "bombe" : 3,
       "strenght" : 2,
       "shadow" : 0.0,
-      "bonus" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 10, 10 ],
-      "fillWithBrick" : false,
+      "bonus" : [ 10, 10, 10, 10, 5, 10, 10, 10, 10, 10, 10, 0, 10, 10, 10 ],
+      "fillWithBrick" : true,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 2
@@ -2620,7 +2620,7 @@
       "strenght" : 3,
       "shadow" : 0.8,
       "bonus" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 10, 10 ],
-      "fillWithBrick" : false,
+      "fillWithBrick" : true,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 2
@@ -5552,7 +5552,7 @@
       "strenght" : 1,
       "shadow" : 0.0,
       "bonus" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-      "fillWithBrick" : false,
+      "fillWithBrick" : true,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 8
@@ -5561,7 +5561,7 @@
         "animation" : "LEVEL",
         "index" : 14
       },
-      "defaultBrickAnimation" : "LEVEL1",
+      "defaultBrickAnimation" : "LEVEL2",
       "hole" : [ ],
       "rail" : [ ],
       "interrupter" : [ ],
@@ -7249,7 +7249,7 @@
       "strenght" : 1,
       "shadow" : 0.0,
       "bonus" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-      "fillWithBrick" : false,
+      "fillWithBrick" : true,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 20

@@ -28,7 +28,8 @@ public class Brick extends BodyAble {
 	protected int x;
 	protected int y;
 	private SpriteEnum animation;
-
+	
+	private Level level;
 	private BrickStateEnum state;
 	private int countdown;
 	private int indexAnimation;

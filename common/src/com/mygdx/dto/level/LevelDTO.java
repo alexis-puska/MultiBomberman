@@ -62,6 +62,7 @@ public class LevelDTO implements Serializable {
 		for (int i = 0; i < Constante.MAX_BONUS; i++) {
 			this.bonus[i] = original.bonus[i];
 		}
+		this.fillWithBrick = original.isFillWithBrick();
 		this.defaultBackground = new DefaultTextureDTO(original.defaultBackground);
 		this.defaultWall = new DefaultTextureDTO(original.defaultWall);
 		this.defaultBrickAnimation = original.defaultBrickAnimation;

@@ -10,25 +10,25 @@ public class CustomContactListener implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-		//Gdx.app.log("contact1", "");
+		Gdx.app.log("contact1", "");
 		// a definir
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		//Gdx.app.log("contact2", "");
+		Gdx.app.log("contact2", "");
 		// a definir
 	}
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		//Gdx.app.log("contact3", "");
+		Gdx.app.log("contact3", "");
 		// a definir
 	}
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-		//Gdx.app.log("contact4", "");
+		Gdx.app.log("contact4", "");
 		// a definir
 	}
 

@@ -1,8 +1,6 @@
 package com.mygdx.game;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -22,7 +20,6 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
-import com.mygdx.domain.level.Brick;
 import com.mygdx.domain.level.Level;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SpriteEnum;
@@ -79,7 +76,6 @@ public class Game {
 	private OrthographicCamera debugCamera;
 
 	private List<Player> players;
-	private List<Brick> bricks;
 
 	private Level level;
 
@@ -88,7 +84,6 @@ public class Game {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		SoundService.getInstance().playMusic(MusicEnum.BATTLE);
-		this.bricks = new ArrayList<>();
 
 		/********************
 		 * --- FONT ---
@@ -149,15 +144,7 @@ public class Game {
 		this.level = levelMapper.toEntity(Context.getLevel());
 		this.level.init(this, world);
 		this.players = this.mbGame.getPlayerService().generatePlayer(this.world, this.level.getStartPlayer());
-		for (int i = 0; i < 35; i++) {
-			for (int j = 0; j < 21; j++) {
-				if (ThreadLocalRandom.current().nextInt(0, 10) > 2) {
-					Brick b = new Brick();
-					b.init(world, mbGame, this.level.getDefaultBrickAnimation(), i, j);
-					bricks.add(b);
-				}
-			}
-		}
+
 	}
 
 	/******************************
@@ -268,7 +255,7 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.bricks.stream().forEach(b -> b.drawIt());
+		this.level.getBrick().stream().forEach(b -> b.drawIt());
 		mbGame.getBatch().end();
 		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
 		bricksLayerTextureRegion.flip(false, true);
