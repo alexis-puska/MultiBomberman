@@ -257,7 +257,7 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.level.getBrick().stream().forEach(Brick::drawIt);
+		this.level.getBricks().stream().forEach(Brick::drawIt);
 		mbGame.getBatch().end();
 		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
 		bricksLayerTextureRegion.flip(false, true);

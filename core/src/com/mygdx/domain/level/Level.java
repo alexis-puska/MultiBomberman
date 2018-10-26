@@ -6,21 +6,20 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.Bombe;
 import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class Level {
 	private List<Text> name;
 	private List<Text> description;
@@ -45,7 +44,8 @@ public class Level {
 
 	private boolean[][] reservedStartPlayer;
 	private boolean[][] occupedWallBrick;
-	private List<Brick> brick;
+	private List<Brick> bricks;
+	private List<Bombe> bombes;
 
 	public void init(Game game, World world) {
 		this.reservedStartPlayer = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
@@ -56,7 +56,7 @@ public class Level {
 				occupedWallBrick[x][y] = false;
 			}
 		}
-		this.brick = new ArrayList<>();
+		this.bricks = new ArrayList<>();
 		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame()));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
@@ -68,7 +68,6 @@ public class Level {
 					this.getDefaultWall().getIndex());
 			occupedWallBrick[w.getX()][w.getY()] = true;
 		});
-
 		startPlayer.stream().forEach(sp -> {
 			reservedStartPlayer[sp.getX() - 1][sp.getY() - 1] = true;
 			reservedStartPlayer[sp.getX()][sp.getY() - 1] = true;
@@ -87,18 +86,17 @@ public class Level {
 							&& ThreadLocalRandom.current().nextInt(0, 50) > 5) {
 						Brick b = new Brick();
 						b.init(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
-						brick.add(b);
+						bricks.add(b);
 						occupedWallBrick[x][y] = true;
 					}
-
 				}
 			}
 		}
 	}
 
 	public void update() {
-		brick.stream().forEach(Brick::update);
-		brick.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
+		bricks.stream().forEach(Brick::update);
+		bricks.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
 	}
 
 	public void burnBricks(Brick brick) {
