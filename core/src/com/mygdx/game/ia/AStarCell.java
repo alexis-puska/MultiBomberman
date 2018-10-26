@@ -18,7 +18,11 @@ public class AStarCell implements Comparable<AStarCell> {
 	private boolean origin;
 	private AStarCell parent;
 
-	public AStarCell(int x, int y, boolean origin, int endX, int endY) {
+	public AStarCell() {
+		
+	}
+	
+	public void configure(int x, int y, boolean origin, int endX, int endY) {
 		this.x = x;
 		this.y = y;
 		finalCost = 0;

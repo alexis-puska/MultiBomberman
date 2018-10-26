@@ -2,9 +2,11 @@ package com.mygdx.game.ia;
 
 import java.util.PriorityQueue;
 
+import com.mygdx.constante.Constante;
+
 public class AStar {
 
-	private PriorityQueue<AStarCell> cells;
+	private PriorityQueue<AStarCell> open;
 	private boolean ignoreBombe;
 	private int searchlevel;
 	private int[] tab;
@@ -21,7 +23,28 @@ public class AStar {
 	}
 
 	public void init(int startX, int startY, int endX, int endY, int searchlevel) {
-		// a definir
+		this.startX = startX;
+		this.startY = startY;
+		this.endX = endX;
+		this.endY = endY;
+		while (!open.isEmpty()) {
+			open.poll();
+		}
+		this.ignoreBombe = true;
+		if (tab[endX + endY * Constante.GRID_SIZE_X] == 3) {
+			this.ignoreBombe = false;
+		}
+		for (int i = 0; i < Constante.GRID_SIZE_X; i++) {
+			for (int j = 0; j < Constante.GRID_SIZE_Y; j++) {
+				if (startX == i && startY == j) {
+					grid[i + j * Constante.GRID_SIZE_X].configure(i, j, true, endX, endY);
+				} else {
+					grid[i + j * Constante.GRID_SIZE_X].configure(i, j, false, endX, endY);
+				}
+				closed[i + j * Constante.GRID_SIZE_X] = false;
+				inOpen[i + j * Constante.GRID_SIZE_X] = false;
+			}
+		}
 	}
 
 	public void solve() {
@@ -39,5 +62,4 @@ public class AStar {
 	private boolean checkAndUpdateCost(AStarCell current, AStarCell t, int cost) {
 		return false;
 	}
-
 }
