@@ -206,6 +206,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	
 	
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -241,8 +242,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (startPlayer == null) {
 			if (other.startPlayer != null)
 				return false;
-		} 
-		return startPlayer.equals(other.startPlayer);
+		} else if (!startPlayer.equals(other.startPlayer))
+			return false;
+		return true;
 	}
 
 	@Override
