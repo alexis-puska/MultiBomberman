@@ -44,6 +44,7 @@ public class Level {
 
 	private boolean[][] reservedStartPlayer;
 	private boolean[][] occupedWallBrick;
+	private List<Integer> free;
 	private List<Brick> bricks;
 	private List<Bombe> bombes;
 
@@ -58,7 +59,7 @@ public class Level {
 		}
 		this.bricks = new ArrayList<>();
 		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
-		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame()));
+		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
 		mine.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
 		trolley.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
@@ -97,6 +98,11 @@ public class Level {
 	public void update() {
 		bricks.stream().forEach(Brick::update);
 		bricks.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
+		mine.stream().forEach(Mine::update);
+		trolley.stream().forEach(Trolley::update);
+		teleporter.stream().forEach(Teleporter::update);
+
+		rail.stream().forEach(Rail::switchRail);
 	}
 
 	public void burnBricks(Brick brick) {

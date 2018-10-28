@@ -41,5 +41,4 @@ public class Teleporter extends BodyAble {
 	public void drawIt() {
 		// make
 	}
-
 }

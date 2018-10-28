@@ -52,15 +52,15 @@
 				{"x": 32,  "y": 32,  "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE_D"},
 				{"x": 32,  "y": 48,  "nx": 3, "ny": 1, "n": 3,  "sx": 16, "sy": 16, "r": false, "animation": "BOMBE_E"},
 				{"x": 80,  "y": 0,   "nx": 8, "ny": 1, "n": 8,  "sx": 30, "sy": 42, "r": false, "animation": "BONUS_BURN"},
-				{"x": 80,  "y": 42,  "nx": 4, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "POP"},
-				{"x": 80,  "y": 64,  "nx": 8, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "MINE_C"},
-				{"x": 224, "y": 64,  "nx": 4, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "MINE_D"},
+				{"x": 80,  "y": 42,  "nx": 4, "ny": 1, "n": 4,  "sx": 18, "sy": 16, "r": false, "animation": "POP"},
+				{"x": 80,  "y": 64,  "nx": 8, "ny": 1, "n": 8,  "sx": 18, "sy": 16, "r": false, "animation": "MINE_C"},
+				{"x": 224, "y": 64,  "nx": 4, "ny": 1, "n": 4,  "sx": 18, "sy": 16, "r": false, "animation": "MINE_D"},
 				{"x": 296, "y": 64,  "nx": 1, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "MINE"},
-				{"x": 80,  "y": 80,  "nx": 8, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "RAIL"},
-				{"x": 224, "y": 80,  "nx": 2, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "BUTTON"},
-				{"x": 80,  "y": 96,  "nx": 2, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "HOLE"},
-				{"x": 116, "y": 96,  "nx": 2, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "UNDERWATER"},
-				{"x": 80,  "y": 112, "nx": 4, "ny": 1, "n": 1,  "sx": 18, "sy": 16, "r": false, "animation": "TELEPORTER"}
+				{"x": 80,  "y": 80,  "nx": 8, "ny": 1, "n": 8,  "sx": 18, "sy": 16, "r": false, "animation": "RAIL"},
+				{"x": 224, "y": 80,  "nx": 2, "ny": 1, "n": 2,  "sx": 18, "sy": 16, "r": false, "animation": "BUTTON"},
+				{"x": 80,  "y": 96,  "nx": 2, "ny": 1, "n": 2,  "sx": 18, "sy": 16, "r": false, "animation": "HOLE"},
+				{"x": 116, "y": 96,  "nx": 2, "ny": 1, "n": 2,  "sx": 18, "sy": 16, "r": false, "animation": "UNDERWATER"},
+				{"x": 80,  "y": 112, "nx": 4, "ny": 1, "n": 4,  "sx": 18, "sy": 16, "r": false, "animation": "TELEPORTER"}
 			]
 		},{
 			"files": ["sprite/other/sprite_fire.png"],

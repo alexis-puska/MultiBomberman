@@ -3,8 +3,10 @@ package com.mygdx.domain;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -31,6 +33,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
 	private PovDirection direction;
+	private Body collisionBody;
 
 	private StartPlayer startPlayer;
 
@@ -41,7 +44,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.color = color;
 		this.direction = PovDirection.center;
 		init(world, mbGame);
-
 	}
 
 	@Override
@@ -55,15 +57,15 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		data.mass = 100f;
 		body.setMassData(data);
 		body.setUserData(this);
-		PolygonShape bodyCircle = new PolygonShape();
+		PolygonShape diamondBody = new PolygonShape();
 		Vector2[] vertices = new Vector2[4];
 		vertices[0] = new Vector2(-RADIUS, 0);
 		vertices[1] = new Vector2(0, RADIUS);
 		vertices[2] = new Vector2(RADIUS, 0);
 		vertices[3] = new Vector2(0, -RADIUS);
-		bodyCircle.set(vertices);
+		diamondBody.set(vertices);
 		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = bodyCircle;
+		fixtureDef.shape = diamondBody;
 		fixtureDef.density = 0;
 		fixtureDef.restitution = 0f;
 		Fixture fixture = body.createFixture(fixtureDef);
@@ -71,9 +73,30 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_PLAYER;
-		filter.maskBits = CollisionConstante.GROUP_PLAYER;
+		filter.maskBits = CollisionConstante.GROUP_PLAYER_MOVE;
 		fixture.setFilterData(filter);
-		bodyCircle.dispose();
+		diamondBody.dispose();
+
+		collisionBody = world.createBody(bodyDef);
+		collisionBody.setFixedRotation(false);
+		collisionBody.setUserData(this);
+		CircleShape groundBox = new CircleShape();
+		groundBox.setRadius(0.02f);
+		Fixture fixtureColision = collisionBody.createFixture(groundBox, 0.0f);
+		fixtureColision.setFriction(0f);
+		fixtureColision.setUserData(this);
+		Filter filterColision = new Filter();
+		filterColision.categoryBits = CollisionConstante.CATEGORY_PLAYER_HITBOX;
+		filterColision.maskBits = CollisionConstante.GROUP_PLAYER_MOVE;
+		fixtureColision.setFilterData(filterColision);
+	}
+
+	@Override
+	public void dispose() {
+		if (body != null) {
+			this.world.destroyBody(body);
+			body = null;
+		}
 	}
 
 	@Override
@@ -101,6 +124,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
+		collisionBody.setTransform(this.body.getPosition(), body.getAngle());
 		mbGame.getBatch().draw(
 				SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);

@@ -23,6 +23,7 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Brick;
 import com.mygdx.domain.level.Level;
+import com.mygdx.domain.level.Rail;
 import com.mygdx.domain.level.Wall;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SpriteEnum;
@@ -230,7 +231,7 @@ public class Game {
 				.forEach(cbt -> mbGame.getBatch().draw(
 						SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()), cbt.getX() * 18,
 						cbt.getY() * 16));
-
+		this.level.getRail().stream().forEach(Rail::drawIt);
 		mbGame.getBatch().end();
 		backgroundLayer.end();
 		backgroundLayerTextureRegion = new TextureRegion(backgroundLayerTexture);

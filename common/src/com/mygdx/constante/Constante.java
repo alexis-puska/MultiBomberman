@@ -5,7 +5,7 @@ import com.mygdx.enumeration.TimeEnum;
 
 public class Constante {
 
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	public static final int LIBGDX_LOG_LEVEL = Application.LOG_INFO;
 
 	// NETWORK DEFAULT VALUE
