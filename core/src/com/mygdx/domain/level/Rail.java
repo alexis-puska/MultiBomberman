@@ -136,6 +136,7 @@ public class Rail extends Drawable {
 			this.type = possibility.get(p);
 			// UDR
 			break;
+		default:
 		case 0b1111:
 			possibility.add(RailEnum.HORIZONTAL);
 			possibility.add(RailEnum.VERTICAL);
@@ -173,12 +174,12 @@ public class Rail extends Drawable {
 		if (previous == null) {
 			if (this.getType() == RailEnum.START_LEFT) {
 				return PovDirection.east;
-			} else if (this.getType() == RailEnum.START_LEFT) {
+			} else if (this.getType() == RailEnum.START_RIGHT) {
 				return PovDirection.west;
 			}
 			return PovDirection.center;
 		}
-		// convertion rail en position précédente;
+		// convertion rail en position précédente
 		int val = 0b0000000000000000;
 		if (previous.getY() == this.y && previous.getX() == this.x - 1) {
 			val += 0b0000000000000001;
@@ -216,6 +217,7 @@ public class Rail extends Drawable {
 					return PovDirection.north;
 				case 0b0000000000000100:
 					return PovDirection.east;
+				default:
 				case 0b0000000000001000:
 					return PovDirection.south;
 				}

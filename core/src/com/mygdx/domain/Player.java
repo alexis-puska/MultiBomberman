@@ -203,6 +203,47 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		// unused method
 
 	}
+	
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((character == null) ? 0 : character.hashCode());
+		result = prime * result + ((collisionBody == null) ? 0 : collisionBody.hashCode());
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
+		result = prime * result + ((startPlayer == null) ? 0 : startPlayer.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (character != other.character)
+			return false;
+		if (collisionBody == null) {
+			if (other.collisionBody != null)
+				return false;
+		} else if (!collisionBody.equals(other.collisionBody))
+			return false;
+		if (color != other.color)
+			return false;
+		if (direction != other.direction)
+			return false;
+		if (startPlayer == null) {
+			if (other.startPlayer != null)
+				return false;
+		} 
+		return startPlayer.equals(other.startPlayer);
+	}
 
 	@Override
 	public int compareTo(Player o) {

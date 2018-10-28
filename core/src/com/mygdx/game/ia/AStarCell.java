@@ -19,9 +19,9 @@ public class AStarCell implements Comparable<AStarCell> {
 	private AStarCell parent;
 
 	public AStarCell() {
-		
+
 	}
-	
+
 	public void configure(int x, int y, boolean origin, int endX, int endY) {
 		this.x = x;
 		this.y = y;
@@ -43,5 +43,43 @@ public class AStarCell implements Comparable<AStarCell> {
 			return -1;
 		}
 		return 0;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AStarCell other = (AStarCell) obj;
+		if (finalCost != other.finalCost)
+			return false;
+		if (heuristicCost != other.heuristicCost)
+			return false;
+		if (origin != other.origin)
+			return false;
+		if (parent == null) {
+			if (other.parent != null)
+				return false;
+		} else if (!parent.equals(other.parent))
+			return false;
+		if (x != other.x)
+			return false;
+		return y == other.y;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + finalCost;
+		result = prime * result + heuristicCost;
+		result = prime * result + (origin ? 1231 : 1237);
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
 	}
 }
