@@ -36,11 +36,7 @@ public class AStar {
 		}
 		for (int i = 0; i < Constante.GRID_SIZE_X; i++) {
 			for (int j = 0; j < Constante.GRID_SIZE_Y; j++) {
-				if (startX == i && startY == j) {
-					grid[i + j * Constante.GRID_SIZE_X].configure(i, j, true, endX, endY);
-				} else {
-					grid[i + j * Constante.GRID_SIZE_X].configure(i, j, false, endX, endY);
-				}
+				grid[i + j * Constante.GRID_SIZE_X].configure(i, j, (startX == i && startY == j), endX, endY);
 				closed[i + j * Constante.GRID_SIZE_X] = false;
 				inOpen[i + j * Constante.GRID_SIZE_X] = false;
 			}

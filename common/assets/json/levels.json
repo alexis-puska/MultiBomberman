@@ -9170,7 +9170,10 @@
         "x" : 9,
         "y" : 16
       } ],
-      "interrupter" : [ ],
+      "interrupter" : [ {
+        "x" : 3,
+        "y" : 19
+      } ],
       "mine" : [ ],
       "trolley" : [ ],
       "teleporter" : [ ],

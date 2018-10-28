@@ -87,7 +87,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		fixtureColision.setUserData(this);
 		Filter filterColision = new Filter();
 		filterColision.categoryBits = CollisionConstante.CATEGORY_PLAYER_HITBOX;
-		filterColision.maskBits = CollisionConstante.GROUP_PLAYER_MOVE;
+		filterColision.maskBits = CollisionConstante.GROUP_PLAYER_HITBOX;
 		fixtureColision.setFilterData(filterColision);
 	}
 
@@ -203,9 +203,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		// unused method
 
 	}
-	
-	
-
 
 	@Override
 	public int hashCode() {

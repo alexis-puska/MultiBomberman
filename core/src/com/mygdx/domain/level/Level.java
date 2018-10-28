@@ -60,7 +60,7 @@ public class Level {
 		this.bricks = new ArrayList<>();
 		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
-		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
+		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		mine.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
 		trolley.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
 		teleporter.stream().forEach(w -> w.init(world, game.getMultiBombermanGame()));
@@ -101,8 +101,6 @@ public class Level {
 		mine.stream().forEach(Mine::update);
 		trolley.stream().forEach(Trolley::update);
 		teleporter.stream().forEach(Teleporter::update);
-
-		rail.stream().forEach(Rail::switchRail);
 	}
 
 	public void burnBricks(Brick brick) {

@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Brick;
+import com.mygdx.domain.level.Interrupter;
 
 public class CustomContactListener implements ContactListener {
 
@@ -22,12 +23,36 @@ public class CustomContactListener implements ContactListener {
 				b.burn();
 			}
 		}
+
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Interrupter.class
+					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				Interrupter b = (Interrupter) contact.getFixtureA().getUserData();
+				b.playerTouchBegin();
+			} else if (contact.getFixtureB().getUserData().getClass() == Interrupter.class
+					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				Interrupter b = (Interrupter) contact.getFixtureB().getUserData();
+				b.playerTouchBegin();
+			}
+		}
+
 		// a definir
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		// a definir
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Interrupter.class
+					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				Interrupter b = (Interrupter) contact.getFixtureA().getUserData();
+				b.playerTouchEnd();
+			} else if (contact.getFixtureB().getUserData().getClass() == Interrupter.class
+					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				Interrupter b = (Interrupter) contact.getFixtureB().getUserData();
+				b.playerTouchEnd();
+			}
+		}
+
 	}
 
 	@Override
