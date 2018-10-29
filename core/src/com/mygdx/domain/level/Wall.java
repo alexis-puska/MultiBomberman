@@ -34,11 +34,13 @@ public class Wall extends BodyAble {
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
 
-	public void init(World world, MultiBombermanGame mbGame, SpriteEnum defaultAnimation, int defaultTexture) {
+	@Override
+	public void init(World world, MultiBombermanGame mbGame, Level level) {
 		this.init = true;
 		this.world = world;
-		this.defaultAnimation = defaultAnimation;
-		this.defaultTexture = defaultTexture;
+		this.level = level;
+		this.defaultAnimation = level.getDefaultWall().getAnimation();
+		this.defaultTexture = level.getDefaultWall().getIndex();
 		this.init(mbGame);
 		createBody();
 	}

@@ -11,9 +11,10 @@ public abstract class BodyAble extends Drawable {
 	protected Body body;
 	protected Level level;
 
-	public void init(World world, MultiBombermanGame mbGame) {
+	public void init(World world, MultiBombermanGame mbGame, Level level) {
 		this.init(mbGame);
 		this.world = world;
+		this.level = level;
 		createBody();
 	}
 

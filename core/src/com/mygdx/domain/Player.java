@@ -1,5 +1,9 @@
 package com.mygdx.domain;
 
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector2;
@@ -15,7 +19,10 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.domain.enumeration.PlayerStateEnum;
+import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.StartPlayer;
+import com.mygdx.domain.level.Teleporter;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
@@ -35,15 +42,24 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private PovDirection direction;
 	private Body collisionBody;
 
+	// state
+	PlayerStateEnum state;
+
+	// teleporte
+	private Teleporter destinationTeleporter;
+	private int teleportCountDown;
+
+	// player start
 	private StartPlayer startPlayer;
 
-	public Player(World world, MultiBombermanGame mbGame, CharacterEnum character, CharacterColorEnum color,
-			StartPlayer startPlayer) {
+	public Player(World world, MultiBombermanGame mbGame, Level level, CharacterEnum character,
+			CharacterColorEnum color, StartPlayer startPlayer) {
 		this.startPlayer = startPlayer;
 		this.character = character;
 		this.color = color;
 		this.direction = PovDirection.center;
-		init(world, mbGame);
+		this.state = PlayerStateEnum.NORMAL;
+		init(world, mbGame, level);
 	}
 
 	@Override
@@ -101,33 +117,96 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void drawIt() {
-		switch (this.direction) {
-		case center:
-			this.body.setLinearVelocity(0f, 0f);
-			break;
-		case east:
-			this.body.setLinearVelocity(WALK_SPEED, 0f);
-			break;
-		case north:
-			this.body.setLinearVelocity(0f, WALK_SPEED);
-			break;
-		case south:
-			this.body.setLinearVelocity(0f, -WALK_SPEED);
-			break;
-		case west:
-			this.body.setLinearVelocity(-WALK_SPEED, 0f);
-			break;
-		case southEast:
-		case southWest:
-		case northEast:
-		case northWest:
-		default:
-			break;
-		}
-		collisionBody.setTransform(this.body.getPosition(), body.getAngle());
 		mbGame.getBatch().draw(
 				SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+	}
+
+	public void teleporte(Teleporter tel) {
+		if (destinationTeleporter == null) {
+			List<Teleporter> destination = this.level.getTeleporter().stream()
+					.filter(t -> ((t.getX() != tel.getX() || t.getY() != tel.getY())
+							&& !this.level.getOccupedWallBrick()[t.getX()][t.getY()]))
+					.collect(Collectors.toList());
+			if (!destination.isEmpty()) {
+				int idx = ThreadLocalRandom.current().nextInt(0, destination.size());
+				destinationTeleporter = destination.get(idx);
+				this.state = PlayerStateEnum.TELEPORT;
+				this.teleportCountDown = 6;
+				tel.animate(true);
+				destinationTeleporter.animate(false);
+			}
+		}
+	}
+
+	public void teleporteEnd(Teleporter tel) {
+		if (tel.equals(destinationTeleporter) && this.teleportCountDown == 0
+				&& this.state != PlayerStateEnum.TELEPORT) {
+			Gdx.app.log(this.CLASS_NAME, "teleporte end ok 2! ");
+			destinationTeleporter = null;
+		}
+	}
+
+	public void update() {
+
+		switch (this.state) {
+		case BURNING:
+			break;
+		case CARRY_BOMBE:
+			break;
+		case CRYING:
+			break;
+		case DEAD:
+			break;
+		case INSIDE_TROLLEY:
+			break;
+		case NORMAL:
+			switch (this.direction) {
+			case center:
+				this.body.setLinearVelocity(0f, 0f);
+				break;
+			case east:
+				this.body.setLinearVelocity(WALK_SPEED, 0f);
+				break;
+			case north:
+				this.body.setLinearVelocity(0f, WALK_SPEED);
+				break;
+			case south:
+				this.body.setLinearVelocity(0f, -WALK_SPEED);
+				break;
+			case west:
+				this.body.setLinearVelocity(-WALK_SPEED, 0f);
+				break;
+			case southEast:
+			case southWest:
+			case northEast:
+			case northWest:
+			default:
+				break;
+			}
+			break;
+		case ON_LOUIS:
+			break;
+		case TELEPORT:
+			if (destinationTeleporter != null && teleportCountDown == 0) {
+				this.body.setTransform(destinationTeleporter.getX() + 0.5f, destinationTeleporter.getY() + 0.5f, 0f);
+				this.state = PlayerStateEnum.NORMAL;
+			} else {
+				teleportCountDown--;
+				this.body.setLinearVelocity(0f, 0f);
+			}
+			break;
+		case THROW_BOMBE:
+			break;
+		case VICTORY:
+			break;
+		case VICTORY_ON_LOUIS:
+			break;
+		default:
+			break;
+
+		}
+		collisionBody.setTransform(this.body.getPosition(), body.getAngle());
 	}
 
 	public int getX() {

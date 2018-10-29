@@ -8,6 +8,7 @@ import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Brick;
 import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
+import com.mygdx.domain.level.Teleporter;
 
 public class CustomContactListener implements ContactListener {
 
@@ -53,6 +54,20 @@ public class CustomContactListener implements ContactListener {
 			}
 		}
 
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Teleporter.class
+					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				Teleporter t = (Teleporter) contact.getFixtureA().getUserData();
+				Player p = (Player) contact.getFixtureB().getUserData();
+				p.teleporte(t);
+			} else if (contact.getFixtureB().getUserData().getClass() == Teleporter.class
+					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				Teleporter t = (Teleporter) contact.getFixtureB().getUserData();
+				Player p = (Player) contact.getFixtureA().getUserData();
+				p.teleporte(t);
+			}
+		}
+
 		// a definir
 	}
 
@@ -81,6 +96,21 @@ public class CustomContactListener implements ContactListener {
 					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
 				Hole b = (Hole) contact.getFixtureB().getUserData();
 				b.walkOff();
+			}
+		}
+		
+		//sortie teleporter
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Teleporter.class
+					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				Teleporter t = (Teleporter) contact.getFixtureA().getUserData();
+				Player p = (Player) contact.getFixtureB().getUserData();
+				p.teleporteEnd(t);
+			} else if (contact.getFixtureB().getUserData().getClass() == Teleporter.class
+					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				Teleporter t = (Teleporter) contact.getFixtureB().getUserData();
+				Player p = (Player) contact.getFixtureA().getUserData();
+				p.teleporteEnd(t);
 			}
 		}
 

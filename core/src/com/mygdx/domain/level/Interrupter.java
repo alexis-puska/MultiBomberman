@@ -28,13 +28,6 @@ public class Interrupter extends BodyAble {
 
 	private int nbPlayer;
 
-	public void init(final World world, final MultiBombermanGame mbGame, final Level level) {
-		this.world = world;
-		this.level = level;
-		this.init(mbGame);
-		this.createBody();
-	}
-
 	@Override
 	public void createBody() {
 		BodyDef groundBodyDef = new BodyDef();

@@ -26,6 +26,7 @@ import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.Rail;
+import com.mygdx.domain.level.Teleporter;
 import com.mygdx.domain.level.Wall;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SpriteEnum;
@@ -149,7 +150,8 @@ public class Game {
 		LevelMapper levelMapper = new LevelMapper();
 		this.level = levelMapper.toEntity(Context.getLevel());
 		this.level.init(this, world);
-		this.players = this.mbGame.getPlayerService().generatePlayer(this.world, this.level.getStartPlayer());
+		this.players = this.mbGame.getPlayerService().generatePlayer(this.world, this.level,
+				this.level.getStartPlayer());
 
 	}
 
@@ -199,6 +201,7 @@ public class Game {
 		this.gameCamera.update();
 		this.mbGame.getScreenCamera().update();
 		this.level.update();
+		this.players.stream().forEach(Player::update);
 		drawBackground();
 		drawWall();
 		drawBricks();
@@ -235,6 +238,7 @@ public class Game {
 						cbt.getY() * 16));
 		this.level.getRail().stream().forEach(Rail::drawIt);
 		this.level.getInterrupter().stream().forEach(Interrupter::drawIt);
+		this.level.getTeleporter().stream().forEach(Teleporter::drawIt);
 		this.level.getHole().stream().forEach(Hole::drawIt);
 		mbGame.getBatch().end();
 		backgroundLayer.end();

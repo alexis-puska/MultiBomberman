@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Bombe;
+import com.mygdx.domain.Player;
 import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
@@ -67,12 +68,11 @@ public class Level {
 		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
-		mine.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
-		trolley.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
-		teleporter.stream().forEach(w -> w.init(world, game.getMultiBombermanGame()));
+		mine.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
+		trolley.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
+		teleporter.stream().forEach(w -> w.init(world, game.getMultiBombermanGame(), this));
 		wall.stream().forEach(w -> {
-			w.init(world, game.getMultiBombermanGame(), this.getDefaultWall().getAnimation(),
-					this.getDefaultWall().getIndex());
+			w.init(world, game.getMultiBombermanGame(), this);
 			occupedWallBrick[w.getX()][w.getY()] = true;
 		});
 		startPlayer.stream().forEach(sp -> {
@@ -108,7 +108,7 @@ public class Level {
 		trolley.stream().forEach(Trolley::update);
 		teleporter.stream().forEach(Teleporter::update);
 		wall.stream().filter(w -> !w.isInit()).forEach(w -> {
-			w.init(this.world, mbGame, this.getDefaultWall().getAnimation(), this.getDefaultWall().getIndex());
+			w.init(this.world, mbGame, this);
 			occupedWallBrick[w.getX()][w.getY()] = true;
 		});
 

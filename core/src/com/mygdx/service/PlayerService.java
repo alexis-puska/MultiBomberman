@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.PlayerDefinition;
+import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.StartPlayer;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
@@ -174,7 +175,7 @@ public class PlayerService {
 		return definitions.get(index).getColor();
 	}
 
-	public List<Player> generatePlayer(World world, List<StartPlayer> startPlayer) {
+	public List<Player> generatePlayer(World world, Level level, List<StartPlayer> startPlayer) {
 		controlEventListeners = new HashMap<>();
 		List<Player> players = new ArrayList<>();
 
@@ -185,7 +186,7 @@ public class PlayerService {
 							+ def.getValue().getPlayerType().toString() + ",  "
 							+ def.getValue().getCharacter().toString() + ",  " + def.getValue().getColor().toString());
 			if (idx < startPlayer.size()) {
-				Player p = new Player(world, mbGame, def.getValue().getCharacter(), def.getValue().getColor(),
+				Player p = new Player(world, mbGame, level, def.getValue().getCharacter(), def.getValue().getColor(),
 						startPlayer.get(idx));
 				players.add(p);
 				controlEventListeners.put(def.getKey(), p);
