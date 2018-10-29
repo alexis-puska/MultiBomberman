@@ -10,6 +10,7 @@ import com.mygdx.domain.Bombe;
 import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
+import com.mygdx.main.MultiBombermanGame;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -48,7 +49,12 @@ public class Level {
 	private List<Brick> bricks;
 	private List<Bombe> bombes;
 
+	private MultiBombermanGame mbGame;
+	private World world;
+
 	public void init(Game game, World world) {
+		this.mbGame = game.getMultiBombermanGame();
+		this.world = world;
 		this.reservedStartPlayer = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
 		this.occupedWallBrick = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
 		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
@@ -58,7 +64,7 @@ public class Level {
 			}
 		}
 		this.bricks = new ArrayList<>();
-		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
+		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		mine.stream().forEach(t -> t.init(world, game.getMultiBombermanGame()));
@@ -101,6 +107,11 @@ public class Level {
 		mine.stream().forEach(Mine::update);
 		trolley.stream().forEach(Trolley::update);
 		teleporter.stream().forEach(Teleporter::update);
+		wall.stream().filter(w -> !w.isInit()).forEach(w -> {
+			w.init(this.world, mbGame, this.getDefaultWall().getAnimation(), this.getDefaultWall().getIndex());
+			occupedWallBrick[w.getX()][w.getY()] = true;
+		});
+
 	}
 
 	public void burnBricks(Brick brick) {

@@ -29,11 +29,13 @@ public class Wall extends BodyAble {
 	private boolean customSkin;
 	private SpriteEnum animation;
 	private int index;
+	private boolean init = false;
 
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
 
 	public void init(World world, MultiBombermanGame mbGame, SpriteEnum defaultAnimation, int defaultTexture) {
+		this.init = true;
 		this.world = world;
 		this.defaultAnimation = defaultAnimation;
 		this.defaultTexture = defaultTexture;
@@ -71,5 +73,4 @@ public class Wall extends BodyAble {
 		filter.maskBits = CollisionConstante.CATEGORY_PLAYER;
 		fixture.setFilterData(filter);
 	}
-
 }

@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Brick;
+import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.Rail;
@@ -234,6 +235,7 @@ public class Game {
 						cbt.getY() * 16));
 		this.level.getRail().stream().forEach(Rail::drawIt);
 		this.level.getInterrupter().stream().forEach(Interrupter::drawIt);
+		this.level.getHole().stream().forEach(Hole::drawIt);
 		mbGame.getBatch().end();
 		backgroundLayer.end();
 		backgroundLayerTextureRegion = new TextureRegion(backgroundLayerTexture);

@@ -8913,7 +8913,10 @@
         "index" : 3
       },
       "defaultBrickAnimation" : "LEVEL1",
-      "hole" : [ ],
+      "hole" : [ {
+        "x" : 3,
+        "y" : 15
+      } ],
       "rail" : [ {
         "x" : 3,
         "y" : 1
@@ -9173,10 +9176,34 @@
       "interrupter" : [ {
         "x" : 3,
         "y" : 19
+      }, {
+        "x" : 4,
+        "y" : 19
+      }, {
+        "x" : 5,
+        "y" : 19
+      }, {
+        "x" : 6,
+        "y" : 19
+      }, {
+        "x" : 7,
+        "y" : 19
       } ],
-      "mine" : [ ],
-      "trolley" : [ ],
-      "teleporter" : [ ],
+      "mine" : [ {
+        "x" : 3,
+        "y" : 13
+      } ],
+      "trolley" : [ {
+        "x" : 13,
+        "y" : 15
+      } ],
+      "teleporter" : [ {
+        "x" : 3,
+        "y" : 11
+      }, {
+        "x" : 5,
+        "y" : 11
+      } ],
       "wall" : [ {
         "x" : 0,
         "y" : 0,
@@ -10770,6 +10797,21 @@
       }, {
         "x" : 32,
         "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 3,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 15,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 3,
+        "y" : 14,
         "draw" : true,
         "texture" : null
       } ],

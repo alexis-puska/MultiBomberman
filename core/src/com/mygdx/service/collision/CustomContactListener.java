@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Brick;
+import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
 
 public class CustomContactListener implements ContactListener {
@@ -36,6 +37,18 @@ public class CustomContactListener implements ContactListener {
 			}
 		}
 
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Hole.class
+					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				Hole b = (Hole) contact.getFixtureA().getUserData();
+				b.walkOn();
+			} else if (contact.getFixtureB().getUserData().getClass() == Hole.class
+					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				Hole b = (Hole) contact.getFixtureB().getUserData();
+				b.walkOn();
+			}
+		}
+
 		// a definir
 	}
 
@@ -50,6 +63,18 @@ public class CustomContactListener implements ContactListener {
 					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
 				Interrupter b = (Interrupter) contact.getFixtureB().getUserData();
 				b.playerTouchEnd();
+			}
+		}
+
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Hole.class
+					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				Hole b = (Hole) contact.getFixtureA().getUserData();
+				b.walkOff();
+			} else if (contact.getFixtureB().getUserData().getClass() == Hole.class
+					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				Hole b = (Hole) contact.getFixtureB().getUserData();
+				b.walkOff();
 			}
 		}
 
