@@ -40,6 +40,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
 	private PovDirection direction;
+	private PovDirection previousDirection;
 	private Body collisionBody;
 
 	// state
@@ -117,8 +118,69 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void drawIt() {
+		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.WALK_DOWN;
+		switch (this.state) {
+		case BURNING:
+			break;
+		case CARRY_BOMBE:
+			break;
+		case CRYING:
+			break;
+		case DEAD:
+			break;
+		case INSIDE_TROLLEY:
+			break;
+		case NORMAL:
+			switch (this.direction) {
+			case center:
+				if (previousDirection == PovDirection.west) {
+					drawSprite = CharacterSpriteEnum.WALK_LEFT;
+				} else if (previousDirection == PovDirection.north) {
+					drawSprite = CharacterSpriteEnum.WALK_UP;
+				} else if (previousDirection == PovDirection.east) {
+					drawSprite = CharacterSpriteEnum.WALK_RIGHT;
+				} else if (previousDirection == PovDirection.south) {
+					drawSprite = CharacterSpriteEnum.WALK_DOWN;
+				}
+				break;
+			case east:
+				drawSprite = CharacterSpriteEnum.WALK_RIGHT;
+				break;
+			case north:
+				drawSprite = CharacterSpriteEnum.WALK_UP;
+				break;
+			case south:
+				drawSprite = CharacterSpriteEnum.WALK_DOWN;
+				break;
+			case west:
+				drawSprite = CharacterSpriteEnum.WALK_LEFT;
+				break;
+			case northEast:
+			case northWest:
+			case southEast:
+			case southWest:
+			default:
+				break;
+
+			}
+			break;
+		case ON_LOUIS:
+			break;
+		case TELEPORT:
+			break;
+		case THROW_BOMBE:
+			break;
+		case VICTORY:
+			break;
+		case VICTORY_ON_LOUIS:
+			break;
+		default:
+			break;
+
+		}
+
 		mbGame.getBatch().draw(
-				SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN, color, character, 0),
+				SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
@@ -148,7 +210,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void update() {
-
 		switch (this.state) {
 		case BURNING:
 			break;
@@ -220,6 +281,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	@Override
 	public void move(PovDirection value) {
 		Gdx.app.debug(CLASS_NAME, "press move : " + value.toString());
+		if (value == PovDirection.center) {
+			this.previousDirection = direction;
+		}
 		this.direction = value;
 	}
 
@@ -243,7 +307,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressB() {
-		// unused method
 
 	}
 
