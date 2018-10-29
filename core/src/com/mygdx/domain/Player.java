@@ -179,8 +179,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 		}
 
-		mbGame.getBatch().draw(
-				SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
@@ -276,6 +275,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public int getY() {
 		return (int) (body.getPosition().y * 16f);
+	}
+
+	public void fireIn() {
+		Gdx.app.log(CLASS_NAME, "fire in");
+	}
+
+	public void fireOut() {
+		Gdx.app.log(CLASS_NAME, "fire out");
 	}
 
 	@Override

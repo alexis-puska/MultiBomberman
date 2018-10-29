@@ -5,11 +5,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.enumeration.SpriteEnum;
-import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
 import lombok.AllArgsConstructor;

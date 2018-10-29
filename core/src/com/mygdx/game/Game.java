@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.Fire;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Brick;
 import com.mygdx.domain.level.Hole;
@@ -304,6 +305,7 @@ public class Game {
 		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 
 		Collections.sort(players);
+		this.level.getFires().stream().forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
 		players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
 
 		shapeRenderer.end();
@@ -321,6 +323,7 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		this.level.getFires().stream().forEach(Fire::drawIt);
 		players.stream().forEach(Player::drawIt);
 		mbGame.getBatch().end();
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);

@@ -7,8 +7,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Bombe;
-import com.mygdx.domain.Player;
+import com.mygdx.domain.Fire;
 import com.mygdx.domain.enumeration.BrickStateEnum;
+import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
@@ -49,6 +50,7 @@ public class Level {
 	private List<Integer> free;
 	private List<Brick> bricks;
 	private List<Bombe> bombes;
+	private List<Fire> fires;
 
 	private MultiBombermanGame mbGame;
 	private World world;
@@ -65,6 +67,8 @@ public class Level {
 			}
 		}
 		this.bricks = new ArrayList<>();
+		this.fires = new ArrayList<>();
+		this.bombes = new ArrayList<>();
 		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
@@ -99,11 +103,17 @@ public class Level {
 				}
 			}
 		}
+		
+		this.fires.add(new Fire(20,19,FireEnum.FIRE_TOP_EXT));
+		this.fires.stream().forEach(f-> f.init(this.world, this.mbGame, this));
+		
 	}
 
 	public void update() {
 		bricks.stream().forEach(Brick::update);
 		bricks.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
+		fires.stream().forEach(Fire::update);
+		fires.removeIf(Fire::isOff);
 		mine.stream().forEach(Mine::update);
 		trolley.stream().forEach(Trolley::update);
 		teleporter.stream().forEach(Teleporter::update);

@@ -40,7 +40,7 @@ public class Teleporter extends BodyAble {
 		BodyDef groundBodyDef = new BodyDef();
 		PolygonShape groundBox = new PolygonShape();
 		groundBox.setAsBox(0.4f, 0.4f);
-		groundBodyDef.position.set(new Vector2((float) this.x + 0.3f, (float) this.y + 0.3f));
+		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 		this.body = world.createBody(groundBodyDef);
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);

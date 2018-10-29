@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.mygdx.domain.Fire;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.level.Brick;
 import com.mygdx.domain.level.Hole;
@@ -54,6 +55,7 @@ public class CustomContactListener implements ContactListener {
 			}
 		}
 
+		// touch teleporter
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Teleporter.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
@@ -65,6 +67,19 @@ public class CustomContactListener implements ContactListener {
 				Teleporter t = (Teleporter) contact.getFixtureB().getUserData();
 				Player p = (Player) contact.getFixtureA().getUserData();
 				p.teleporte(t);
+			}
+		}
+
+		// touch fire
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Fire.class
+					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				Player p = (Player) contact.getFixtureB().getUserData();
+				p.fireIn();
+			} else if (contact.getFixtureB().getUserData().getClass() == Fire.class
+					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				Player p = (Player) contact.getFixtureA().getUserData();
+				p.fireIn();
 			}
 		}
 
@@ -98,8 +113,8 @@ public class CustomContactListener implements ContactListener {
 				b.walkOff();
 			}
 		}
-		
-		//sortie teleporter
+
+		// sortie teleporter
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Teleporter.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
@@ -111,6 +126,19 @@ public class CustomContactListener implements ContactListener {
 				Teleporter t = (Teleporter) contact.getFixtureB().getUserData();
 				Player p = (Player) contact.getFixtureA().getUserData();
 				p.teleporteEnd(t);
+			}
+		}
+
+		// touch fire
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Fire.class
+					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				Player p = (Player) contact.getFixtureB().getUserData();
+				p.fireOut();
+			} else if (contact.getFixtureB().getUserData().getClass() == Fire.class
+					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				Player p = (Player) contact.getFixtureA().getUserData();
+				p.fireOut();
 			}
 		}
 
