@@ -2,13 +2,11 @@ package com.mygdx.game.ia;
 
 import com.mygdx.constante.Constante;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 public class AStarCell implements Comparable<AStarCell> {
 
 	private int finalCost;

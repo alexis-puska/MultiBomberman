@@ -13,6 +13,8 @@ public class CustomContactListener implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
+
+		// touche une brick
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Brick.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
@@ -25,6 +27,7 @@ public class CustomContactListener implements ContactListener {
 			}
 		}
 
+		// touche un interrupteur
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Interrupter.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
@@ -37,6 +40,7 @@ public class CustomContactListener implements ContactListener {
 			}
 		}
 
+		// touche un trou
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Hole.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
@@ -54,6 +58,7 @@ public class CustomContactListener implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
+		// Sortie d'un interrupteur
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Interrupter.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
@@ -66,6 +71,7 @@ public class CustomContactListener implements ContactListener {
 			}
 		}
 
+		// Sortie d'un trou
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Hole.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
