@@ -9,7 +9,6 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.Bombe;
 import com.mygdx.domain.Fire;
 import com.mygdx.domain.enumeration.BrickStateEnum;
-import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
@@ -103,10 +102,6 @@ public class Level {
 				}
 			}
 		}
-		
-		this.fires.add(new Fire(20,19,FireEnum.FIRE_TOP_EXT));
-		this.fires.stream().forEach(f-> f.init(this.world, this.mbGame, this));
-		
 	}
 
 	public void update() {
@@ -121,7 +116,6 @@ public class Level {
 			w.init(this.world, mbGame, this);
 			occupedWallBrick[w.getX()][w.getY()] = true;
 		});
-
 	}
 
 	public void burnBricks(Brick brick) {

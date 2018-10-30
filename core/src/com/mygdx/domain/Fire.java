@@ -5,32 +5,32 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.FireEnum;
-import com.mygdx.domain.level.Level;
-import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
 public class Fire extends BodyAble {
+
+	private static final int NB_FRAME = 4;
 
 	protected int x;
 	protected int y;
 	private FireEnum fireEnum;
 	private boolean off;
 
+	private int frameCounter;
+	private int offsetSprite;
+	private int nbFrameForAnimation;
+	private int offsetSpriteAnimation;
+
 	public Fire(int x, int y, FireEnum fireEnum) {
 		this.x = x;
 		this.y = y;
 		this.fireEnum = fireEnum;
-	}
-
-	public void init(World world, MultiBombermanGame mbGame, Level level) {
-		this.world = world;
-		this.mbGame = mbGame;
-		this.level = level;
-		this.createBody();
+		frameCounter = 0;
+		offsetSprite = 0;
+		nbFrameForAnimation = 7;
 	}
 
 	@Override
@@ -38,15 +38,12 @@ public class Fire extends BodyAble {
 		BodyDef groundBodyDef = new BodyDef();
 		PolygonShape groundBox = new PolygonShape();
 		switch (fireEnum) {
-		case FIRE_DOWN:
-			groundBox.setAsBox(0.4f, 0.5f);
-			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.55f));
-			break;
 		case FIRE_DOWN_EXT:
 			groundBox.setAsBox(0.4f, 0.45f);
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 			break;
 		case FIRE_LEFT:
+		case FIRE_RIGHT:
 			groundBox.setAsBox(0.5f, 0.4f);
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 			break;
@@ -54,15 +51,12 @@ public class Fire extends BodyAble {
 			groundBox.setAsBox(0.45f, 0.4f);
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.55f, (float) this.y + 0.5f));
 			break;
-		case FIRE_RIGHT:
-			groundBox.setAsBox(0.5f, 0.4f);
-			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
-			break;
 		case FIRE_RIGHT_EXT:
 			groundBox.setAsBox(0.45f, 0.4f);
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.45f));
 			break;
 		case FIRE_TOP:
+		case FIRE_DOWN:
 			groundBox.setAsBox(0.4f, 0.5f);
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 			break;
@@ -88,13 +82,44 @@ public class Fire extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(fireEnum.getSpriteEnum(), 0), this.x * 18,
-				this.y * 16);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(fireEnum.getSpriteEnum(), offsetSpriteAnimation),
+				(float) this.x * 18, (float) this.y * 16);
 	}
 
 	public void update() {
-		if (off) {
-			this.dispose();
+		if (frameCounter > NB_FRAME) {
+			frameCounter = 0;
+			offsetSprite++;
+			if (offsetSprite >= nbFrameForAnimation) {
+				off = true;
+				this.dispose();
+			}
+		}
+		frameCounter++;
+		offsetSpriteAnimation = 0;
+		switch (offsetSprite) {
+		case 0:
+			offsetSpriteAnimation = 3;
+			break;
+		case 1:
+			offsetSpriteAnimation = 2;
+			break;
+		case 2:
+			offsetSpriteAnimation = 1;
+			break;
+		case 3:
+			offsetSpriteAnimation = 0;
+			break;
+		case 4:
+			offsetSpriteAnimation = 1;
+			break;
+		case 5:
+			offsetSpriteAnimation = 2;
+			break;
+		case 6:
+		default:
+			offsetSpriteAnimation = 3;
+			break;
 		}
 	}
 
