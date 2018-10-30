@@ -23,7 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Teleporter extends BodyAble {
 
-	private static final int nbFrameTeleporter = 3;
+	private static final int NB_FRAME_TELEPORTER = 3;
 
 	protected int x;
 	protected int y;
@@ -62,7 +62,7 @@ public class Teleporter extends BodyAble {
 
 	public void update() {
 		if (animate) {
-			if (frameCounter > nbFrameTeleporter) {
+			if (frameCounter > NB_FRAME_TELEPORTER) {
 				frameCounter = 0;
 				offsetSprite++;
 				if (offsetSprite >= nbFrameForAnimation) {
