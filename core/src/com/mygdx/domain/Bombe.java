@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.BombeTypeEnum;
+import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.service.SpriteService;
 
 public class Bombe extends BodyAble {
@@ -20,6 +21,7 @@ public class Bombe extends BodyAble {
 	private BombeTypeEnum type;
 	private Player player;
 	private int countDown;
+	private boolean exploded;
 
 	private int frameCounter;
 	private int offsetSprite;
@@ -28,6 +30,7 @@ public class Bombe extends BodyAble {
 
 	public Bombe(int strenght, int x, int y, BombeTypeEnum type, Player player, int countDown) {
 		this.strenght = strenght;
+		this.exploded = false;
 		this.x = x;
 		this.y = y;
 		this.type = type;
@@ -98,13 +101,25 @@ public class Bombe extends BodyAble {
 		}
 
 		if (countDown == 0) {
-
+			explode();
 		}
 	}
+	
+	
+	
 
 	private void explode() {
-		for (int i = 0; i < this.strenght; i++) {
-			
+		this.level.getFires().add(new Fire(this.x, this.y, FireEnum.FIRE_CENTER));
+		for (int i = 0; i <= this.strenght; i++) {
+			if (!this.level.getOccupedWallBrick()[this.x - i][this.y]) {
+				if (i <= this.strenght - 1) {
+					this.level.getFires().add(new Fire(this.x - i, this.y, FireEnum.FIRE_LEFT));
+				} else {
+					this.level.getFires().add(new Fire(this.x - i, this.y, FireEnum.FIRE_LEFT_EXT));
+				}
+			} else {
+				break;
+			}
 		}
 		for (int i = 0; i < this.strenght; i++) {
 
@@ -115,5 +130,10 @@ public class Bombe extends BodyAble {
 		for (int i = 0; i < this.strenght; i++) {
 
 		}
+		exploded = true;
+	}
+
+	public boolean isExploded() {
+		return exploded;
 	}
 }
