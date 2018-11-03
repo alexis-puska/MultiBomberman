@@ -1,2 +1,3 @@
 cd /home/pi/RetroPie/roms/MultiBomberman
-git pull
+./gradlew raspberry:dist
+
