@@ -49,7 +49,7 @@ chmod +x Generate\ pi.sh
 chmod +x Bomberman.sh
 ./Generate\ pi.sh
 cd emulationStationTheme
-sudo cp -avr InTheWell /etc/emulationstation/themes/carbon
+sudo cp -avr MultiBomberman /etc/emulationstation/themes/carbon
 sudo reboot
 ```
 
