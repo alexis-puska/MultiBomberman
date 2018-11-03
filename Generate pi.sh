@@ -1,2 +1,2 @@
-cd /home/pi/RetroPie/roms/multi-bomberman
+cd /home/pi/RetroPie/roms/MutliBomberman
 ./gradlew raspberry:dist
