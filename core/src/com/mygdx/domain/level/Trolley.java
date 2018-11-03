@@ -26,4 +26,8 @@ public class Trolley extends BodyAble {
 		// make
 	}
 
+	public boolean isDestroyed() {
+		return false;
+	}
+
 }

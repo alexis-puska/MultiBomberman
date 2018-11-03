@@ -105,20 +105,22 @@ public class Level {
 	}
 
 	public void update() {
+		bombes.stream().forEach(Bombe::update);
 		bricks.stream().forEach(Brick::update);
-		bricks.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
 		fires.stream().forEach(Fire::update);
-		fires.removeIf(Fire::isOff);
 		mine.stream().forEach(Mine::update);
-		trolley.stream().forEach(Trolley::update);
 		teleporter.stream().forEach(Teleporter::update);
+		trolley.stream().forEach(Trolley::update);
 		wall.stream().filter(w -> !w.isInit()).forEach(w -> {
 			w.init(this.world, mbGame, this);
 			occupedWallBrick[w.getX()][w.getY()] = true;
 		});
 	}
 
-	public void burnBricks(Brick brick) {
-		occupedWallBrick[brick.getX()][brick.getY()] = false;
+	public void cleanUp() {
+		bombes.removeIf(b -> b.isExploded());
+		bricks.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
+		fires.removeIf(Fire::isOff);
+		trolley.stream().forEach(Trolley::isDestroyed);
 	}
 }

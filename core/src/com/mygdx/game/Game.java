@@ -210,6 +210,7 @@ public class Game {
 		drawFront();
 		drawShadow();
 		merge();
+		this.level.cleanUp();
 		if (Constante.DEBUG) {
 			debugCamera.update();
 			debugRenderer.render(world, debugCamera.combined);

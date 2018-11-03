@@ -87,7 +87,7 @@ public class Brick extends BodyAble {
 				indexAnimation++;
 				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(this.animation) - 1) {
 					this.state = BrickStateEnum.BURNED;
-					this.level.burnBricks(this);
+					this.level.getOccupedWallBrick()[this.getX()][this.getY()] = false;
 					dispose();
 				}
 			}
