@@ -120,7 +120,7 @@ public class MultiBombermanGame extends Game {
 	}
 
 	public void resize(int width, int height) {
-		this.viewport.update(width, height, true);
+		/*this.viewport.update(width, height, true);
 		Gdx.app.log(LOG_NAME, "RESIZE");
 		try {
 			Thread.sleep(500);
@@ -129,6 +129,6 @@ public class MultiBombermanGame extends Game {
 		} catch (InterruptedException e) {
 			Gdx.app.error("MultiBomberman", "Resize thread error");
 			Thread.currentThread().interrupt();
-		}
+		}*/
 	}
 }
