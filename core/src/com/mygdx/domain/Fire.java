@@ -86,6 +86,7 @@ public class Fire extends BodyAble {
 				(float) this.x * 18, (float) this.y * 16);
 	}
 
+	@Override
 	public void update() {
 		if (frameCounter > NB_FRAME) {
 			frameCounter = 0;

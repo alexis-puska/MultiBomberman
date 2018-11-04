@@ -102,7 +102,7 @@ public class Game {
 		 * --- DRAW ---
 		 ********************/
 		this.gameCamera = new OrthographicCamera(Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
-		this.gameCamera.position.set(Constante.GAME_SCREEN_SIZE_X / 2, Constante.GAME_SCREEN_SIZE_Y / 2, 0);
+		this.gameCamera.position.set(Constante.GAME_SCREEN_SIZE_X / 2f, Constante.GAME_SCREEN_SIZE_Y / 2f, 0);
 		this.gameCamera.update();
 
 		this.backgroundLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X,
@@ -195,7 +195,7 @@ public class Game {
 	 * 
 	 * @param delta
 	 */
-	public void render(float delta) {
+	public void render() {
 		// clear screen
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -231,13 +231,13 @@ public class Game {
 			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 				mbGame.getBatch()
 						.draw(SpriteService.getInstance().getSprite(this.level.getDefaultBackground().getAnimation(),
-								this.level.getDefaultBackground().getIndex()), x * 18, y * 16);
+								this.level.getDefaultBackground().getIndex()), x * 18f, y * 16f);
 			}
 		}
 		this.level.getCustomBackgroundTexture().stream()
 				.forEach(cbt -> mbGame.getBatch().draw(
-						SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()), cbt.getX() * 18,
-						cbt.getY() * 16));
+						SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()), cbt.getX() * 18f,
+						cbt.getY() * 16f));
 		this.level.getRail().stream().forEach(Rail::drawIt);
 		this.level.getInterrupter().stream().forEach(Interrupter::drawIt);
 		this.level.getTeleporter().stream().forEach(Teleporter::drawIt);
@@ -285,7 +285,7 @@ public class Game {
 		this.level.getCustomForegroundTexture().stream()
 				.forEach(cft -> mbGame.getBatch().draw(
 						SpriteService.getInstance().getSprite(cft.getAnimation(), cft.getIndex()),
-						(cft.getX() * 18) - 18, (cft.getY() * 16) - 16));
+						(cft.getX() * 18f) - 18f, (cft.getY() * 16f) - 16f));
 
 		mbGame.getBatch().end();
 		frontLayerTextureRegion = new TextureRegion(frontLayerTexture);

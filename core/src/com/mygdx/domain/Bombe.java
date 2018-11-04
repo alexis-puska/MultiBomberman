@@ -62,7 +62,8 @@ public class Bombe extends BodyAble {
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(type.getSpriteEnum(), offsetSpriteAnimation),
 				(float) this.x * 18, (float) this.y * 16);
 	}
-
+	
+	@Override
 	public void update() {
 		if (frameCounter > NB_FRAME) {
 			frameCounter = 0;
@@ -83,6 +84,7 @@ public class Bombe extends BodyAble {
 			offsetSpriteAnimation = 1;
 			break;
 		case 3:
+		default:
 			offsetSpriteAnimation = 2;
 			break;
 		}
@@ -96,6 +98,7 @@ public class Bombe extends BodyAble {
 			if (countDown == 1) {
 				countDown--;
 			}
+			break;
 		default:
 			break;
 		}
@@ -104,9 +107,6 @@ public class Bombe extends BodyAble {
 			explode();
 		}
 	}
-	
-	
-	
 
 	private void explode() {
 		this.level.getFires().add(new Fire(this.x, this.y, FireEnum.FIRE_CENTER));
@@ -131,6 +131,7 @@ public class Bombe extends BodyAble {
 
 		}
 		exploded = true;
+		this.player.bombeExploded();
 	}
 
 	public boolean isExploded() {

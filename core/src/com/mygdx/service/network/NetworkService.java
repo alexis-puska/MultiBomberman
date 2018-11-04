@@ -103,15 +103,15 @@ public class NetworkService {
 	}
 
 	public String getExternalIp() {
-		return externalIp;
+		return externalIp == null ? "" : externalIp;
 	}
 
 	public String getHostName() {
-		return hostName;
+		return hostName == null ? "" : hostName;
 	}
 
 	public String getInternetIp() {
-		return internetIp;
+		return internetIp == null ? "" : internetIp;
 	}
 
 	public Server getServer() {
@@ -213,38 +213,41 @@ public class NetworkService {
 			this.client.send((EVENT + integer + ":B\n").getBytes());
 		}
 	}
+
 	public void sendPressX(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":X\n").getBytes());
 		}
 	}
+
 	public void sendPressY(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":Y\n").getBytes());
 		}
 	}
+
 	public void sendPressL(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":PL\n").getBytes());
 		}
 	}
-	
+
 	public void sendPressR(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":PR\n").getBytes());
 		}
 	}
-	
+
 	public void sendReleaseL(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":RL\n").getBytes());
 		}
 	}
-	
+
 	public void sendReleaseR(Integer integer) {
 		if (this.client != null && this.client.isStatus() && integer < Context.getLocalPlayer()) {
 			this.client.send((EVENT + integer + ":RR\n").getBytes());
 		}
 	}
-	
+
 }

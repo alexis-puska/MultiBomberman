@@ -2,6 +2,7 @@ apply plugin: "java"
 
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
+targetCompatibility = 1.8
 
 project.ext.mainClassName = "com.mygdx.game.raspberry.RaspberryLauncher"
 project.ext.assetsDir = new File("../common/assets");

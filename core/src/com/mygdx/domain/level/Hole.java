@@ -89,9 +89,9 @@ public class Hole extends BodyAble {
 	@Override
 	public void drawIt() {
 		if (walkCounter > 0 && walkCounter < WALL_COUNTER) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 0), this.x * 18, this.y * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 0), this.x * 18f, this.y * 16f);
 		} else if (walkCounter >= 3) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 1), this.x * 18, this.y * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 1), this.x * 18f, this.y * 16f);
 		}
 	}
 }

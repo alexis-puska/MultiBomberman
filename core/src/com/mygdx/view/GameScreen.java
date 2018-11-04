@@ -60,10 +60,10 @@ public class GameScreen implements Screen, MenuListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		mbGame.getScreenCamera().update();
 		if (pause) {
-			this.game.render(delta);
+			this.game.render();
 			drawPause();
 		} else {
-			this.game.render(delta);
+			this.game.render();
 			this.game.step();
 		}
 	}
@@ -78,7 +78,7 @@ public class GameScreen implements Screen, MenuListener {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen"));
-		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
 		mbGame.getBatch().end();
 	}
 

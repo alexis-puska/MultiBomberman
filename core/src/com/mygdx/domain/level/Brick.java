@@ -29,7 +29,6 @@ public class Brick extends BodyAble {
 	protected int y;
 	private SpriteEnum animation;
 
-	private Level level;
 	private BrickStateEnum state;
 	private int countdown;
 	private int indexAnimation;
@@ -53,7 +52,7 @@ public class Brick extends BodyAble {
 	public void drawIt() {
 		if (this.state == BrickStateEnum.BURN || this.state == BrickStateEnum.CREATED) {
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.indexAnimation),
-					this.x * 18, this.y * 16);
+					this.x * 18f, this.y * 16f);
 		}
 	}
 
@@ -78,7 +77,8 @@ public class Brick extends BodyAble {
 		this.countdown = Constante.BURN_BRICK_COUNTDOWN;
 		this.indexAnimation++;
 	}
-
+	
+	@Override
 	public void update() {
 		if (this.state == BrickStateEnum.BURN) {
 			this.countdown--;

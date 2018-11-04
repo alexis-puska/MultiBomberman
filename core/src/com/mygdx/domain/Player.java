@@ -203,11 +203,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	public void teleporteEnd(Teleporter tel) {
 		if (tel.equals(destinationTeleporter) && this.teleportCountDown == 0
 				&& this.state != PlayerStateEnum.TELEPORT) {
-			Gdx.app.log(this.CLASS_NAME, "teleporte end ok 2! ");
+			Gdx.app.log(CLASS_NAME, "teleporte end ok 2! ");
 			destinationTeleporter = null;
 		}
 	}
 
+	@Override
 	public void update() {
 		switch (this.state) {
 		case BURNING:
@@ -314,13 +315,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressB() {
-
+		// unused method
 	}
 
 	@Override
 	public void pressX() {
 		// unused method
-
 	}
 
 	@Override
@@ -379,8 +379,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (collisionBody == null) {
 			if (other.collisionBody != null)
 				return false;
-		} else if (!collisionBody.equals(other.collisionBody))
+		} else if (!collisionBody.equals(other.collisionBody)) {
 			return false;
+		}
 		if (color != other.color)
 			return false;
 		if (direction != other.direction)
@@ -388,8 +389,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (startPlayer == null) {
 			if (other.startPlayer != null)
 				return false;
-		} else if (!startPlayer.equals(other.startPlayer))
+		} else if (!startPlayer.equals(other.startPlayer)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -401,6 +403,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			return -1;
 		}
 		return 0;
+	}
+
+	public void bombeExploded() {
+		// bombe++
 	}
 
 }

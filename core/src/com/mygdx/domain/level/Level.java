@@ -118,7 +118,7 @@ public class Level {
 	}
 
 	public void cleanUp() {
-		bombes.removeIf(b -> b.isExploded());
+		bombes.removeIf(Bombe::isExploded);
 		bricks.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
 		fires.removeIf(Fire::isOff);
 		trolley.stream().forEach(Trolley::isDestroyed);

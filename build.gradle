@@ -87,15 +87,15 @@ project(":raspberry") {
 
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$raspberryGdxVersion"
         compile "com.badlogicgames.gdx:gdx-backend-jogamp:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$raspberryGdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-box2d-platform:$raspberryGdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-bullet-platform:$raspberryGdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-freetype-platform:$raspberryGdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers-platform:$raspberryGdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-tools:$raspberryGdxVersion"
         
     }
 }

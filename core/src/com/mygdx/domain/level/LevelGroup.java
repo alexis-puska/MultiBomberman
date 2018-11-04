@@ -2,8 +2,6 @@ package com.mygdx.domain.level;
 
 import java.util.List;
 
-import com.mygdx.domain.common.Identifiable;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LevelGroup extends Identifiable {
-
+public class LevelGroup {
 	protected List<Text> name;
 	protected List<Level> level;
 }
