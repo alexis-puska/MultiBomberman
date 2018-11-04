@@ -173,7 +173,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 			mbGame.getScreen().dispose();
 			mbGame.setScreen(new ServerParamScreen(mbGame));
 		} else if (Context.getGameMode() == GameModeEnum.LOCAL) {
-			mbGame.getPlayerService().validePlayerType();
+			//mbGame.getPlayerService().validePlayerType();
 			mbGame.getScreen().dispose();
 			mbGame.setScreen(new SkinScreen(mbGame));
 		}
