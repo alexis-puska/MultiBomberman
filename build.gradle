@@ -1,6 +1,4 @@
 buildscript {
-    
-
     repositories {
         mavenLocal()
         mavenCentral()
@@ -47,8 +45,6 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java"
-
-
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -59,14 +55,11 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-        
     }
 }
 
 project(":editor") {
     apply plugin: "java"
-
-
     dependencies {
         compile project(":common")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -84,20 +77,31 @@ project(":editor") {
 
 project(":raspberry") {
     apply plugin: "java"
-
-
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-backend-jogamp:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$raspberryGdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-box2d-platform:$raspberryGdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-bullet-platform:$raspberryGdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-freetype-platform:$raspberryGdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-platform:$raspberryGdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-tools:$raspberryGdxVersion"
-        
+        def task = gradle.startParameter.taskNames[0] ?: ""
+        if(task.startsWith("raspberry")){
+    		println "start with raspberry";
+    		compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-backend-jogamp:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-platform:$raspberryGdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-box2d-platform:$raspberryGdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-bullet-platform:$raspberryGdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-freetype-platform:$raspberryGdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-controllers-platform:$raspberryGdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-tools:$raspberryGdxVersion"
+    	}else{
+    		compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-backend-jogamp:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+	        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    	}
     }
 }
 
@@ -107,12 +111,22 @@ project(":core") {
 
     dependencies {
     	compile project(":common")
-        compile "com.badlogicgames.gdx:gdx:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-bullet:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers:$raspberryGdxVersion"
-        compile "org.projectlombok:lombok:1.16.20"
+    	def task = gradle.startParameter.taskNames[0] ?: ""
+        if(task.startsWith("raspberry")){
+    		println "start with raspberry";
+	        compile "com.badlogicgames.gdx:gdx:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-box2d:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-bullet:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-freetype:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-controllers:$raspberryGdxVersion"
+		}else{
+			compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+		}
+		compile "org.projectlombok:lombok:1.16.20"
 		compile "com.fasterxml.jackson.core:jackson-core:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
@@ -122,14 +136,23 @@ project(":core") {
 
 project(":common") {
     apply plugin: "java"
-
     dependencies {
-        compile "com.badlogicgames.gdx:gdx:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-bullet:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$raspberryGdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers:$raspberryGdxVersion"
-        compile "org.projectlombok:lombok:1.16.20"
+    	def task = gradle.startParameter.taskNames[0] ?: ""
+        if(task.startsWith("raspberry")){
+    		println "start with raspberry";
+     		compile "com.badlogicgames.gdx:gdx:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-box2d:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-bullet:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-freetype:$raspberryGdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-controllers:$raspberryGdxVersion"
+	    }else{
+	        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+	        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+		}
+		compile "org.projectlombok:lombok:1.16.20"
 		compile "com.fasterxml.jackson.core:jackson-core:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
