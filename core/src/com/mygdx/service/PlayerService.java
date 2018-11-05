@@ -101,6 +101,8 @@ public class PlayerService {
 		firstHumanIdx = -1;
 		localController = new HashMap<>();
 		Array<Controller> controllers = Controllers.getControllers();
+		controllers.forEach(c -> Gdx.app.log(CLASS_NAME, c.getName()));
+
 		int controllerIndex = 0;
 		if (controllers.size != 0) {
 			for (Entry<Integer, PlayerDefinition> entry : definitions.entrySet()) {

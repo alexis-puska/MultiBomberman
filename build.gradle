@@ -107,11 +107,11 @@ project(":core") {
 
     dependencies {
     	compile project(":common")
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-bullet:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-freetype:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers:$raspberryGdxVersion"
         compile "org.projectlombok:lombok:1.16.20"
 		compile "com.fasterxml.jackson.core:jackson-core:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
@@ -124,11 +124,11 @@ project(":common") {
     apply plugin: "java"
 
     dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-bullet:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-freetype:$raspberryGdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers:$raspberryGdxVersion"
         compile "org.projectlombok:lombok:1.16.20"
 		compile "com.fasterxml.jackson.core:jackson-core:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
