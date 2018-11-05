@@ -95,7 +95,6 @@ public class NetworkService {
 			}
 		} catch (MalformedURLException e1) {
 			Gdx.app.error(CLASS_NAME, "MalformedURLException : " + e1.getMessage());
-
 		}
 		Gdx.app.debug(CLASS_NAME, "IP internet:- " + internetIp);
 		Gdx.app.debug(CLASS_NAME, "IP Address:- " + externalIp);

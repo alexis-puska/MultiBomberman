@@ -58,7 +58,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.server.params"));
-		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.server.player.external"));
 		font.draw(mbGame.getBatch(), layout, COLUMN1, 190);
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.server.player.local"));

@@ -58,9 +58,9 @@ public class MultiBombermanGame extends Game {
 		 * Camera and viewport to draw fit image
 		 ****************************************/
 		screenCamera = new OrthographicCamera();
-		screenCamera.position.set(Constante.SCREEN_SIZE_X / 2, Constante.SCREEN_SIZE_Y / 2, 0);
+		screenCamera.position.set(Constante.SCREEN_SIZE_X / 2f, Constante.SCREEN_SIZE_Y / 2f, 0);
 		screenCamera.update();
-		viewport = new StretchViewport(Constante.SCREEN_SIZE_X, Constante.SCREEN_SIZE_Y, screenCamera);
+		viewport = new StretchViewport((float) Constante.SCREEN_SIZE_X, (float) Constante.SCREEN_SIZE_Y, screenCamera);
 		viewport.apply();
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(screenCamera.combined);
@@ -109,7 +109,7 @@ public class MultiBombermanGame extends Game {
 			json = objectMapper.writeValueAsString(multiBomberman);
 			multiBombermanJson.writeString(json, false);
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			Gdx.app.log(LOG_NAME, e.getMessage());
 		}
 		Context.setUuid(uuid);
 	}
@@ -119,6 +119,7 @@ public class MultiBombermanGame extends Game {
 		batch.dispose();
 	}
 
+	@Override
 	public void resize(int width, int height) {
 		this.viewport.update(width, height, true);
 		Gdx.app.log(LOG_NAME, "RESIZE");

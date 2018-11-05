@@ -66,12 +66,13 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
 		layout.setText(fontRed, MessageService.getInstance().getMessage("game.menu.player.configuration"));
-		fontRed.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		fontRed.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
 				layout.setText(fontRed, MessageService.getInstance().getMessage("game.menu.player") + pos + " : ");
-				fontRed.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
+				fontRed.draw(mbGame.getBatch(), layout, (float) START_X + (i * COL_SIZE),
+						(float) START_Y - (j * ROW_SIZE));
 			}
 		}
 
@@ -82,23 +83,27 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 				case CPU:
 					layout.setText(fontGreen, MessageService.getInstance()
 							.getMessage(mbGame.getPlayerService().getPlayerType(pos).getKey()));
-					fontGreen.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+					fontGreen.draw(mbGame.getBatch(), layout, (float) START_X + (i * COL_SIZE) + 65,
+							(float) START_Y - (j * ROW_SIZE));
 					break;
 				case HUMAN:
 					layout.setText(fontBlue, MessageService.getInstance()
 							.getMessage(mbGame.getPlayerService().getPlayerType(pos).getKey()));
-					fontBlue.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+					fontBlue.draw(mbGame.getBatch(), layout, (float) START_X + (i * COL_SIZE) + 65,
+							(float) START_Y - (j * ROW_SIZE));
 					break;
 				case NET:
 					layout.setText(fontGold, MessageService.getInstance()
 							.getMessage(mbGame.getPlayerService().getPlayerType(pos).getKey()));
-					fontGold.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+					fontGold.draw(mbGame.getBatch(), layout, (float) START_X + (i * COL_SIZE) + 65,
+							(float) START_Y - (j * ROW_SIZE));
 					break;
 				case NONE:
 				default:
 					layout.setText(fontRed, MessageService.getInstance()
 							.getMessage(mbGame.getPlayerService().getPlayerType(pos).getKey()));
-					fontRed.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE) + 65, START_Y - (j * ROW_SIZE));
+					fontRed.draw(mbGame.getBatch(), layout, (float) START_X + (i * COL_SIZE) + 65,
+							(float) START_Y - (j * ROW_SIZE));
 					break;
 				}
 			}
@@ -189,7 +194,7 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 	public void pressA() {
 		mbGame.getPlayerService().incPlayerType(cursorPosition);
 	}
-	
+
 	@Override
 	public void pressB() {
 		mbGame.getPlayerService().decPlayerType(cursorPosition);
@@ -229,25 +234,25 @@ public class PlayerTypeScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressX() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressY() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressL() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressR() {
-		//unused method
-		
+		// unused method
+
 	}
 }

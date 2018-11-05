@@ -281,7 +281,6 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		this.level.getCustomForegroundTexture().stream()
 				.forEach(cft -> mbGame.getBatch().draw(
 						SpriteService.getInstance().getSprite(cft.getAnimation(), cft.getIndex()),
