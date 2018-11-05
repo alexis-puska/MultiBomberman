@@ -1,6 +1,8 @@
 package com.mygdx.domain.level;
 
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.main.MultiBombermanGame;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mine extends BodyAble {
+public class Mine extends BodyAble implements Initiable {
 
 	protected int x;
 	protected int y;
@@ -19,6 +21,14 @@ public class Mine extends BodyAble {
 	@Override
 	public void createBody() {
 		// make
+	}
+
+	@Override
+	public void init(World world, MultiBombermanGame mbGame, Level level) {
+		this.mbGame = mbGame;
+		this.world = world;
+		this.level = level;
+		createBody();
 	}
 
 	@Override

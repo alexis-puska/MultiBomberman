@@ -4,9 +4,9 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.mygdx.domain.Fire;
 import com.mygdx.domain.Player;
-import com.mygdx.domain.level.Brick;
+import com.mygdx.domain.game.Brick;
+import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
 import com.mygdx.domain.level.Teleporter;
@@ -21,11 +21,11 @@ public class CustomContactListener implements ContactListener {
 			if (contact.getFixtureA().getUserData().getClass() == Brick.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 				Brick b = (Brick) contact.getFixtureA().getUserData();
-				b.burn();
+				b.action();
 			} else if (contact.getFixtureB().getUserData().getClass() == Brick.class
 					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
 				Brick b = (Brick) contact.getFixtureB().getUserData();
-				b.burn();
+				b.action();
 			}
 		}
 

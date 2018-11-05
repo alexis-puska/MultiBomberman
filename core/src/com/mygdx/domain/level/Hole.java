@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Hole extends BodyAble {
+public class Hole extends BodyAble implements Initiable {
 
 	private static final int WALL_COUNTER = 3;
 
@@ -37,13 +37,13 @@ public class Hole extends BodyAble {
 	public void init(final World world, final MultiBombermanGame mbGame, final Level level) {
 		this.world = world;
 		this.level = level;
-		this.init(mbGame);
-		this.wallCreated = false;
+		this.mbGame = mbGame;
 		this.createBody();
 	}
 
 	@Override
-	public void createBody() {
+	protected void createBody() {
+		this.wallCreated = false;
 		BodyDef groundBodyDef = new BodyDef();
 		PolygonShape groundBox = new PolygonShape();
 		groundBox.setAsBox(0.4f, 0.4f);
@@ -89,9 +89,11 @@ public class Hole extends BodyAble {
 	@Override
 	public void drawIt() {
 		if (walkCounter > 0 && walkCounter < WALL_COUNTER) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 0), this.x * 18f, this.y * 16f);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 0), this.x * 18f,
+					this.y * 16f);
 		} else if (walkCounter >= 3) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 1), this.x * 18f, this.y * 16f);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 1), this.x * 18f,
+					this.y * 16f);
 		}
 	}
 }

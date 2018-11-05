@@ -5,10 +5,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 
@@ -21,7 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Teleporter extends BodyAble {
+public class Teleporter extends BodyAble implements Initiable {
 
 	private static final int NB_FRAME_TELEPORTER = 3;
 
@@ -49,6 +51,14 @@ public class Teleporter extends BodyAble {
 		filter.categoryBits = CollisionConstante.CATEGORY_TELEPORTER;
 		filter.maskBits = CollisionConstante.CATEGORY_PLAYER_HITBOX;
 		fixture.setFilterData(filter);
+	}
+
+	@Override
+	public void init(World world, MultiBombermanGame mbGame, Level level) {
+		this.mbGame = mbGame;
+		this.world = world;
+		this.level = level;
+		createBody();
 	}
 
 	public void animate(boolean playSound) {

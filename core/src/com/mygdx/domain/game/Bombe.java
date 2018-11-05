@@ -1,14 +1,17 @@
-package com.mygdx.domain;
+package com.mygdx.domain.game;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
+import com.mygdx.domain.Player;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.BombeTypeEnum;
-import com.mygdx.domain.enumeration.FireEnum;
+import com.mygdx.domain.level.Level;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
 public class Bombe extends BodyAble {
@@ -28,7 +31,11 @@ public class Bombe extends BodyAble {
 	private int nbFrameForAnimation;
 	private int offsetSpriteAnimation;
 
-	public Bombe(int strenght, int x, int y, BombeTypeEnum type, Player player, int countDown) {
+	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
+			Player player, int countDown) {
+		this.world = world;
+		this.mbGame = mbGame;
+		this.level = level;
 		this.strenght = strenght;
 		this.exploded = false;
 		this.x = x;
@@ -39,10 +46,11 @@ public class Bombe extends BodyAble {
 		this.frameCounter = 0;
 		this.offsetSprite = 0;
 		this.nbFrameForAnimation = 4;
+		createBody();
 	}
 
 	@Override
-	public void createBody() {
+	protected void createBody() {
 		BodyDef groundBodyDef = new BodyDef();
 		CircleShape groundBox = new CircleShape();
 		groundBox.setRadius(0.5f);
@@ -62,7 +70,7 @@ public class Bombe extends BodyAble {
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(type.getSpriteEnum(), offsetSpriteAnimation),
 				(float) this.x * 18, (float) this.y * 16);
 	}
-	
+
 	@Override
 	public void update() {
 		if (frameCounter > NB_FRAME) {
@@ -109,16 +117,12 @@ public class Bombe extends BodyAble {
 	}
 
 	private void explode() {
-		this.level.getFires().add(new Fire(this.x, this.y, FireEnum.FIRE_CENTER));
-		for (int i = 0; i <= this.strenght; i++) {
-			if (!this.level.getOccupedWallBrick()[this.x - i][this.y]) {
-				if (i <= this.strenght - 1) {
-					this.level.getFires().add(new Fire(this.x - i, this.y, FireEnum.FIRE_LEFT));
-				} else {
-					this.level.getFires().add(new Fire(this.x - i, this.y, FireEnum.FIRE_LEFT_EXT));
+		for (int i = 0; i < 35; i++) {
+			for (int j = 0; j < 21; j++) {
+				if (this.x + i < 35 && this.y + j < 19
+						&& this.level.getOccupedWallBrick()[this.x + i][this.y + j] != null) {
+					this.level.getOccupedWallBrick()[this.x + i][this.y + j].action();
 				}
-			} else {
-				break;
 			}
 		}
 		for (int i = 0; i < this.strenght; i++) {

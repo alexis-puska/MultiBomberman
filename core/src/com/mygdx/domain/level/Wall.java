@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Wall extends BodyAble {
+public class Wall extends BodyAble implements LevelElement, Initiable {
 
 	protected int x;
 	protected int y;
@@ -34,14 +34,16 @@ public class Wall extends BodyAble {
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
 
+	
+	
 	@Override
 	public void init(World world, MultiBombermanGame mbGame, Level level) {
 		this.init = true;
 		this.world = world;
 		this.level = level;
+		this.mbGame = mbGame;
 		this.defaultAnimation = level.getDefaultWall().getAnimation();
 		this.defaultTexture = level.getDefaultWall().getIndex();
-		this.init(mbGame);
 		createBody();
 	}
 
@@ -49,18 +51,18 @@ public class Wall extends BodyAble {
 	public void drawIt() {
 		if (draw) {
 			if (customSkin) {
-				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.index), this.x * 18,
-						this.y * 16);
+				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.index), this.x * 18f,
+						this.y * 16f);
 			} else {
 				mbGame.getBatch().draw(
-						SpriteService.getInstance().getSprite(this.defaultAnimation, this.defaultTexture), this.x * 18,
-						this.y * 16);
+						SpriteService.getInstance().getSprite(this.defaultAnimation, this.defaultTexture), this.x * 18f,
+						this.y * 16f);
 			}
 		}
 	}
 
 	@Override
-	public void createBody() {
+	protected void createBody() {
 		BodyDef groundBodyDef = new BodyDef();
 		PolygonShape groundBox = new PolygonShape();
 		groundBox.setAsBox(0.5f, 0.5f);
@@ -74,5 +76,10 @@ public class Wall extends BodyAble {
 		filter.maskBits = 0x0000000000000000;
 		filter.maskBits = CollisionConstante.CATEGORY_PLAYER;
 		fixture.setFilterData(filter);
+	}
+
+	@Override
+	public void action() {
+		//do nothing on wall
 	}
 }

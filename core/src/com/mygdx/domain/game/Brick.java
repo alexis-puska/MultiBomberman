@@ -1,4 +1,4 @@
-package com.mygdx.domain.level;
+package com.mygdx.domain.game;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -10,6 +10,8 @@ import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.BrickStateEnum;
+import com.mygdx.domain.level.Level;
+import com.mygdx.domain.level.LevelElement;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
@@ -23,7 +25,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Brick extends BodyAble {
+public class Brick extends BodyAble implements LevelElement {
 
 	protected int x;
 	protected int y;
@@ -36,14 +38,14 @@ public class Brick extends BodyAble {
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
 
-	public void init(final World world, final MultiBombermanGame mbGame, final Level level, SpriteEnum animation, int i,
+	public Brick(final World world, final MultiBombermanGame mbGame, final Level level, SpriteEnum animation, int i,
 			int j) {
 		this.x = i;
 		this.y = j;
+		this.mbGame = mbGame;
 		this.world = world;
 		this.level = level;
 		this.animation = animation;
-		this.init(mbGame);
 		this.state = BrickStateEnum.CREATED;
 		createBody();
 	}
@@ -57,7 +59,7 @@ public class Brick extends BodyAble {
 	}
 
 	@Override
-	public void createBody() {
+	protected void createBody() {
 		BodyDef groundBodyDef = new BodyDef();
 		PolygonShape groundBox = new PolygonShape();
 		groundBox.setAsBox(0.5f, 0.5f);
@@ -72,12 +74,13 @@ public class Brick extends BodyAble {
 		fixture.setFilterData(filter);
 	}
 
-	public void burn() {
+	@Override
+	public void action() {
 		this.state = BrickStateEnum.BURN;
 		this.countdown = Constante.BURN_BRICK_COUNTDOWN;
 		this.indexAnimation++;
 	}
-	
+
 	@Override
 	public void update() {
 		if (this.state == BrickStateEnum.BURN) {
@@ -87,10 +90,11 @@ public class Brick extends BodyAble {
 				indexAnimation++;
 				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(this.animation) - 1) {
 					this.state = BrickStateEnum.BURNED;
-					this.level.getOccupedWallBrick()[this.getX()][this.getY()] = false;
+					this.level.getOccupedWallBrick()[this.getX()][this.getY()] = null;
 					dispose();
 				}
 			}
 		}
 	}
+
 }

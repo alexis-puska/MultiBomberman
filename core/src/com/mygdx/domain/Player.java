@@ -19,7 +19,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.domain.enumeration.BombeTypeEnum;
 import com.mygdx.domain.enumeration.PlayerStateEnum;
+import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.StartPlayer;
 import com.mygdx.domain.level.Teleporter;
@@ -60,7 +62,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.color = color;
 		this.direction = PovDirection.center;
 		this.state = PlayerStateEnum.NORMAL;
-		init(world, mbGame, level);
+		this.world = world;
+		this.mbGame = mbGame;
+		this.level = level;
+		this.createBody();
 	}
 
 	@Override
@@ -187,7 +192,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (destinationTeleporter == null) {
 			List<Teleporter> destination = this.level.getTeleporter().stream()
 					.filter(t -> ((t.getX() != tel.getX() || t.getY() != tel.getY())
-							&& !this.level.getOccupedWallBrick()[t.getX()][t.getY()]))
+							&& this.level.getOccupedWallBrick()[t.getX()][t.getY()] == null))
 					.collect(Collectors.toList());
 			if (!destination.isEmpty()) {
 				int idx = ThreadLocalRandom.current().nextInt(0, destination.size());
@@ -309,8 +314,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressA() {
-		// unused method
-
+		Bombe b = new Bombe(this.level, this.world, this.mbGame, 10, 1, 2, BombeTypeEnum.BOMBE, this, 2);
+		this.level.getBombes().add(b);
 	}
 
 	@Override

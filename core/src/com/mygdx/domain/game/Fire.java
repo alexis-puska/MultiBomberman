@@ -1,13 +1,16 @@
-package com.mygdx.domain;
+package com.mygdx.domain.game;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.FireEnum;
+import com.mygdx.domain.level.Level;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
 public class Fire extends BodyAble {
@@ -24,7 +27,10 @@ public class Fire extends BodyAble {
 	private int nbFrameForAnimation;
 	private int offsetSpriteAnimation;
 
-	public Fire(int x, int y, FireEnum fireEnum) {
+	public Fire(World world, MultiBombermanGame mbGame, Level level, int x, int y, FireEnum fireEnum) {
+		this.world = world;
+		this.mbGame = mbGame;
+		this.level = level;
 		this.x = x;
 		this.y = y;
 		this.fireEnum = fireEnum;

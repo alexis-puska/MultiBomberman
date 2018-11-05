@@ -5,9 +5,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
 import lombok.AllArgsConstructor;
@@ -19,12 +21,20 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Interrupter extends BodyAble {
+public class Interrupter extends BodyAble implements Initiable {
 
 	protected int x;
 	protected int y;
 
 	private int nbPlayer;
+
+	@Override
+	public void init(World world, MultiBombermanGame mbGame, Level level) {
+		this.mbGame = mbGame;
+		this.world = world;
+		this.level = level;
+		createBody();
+	}
 
 	@Override
 	public void createBody() {
@@ -56,11 +66,11 @@ public class Interrupter extends BodyAble {
 	@Override
 	public void drawIt() {
 		if (nbPlayer > 0) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 1), this.x * 18,
-					this.y * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 1), this.x * 18f,
+					this.y * 16f);
 		} else {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 0), this.x * 18,
-					this.y * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 0), this.x * 18f,
+					this.y * 16f);
 		}
 	}
 }

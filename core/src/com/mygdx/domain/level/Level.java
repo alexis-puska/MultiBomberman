@@ -6,9 +6,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
-import com.mygdx.domain.Bombe;
-import com.mygdx.domain.Fire;
 import com.mygdx.domain.enumeration.BrickStateEnum;
+import com.mygdx.domain.game.Bombe;
+import com.mygdx.domain.game.Brick;
+import com.mygdx.domain.game.Fire;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
@@ -45,7 +46,7 @@ public class Level {
 	private List<StartPlayer> startPlayer;
 
 	private boolean[][] reservedStartPlayer;
-	private boolean[][] occupedWallBrick;
+	private LevelElement[][] occupedWallBrick;
 	private List<Integer> free;
 	private List<Brick> bricks;
 	private List<Bombe> bombes;
@@ -58,11 +59,11 @@ public class Level {
 		this.mbGame = game.getMultiBombermanGame();
 		this.world = world;
 		this.reservedStartPlayer = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
-		this.occupedWallBrick = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
+		this.occupedWallBrick = new LevelElement[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
 		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
 			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 				reservedStartPlayer[x][y] = false;
-				occupedWallBrick[x][y] = false;
+				occupedWallBrick[x][y] = null;
 			}
 		}
 		this.bricks = new ArrayList<>();
@@ -76,7 +77,7 @@ public class Level {
 		teleporter.stream().forEach(w -> w.init(world, game.getMultiBombermanGame(), this));
 		wall.stream().forEach(w -> {
 			w.init(world, game.getMultiBombermanGame(), this);
-			occupedWallBrick[w.getX()][w.getY()] = true;
+			occupedWallBrick[w.getX()][w.getY()] = w;
 		});
 		startPlayer.stream().forEach(sp -> {
 			reservedStartPlayer[sp.getX() - 1][sp.getY() - 1] = true;
@@ -92,12 +93,11 @@ public class Level {
 		if (fillWithBrick) {
 			for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
 				for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
-					if (!occupedWallBrick[x][y] && !reservedStartPlayer[x][y]
+					if (occupedWallBrick[x][y] == null && !reservedStartPlayer[x][y]
 							&& ThreadLocalRandom.current().nextInt(0, 50) > 5) {
-						Brick b = new Brick();
-						b.init(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
+						Brick b = new Brick(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
 						bricks.add(b);
-						occupedWallBrick[x][y] = true;
+						occupedWallBrick[x][y] = b;
 					}
 				}
 			}
@@ -113,7 +113,7 @@ public class Level {
 		trolley.stream().forEach(Trolley::update);
 		wall.stream().filter(w -> !w.isInit()).forEach(w -> {
 			w.init(this.world, mbGame, this);
-			occupedWallBrick[w.getX()][w.getY()] = true;
+			occupedWallBrick[w.getX()][w.getY()] = w;
 		});
 	}
 
