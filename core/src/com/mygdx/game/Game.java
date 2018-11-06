@@ -186,6 +186,7 @@ public class Game {
 		this.playerLayerTexture.dispose();
 		this.frontLayerTexture.dispose();
 		this.shadowLayerTexture.dispose();
+		this.players.stream().forEach(Player::dispose);
 		this.level.dispose();
 		this.world.dispose();
 		this.debugRenderer.dispose();

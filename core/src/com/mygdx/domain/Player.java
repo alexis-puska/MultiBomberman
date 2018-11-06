@@ -123,6 +123,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.world.destroyBody(body);
 			body = null;
 		}
+		this.level = null;
 	}
 
 	@Override
