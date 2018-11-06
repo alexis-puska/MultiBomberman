@@ -6,12 +6,8 @@ import java.util.List;
 
 import com.mygdx.dto.level.common.TextDTO;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 public class LevelGroupDTO implements Serializable {
 
@@ -27,4 +23,19 @@ public class LevelGroupDTO implements Serializable {
 		orignial.getLevel().stream().forEach(n -> this.level.add(new LevelDTO(n)));
 	}
 
+	public List<TextDTO> getName() {
+		return name;
+	}
+
+	public void setName(List<TextDTO> name) {
+		this.name = name;
+	}
+
+	public List<LevelDTO> getLevel() {
+		return level;
+	}
+
+	public void setLevel(List<LevelDTO> level) {
+		this.level = level;
+	}
 }

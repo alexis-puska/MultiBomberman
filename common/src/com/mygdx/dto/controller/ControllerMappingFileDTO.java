@@ -4,12 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ControllerMappingFileDTO implements Serializable {
@@ -18,4 +14,11 @@ public class ControllerMappingFileDTO implements Serializable {
 
 	private List<ControllerMappingDTO> controllers;
 
+	public List<ControllerMappingDTO> getControllers() {
+		return controllers;
+	}
+
+	public void setControllers(List<ControllerMappingDTO> controllers) {
+		this.controllers = controllers;
+	}
 }

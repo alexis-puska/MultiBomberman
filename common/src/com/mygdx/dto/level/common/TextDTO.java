@@ -5,12 +5,8 @@ import java.io.Serializable;
 import com.mygdx.enumeration.LocaleEnum;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class TextDTO implements Serializable {
@@ -23,5 +19,21 @@ public class TextDTO implements Serializable {
 	public TextDTO(TextDTO original) {
 		this.lang = original.lang;
 		this.value = original.value;
+	}
+
+	public LocaleEnum getLang() {
+		return lang;
+	}
+
+	public void setLang(LocaleEnum lang) {
+		this.lang = lang;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

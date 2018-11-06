@@ -5,12 +5,8 @@ import java.io.Serializable;
 import com.mygdx.enumeration.ControllerAxisEnum;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AxisMappingDTO implements Serializable {
@@ -20,4 +16,28 @@ public class AxisMappingDTO implements Serializable {
 	private ControllerAxisEnum type;
 	private int axis;
 	private boolean inverted;
+
+	public ControllerAxisEnum getType() {
+		return type;
+	}
+
+	public void setType(ControllerAxisEnum type) {
+		this.type = type;
+	}
+
+	public int getAxis() {
+		return axis;
+	}
+
+	public void setAxis(int axis) {
+		this.axis = axis;
+	}
+
+	public boolean isInverted() {
+		return inverted;
+	}
+
+	public void setInverted(boolean inverted) {
+		this.inverted = inverted;
+	}
 }

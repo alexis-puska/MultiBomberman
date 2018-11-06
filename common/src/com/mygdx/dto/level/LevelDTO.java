@@ -11,12 +11,8 @@ import com.mygdx.dto.level.common.TextDTO;
 import com.mygdx.enumeration.SpriteEnum;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class LevelDTO implements Serializable {
@@ -88,6 +84,174 @@ public class LevelDTO implements Serializable {
 				.forEach(n -> this.customForegroundTexture.add(new CustomTextureDTO(n)));
 		this.startPlayer = new ArrayList<>();
 		original.startPlayer.stream().forEach(n -> this.startPlayer.add(new PositionableDTO(n)));
+	}
+
+	public List<TextDTO> getName() {
+		return name;
+	}
+
+	public void setName(List<TextDTO> name) {
+		this.name = name;
+	}
+
+	public List<TextDTO> getDescription() {
+		return description;
+	}
+
+	public void setDescription(List<TextDTO> description) {
+		this.description = description;
+	}
+
+	public int getIndexPreview() {
+		return indexPreview;
+	}
+
+	public void setIndexPreview(int indexPreview) {
+		this.indexPreview = indexPreview;
+	}
+
+	public int getBombe() {
+		return bombe;
+	}
+
+	public void setBombe(int bombe) {
+		this.bombe = bombe;
+	}
+
+	public int getStrenght() {
+		return strenght;
+	}
+
+	public void setStrenght(int strenght) {
+		this.strenght = strenght;
+	}
+
+	public float getShadow() {
+		return shadow;
+	}
+
+	public void setShadow(float shadow) {
+		this.shadow = shadow;
+	}
+
+	public Integer[] getBonus() {
+		return bonus;
+	}
+
+	public void setBonus(Integer[] bonus) {
+		this.bonus = bonus;
+	}
+
+	public boolean isFillWithBrick() {
+		return fillWithBrick;
+	}
+
+	public void setFillWithBrick(boolean fillWithBrick) {
+		this.fillWithBrick = fillWithBrick;
+	}
+
+	public DefaultTextureDTO getDefaultBackground() {
+		return defaultBackground;
+	}
+
+	public void setDefaultBackground(DefaultTextureDTO defaultBackground) {
+		this.defaultBackground = defaultBackground;
+	}
+
+	public DefaultTextureDTO getDefaultWall() {
+		return defaultWall;
+	}
+
+	public void setDefaultWall(DefaultTextureDTO defaultWall) {
+		this.defaultWall = defaultWall;
+	}
+
+	public SpriteEnum getDefaultBrickAnimation() {
+		return defaultBrickAnimation;
+	}
+
+	public void setDefaultBrickAnimation(SpriteEnum defaultBrickAnimation) {
+		this.defaultBrickAnimation = defaultBrickAnimation;
+	}
+
+	public List<PositionableDTO> getHole() {
+		return hole;
+	}
+
+	public void setHole(List<PositionableDTO> hole) {
+		this.hole = hole;
+	}
+
+	public List<PositionableDTO> getRail() {
+		return rail;
+	}
+
+	public void setRail(List<PositionableDTO> rail) {
+		this.rail = rail;
+	}
+
+	public List<PositionableDTO> getInterrupter() {
+		return interrupter;
+	}
+
+	public void setInterrupter(List<PositionableDTO> interrupter) {
+		this.interrupter = interrupter;
+	}
+
+	public List<PositionableDTO> getMine() {
+		return mine;
+	}
+
+	public void setMine(List<PositionableDTO> mine) {
+		this.mine = mine;
+	}
+
+	public List<PositionableDTO> getTrolley() {
+		return trolley;
+	}
+
+	public void setTrolley(List<PositionableDTO> trolley) {
+		this.trolley = trolley;
+	}
+
+	public List<PositionableDTO> getTeleporter() {
+		return teleporter;
+	}
+
+	public void setTeleporter(List<PositionableDTO> teleporter) {
+		this.teleporter = teleporter;
+	}
+
+	public List<WallDTO> getWall() {
+		return wall;
+	}
+
+	public void setWall(List<WallDTO> wall) {
+		this.wall = wall;
+	}
+
+	public List<CustomTextureDTO> getCustomBackgroundTexture() {
+		return customBackgroundTexture;
+	}
+
+	public void setCustomBackgroundTexture(List<CustomTextureDTO> customBackgroundTexture) {
+		this.customBackgroundTexture = customBackgroundTexture;
+	}
+
+	public List<CustomTextureDTO> getCustomForegroundTexture() {
+		return customForegroundTexture;
+	}
+
+	public void setCustomForegroundTexture(List<CustomTextureDTO> customForegroundTexture) {
+		this.customForegroundTexture = customForegroundTexture;
+	}
+
+	public List<PositionableDTO> getStartPlayer() {
+		return startPlayer;
+	}
+
+	public void setStartPlayer(List<PositionableDTO> startPlayer) {
+		this.startPlayer = startPlayer;
 	}
 
 }

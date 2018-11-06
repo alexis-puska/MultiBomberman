@@ -1,12 +1,8 @@
 package com.mygdx.dto.level.common;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PositionableDTO {
@@ -16,5 +12,21 @@ public class PositionableDTO {
 	public PositionableDTO(PositionableDTO original) {
 		this.x = original.x;
 		this.y = original.y;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 }

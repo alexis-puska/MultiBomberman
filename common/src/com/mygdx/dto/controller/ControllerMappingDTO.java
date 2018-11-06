@@ -4,12 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ControllerMappingDTO implements Serializable {
@@ -20,4 +16,27 @@ public class ControllerMappingDTO implements Serializable {
 	private List<ButtonMappingDTO> buttons;
 	private List<AxisMappingDTO> axis;
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<ButtonMappingDTO> getButtons() {
+		return buttons;
+	}
+
+	public void setButtons(List<ButtonMappingDTO> buttons) {
+		this.buttons = buttons;
+	}
+
+	public List<AxisMappingDTO> getAxis() {
+		return axis;
+	}
+
+	public void setAxis(List<AxisMappingDTO> axis) {
+		this.axis = axis;
+	}
 }

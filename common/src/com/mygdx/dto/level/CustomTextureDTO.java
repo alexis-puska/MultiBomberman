@@ -5,12 +5,8 @@ import java.io.Serializable;
 import com.mygdx.dto.level.common.PositionableDTO;
 import com.mygdx.enumeration.SpriteEnum;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 public class CustomTextureDTO extends PositionableDTO implements Serializable {
 
@@ -29,5 +25,21 @@ public class CustomTextureDTO extends PositionableDTO implements Serializable {
 		super(orignial.getX(), orignial.getY());
 		this.animation = orignial.animation;
 		this.index = orignial.index;
+	}
+
+	public SpriteEnum getAnimation() {
+		return animation;
+	}
+
+	public void setAnimation(SpriteEnum animation) {
+		this.animation = animation;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

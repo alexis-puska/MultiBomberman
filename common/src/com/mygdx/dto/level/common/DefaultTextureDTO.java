@@ -5,12 +5,8 @@ import java.io.Serializable;
 import com.mygdx.enumeration.SpriteEnum;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class DefaultTextureDTO implements Serializable {
@@ -23,5 +19,21 @@ public class DefaultTextureDTO implements Serializable {
 	public DefaultTextureDTO(DefaultTextureDTO original) {
 		this.animation = original.animation;
 		this.index = original.index;
+	}
+
+	public SpriteEnum getAnimation() {
+		return animation;
+	}
+
+	public void setAnimation(SpriteEnum animation) {
+		this.animation = animation;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

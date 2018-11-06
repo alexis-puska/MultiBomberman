@@ -4,12 +4,8 @@ import java.io.Serializable;
 
 import com.mygdx.dto.level.common.PositionableDTO;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 public class WallDTO extends PositionableDTO implements Serializable {
 
@@ -36,5 +32,21 @@ public class WallDTO extends PositionableDTO implements Serializable {
 		if (orignial.texture != null) {
 			this.texture = new TextureDTO(orignial.texture);
 		}
+	}
+
+	public boolean isDraw() {
+		return draw;
+	}
+
+	public void setDraw(boolean draw) {
+		this.draw = draw;
+	}
+
+	public TextureDTO getTexture() {
+		return texture;
+	}
+
+	public void setTexture(TextureDTO texture) {
+		this.texture = texture;
 	}
 }
