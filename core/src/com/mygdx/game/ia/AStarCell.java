@@ -3,10 +3,12 @@ package com.mygdx.game.ia;
 import com.mygdx.constante.Constante;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class AStarCell implements Comparable<AStarCell> {
 
 	private int finalCost;
@@ -15,10 +17,6 @@ public class AStarCell implements Comparable<AStarCell> {
 	private int y;
 	private boolean origin;
 	private AStarCell parent;
-
-	public AStarCell() {
-
-	}
 
 	public void configure(int x, int y, boolean origin, int endX, int endY) {
 		this.x = x;
@@ -61,10 +59,12 @@ public class AStarCell implements Comparable<AStarCell> {
 		if (parent == null) {
 			if (other.parent != null)
 				return false;
-		} else if (!parent.equals(other.parent))
+		} else if (!parent.equals(other.parent)) {
 			return false;
-		if (x != other.x)
+		}
+		if (x != other.x) {
 			return false;
+		}
 		return y == other.y;
 	}
 

@@ -34,9 +34,10 @@ public class Fire extends BodyAble {
 		this.x = x;
 		this.y = y;
 		this.fireEnum = fireEnum;
-		frameCounter = 0;
-		offsetSprite = 0;
-		nbFrameForAnimation = 7;
+		this.frameCounter = 0;
+		this.offsetSprite = 0;
+		this.nbFrameForAnimation = 7;
+		this.createBody();
 	}
 
 	@Override
@@ -61,12 +62,12 @@ public class Fire extends BodyAble {
 			groundBox.setAsBox(0.45f, 0.4f);
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.45f));
 			break;
-		case FIRE_TOP:
+		case FIRE_UP:
 		case FIRE_DOWN:
 			groundBox.setAsBox(0.4f, 0.5f);
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 			break;
-		case FIRE_TOP_EXT:
+		case FIRE_UP_EXT:
 			groundBox.setAsBox(0.4f, 0.45f);
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.45f));
 			break;

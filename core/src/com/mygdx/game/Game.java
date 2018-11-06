@@ -305,7 +305,7 @@ public class Game {
 		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 
 		Collections.sort(players);
-		this.level.getFires().stream().forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
+		this.level.getFires().stream().filter(f->!f.isOff()).forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
 		players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
 
 		shapeRenderer.end();

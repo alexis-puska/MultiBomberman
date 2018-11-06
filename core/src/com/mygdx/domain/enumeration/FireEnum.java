@@ -4,8 +4,8 @@ import com.mygdx.enumeration.SpriteEnum;
 
 public enum FireEnum {
 	FIRE_CENTER(SpriteEnum.FIRE_CENTER),
-	FIRE_TOP_EXT(SpriteEnum.FIRE_TOP_EXT),
-	FIRE_TOP(SpriteEnum.FIRE_TOP),
+	FIRE_UP_EXT(SpriteEnum.FIRE_TOP_EXT),
+	FIRE_UP(SpriteEnum.FIRE_TOP),
 	FIRE_LEFT_EXT(SpriteEnum.FIRE_LEFT_EXT),
 	FIRE_LEFT(SpriteEnum.FIRE_LEFT),
 	FIRE_DOWN_EXT(SpriteEnum.FIRE_DOWN_EXT),

@@ -7,9 +7,11 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.BombeTypeEnum;
+import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.level.Level;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
@@ -117,25 +119,72 @@ public class Bombe extends BodyAble {
 	}
 
 	private void explode() {
-		for (int i = 0; i < 35; i++) {
-			for (int j = 0; j < 21; j++) {
-				if (this.x + i < 35 && this.y + j < 19
-						&& this.level.getOccupedWallBrick()[this.x + i][this.y + j] != null) {
-					this.level.getOccupedWallBrick()[this.x + i][this.y + j].action();
-				}
+		int calcX = 0;
+		int calcY = 0;
+		for (int i = 1; i <= this.strenght; i++) {
+			calcX = calcIdxX(this.x, i);
+			calcY = this.y;
+			if (this.level.getOccupedWallBrick()[calcX][calcY] != null) {
+				this.level.getOccupedWallBrick()[calcX][calcY].action();
+			} else {
+				this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, calcX, calcY,
+						i == this.strenght ? FireEnum.FIRE_RIGHT_EXT : FireEnum.FIRE_RIGHT));
 			}
 		}
-		for (int i = 0; i < this.strenght; i++) {
-
+		for (int i = 1; i <= this.strenght; i++) {
+			calcX = this.x;
+			calcY = calcIdxY(this.y, i);
+			if (this.level.getOccupedWallBrick()[calcX][calcY] != null) {
+				this.level.getOccupedWallBrick()[calcX][calcY].action();
+			} else {
+				this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, calcX, calcY,
+						i == this.strenght ? FireEnum.FIRE_UP_EXT : FireEnum.FIRE_UP));
+			}
 		}
-		for (int i = 0; i < this.strenght; i++) {
-
+		for (int i = 1; i <= this.strenght; i++) {
+			calcX = calcIdxX(this.x, -i);
+			calcY = this.y;
+			if (this.level.getOccupedWallBrick()[calcX][calcY] != null) {
+				this.level.getOccupedWallBrick()[calcX][calcY].action();
+			} else {
+				this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, calcX, calcY,
+						i == this.strenght ? FireEnum.FIRE_LEFT_EXT : FireEnum.FIRE_LEFT));
+			}
 		}
-		for (int i = 0; i < this.strenght; i++) {
-
+		for (int i = 1; i <= this.strenght; i++) {
+			calcX = this.x;
+			calcY = calcIdxY(this.y, i);
+			if (this.level.getOccupedWallBrick()[calcX][calcY] != null) {
+				this.level.getOccupedWallBrick()[calcX][calcY].action();
+			} else {
+				this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, calcX, calcY,
+						i == this.strenght ? FireEnum.FIRE_DOWN_EXT : FireEnum.FIRE_DOWN));
+			}
 		}
 		exploded = true;
 		this.player.bombeExploded();
+	}
+
+	private int calcIdxX(int x, int offset) {
+		int r = x + offset;
+		if (offset < 0 && r < 0) {
+			r = Constante.GRID_SIZE_X + r;
+		}
+		if (offset > 0 && r >= Constante.GRID_SIZE_X) {
+			r = r - Constante.GRID_SIZE_X;
+		}
+		return r;
+	}
+
+	private int calcIdxY(int y, int offset) {
+		int r = y + offset;
+		if (offset < 0 && r < 0) {
+			r = Constante.GRID_SIZE_Y + r;
+		}
+		if (offset > 0 && r >= Constante.GRID_SIZE_Y) {
+			r = r - Constante.GRID_SIZE_Y;
+		}
+		return r;
 	}
 
 	public boolean isExploded() {

@@ -96,5 +96,4 @@ public class Brick extends BodyAble implements LevelElement {
 			}
 		}
 	}
-
 }

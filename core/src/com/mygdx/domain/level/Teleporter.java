@@ -107,6 +107,7 @@ public class Teleporter extends BodyAble implements Initiable {
 				offsetSpriteAnimation = 1;
 				break;
 			case 6:
+			default:
 				offsetSpriteAnimation = 0;
 				offsetSprite = 0;
 				frameCounter = 0;
