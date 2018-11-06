@@ -76,9 +76,11 @@ public class Brick extends BodyAble implements LevelElement {
 
 	@Override
 	public void action() {
-		this.state = BrickStateEnum.BURN;
-		this.countdown = Constante.BURN_BRICK_COUNTDOWN;
-		this.indexAnimation++;
+		if (state != BrickStateEnum.BURN) {
+			this.state = BrickStateEnum.BURN;
+			this.countdown = Constante.BURN_BRICK_COUNTDOWN;
+			this.indexAnimation++;
+		}
 	}
 
 	@Override

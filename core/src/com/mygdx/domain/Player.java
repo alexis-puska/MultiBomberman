@@ -314,7 +314,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressA() {
-		Bombe b = new Bombe(this.level, this.world, this.mbGame, 10, 1, 2, BombeTypeEnum.BOMBE, this, 2);
+		Bombe b = new Bombe(this.level, this.world, this.mbGame, 20, 5, 7, BombeTypeEnum.BOMBE_MAX, this, 2);
 		this.level.getBombes().add(b);
 	}
 

@@ -305,8 +305,8 @@ public class Game {
 		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 
 		Collections.sort(players);
-		this.level.getFires().stream().filter(f->!f.isOff()).forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
 		players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
+		level.getFires().stream().filter(f -> !f.isOff()).forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
 
 		shapeRenderer.end();
 		Gdx.gl.glColorMask(true, true, true, true);
@@ -323,7 +323,7 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.level.getFires().stream().forEach(Fire::drawIt);
+		level.getFires().stream().filter(f -> !f.isOff()).forEach(Fire::drawIt);
 		players.stream().forEach(Player::drawIt);
 		mbGame.getBatch().end();
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);
