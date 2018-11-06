@@ -17,6 +17,7 @@ public abstract class BodyAble {
 			this.world.destroyBody(body);
 			body = null;
 		}
+		this.level = null;
 	}
 
 	protected abstract void createBody();

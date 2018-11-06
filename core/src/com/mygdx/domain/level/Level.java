@@ -94,7 +94,8 @@ public class Level {
 				for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 					if (occupedWallBrick[x][y] == null && !reservedStartPlayer[x][y]
 							&& ThreadLocalRandom.current().nextInt(0, 50) > 5) {
-						Brick b = new Brick(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
+						Brick b = new Brick(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x,
+								y);
 						bricks.add(b);
 						occupedWallBrick[x][y] = b;
 					}
@@ -122,6 +123,21 @@ public class Level {
 		fires.removeIf(Fire::isOff);
 		trolley.stream().forEach(Trolley::isDestroyed);
 	}
-	
-	
+
+	public void dispose() {
+		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
+			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
+				occupedWallBrick[x][y] = null;
+			}
+		}
+		hole.stream().forEach(Hole::dispose);
+		interrupter.stream().forEach(Interrupter::dispose);
+		mine.stream().forEach(Mine::dispose);
+		trolley.stream().forEach(Trolley::dispose);
+		teleporter.stream().forEach(Teleporter::dispose);
+		wall.stream().forEach(Wall::dispose);
+		bricks.stream().forEach(Brick::dispose);
+		bombes.stream().forEach(Bombe::dispose);
+		fires.stream().forEach(Fire::dispose);
+	}
 }
