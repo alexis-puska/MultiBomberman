@@ -28,9 +28,6 @@ import com.mygdx.service.input_processor.MenuInputProcessor;
 import com.mygdx.service.network.NetworkService;
 import com.mygdx.view.SplashScreen;
 
-import lombok.Getter;
-
-@Getter
 public class MultiBombermanGame extends Game {
 
 	private static final String LOG_NAME = "MultiBombermanGame.class";
@@ -41,7 +38,6 @@ public class MultiBombermanGame extends Game {
 	private SpriteBatch batch;
 	private OrthographicCamera screenCamera;
 	private Viewport viewport;
-	private MenuInputProcessor menuInputProcessor;
 	private ControllerAdapter controllerAdapter;
 
 	@Override
@@ -68,8 +64,7 @@ public class MultiBombermanGame extends Game {
 		controllerAdapter = new ControllerAdapter(playerService);
 
 		SoundService.getInstance().playMusic(MusicEnum.MENU);
-		menuInputProcessor = new MenuInputProcessor(playerService);
-		Gdx.input.setInputProcessor(menuInputProcessor);
+		Gdx.input.setInputProcessor(new MenuInputProcessor(playerService));
 
 		this.setScreen(new SplashScreen(this));
 	}
@@ -131,5 +126,29 @@ public class MultiBombermanGame extends Game {
 			Gdx.app.error("MultiBomberman", "Resize thread error");
 			Thread.currentThread().interrupt();
 		}
+	}
+
+	public NetworkService getNetworkService() {
+		return networkService;
+	}
+
+	public PlayerService getPlayerService() {
+		return playerService;
+	}
+
+	public LevelService getLevelService() {
+		return levelService;
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
+
+	public OrthographicCamera getScreenCamera() {
+		return screenCamera;
+	}
+
+	public Viewport getViewport() {
+		return viewport;
 	}
 }

@@ -23,13 +23,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Rail extends Drawable {
 
-	private Level level;
-
 	protected int x;
 	protected int y;
 
 	private RailEnum type;
-	private List<Rail> nearestRail;
 	private boolean canSwitch;
 	private List<RailEnum> possibility;
 	private short nearest;
@@ -41,11 +38,10 @@ public class Rail extends Drawable {
 
 	public void init(MultiBombermanGame mbGame, final Level level) {
 		this.mbGame = mbGame;
-		this.level = level;
 		this.canSwitch = false;
 		this.possibility = new ArrayList<>();
 		this.nearest = 0b0000000000000000;
-		this.nearestRail = this.level.getRail().stream().filter(r -> (r.getX() == this.x - 1 && r.getY() == this.y)
+		List<Rail> nearestRail = level.getRail().stream().filter(r -> (r.getX() == this.x - 1 && r.getY() == this.y)
 				|| (r.getX() == this.x + 1 && r.getY() == this.y) || (r.getY() == this.y - 1 && r.getX() == this.x)
 				|| (r.getY() == this.y + 1 && r.getX() == this.x)).collect(Collectors.toList());
 		if (nearestRail.size() > 2) {

@@ -33,8 +33,6 @@ public class Wall extends BodyAble implements LevelElement, Initiable {
 
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
-
-	
 	
 	@Override
 	public void init(World world, MultiBombermanGame mbGame, Level level) {

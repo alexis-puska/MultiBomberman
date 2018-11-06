@@ -45,7 +45,6 @@ public class Level {
 	private List<CustomTexture> customForegroundTexture;
 	private List<StartPlayer> startPlayer;
 
-	private boolean[][] reservedStartPlayer;
 	private LevelElement[][] occupedWallBrick;
 	private List<Integer> free;
 	private List<Brick> bricks;
@@ -58,7 +57,7 @@ public class Level {
 	public void init(Game game, World world) {
 		this.mbGame = game.getMultiBombermanGame();
 		this.world = world;
-		this.reservedStartPlayer = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
+		boolean[][] reservedStartPlayer = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
 		this.occupedWallBrick = new LevelElement[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
 		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
 			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
@@ -123,4 +122,6 @@ public class Level {
 		fires.removeIf(Fire::isOff);
 		trolley.stream().forEach(Trolley::isDestroyed);
 	}
+	
+	
 }
