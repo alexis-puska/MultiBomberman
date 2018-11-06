@@ -44,6 +44,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private PovDirection direction;
 	private PovDirection previousDirection;
 	private Body collisionBody;
+	private int bombeStrenght;
+	private int nbBombe;
 
 	// state
 	PlayerStateEnum state;
@@ -56,7 +58,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private StartPlayer startPlayer;
 
 	public Player(World world, MultiBombermanGame mbGame, Level level, CharacterEnum character,
-			CharacterColorEnum color, StartPlayer startPlayer) {
+			CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe) {
 		this.startPlayer = startPlayer;
 		this.character = character;
 		this.color = color;
@@ -65,6 +67,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
+		this.bombeStrenght = bombeStrenght;
+		this.nbBombe = nbBombe;
 		this.createBody();
 	}
 
@@ -314,8 +318,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressA() {
-		Bombe b = new Bombe(this.level, this.world, this.mbGame, 20, 5, 7, BombeTypeEnum.BOMBE_MAX, this, 2);
-		this.level.getBombes().add(b);
+		if (this.nbBombe > 0) {
+			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght,
+					(int) (body.getPosition().x), (int) (body.getPosition().y), BombeTypeEnum.BOMBE_MAX,
+					this, 2);
+			this.level.getBombes().add(b);
+			this.nbBombe--;
+		}
 	}
 
 	@Override
@@ -411,7 +420,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void bombeExploded() {
-		// bombe++
+		this.nbBombe++;
 	}
 
 }

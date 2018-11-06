@@ -113,7 +113,6 @@ public class Bombe extends BodyAble {
 		default:
 			break;
 		}
-
 		if (countDown == 0) {
 			explode();
 		}
@@ -155,6 +154,7 @@ public class Bombe extends BodyAble {
 			}
 		}
 		exploded = true;
+		this.dispose();
 		this.player.bombeExploded();
 	}
 
