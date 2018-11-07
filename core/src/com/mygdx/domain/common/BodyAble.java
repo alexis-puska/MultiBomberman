@@ -1,5 +1,6 @@
 package com.mygdx.domain.common;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.domain.level.Level;
@@ -27,5 +28,9 @@ public abstract class BodyAble {
 	}
 
 	public abstract void drawIt();
+	
+	public Vector2 getPosition() {
+		return body.getPosition();
+	}
 
 }

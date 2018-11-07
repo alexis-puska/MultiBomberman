@@ -289,11 +289,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void fireIn() {
-		//Gdx.app.log(CLASS_NAME, "fire in");
+		Gdx.app.log(CLASS_NAME, "fire in");
 	}
 
 	public void fireOut() {
-		//Gdx.app.log(CLASS_NAME, "fire out");
+		Gdx.app.log(CLASS_NAME, "fire out");
 	}
 
 	@Override

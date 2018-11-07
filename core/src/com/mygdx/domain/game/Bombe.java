@@ -66,10 +66,9 @@ public class Bombe extends BodyAble {
 		body = world.createBody(groundBodyDef);
 		body.setFixedRotation(false);
 		MassData data = new MassData();
-		data.mass = 100f;
+		data.mass = 100000f;
 		body.setMassData(data);
 		body.setUserData(this);
-		
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);
 		fixture.setUserData(this);
