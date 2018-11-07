@@ -15,12 +15,14 @@ buildscript {
 		classpath "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
         classpath "org.apache.logging.log4j:log4j-api:2.11.1"
   		classpath "org.apache.logging.log4j:log4j-core:2.11.1"
+  		classpath "io.freefair.gradle:lombok-plugin:2.8.0"
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
+    apply plugin: "io.freefair.lombok"
 
     version = '1.0'
     ext {
