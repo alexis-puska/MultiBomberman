@@ -14,6 +14,9 @@ import com.mygdx.domain.level.Teleporter;
 
 public class CustomContactListener implements ContactListener {
 
+	/************************************************
+	 * --- BEGIN CONTACT ---
+	 ************************************************/
 	@Override
 	public void beginContact(Contact contact) {
 		// touche un interrupteur
@@ -77,7 +80,6 @@ public class CustomContactListener implements ContactListener {
 			b.inFire();
 		}
 
-		
 		if (contact.getFixtureA().getUserData().getClass() == Bombe.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			contact.setEnabled(false);
@@ -100,6 +102,9 @@ public class CustomContactListener implements ContactListener {
 		}
 	}
 
+	/************************************************
+	 * --- END CONTACT ---
+	 ************************************************/
 	@Override
 	public void endContact(Contact contact) {
 		// Sortie d'un interrupteur
@@ -149,29 +154,38 @@ public class CustomContactListener implements ContactListener {
 		}
 	}
 
+	/************************************************
+	 * --- PRE SOLVE ---
+	 ************************************************/
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
+		preSolvePlayerBombe(contact, oldManifold);
+		preSolvePlayerFire(contact, oldManifold);
+	}
+
+	private void preSolvePlayerBombe(Contact contact, Manifold oldManifold) {
+		Player player = null;
+		Bombe bombe = null;
 		if (contact.getFixtureA().getUserData().getClass() == Bombe.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			contact.setEnabled(false);
-			Player p = (Player) contact.getFixtureB().getUserData();
-			Bombe b = (Bombe) contact.getFixtureA().getUserData();
-			Vector2 pp = p.getPosition();
-			Vector2 bp = b.getPosition();
+			player = (Player) contact.getFixtureB().getUserData();
+			bombe = (Bombe) contact.getFixtureA().getUserData();
+		} else if (contact.getFixtureB().getUserData().getClass() == Bombe.class
+				&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+			player = (Player) contact.getFixtureA().getUserData();
+			bombe = (Bombe) contact.getFixtureB().getUserData();
+		}
+		if (player != null && bombe != null) {
+			Vector2 pp = player.getPosition();
+			Vector2 bp = bombe.getPosition();
 			if ((Math.abs(pp.x - bp.x) + Math.abs(pp.y - bp.y)) < 0.499f) {
 				contact.setEnabled(false);
 			}
-		} else if (contact.getFixtureB().getUserData().getClass() == Bombe.class
-				&& contact.getFixtureA().getUserData().getClass() == Player.class) {
-			Player p = (Player) contact.getFixtureA().getUserData();
-			Bombe b = (Bombe) contact.getFixtureB().getUserData();
-			Vector2 pp = p.getPosition();
-			Vector2 bp = b.getPosition();
-			if ((Math.abs(pp.x - bp.x) + Math.abs(pp.y - bp.y)) < 0.45f) {
-				contact.setEnabled(false);
-			}
 		}
+	}
 
+	private void preSolvePlayerFire(Contact contact, Manifold oldManifold) {
 		if (contact.getFixtureA().getUserData().getClass() == Fire.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			contact.setEnabled(false);
@@ -181,6 +195,9 @@ public class CustomContactListener implements ContactListener {
 		}
 	}
 
+	/************************************************
+	 * --- POST SOLVE ---
+	 ************************************************/
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// a definir
