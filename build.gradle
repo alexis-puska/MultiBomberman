@@ -15,7 +15,6 @@ buildscript {
 		classpath "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
         classpath "org.apache.logging.log4j:log4j-api:2.11.1"
   		classpath "org.apache.logging.log4j:log4j-core:2.11.1"
-  		classpath "gradle.plugin.de.lukaskoerfer.gradle:delombok:0.2"
     }
 }
 
@@ -94,8 +93,6 @@ project(":raspberry") {
 
 project(":core") {
     apply plugin: "java"
-    apply plugin: "de.lukaskoerfer.gradle.delombok"
-
     dependencies {
     	compile project(":common")
     	def task = gradle.startParameter.taskNames[0] ?: ""
@@ -119,16 +116,10 @@ project(":core") {
 		compile "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
 		compile "org.bitlet:weupnp:0.1.4"
     }
-    
-    task myDelombok(type: Delombok) {
-	    source = files(sourceSets.main.java.srcDirs)
-	    destinationDir = file('delombok')
-	}
 }
 
 project(":common") {
     apply plugin: "java"
-    apply plugin: "de.lukaskoerfer.gradle.delombok"
     dependencies {
     	def task = gradle.startParameter.taskNames[0] ?: ""
         if(task.startsWith("raspberry")){
@@ -151,14 +142,8 @@ project(":common") {
 		compile "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
 		compile "org.bitlet:weupnp:0.1.4"
     }
-    
-    task myDelombok(type: Delombok) {
-	    source = files(sourceSets.main.java.srcDirs)
-	    destinationDir = file('delombok')
-	}
 }
 
 tasks.eclipse.doLast {
     delete ".project"
 }
-
