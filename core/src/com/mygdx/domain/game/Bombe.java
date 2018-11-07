@@ -1,10 +1,13 @@
 package com.mygdx.domain.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
@@ -55,17 +58,26 @@ public class Bombe extends BodyAble {
 	@Override
 	protected void createBody() {
 		BodyDef groundBodyDef = new BodyDef();
+		groundBodyDef.active = true;
+		groundBodyDef.type = BodyType.DynamicBody;
 		CircleShape groundBox = new CircleShape();
 		groundBox.setRadius(0.5f);
 		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
-		this.body = world.createBody(groundBodyDef);
+		body = world.createBody(groundBodyDef);
+		body.setFixedRotation(false);
+		MassData data = new MassData();
+		data.mass = 100f;
+		body.setMassData(data);
+		body.setUserData(this);
+		
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);
 		fixture.setUserData(this);
 		Filter filter = new Filter();
-		filter.categoryBits = CollisionConstante.CATEGORY_FIRE;
-		filter.maskBits = CollisionConstante.CATEGORY_PLAYER_HITBOX;
+		filter.categoryBits = CollisionConstante.CATEGORY_BOMBE;
+		filter.maskBits = CollisionConstante.GROUP_BOMBE_HITBOX;
 		fixture.setFilterData(filter);
+		Gdx.app.log("BOMBE", "BODY CREATED");
 	}
 
 	@Override
@@ -116,6 +128,10 @@ public class Bombe extends BodyAble {
 		if (countDown == 0) {
 			explode();
 		}
+	}
+
+	public void inFire() {
+		countDown = 1;
 	}
 
 	private void explode() {

@@ -21,6 +21,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
+import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.game.Brick;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
@@ -326,6 +327,7 @@ public class Game {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		level.getFires().stream().filter(f -> !f.isOff()).forEach(Fire::drawIt);
+		level.getBombes().stream().filter(b -> !b.isExploded()).forEach(Bombe::drawIt);
 		players.stream().forEach(Player::drawIt);
 		mbGame.getBatch().end();
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);

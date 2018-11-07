@@ -1,11 +1,12 @@
 package com.mygdx.service.collision;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.domain.Player;
-import com.mygdx.domain.game.Brick;
+import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
@@ -17,17 +18,17 @@ public class CustomContactListener implements ContactListener {
 	public void beginContact(Contact contact) {
 
 		// touche une brick
-		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
-			if (contact.getFixtureA().getUserData().getClass() == Brick.class
-					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
-				Brick b = (Brick) contact.getFixtureA().getUserData();
-				b.action();
-			} else if (contact.getFixtureB().getUserData().getClass() == Brick.class
-					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
-				Brick b = (Brick) contact.getFixtureB().getUserData();
-				b.action();
-			}
-		}
+//		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+//			if (contact.getFixtureA().getUserData().getClass() == Brick.class
+//					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+//				Brick b = (Brick) contact.getFixtureA().getUserData();
+//				b.action();
+//			} else if (contact.getFixtureB().getUserData().getClass() == Brick.class
+//					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+//				Brick b = (Brick) contact.getFixtureB().getUserData();
+//				b.action();
+//			}
+//		}
 
 		// touche un interrupteur
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
@@ -74,16 +75,36 @@ public class CustomContactListener implements ContactListener {
 		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
 			if (contact.getFixtureA().getUserData().getClass() == Fire.class
 					&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+				contact.setEnabled(false);
 				Player p = (Player) contact.getFixtureB().getUserData();
 				p.fireIn();
 			} else if (contact.getFixtureB().getUserData().getClass() == Fire.class
 					&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+				contact.setEnabled(false);
 				Player p = (Player) contact.getFixtureA().getUserData();
 				p.fireIn();
 			}
 		}
 
 		// a definir
+
+		Gdx.app.log("collision",
+				contact.getFixtureA().getUserData().getClass() + " " + contact.getFixtureB().getUserData().getClass());
+
+		if (contact.getFixtureA().getUserData() != null && contact.getFixtureB() != null) {
+			if (contact.getFixtureA().getUserData().getClass() == Fire.class
+					&& contact.getFixtureB().getUserData().getClass() == Bombe.class) {
+				contact.setEnabled(false);
+				Bombe b = (Bombe) contact.getFixtureB().getUserData();
+				b.inFire();
+			} else if (contact.getFixtureB().getUserData().getClass() == Fire.class
+					&& contact.getFixtureA().getUserData().getClass() == Bombe.class) {
+				contact.setEnabled(false);
+				Bombe b = (Bombe) contact.getFixtureA().getUserData();
+				b.inFire();
+			}
+		}
+
 	}
 
 	@Override

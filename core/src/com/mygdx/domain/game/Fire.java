@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.FireEnum;
@@ -77,13 +78,14 @@ public class Fire extends BodyAble {
 			groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 			break;
 		}
+		groundBodyDef.type = BodyType.DynamicBody;
 		this.body = world.createBody(groundBodyDef);
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);
 		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_FIRE;
-		filter.maskBits = CollisionConstante.CATEGORY_PLAYER_HITBOX;
+		filter.maskBits = CollisionConstante.CATEGORY_PLAYER_HITBOX | CollisionConstante.CATEGORY_BOMBE;
 		fixture.setFilterData(filter);
 	}
 

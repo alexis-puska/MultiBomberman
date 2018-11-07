@@ -80,7 +80,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		body = world.createBody(bodyDef);
 		body.setFixedRotation(false);
 		MassData data = new MassData();
-		data.mass = 100f;
+		data.mass = 1f;
 		body.setMassData(data);
 		body.setUserData(this);
 		PolygonShape diamondBody = new PolygonShape();
@@ -322,7 +322,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (this.nbBombe > 0) {
 			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght,
 					(int) (body.getPosition().x), (int) (body.getPosition().y), BombeTypeEnum.BOMBE_MAX,
-					this, 2);
+					this, 75);
 			this.level.getBombes().add(b);
 			this.nbBombe--;
 		}

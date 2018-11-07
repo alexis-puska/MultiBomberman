@@ -71,8 +71,7 @@ public class Wall extends BodyAble implements LevelElement, Initiable {
 		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_WALL;
-		filter.maskBits = 0x0000000000000000;
-		filter.maskBits = CollisionConstante.CATEGORY_PLAYER;
+		filter.maskBits = CollisionConstante.CATEGORY_PLAYER | CollisionConstante.CATEGORY_BOMBE;
 		fixture.setFilterData(filter);
 	}
 
