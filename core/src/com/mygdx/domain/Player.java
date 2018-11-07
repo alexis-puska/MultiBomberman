@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.BombeTypeEnum;
 import com.mygdx.domain.enumeration.PlayerStateEnum;
@@ -275,8 +276,24 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		default:
 			break;
-
 		}
+		if (this.body.getPosition().x > (float) Constante.GRID_SIZE_X) {
+			this.body.setTransform(this.body.getPosition().x - (float) Constante.GRID_SIZE_X, this.body.getPosition().y,
+					0f);
+		}
+		if (this.body.getPosition().x < 0f) {
+			this.body.setTransform(this.body.getPosition().x + (float) Constante.GRID_SIZE_X, this.body.getPosition().y,
+					0f);
+		}
+		if (this.body.getPosition().y > (float) Constante.GRID_SIZE_Y) {
+			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y - (float) Constante.GRID_SIZE_Y,
+					0f);
+		}
+		if (this.body.getPosition().y < 0f) {
+			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y + (float) Constante.GRID_SIZE_Y,
+					0f);
+		}
+
 		collisionBody.setTransform(this.body.getPosition(), body.getAngle());
 	}
 
@@ -320,9 +337,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	@Override
 	public void pressA() {
 		if (this.nbBombe > 0) {
-			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght,
-					(int) (body.getPosition().x), (int) (body.getPosition().y), BombeTypeEnum.BOMBE_MAX,
-					this, 75);
+			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, (int) (body.getPosition().x),
+					(int) (body.getPosition().y), BombeTypeEnum.BOMBE_MAX, this, 75);
 			this.level.getBombes().add(b);
 			this.nbBombe--;
 		}

@@ -70,7 +70,6 @@ public class Brick extends BodyAble implements LevelElement {
 		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_BRICKS;
-		filter.maskBits = CollisionConstante.CATEGORY_PLAYER;
 		fixture.setFilterData(filter);
 	}
 

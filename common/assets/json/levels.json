@@ -54,16 +54,6 @@
         "draw" : true,
         "texture" : null
       }, {
-        "x" : 1,
-        "y" : 0,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 1,
-        "y" : 20,
-        "draw" : true,
-        "texture" : null
-      }, {
         "x" : 2,
         "y" : 0,
         "draw" : true,
@@ -575,31 +565,11 @@
         "texture" : null
       }, {
         "x" : 0,
-        "y" : 19,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 34,
-        "y" : 19,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 0,
         "y" : 0,
         "draw" : true,
         "texture" : null
       }, {
         "x" : 0,
-        "y" : 20,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 1,
-        "y" : 0,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 1,
         "y" : 20,
         "draw" : true,
         "texture" : null
