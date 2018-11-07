@@ -19,7 +19,15 @@ public class CustomContactListener implements ContactListener {
 	 ************************************************/
 	@Override
 	public void beginContact(Contact contact) {
-		// touche un interrupteur
+		beginContactPlayerInterrupter(contact);
+		beginContactPlayerHole(contact);
+		beginContactPlayerTeleporter(contact);
+		beginContactPlayerFire(contact);
+		beginContactBombeFire(contact);
+		beginContactPlayerBombe(contact);
+	}
+
+	private void beginContactPlayerInterrupter(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Interrupter.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			Interrupter b = (Interrupter) contact.getFixtureA().getUserData();
@@ -29,8 +37,9 @@ public class CustomContactListener implements ContactListener {
 			Interrupter b = (Interrupter) contact.getFixtureB().getUserData();
 			b.playerTouchBegin();
 		}
+	}
 
-		// touche un trou
+	private void beginContactPlayerHole(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Hole.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			Hole b = (Hole) contact.getFixtureA().getUserData();
@@ -40,8 +49,9 @@ public class CustomContactListener implements ContactListener {
 			Hole b = (Hole) contact.getFixtureB().getUserData();
 			b.walkOn();
 		}
+	}
 
-		// touch teleporter
+	private void beginContactPlayerTeleporter(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Teleporter.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			Teleporter t = (Teleporter) contact.getFixtureA().getUserData();
@@ -53,8 +63,9 @@ public class CustomContactListener implements ContactListener {
 			Player p = (Player) contact.getFixtureA().getUserData();
 			p.teleporte(t);
 		}
+	}
 
-		// touch fire
+	private void beginContactPlayerFire(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Fire.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			contact.setEnabled(false);
@@ -66,8 +77,9 @@ public class CustomContactListener implements ContactListener {
 			Player p = (Player) contact.getFixtureA().getUserData();
 			p.fireIn();
 		}
+	}
 
-		// a definir
+	private void beginContactBombeFire(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Fire.class
 				&& contact.getFixtureB().getUserData().getClass() == Bombe.class) {
 			contact.setEnabled(false);
@@ -79,7 +91,9 @@ public class CustomContactListener implements ContactListener {
 			Bombe b = (Bombe) contact.getFixtureA().getUserData();
 			b.inFire();
 		}
+	}
 
+	private void beginContactPlayerBombe(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Bombe.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			contact.setEnabled(false);
@@ -107,7 +121,13 @@ public class CustomContactListener implements ContactListener {
 	 ************************************************/
 	@Override
 	public void endContact(Contact contact) {
-		// Sortie d'un interrupteur
+		endContactPlayerInterrupter(contact);
+		endContactPlayerHole(contact);
+		endContactPlayerTeleporter(contact);
+		endContactPlayerFire(contact);
+	}
+
+	private void endContactPlayerInterrupter(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Interrupter.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			Interrupter b = (Interrupter) contact.getFixtureA().getUserData();
@@ -117,8 +137,9 @@ public class CustomContactListener implements ContactListener {
 			Interrupter b = (Interrupter) contact.getFixtureB().getUserData();
 			b.playerTouchEnd();
 		}
+	}
 
-		// Sortie d'un trou
+	private void endContactPlayerHole(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Hole.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			Hole b = (Hole) contact.getFixtureA().getUserData();
@@ -128,8 +149,9 @@ public class CustomContactListener implements ContactListener {
 			Hole b = (Hole) contact.getFixtureB().getUserData();
 			b.walkOff();
 		}
+	}
 
-		// sortie teleporter
+	private void endContactPlayerTeleporter(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Teleporter.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			Teleporter t = (Teleporter) contact.getFixtureA().getUserData();
@@ -141,7 +163,9 @@ public class CustomContactListener implements ContactListener {
 			Player p = (Player) contact.getFixtureA().getUserData();
 			p.teleporteEnd(t);
 		}
+	}
 
+	private void endContactPlayerFire(Contact contact) {
 		// touch fire
 		if (contact.getFixtureA().getUserData().getClass() == Fire.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
@@ -159,11 +183,11 @@ public class CustomContactListener implements ContactListener {
 	 ************************************************/
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		preSolvePlayerBombe(contact, oldManifold);
-		preSolvePlayerFire(contact, oldManifold);
+		preSolvePlayerBombe(contact);
+		preSolvePlayerFire(contact);
 	}
 
-	private void preSolvePlayerBombe(Contact contact, Manifold oldManifold) {
+	private void preSolvePlayerBombe(Contact contact) {
 		Player player = null;
 		Bombe bombe = null;
 		if (contact.getFixtureA().getUserData().getClass() == Bombe.class
@@ -185,7 +209,7 @@ public class CustomContactListener implements ContactListener {
 		}
 	}
 
-	private void preSolvePlayerFire(Contact contact, Manifold oldManifold) {
+	private void preSolvePlayerFire(Contact contact) {
 		if (contact.getFixtureA().getUserData().getClass() == Fire.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			contact.setEnabled(false);
