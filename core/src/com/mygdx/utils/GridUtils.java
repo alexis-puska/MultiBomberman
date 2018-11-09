@@ -4,6 +4,9 @@ import com.mygdx.constante.Constante;
 
 public class GridUtils {
 
+	private GridUtils() {
+	}
+
 	public static int calcIdxX(int x, int offset) {
 		int r = x + offset;
 		if (offset < 0 && r < 0) {

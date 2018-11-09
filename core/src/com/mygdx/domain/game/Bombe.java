@@ -247,10 +247,7 @@ public class Bombe extends BodyAble {
 	 * --- PLAYER TRIGGER BOMBE P ---
 	 *****************************************/
 	public boolean bombeOfPlayer(Player player) {
-		if (this.player.equals(player)) {
-			return true;
-		}
-		return false;
+		return this.player.equals(player);
 	}
 
 	public BombeTypeEnum getType() {

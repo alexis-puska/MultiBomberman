@@ -50,7 +50,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private int bombeStrenght;
 	private int nbBombe;
 	private float walkSpeed;
-	private float ship_speed;
+	private float shipSpeed;
 
 	// state
 	private PlayerStateEnum state;
@@ -82,7 +82,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.walkSpeed = Constante.WALK_SPEED;
 		this.bombeType = BombeTypeEnum.BOMBE;
 		this.canPutLineOfBombe = false;
-		this.ship_speed = DEFAULT_SHIP_SPEED;
+		this.shipSpeed = DEFAULT_SHIP_SPEED;
 		this.createBody();
 	}
 
@@ -422,22 +422,22 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressL() {
-		this.ship_speed += SHIP_SPEED_STEP;
+		this.shipSpeed += SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void pressR() {
-		this.ship_speed += SHIP_SPEED_STEP;
+		this.shipSpeed += SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void releaseL() {
-		this.ship_speed -= SHIP_SPEED_STEP;
+		this.shipSpeed -= SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void releaseR() {
-		this.ship_speed -= SHIP_SPEED_STEP;
+		this.shipSpeed -= SHIP_SPEED_STEP;
 	}
 
 	@Override
