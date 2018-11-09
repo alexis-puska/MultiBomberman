@@ -23,8 +23,9 @@ public class CustomContactListener implements ContactListener {
 		beginContactPlayerHole(contact);
 		beginContactPlayerTeleporter(contact);
 		beginContactPlayerFire(contact);
-		beginContactBombeFire(contact);
 		beginContactPlayerBombe(contact);
+		
+		beginContactBombeFire(contact);
 	}
 
 	private void beginContactPlayerInterrupter(Contact contact) {

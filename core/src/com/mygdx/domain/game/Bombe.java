@@ -1,6 +1,7 @@
 package com.mygdx.domain.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.MassData;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
@@ -17,10 +19,16 @@ import com.mygdx.domain.enumeration.BombeTypeEnum;
 import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.Wall;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.main.MultiBombermanGame;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
+import com.mygdx.utils.GridUtils;
 
 public class Bombe extends BodyAble {
+
+	private static final float BORDER_MAX = 0.47f;
+	private static final float BORDER_MIN = 0.3f;
 
 	private static final int NB_FRAME = 4;
 
@@ -31,6 +39,9 @@ public class Bombe extends BodyAble {
 	private Player player;
 	private int countDown;
 	private boolean exploded;
+
+	private PovDirection direction;
+	private float walkSpeed;
 
 	private int frameCounter;
 	private int offsetSprite;
@@ -52,6 +63,8 @@ public class Bombe extends BodyAble {
 		this.frameCounter = 0;
 		this.offsetSprite = 0;
 		this.nbFrameForAnimation = 4;
+		this.direction = PovDirection.center;
+		this.walkSpeed = Constante.WALK_SPEED;
 		createBody();
 	}
 
@@ -60,6 +73,19 @@ public class Bombe extends BodyAble {
 		BodyDef groundBodyDef = new BodyDef();
 		groundBodyDef.active = true;
 		groundBodyDef.type = BodyType.DynamicBody;
+
+		PolygonShape diamondBody = new PolygonShape();
+		Vector2[] vertices = new Vector2[8];
+		vertices[0] = new Vector2(BORDER_MIN, BORDER_MAX);
+		vertices[1] = new Vector2(BORDER_MAX, BORDER_MIN);
+		vertices[2] = new Vector2(BORDER_MAX, -BORDER_MIN);
+		vertices[3] = new Vector2(BORDER_MIN, -BORDER_MAX);
+		vertices[4] = new Vector2(-BORDER_MIN, -BORDER_MAX);
+		vertices[5] = new Vector2(-BORDER_MAX, -BORDER_MIN);
+		vertices[6] = new Vector2(-BORDER_MAX, BORDER_MIN);
+		vertices[7] = new Vector2(-BORDER_MIN, BORDER_MAX);
+		diamondBody.set(vertices);
+
 		CircleShape groundBox = new CircleShape();
 		groundBox.setRadius(0.5f);
 		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
@@ -69,7 +95,7 @@ public class Bombe extends BodyAble {
 		data.mass = 100000f;
 		body.setMassData(data);
 		body.setUserData(this);
-		Fixture fixture = body.createFixture(groundBox, 0.0f);
+		Fixture fixture = body.createFixture(diamondBody, 0.0f);
 		fixture.setFriction(0f);
 		fixture.setUserData(this);
 		Filter filter = new Filter();
@@ -117,13 +143,33 @@ public class Bombe extends BodyAble {
 			countDown--;
 			break;
 		case BOMBE_P:
-			if (countDown == 1) {
-				countDown--;
-			}
-			break;
 		default:
 			break;
 		}
+
+		switch (direction) {
+		case east:
+			this.body.setLinearVelocity(walkSpeed, 0f);
+			break;
+		case north:
+			this.body.setLinearVelocity(0f, walkSpeed);
+			break;
+		case south:
+			this.body.setLinearVelocity(0f, -walkSpeed);
+			break;
+		case west:
+			this.body.setLinearVelocity(-walkSpeed, 0f);
+			break;
+		case northEast:
+		case northWest:
+		case southEast:
+		case southWest:
+		case center:
+		default:
+			this.body.setLinearVelocity(0f, 0f);
+			break;
+		}
+
 		if (countDown == 0) {
 			explode();
 		}
@@ -133,7 +179,7 @@ public class Bombe extends BodyAble {
 		countDown = 1;
 	}
 
-	private void explode() {
+	public void explode() {
 		int calcX = 0;
 		int calcY = 0;
 		if (this.level.getOccupedWallBrick()[this.x][this.y] == null) {
@@ -141,7 +187,7 @@ public class Bombe extends BodyAble {
 					.add(new Fire(this.world, this.mbGame, this.level, this.x, this.y, FireEnum.FIRE_CENTER));
 		}
 		for (int i = 1; i <= this.strenght; i++) {
-			calcX = calcIdxX(this.x, i);
+			calcX = GridUtils.calcIdxX(this.x, i);
 			calcY = this.y;
 			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_RIGHT_EXT : FireEnum.FIRE_RIGHT)) {
 				break;
@@ -149,13 +195,13 @@ public class Bombe extends BodyAble {
 		}
 		for (int i = 1; i <= this.strenght; i++) {
 			calcX = this.x;
-			calcY = calcIdxY(this.y, -i);
+			calcY = GridUtils.calcIdxY(this.y, -i);
 			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_DOWN_EXT : FireEnum.FIRE_DOWN)) {
 				break;
 			}
 		}
 		for (int i = 1; i <= this.strenght; i++) {
-			calcX = calcIdxX(this.x, -i);
+			calcX = GridUtils.calcIdxX(this.x, -i);
 			calcY = this.y;
 			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_LEFT_EXT : FireEnum.FIRE_LEFT)) {
 				break;
@@ -163,7 +209,7 @@ public class Bombe extends BodyAble {
 		}
 		for (int i = 1; i <= this.strenght; i++) {
 			calcX = this.x;
-			calcY = calcIdxY(this.y, i);
+			calcY = GridUtils.calcIdxY(this.y, i);
 			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_UP_EXT : FireEnum.FIRE_UP)) {
 				break;
 			}
@@ -186,29 +232,71 @@ public class Bombe extends BodyAble {
 		return false;
 	}
 
-	private int calcIdxX(int x, int offset) {
-		int r = x + offset;
-		if (offset < 0 && r < 0) {
-			r = Constante.GRID_SIZE_X + r;
-		}
-		if (offset > 0 && r >= Constante.GRID_SIZE_X) {
-			r = r - Constante.GRID_SIZE_X;
-		}
-		return r;
-	}
-
-	private int calcIdxY(int y, int offset) {
-		int r = y + offset;
-		if (offset < 0 && r < 0) {
-			r = Constante.GRID_SIZE_Y + r;
-		}
-		if (offset > 0 && r >= Constante.GRID_SIZE_Y) {
-			r = r - Constante.GRID_SIZE_Y;
-		}
-		return r;
-	}
-
 	public boolean isExploded() {
 		return exploded;
+	}
+
+	/*****************************************
+	 * --- PLAYER HURT BOMBE ---
+	 *****************************************/
+	public void kick(PovDirection direction) {
+		this.direction = direction;
+	}
+
+	/*****************************************
+	 * --- PLAYER TRIGGER BOMBE P ---
+	 *****************************************/
+	public boolean bombeOfPlayer(Player player) {
+		if (this.player.equals(player)) {
+			return true;
+		}
+		return false;
+	}
+
+	public BombeTypeEnum getType() {
+		return this.type;
+	}
+
+	/*****************************************
+	 * --- HURT WALL ---
+	 *****************************************/
+	public void hurtWallOrBrick(float x, float y) {
+		float diffX = Math.abs(this.body.getPosition().x - x);
+		float diffY = Math.abs(this.body.getPosition().y - y);
+		if (direction != PovDirection.center) {
+			if (diffX > 0.8f && diffY < 0.1f) {
+				hurtWallOnEastOrWest();
+			} else if (diffY > 0.8f && diffX < 0.1f) {
+				hurtWallOnNorthOrSouth();
+			}
+		}
+	}
+
+	private void hurtWallOnNorthOrSouth() {
+		if (type == BombeTypeEnum.BOMBE_RUBBER) {
+			if (direction == PovDirection.north) {
+				SoundService.getInstance().playSound(SoundEnum.BOUNCE);
+				direction = PovDirection.south;
+			} else if (direction == PovDirection.south) {
+				SoundService.getInstance().playSound(SoundEnum.BOUNCE);
+				direction = PovDirection.north;
+			}
+		} else if (direction == PovDirection.north || direction == PovDirection.south) {
+			direction = PovDirection.center;
+		}
+	}
+
+	private void hurtWallOnEastOrWest() {
+		if (type == BombeTypeEnum.BOMBE_RUBBER) {
+			if (direction == PovDirection.east) {
+				SoundService.getInstance().playSound(SoundEnum.BOUNCE);
+				direction = PovDirection.west;
+			} else if (direction == PovDirection.west) {
+				SoundService.getInstance().playSound(SoundEnum.BOUNCE);
+				direction = PovDirection.east;
+			}
+		} else if (direction == PovDirection.east || direction == PovDirection.west) {
+			direction = PovDirection.center;
+		}
 	}
 }

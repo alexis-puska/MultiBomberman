@@ -32,13 +32,15 @@ import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
+import com.mygdx.utils.GridUtils;
 
 public class Player extends BodyAble implements ControlEventListener, Comparable<Player> {
 
 	private static final String CLASS_NAME = "Player.class";
 
-	private static final float WALK_SPEED = 6f;
 	private static final float RADIUS = 0.47f;
+	private static final float DEFAULT_SHIP_SPEED = 0.8f;
+	private static final float SHIP_SPEED_STEP = 0.5f;
 
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
@@ -47,9 +49,15 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private Body collisionBody;
 	private int bombeStrenght;
 	private int nbBombe;
+	private float walkSpeed;
+	private float ship_speed;
 
 	// state
-	PlayerStateEnum state;
+	private PlayerStateEnum state;
+	private BombeTypeEnum bombeType;
+
+	// bonus
+	private boolean canPutLineOfBombe;
 
 	// teleporte
 	private Teleporter destinationTeleporter;
@@ -63,6 +71,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.startPlayer = startPlayer;
 		this.character = character;
 		this.color = color;
+		this.previousDirection = PovDirection.south;
 		this.direction = PovDirection.center;
 		this.state = PlayerStateEnum.NORMAL;
 		this.world = world;
@@ -70,6 +79,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.level = level;
 		this.bombeStrenght = bombeStrenght;
 		this.nbBombe = nbBombe;
+		this.walkSpeed = Constante.WALK_SPEED;
+		this.bombeType = BombeTypeEnum.BOMBE;
+		this.canPutLineOfBombe = false;
+		this.ship_speed = DEFAULT_SHIP_SPEED;
 		this.createBody();
 	}
 
@@ -238,16 +251,16 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				this.body.setLinearVelocity(0f, 0f);
 				break;
 			case east:
-				this.body.setLinearVelocity(WALK_SPEED, 0f);
+				this.body.setLinearVelocity(walkSpeed, 0f);
 				break;
 			case north:
-				this.body.setLinearVelocity(0f, WALK_SPEED);
+				this.body.setLinearVelocity(0f, walkSpeed);
 				break;
 			case south:
-				this.body.setLinearVelocity(0f, -WALK_SPEED);
+				this.body.setLinearVelocity(0f, -walkSpeed);
 				break;
 			case west:
-				this.body.setLinearVelocity(-WALK_SPEED, 0f);
+				this.body.setLinearVelocity(-walkSpeed, 0f);
 				break;
 			case southEast:
 			case southWest:
@@ -316,8 +329,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	@Override
 	public void move(PovDirection value) {
 		Gdx.app.debug(CLASS_NAME, "press move : " + value.toString());
-		if (value == PovDirection.center) {
-			this.previousDirection = direction;
+		if (value == PovDirection.east || value == PovDirection.south || value == PovDirection.north
+				|| value == PovDirection.west) {
+			this.previousDirection = value;
 		}
 		this.direction = value;
 	}
@@ -325,63 +339,105 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	@Override
 	public void pressStart() {
 		// unused method
-
 	}
 
 	@Override
 	public void pressSelect() {
 		// unused method
-
 	}
 
 	@Override
 	public void pressA() {
 		if (this.nbBombe > 0) {
-			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, (int) (body.getPosition().x),
-					(int) (body.getPosition().y), BombeTypeEnum.BOMBE_MAX, this, 75);
-			this.level.getBombes().add(b);
-			this.nbBombe--;
+			putBombe((int) (body.getPosition().x), (int) (body.getPosition().y));
 		}
 	}
 
 	@Override
 	public void pressB() {
-		// unused method
+		if (bombeType == BombeTypeEnum.BOMBE_P) {
+			this.level.getBombes().stream().filter(b -> b.bombeOfPlayer(this) && b.getType() == BombeTypeEnum.BOMBE_P)
+					.forEach(Bombe::explode);
+		}
 	}
 
 	@Override
 	public void pressX() {
-		// unused method
+		if (canPutLineOfBombe) {
+			int calcX = 0;
+			int calcY = 0;
+			int nb = nbBombe;
+			switch (this.previousDirection) {
+			case east:
+				for (int i = 0; i < nb; i++) {
+					calcX = GridUtils.calcIdxY((int) this.body.getPosition().x, i);
+					calcY = (int) this.body.getPosition().y;
+					if (!putBombe(calcX, calcY)) {
+						break;
+					}
+				}
+				break;
+			case north:
+				for (int i = 0; i < nb; i++) {
+					calcX = (int) this.body.getPosition().x;
+					calcY = GridUtils.calcIdxY((int) this.body.getPosition().y, i);
+					if (!putBombe(calcX, calcY)) {
+						break;
+					}
+				}
+				break;
+			case south:
+				for (int i = 0; i < nb; i++) {
+					calcX = (int) this.body.getPosition().x;
+					calcY = GridUtils.calcIdxY((int) this.body.getPosition().y, -i);
+					if (!putBombe(calcX, calcY)) {
+						break;
+					}
+				}
+				break;
+			case west:
+				for (int i = 0; i < nb; i++) {
+					calcX = GridUtils.calcIdxY((int) this.body.getPosition().x, -i);
+					calcY = (int) this.body.getPosition().y;
+					if (!putBombe(calcX, calcY)) {
+						break;
+					}
+				}
+				break;
+			case center:
+			case northEast:
+			case northWest:
+			case southEast:
+			case southWest:
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override
 	public void pressY() {
 		// unused method
-
 	}
 
 	@Override
 	public void pressL() {
-		// unused method
-
+		this.ship_speed += SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void pressR() {
-		// unused method
-
+		this.ship_speed += SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void releaseL() {
-		// unused method
-
+		this.ship_speed -= SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void releaseR() {
-		// unused method
-
+		this.ship_speed -= SHIP_SPEED_STEP;
 	}
 
 	@Override
@@ -440,4 +496,15 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.nbBombe++;
 	}
 
+	private boolean putBombe(int x, int y) {
+		if (this.level.getOccupedWallBrick()[x][y] != null) {
+			return false;
+		} else {
+			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
+					75);
+			this.level.getBombes().add(b);
+			this.nbBombe--;
+		}
+		return true;
+	}
 }

@@ -48,6 +48,8 @@ public class Constante {
 	public static final int MIN_STRENGTH = 1;
 	public static final int MAX_STRENGTH = 6;
 
+	public static final float WALK_SPEED = 6f;
+	
 	private Constante() {
 		// empty private constructor
 	}

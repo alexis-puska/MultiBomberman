@@ -40,4 +40,11 @@ public class Trolley extends BodyAble implements Initiable {
 		return false;
 	}
 
+	public boolean isMoving() {
+		return false;
+	}
+
+	public void trolleyCollision() {
+		// destroy the trolley, two trolley hurt each other and the two trolley move !
+	}
 }
