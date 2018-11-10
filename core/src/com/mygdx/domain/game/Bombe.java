@@ -27,7 +27,7 @@ import com.mygdx.utils.GridUtils;
 
 public class Bombe extends BodyAble {
 
-	private static final float BORDER_MAX = 0.47f;
+	private static final float BORDER_MAX = 0.45f;
 	private static final float BORDER_MIN = 0.3f;
 
 	private static final int NB_FRAME = 4;
@@ -215,6 +215,7 @@ public class Bombe extends BodyAble {
 			}
 		}
 		exploded = true;
+		SoundService.getInstance().playSound(SoundEnum.FIRE);
 		this.dispose();
 		this.player.bombeExploded();
 	}

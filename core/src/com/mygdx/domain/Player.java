@@ -38,19 +38,27 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private static final String CLASS_NAME = "Player.class";
 
-	private static final float RADIUS = 0.47f;
+	private static final float RADIUS = 0.48f;
 	private static final float DEFAULT_SHIP_SPEED = 0.8f;
 	private static final float SHIP_SPEED_STEP = 0.5f;
+
+	private static final int NB_FRAME = 4;
+	private static final int NB_FRAME_INC_ACTION = 5;
+	private static final int NB_FRAME_UNDERWATER = 60;
 
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
 	private PovDirection direction;
 	private PovDirection previousDirection;
 	private Body collisionBody;
-	private int bombeStrenght;
-	private int nbBombe;
+
 	private float walkSpeed;
 	private float shipSpeed;
+	private int bombeStrenght;
+	private int nbBombe;
+
+	private boolean insideBombe;
+	private int insideFire;
 
 	// state
 	private PlayerStateEnum state;
@@ -65,6 +73,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	// player start
 	private StartPlayer startPlayer;
+
+	// animation part
+	int frameCounter;
+	int offsetSprite;
+	int nbFrameForAnimation;
+	int louisType;
+	boolean louisBurn;
 
 	public Player(World world, MultiBombermanGame mbGame, Level level, CharacterEnum character,
 			CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe) {
@@ -82,6 +97,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.walkSpeed = Constante.WALK_SPEED;
 		this.bombeType = BombeTypeEnum.BOMBE;
 		this.canPutLineOfBombe = false;
+		this.insideBombe = false;
+		this.insideFire = 0;
 		this.shipSpeed = DEFAULT_SHIP_SPEED;
 		this.createBody();
 	}
@@ -140,73 +157,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.level = null;
 	}
 
-	@Override
-	public void drawIt() {
-		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.WALK_DOWN;
-		switch (this.state) {
-		case BURNING:
-			break;
-		case CARRY_BOMBE:
-			break;
-		case CRYING:
-			break;
-		case DEAD:
-			break;
-		case INSIDE_TROLLEY:
-			break;
-		case NORMAL:
-			switch (this.direction) {
-			case center:
-				if (previousDirection == PovDirection.west) {
-					drawSprite = CharacterSpriteEnum.WALK_LEFT;
-				} else if (previousDirection == PovDirection.north) {
-					drawSprite = CharacterSpriteEnum.WALK_UP;
-				} else if (previousDirection == PovDirection.east) {
-					drawSprite = CharacterSpriteEnum.WALK_RIGHT;
-				} else if (previousDirection == PovDirection.south) {
-					drawSprite = CharacterSpriteEnum.WALK_DOWN;
-				}
-				break;
-			case east:
-				drawSprite = CharacterSpriteEnum.WALK_RIGHT;
-				break;
-			case north:
-				drawSprite = CharacterSpriteEnum.WALK_UP;
-				break;
-			case south:
-				drawSprite = CharacterSpriteEnum.WALK_DOWN;
-				break;
-			case west:
-				drawSprite = CharacterSpriteEnum.WALK_LEFT;
-				break;
-			case northEast:
-			case northWest:
-			case southEast:
-			case southWest:
-			default:
-				break;
-
-			}
-			break;
-		case ON_LOUIS:
-			break;
-		case TELEPORT:
-			break;
-		case THROW_BOMBE:
-			break;
-		case VICTORY:
-			break;
-		case VICTORY_ON_LOUIS:
-			break;
-		default:
-			break;
-
-		}
-
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
-	}
-
 	public void teleporte(Teleporter tel) {
 		if (destinationTeleporter == null) {
 			List<Teleporter> destination = this.level.getTeleporter().stream()
@@ -246,6 +196,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case INSIDE_TROLLEY:
 			break;
 		case NORMAL:
+			if(insideFire>0) {
+				Gdx.app.log("Player", "Normally i died");
+			}
 			switch (this.direction) {
 			case center:
 				this.body.setLinearVelocity(0f, 0f);
@@ -318,12 +271,18 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return (int) (body.getPosition().y * 16f);
 	}
 
-	public void fireIn() {
-		Gdx.app.log(CLASS_NAME, "fire in");
+	public void insideFire(boolean value) {
+		if(value) {
+			Gdx.app.log(CLASS_NAME, "fire in");
+			insideFire++;	
+		}else {
+			Gdx.app.log(CLASS_NAME, "fire out");
+			insideFire--;
+		}
 	}
 
-	public void fireOut() {
-		Gdx.app.log(CLASS_NAME, "fire out");
+	public void insideBombe(boolean value) {
+		insideBombe = value;
 	}
 
 	@Override
@@ -348,7 +307,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressA() {
-		if (this.nbBombe > 0) {
+		if (this.nbBombe > 0 && !insideBombe) {
 			putBombe((int) (body.getPosition().x), (int) (body.getPosition().y));
 		}
 	}
@@ -363,7 +322,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressX() {
-		if (canPutLineOfBombe) {
+		if (canPutLineOfBombe && !insideBombe) {
 			int calcX = 0;
 			int calcY = 0;
 			int nb = nbBombe;
@@ -507,4 +466,108 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		return true;
 	}
+
+	/*************************************************
+	 * --- DRAW ---
+	 *************************************************/
+
+	@Override
+	public void drawIt() {
+		switch (this.state) {
+		case BURNING:
+			break;
+		case CARRY_BOMBE:
+			break;
+		case CRYING:
+			break;
+		case DEAD:
+			break;
+		case INSIDE_TROLLEY:
+			break;
+		case NORMAL:
+			drawStateNormal();
+			break;
+		case ON_LOUIS:
+			break;
+		case TELEPORT:
+			break;
+		case THROW_BOMBE:
+			break;
+		case VICTORY:
+			break;
+		case VICTORY_ON_LOUIS:
+			break;
+		default:
+			break;
+
+		}
+	}
+
+	private void drawStateNormal() {
+		nbFrameForAnimation = 4;
+		if (direction != PovDirection.center) {
+			if (frameCounter > NB_FRAME) {
+				frameCounter = 0;
+				offsetSprite++;
+				if (offsetSprite >= nbFrameForAnimation) {
+					offsetSprite = 0;
+				}
+			}
+			frameCounter++;
+		} else {
+			offsetSprite = 0;
+		}
+		int offsetSpriteAnimation = 0;
+		switch (offsetSprite) {
+		case 0:
+			offsetSpriteAnimation = 0;
+			break;
+		case 1:
+			offsetSpriteAnimation = 1;
+			break;
+		case 2:
+			offsetSpriteAnimation = 0;
+			break;
+		case 3:
+			offsetSpriteAnimation = 2;
+			break;
+		}
+		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.WALK_DOWN;
+		switch (this.direction) {
+		case center:
+			if (previousDirection == PovDirection.west) {
+				drawSprite = CharacterSpriteEnum.WALK_LEFT;
+			} else if (previousDirection == PovDirection.north) {
+				drawSprite = CharacterSpriteEnum.WALK_UP;
+			} else if (previousDirection == PovDirection.east) {
+				drawSprite = CharacterSpriteEnum.WALK_RIGHT;
+			} else if (previousDirection == PovDirection.south) {
+				drawSprite = CharacterSpriteEnum.WALK_DOWN;
+			}
+			break;
+		case east:
+			drawSprite = CharacterSpriteEnum.WALK_RIGHT;
+			break;
+		case north:
+			drawSprite = CharacterSpriteEnum.WALK_UP;
+			break;
+		case south:
+			drawSprite = CharacterSpriteEnum.WALK_DOWN;
+			break;
+		case west:
+			drawSprite = CharacterSpriteEnum.WALK_LEFT;
+			break;
+		case northEast:
+		case northWest:
+		case southEast:
+		case southWest:
+		default:
+			break;
+
+		}
+		mbGame.getBatch().draw(
+				SpriteService.getInstance().getSprite(drawSprite, color, character, offsetSpriteAnimation),
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+	}
+
 }

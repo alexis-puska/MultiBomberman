@@ -3,8 +3,10 @@ package com.mygdx.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -72,6 +74,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
+		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getNetworkService().disconnectFromServer();
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new ClientConnexionScreen(mbGame));

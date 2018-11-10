@@ -12,10 +12,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
 import com.mygdx.enumeration.GameModeEnum;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -115,6 +117,7 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		mbGame.getPlayerService().valideNetWorkPlayerType();
 		mbGame.getNetworkService().acceptConnexion(false);
 		mbGame.getScreen().dispose();
@@ -123,6 +126,7 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
+		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getScreen().dispose();
 		if (Context.getGameMode() == GameModeEnum.SERVER) {
 			mbGame.getNetworkService().stopServer();

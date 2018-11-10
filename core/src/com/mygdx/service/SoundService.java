@@ -14,6 +14,7 @@ import com.mygdx.enumeration.SoundEnum;
 public class SoundService {
 
 	private static final String CLASS_NAME = "SoundService.class";
+	private static final float MUSIQUE_VOLUME = 0.1f;
 
 	private static SoundService instance = new SoundService();
 
@@ -41,6 +42,8 @@ public class SoundService {
 	private Sound soundTeleporterClose;
 	private Sound soundTeleporterOpen;
 	private Sound soundValide;
+	private Sound soundAzizLightFr;
+	private Sound soundAzizLightEn;
 	private MusicEnum lastMusicPlayed;
 
 	public SoundService() {
@@ -68,6 +71,8 @@ public class SoundService {
 		soundTeleporterClose = Gdx.audio.newSound(Gdx.files.internal("sound/sound_teleporter_close.wav"));
 		soundTeleporterOpen = Gdx.audio.newSound(Gdx.files.internal("sound/sound_teleporter_open.wav"));
 		soundValide = Gdx.audio.newSound(Gdx.files.internal("sound/sound_valide.wav"));
+		soundAzizLightFr = Gdx.audio.newSound(Gdx.files.internal("sound/sound_aziz_light_fr.wav"));
+		soundAzizLightEn = Gdx.audio.newSound(Gdx.files.internal("sound/sound_aziz_light_en.wav"));
 	}
 
 	public static SoundService getInstance() {
@@ -89,11 +94,13 @@ public class SoundService {
 		stopMusic();
 		switch (musicEnum) {
 		case BATTLE:
+			musicBattle.setVolume(MUSIQUE_VOLUME);
 			musicBattle.play();
 			musicBattle.setLooping(true);
 			break;
 		case MENU:
 		default:
+			musicMenu.setVolume(MUSIQUE_VOLUME);
 			musicMenu.play();
 			musicMenu.setLooping(true);
 			break;
@@ -152,6 +159,12 @@ public class SoundService {
 			break;
 		case VALIDE:
 			soundValide.play();
+			break;
+		case AZIZ_LIGHT_EN:
+			soundAzizLightEn.play();
+			break;
+		case AZIZ_LIGHT_FR:
+			soundAzizLightFr.play();
 			break;
 		case BIP:
 		default:

@@ -11,10 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -150,18 +152,21 @@ public class RulesScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new LevelScreen(mbGame));
 	}
 
 	@Override
 	public void pressSelect() {
+		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new SkinScreen(mbGame));
 	}
 
 	@Override
 	public void pressUp() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		cursorPosition--;
 		if (cursorPosition < 0) {
 			cursorPosition = 0;
@@ -170,6 +175,7 @@ public class RulesScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressDown() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		cursorPosition++;
 		if (cursorPosition > 3) {
 			cursorPosition = 3;
@@ -200,6 +206,7 @@ public class RulesScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressA() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		switch (cursorPosition) {
 		case 0:
 			Context.toogleSuddenDeath();
@@ -219,6 +226,7 @@ public class RulesScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressB() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		switch (cursorPosition) {
 		case 0:
 			Context.toogleSuddenDeath();

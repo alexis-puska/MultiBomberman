@@ -11,10 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -191,6 +193,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		mbGame.getPlayerService().initControllerMap();
 		if (mbGame.getNetworkService().connectToServer(Context.getPort(), Context.getIp())) {
 			mbGame.getScreen().dispose();
@@ -200,12 +203,14 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
+		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new MainScreen(mbGame));
 	}
 
 	@Override
 	public void pressUp() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		switch (cursorPos) {
 		case 0:
 			break;
@@ -254,6 +259,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressDown() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		switch (cursorPos) {
 		case 0:
 			cursorPos++;
@@ -303,6 +309,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressLeft() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		switch (cursorPos) {
 		case 0:
 			Context.decLocalPlayer();
@@ -330,6 +337,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressRight() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		switch (cursorPos) {
 		case 0:
 			Context.incLocalPlayer();

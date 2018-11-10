@@ -11,10 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -153,6 +155,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		if (mbGame.getNetworkService().initServer()) {
 			mbGame.getScreen().dispose();
 			mbGame.setScreen(new WaitConnexionScreen(mbGame));
@@ -161,6 +164,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressSelect() {
+		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new PlayerTypeScreen(mbGame));
 	}
@@ -172,6 +176,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressUp() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		cursorPosition--;
 		if (cursorPosition < 0) {
 			cursorPosition = 0;
@@ -180,6 +185,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressDown() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		cursorPosition++;
 		if (cursorPosition > 3) {
 			cursorPosition = 3;
@@ -188,6 +194,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressLeft() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		switch (cursorPosition) {
 		case 0:
 			Context.decExternalPlayer();
@@ -207,6 +214,7 @@ public class ServerParamScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressRight() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		switch (cursorPosition) {
 		case 0:
 			Context.incExternalPlayer();

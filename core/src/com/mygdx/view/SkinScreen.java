@@ -12,10 +12,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.GameModeEnum;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -119,12 +121,14 @@ public class SkinScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new RulesScreen(mbGame));
 	}
 
 	@Override
 	public void pressSelect() {
+		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		if (Context.getGameMode() == GameModeEnum.LOCAL) {
 			mbGame.getScreen().dispose();
 			mbGame.setScreen(new PlayerTypeScreen(mbGame));

@@ -11,10 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 
@@ -114,12 +116,14 @@ public class LangueScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new MainScreen(mbGame));
 	}
 
 	@Override
 	public void pressSelect() {
+		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new SplashScreen(mbGame));
 	}
@@ -144,11 +148,13 @@ public class LangueScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressLeft() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		Context.decLocale();
 	}
 
 	@Override
 	public void pressRight() {
+		SoundService.getInstance().playSound(SoundEnum.BIP);
 		Context.incLocale();
 	}
 

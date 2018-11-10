@@ -30,7 +30,9 @@ import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.Rail;
 import com.mygdx.domain.level.Teleporter;
 import com.mygdx.domain.level.Wall;
+import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.enumeration.MusicEnum;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
@@ -88,7 +90,10 @@ public class Game {
 
 	private Level level;
 
+	private int lightCountdown;
+
 	public Game(final MultiBombermanGame mbGame) {
+		this.lightCountdown = 50;
 		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
@@ -155,6 +160,15 @@ public class Game {
 		this.players = this.mbGame.getPlayerService().generatePlayer(this.world, this.level,
 				this.level.getStartPlayer());
 
+		if (this.level.getShadow() > 0f) {
+			if (Context.getLocale() == LocaleEnum.ENGLISH) {
+				SoundService.getInstance().playSound(SoundEnum.AZIZ_LIGHT_EN);
+			} else {
+				SoundService.getInstance().playSound(SoundEnum.AZIZ_LIGHT_FR);
+			}
+		} else {
+			SoundService.getInstance().playSound(SoundEnum.VALIDE);
+		}
 	}
 
 	/******************************
@@ -217,6 +231,9 @@ public class Game {
 		if (Constante.DEBUG) {
 			debugCamera.update();
 			debugRenderer.render(world, debugCamera.combined);
+		}
+		if (lightCountdown > 0) {
+			lightCountdown--;
 		}
 	}
 
@@ -307,10 +324,12 @@ public class Game {
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 
-		Collections.sort(players);
-		players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
-		level.getFires().stream().filter(f -> !f.isOff()).forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
-
+		if (lightCountdown == 0) {
+			Collections.sort(players);
+			players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
+			level.getFires().stream().filter(f -> !f.isOff())
+					.forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
+		}
 		shapeRenderer.end();
 		Gdx.gl.glColorMask(true, true, true, true);
 
