@@ -32,5 +32,13 @@ public abstract class BodyAble {
 	public Vector2 getPosition() {
 		return body.getPosition();
 	}
+	
+	public float getBodyX() {
+		return this.body.getPosition().x;
+	}
+	
+	public float getBodyY() {
+		return this.body.getPosition().y;
+	}
 
 }

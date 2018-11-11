@@ -95,7 +95,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.bombeStrenght = bombeStrenght;
 		this.nbBombe = nbBombe;
 		this.walkSpeed = Constante.WALK_SPEED;
-		this.bombeType = BombeTypeEnum.BOMBE;
+		this.bombeType = BombeTypeEnum.BOMBE_MAX;
 		this.canPutLineOfBombe = false;
 		this.insideBombe = false;
 		this.insideFire = 0;

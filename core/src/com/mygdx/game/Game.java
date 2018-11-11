@@ -331,6 +331,7 @@ public class Game {
 			level.getFires().stream().filter(f -> !f.isOff())
 					.forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
 			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
+				shapeRenderer.setColor(new Color(b.getLight(), b.getLight(), b.getLight(), 0f));
 				BombeLight light = b.getOffesetShadow();
 				shapeRenderer.circle(b.getX() + light.getX(), b.getY() + light.getY(), light.getRadius());
 			});

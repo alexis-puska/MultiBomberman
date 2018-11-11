@@ -127,6 +127,10 @@ public class Bombe extends BodyAble {
 		return this.type.isCreateLight();
 	}
 
+	public float getLight() {
+		return this.type.getLight();
+	}
+
 	@Override
 	public void update() {
 		if (frameCounter > NB_FRAME) {
@@ -315,18 +319,19 @@ public class Bombe extends BodyAble {
 	 * --- HURT WALL ---
 	 *****************************************/
 	public void hurtWallOrBrick(float x, float y) {
+		Gdx.app.log("BOMBE", "hurt wall");
 		float diffX = Math.abs(this.body.getPosition().x - x);
 		float diffY = Math.abs(this.body.getPosition().y - y);
 		if (direction != PovDirection.center) {
-			if (diffX > 0.8f && diffY < 0.1f) {
-				hurtWallOnEastOrWest();
-			} else if (diffY > 0.8f && diffX < 0.1f) {
-				hurtWallOnNorthOrSouth();
+			if (diffX > 0.8f && diffY < 0.2f) {
+				hurtSomethingOnEastOrWest();
+			} else if (diffY > 0.8f && diffX < 0.2f) {
+				hurtSomethingOnNorthOrSouth();
 			}
 		}
 	}
 
-	private void hurtWallOnNorthOrSouth() {
+	private void hurtSomethingOnNorthOrSouth() {
 		if (type == BombeTypeEnum.BOMBE_RUBBER) {
 			if (direction == PovDirection.north) {
 				SoundService.getInstance().playSound(SoundEnum.BOUNCE);
@@ -340,7 +345,7 @@ public class Bombe extends BodyAble {
 		}
 	}
 
-	private void hurtWallOnEastOrWest() {
+	private void hurtSomethingOnEastOrWest() {
 		if (type == BombeTypeEnum.BOMBE_RUBBER) {
 			if (direction == PovDirection.east) {
 				SoundService.getInstance().playSound(SoundEnum.BOUNCE);
@@ -352,5 +357,11 @@ public class Bombe extends BodyAble {
 		} else if (direction == PovDirection.east || direction == PovDirection.west) {
 			direction = PovDirection.center;
 		}
+	}
+
+	public void hurtBombe() {
+		Gdx.app.log("BOMBE", "hurt bombe");
+		hurtSomethingOnNorthOrSouth();
+		hurtSomethingOnEastOrWest();
 	}
 }

@@ -8,10 +8,12 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.game.Bombe;
+import com.mygdx.domain.game.Brick;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
 import com.mygdx.domain.level.Teleporter;
+import com.mygdx.domain.level.Wall;
 
 public class CustomContactListener implements ContactListener {
 
@@ -29,6 +31,9 @@ public class CustomContactListener implements ContactListener {
 		beginContactPlayerBombe(contact);
 		beginContactPlayerHitboxBombe(contact);
 		beginContactBombeFire(contact);
+		beginContactBombes(contact);
+		beginContactBombeWall(contact);
+		beginContactBombeBrick(contact);
 	}
 
 	private void beginContactPlayerInterrupter(Contact contact) {
@@ -139,6 +144,44 @@ public class CustomContactListener implements ContactListener {
 			contact.setEnabled(false);
 			Player p = (Player) contact.getFixtureA().getUserData();
 			p.insideBombe(true);
+		}
+	}
+
+	private void beginContactBombes(Contact contact) {
+		if ((contact.getFixtureA().getUserData().getClass() == Bombe.class
+				&& contact.getFixtureB().getUserData().getClass() == Bombe.class)) {
+			Bombe b1 = (Bombe) contact.getFixtureA().getUserData();
+			Bombe b2 = (Bombe) contact.getFixtureB().getUserData();
+			b1.hurtBombe();
+			b2.hurtBombe();
+		}
+	}
+
+	private void beginContactBombeWall(Contact contact) {
+		if ((contact.getFixtureA().getUserData().getClass() == Bombe.class
+				&& contact.getFixtureB().getUserData().getClass() == Wall.class)) {
+			Bombe b = (Bombe) contact.getFixtureA().getUserData();
+			Wall w = (Wall) contact.getFixtureB().getUserData();
+			b.hurtWallOrBrick(w.getBodyX(), w.getBodyY());
+		} else if ((contact.getFixtureA().getUserData().getClass() == Wall.class
+				&& contact.getFixtureB().getUserData().getClass() == Bombe.class)) {
+			Bombe b = (Bombe) contact.getFixtureB().getUserData();
+			Wall w = (Wall) contact.getFixtureA().getUserData();
+			b.hurtWallOrBrick(w.getBodyX(), w.getBodyY());
+		}
+	}
+
+	private void beginContactBombeBrick(Contact contact) {
+		if ((contact.getFixtureA().getUserData().getClass() == Bombe.class
+				&& contact.getFixtureB().getUserData().getClass() == Brick.class)) {
+			Bombe b = (Bombe) contact.getFixtureA().getUserData();
+			Brick w = (Brick) contact.getFixtureB().getUserData();
+			b.hurtWallOrBrick(w.getBodyX(), w.getBodyY());
+		} else if ((contact.getFixtureA().getUserData().getClass() == Brick.class
+				&& contact.getFixtureB().getUserData().getClass() == Bombe.class)) {
+			Bombe b = (Bombe) contact.getFixtureB().getUserData();
+			Brick w = (Brick) contact.getFixtureA().getUserData();
+			b.hurtWallOrBrick(w.getBodyX(), w.getBodyY());
 		}
 	}
 

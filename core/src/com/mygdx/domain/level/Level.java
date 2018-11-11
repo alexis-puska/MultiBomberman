@@ -105,7 +105,7 @@ public class Level {
 	}
 
 	public void update() {
-		bombes.stream().forEach(Bombe::update);
+		bombes.stream().filter(b -> !b.isExploded()).forEach(Bombe::update);
 		bricks.stream().forEach(Brick::update);
 		fires.stream().forEach(Fire::update);
 		mine.stream().forEach(Mine::update);
