@@ -215,32 +215,22 @@ public class Bombe extends BodyAble {
 	public void explode() {
 		int posX = (int) body.getPosition().x;
 		int posY = (int) body.getPosition().y;
-		int calcX = 0;
-		int calcY = 0;
 		if (this.level.getOccupedWallBrick()[posX][posY] == null) {
 			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, posX, posY, FireEnum.FIRE_CENTER));
 		}
-		for (int i = 1; i <= this.strenght; i++) {
-			calcX = GridUtils.calcIdxX(posX, i);
-			calcY = posY;
-			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_RIGHT_EXT : FireEnum.FIRE_RIGHT)) {
-				break;
-			}
-		}
-		for (int i = 1; i <= this.strenght; i++) {
-			calcX = posX;
-			calcY = GridUtils.calcIdxY(posY, -i);
-			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_DOWN_EXT : FireEnum.FIRE_DOWN)) {
-				break;
-			}
-		}
-		for (int i = 1; i <= this.strenght; i++) {
-			calcX = GridUtils.calcIdxX(posX, -i);
-			calcY = posY;
-			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_LEFT_EXT : FireEnum.FIRE_LEFT)) {
-				break;
-			}
-		}
+		generateFireRight(posX, posY);
+		generateFireDown(posX, posY);
+		generateFireLeft(posX, posY);
+		generateFireUp(posX, posY);
+		exploded = true;
+		SoundService.getInstance().playSound(SoundEnum.FIRE);
+		this.dispose();
+		this.player.bombeExploded();
+	}
+
+	private void generateFireUp(int posX, int posY) {
+		int calcX;
+		int calcY;
 		for (int i = 1; i <= this.strenght; i++) {
 			calcX = posX;
 			calcY = GridUtils.calcIdxY(posY, i);
@@ -248,10 +238,42 @@ public class Bombe extends BodyAble {
 				break;
 			}
 		}
-		exploded = true;
-		SoundService.getInstance().playSound(SoundEnum.FIRE);
-		this.dispose();
-		this.player.bombeExploded();
+	}
+
+	private void generateFireLeft(int posX, int posY) {
+		int calcX;
+		int calcY;
+		for (int i = 1; i <= this.strenght; i++) {
+			calcX = GridUtils.calcIdxX(posX, -i);
+			calcY = posY;
+			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_LEFT_EXT : FireEnum.FIRE_LEFT)) {
+				break;
+			}
+		}
+	}
+
+	private void generateFireDown(int posX, int posY) {
+		int calcX;
+		int calcY;
+		for (int i = 1; i <= this.strenght; i++) {
+			calcX = posX;
+			calcY = GridUtils.calcIdxY(posY, -i);
+			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_DOWN_EXT : FireEnum.FIRE_DOWN)) {
+				break;
+			}
+		}
+	}
+
+	private void generateFireRight(int posX, int posY) {
+		int calcX;
+		int calcY;
+		for (int i = 1; i <= this.strenght; i++) {
+			calcX = GridUtils.calcIdxX(posX, i);
+			calcY = posY;
+			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_RIGHT_EXT : FireEnum.FIRE_RIGHT)) {
+				break;
+			}
+		}
 	}
 
 	private boolean generateFire(int calcX, int calcY, FireEnum fireEnum) {

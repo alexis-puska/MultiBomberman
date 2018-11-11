@@ -327,45 +327,19 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	@Override
 	public void pressX() {
 		if (canPutLineOfBombe && !insideBombe) {
-			int calcX = 0;
-			int calcY = 0;
 			int nb = nbBombe;
 			switch (this.previousDirection) {
 			case east:
-				for (int i = 0; i < nb; i++) {
-					calcX = GridUtils.calcIdxY((int) this.body.getPosition().x, i);
-					calcY = (int) this.body.getPosition().y;
-					if (!putBombe(calcX, calcY)) {
-						break;
-					}
-				}
+				putBombeLineEast(nb);
 				break;
 			case north:
-				for (int i = 0; i < nb; i++) {
-					calcX = (int) this.body.getPosition().x;
-					calcY = GridUtils.calcIdxY((int) this.body.getPosition().y, i);
-					if (!putBombe(calcX, calcY)) {
-						break;
-					}
-				}
+				putBombeLineNorth(nb);
 				break;
 			case south:
-				for (int i = 0; i < nb; i++) {
-					calcX = (int) this.body.getPosition().x;
-					calcY = GridUtils.calcIdxY((int) this.body.getPosition().y, -i);
-					if (!putBombe(calcX, calcY)) {
-						break;
-					}
-				}
+				putBombeLineSouth(nb);
 				break;
 			case west:
-				for (int i = 0; i < nb; i++) {
-					calcX = GridUtils.calcIdxY((int) this.body.getPosition().x, -i);
-					calcY = (int) this.body.getPosition().y;
-					if (!putBombe(calcX, calcY)) {
-						break;
-					}
-				}
+				putBombeLineWest(nb);
 				break;
 			case center:
 			case northEast:
@@ -373,6 +347,54 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			case southEast:
 			case southWest:
 			default:
+				break;
+			}
+		}
+	}
+
+	private void putBombeLineWest(int nb) {
+		int calcX;
+		int calcY;
+		for (int i = 0; i < nb; i++) {
+			calcX = GridUtils.calcIdxY((int) this.body.getPosition().x, -i);
+			calcY = (int) this.body.getPosition().y;
+			if (!putBombe(calcX, calcY)) {
+				break;
+			}
+		}
+	}
+
+	private void putBombeLineSouth(int nb) {
+		int calcX;
+		int calcY;
+		for (int i = 0; i < nb; i++) {
+			calcX = (int) this.body.getPosition().x;
+			calcY = GridUtils.calcIdxY((int) this.body.getPosition().y, -i);
+			if (!putBombe(calcX, calcY)) {
+				break;
+			}
+		}
+	}
+
+	private void putBombeLineNorth(int nb) {
+		int calcX;
+		int calcY;
+		for (int i = 0; i < nb; i++) {
+			calcX = (int) this.body.getPosition().x;
+			calcY = GridUtils.calcIdxY((int) this.body.getPosition().y, i);
+			if (!putBombe(calcX, calcY)) {
+				break;
+			}
+		}
+	}
+
+	private void putBombeLineEast(int nb) {
+		int calcX;
+		int calcY;
+		for (int i = 0; i < nb; i++) {
+			calcX = GridUtils.calcIdxY((int) this.body.getPosition().x, i);
+			calcY = (int) this.body.getPosition().y;
+			if (!putBombe(calcX, calcY)) {
 				break;
 			}
 		}
@@ -533,6 +555,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			offsetSpriteAnimation = 0;
 			break;
 		case 3:
+		default:
 			offsetSpriteAnimation = 2;
 			break;
 		}

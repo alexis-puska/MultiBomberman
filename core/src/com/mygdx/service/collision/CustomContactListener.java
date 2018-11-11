@@ -277,9 +277,6 @@ public class CustomContactListener implements ContactListener {
 	private boolean distance(Vector2 p1, Vector2 p2, float distance) {
 		double d = Math.sqrt(Math.abs(p1.x - p2.x)) + Math.sqrt(Math.abs(p1.y - p2.y));
 		double dd = Math.sqrt(distance);
-//		Gdx.app.log("calc distance",
-//				"p1 : " + p1.x + " " + p1.y + ",p2 : " + p2.x + " " + p2 + ",distance : " + distance + " ,x2+y2 : "
-//						+ d + " ,sqrt : " + distance * distance + " " + (d < dd));
 		return d < dd;
 
 	}
