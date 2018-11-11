@@ -91,7 +91,7 @@ public class Brick extends BodyAble implements LevelElement {
 				indexAnimation++;
 				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(this.animation) - 1) {
 					this.state = BrickStateEnum.BURNED;
-					this.level.getOccupedWallBrick()[this.getX()][this.getY()] = null;
+					this.level.getOccupedWallBrickBonus()[this.getX()][this.getY()] = null;
 					this.level.getBonuss().stream().filter(b -> b.x == this.x && b.y == this.y)
 							.forEach(Bonus::revealBonus);
 					dispose();

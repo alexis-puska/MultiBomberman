@@ -2,11 +2,11 @@ package com.mygdx.domain.game;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.FireEnum;
@@ -26,7 +26,6 @@ public class Fire extends BodyAble {
 	private int frameCounter;
 	private int offsetSprite;
 	private int nbFrameForAnimation;
-	private int offsetSpriteAnimation;
 
 	public Fire(World world, MultiBombermanGame mbGame, Level level, int x, int y, FireEnum fireEnum) {
 		this.world = world;
@@ -91,7 +90,7 @@ public class Fire extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(fireEnum.getSpriteEnum(), offsetSpriteAnimation),
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(fireEnum.getSpriteEnum(), offsetSprite),
 				(float) this.x * 18, (float) this.y * 16);
 	}
 
@@ -106,31 +105,6 @@ public class Fire extends BodyAble {
 			}
 		}
 		frameCounter++;
-		offsetSpriteAnimation = 0;
-		switch (offsetSprite) {
-		case 0:
-			offsetSpriteAnimation = 3;
-			break;
-		case 1:
-			offsetSpriteAnimation = 2;
-			break;
-		case 2:
-			offsetSpriteAnimation = 1;
-			break;
-		case 3:
-			offsetSpriteAnimation = 0;
-			break;
-		case 4:
-			offsetSpriteAnimation = 1;
-			break;
-		case 5:
-			offsetSpriteAnimation = 2;
-			break;
-		case 6:
-		default:
-			offsetSpriteAnimation = 3;
-			break;
-		}
 	}
 
 	public boolean isOff() {

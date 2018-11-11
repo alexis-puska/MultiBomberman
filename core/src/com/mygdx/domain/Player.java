@@ -161,7 +161,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (destinationTeleporter == null) {
 			List<Teleporter> destination = this.level.getTeleporter().stream()
 					.filter(t -> ((t.getX() != tel.getX() || t.getY() != tel.getY())
-							&& this.level.getOccupedWallBrick()[t.getX()][t.getY()] == null))
+							&& this.level.getOccupedWallBrickBonus()[t.getX()][t.getY()] == null))
 					.collect(Collectors.toList());
 			if (!destination.isEmpty()) {
 				int idx = ThreadLocalRandom.current().nextInt(0, destination.size());
@@ -482,7 +482,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private boolean putBombe(int x, int y) {
-		if (this.level.getOccupedWallBrick()[x][y] != null) {
+		if (this.level.getOccupedWallBrickBonus()[x][y] != null) {
 			return false;
 		} else {
 			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
@@ -530,7 +530,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawStateNormal() {
-		nbFrameForAnimation = 4;
+		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(CharacterSpriteEnum.WALK_LEFT);
 		if (direction != PovDirection.center) {
 			if (frameCounter > NB_FRAME) {
 				frameCounter = 0;
@@ -542,22 +542,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			frameCounter++;
 		} else {
 			offsetSprite = 0;
-		}
-		int offsetSpriteAnimation = 0;
-		switch (offsetSprite) {
-		case 0:
-			offsetSpriteAnimation = 0;
-			break;
-		case 1:
-			offsetSpriteAnimation = 1;
-			break;
-		case 2:
-			offsetSpriteAnimation = 0;
-			break;
-		case 3:
-		default:
-			offsetSpriteAnimation = 2;
-			break;
 		}
 		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.WALK_DOWN;
 		switch (this.direction) {
@@ -593,7 +577,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 		}
 		mbGame.getBatch().draw(
-				SpriteService.getInstance().getSprite(drawSprite, color, character, offsetSpriteAnimation),
+				SpriteService.getInstance().getSprite(drawSprite, color, character, offsetSprite),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 

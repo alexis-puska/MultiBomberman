@@ -46,7 +46,6 @@ public class Bombe extends BodyAble {
 	private int frameCounter;
 	private int offsetSprite;
 	private int nbFrameForAnimation;
-	private int offsetSpriteAnimation;
 
 	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
 			Player player, int countDown) {
@@ -107,7 +106,7 @@ public class Bombe extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(type.getSpriteEnum(), offsetSpriteAnimation),
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(type.getSpriteEnum(), offsetSprite),
 				(float) ((body.getPosition().x - 0.5f) * 18f), (float) ((body.getPosition().y - 0.5f) * 16f));
 	}
 
@@ -120,7 +119,7 @@ public class Bombe extends BodyAble {
 	}
 
 	public BombeLight getOffesetShadow() {
-		return this.type.getOffsetLight().get(offsetSpriteAnimation);
+		return this.type.getOffsetLight().get(offsetSprite);
 	}
 
 	public boolean isCreateLight() {
@@ -141,21 +140,7 @@ public class Bombe extends BodyAble {
 			}
 		}
 		frameCounter++;
-		switch (offsetSprite) {
-		case 0:
-			offsetSpriteAnimation = 1;
-			break;
-		case 1:
-			offsetSpriteAnimation = 0;
-			break;
-		case 2:
-			offsetSpriteAnimation = 1;
-			break;
-		case 3:
-		default:
-			offsetSpriteAnimation = 2;
-			break;
-		}
+
 		switch (type) {
 		case BOMBE:
 		case BOMBE_MAX:
@@ -219,7 +204,7 @@ public class Bombe extends BodyAble {
 	public void explode() {
 		int posX = (int) body.getPosition().x;
 		int posY = (int) body.getPosition().y;
-		if (this.level.getOccupedWallBrick()[posX][posY] == null) {
+		if (this.level.getOccupedWallBrickBonus()[posX][posY] == null) {
 			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, posX, posY, FireEnum.FIRE_CENTER));
 		}
 		generateFireRight(posX, posY);
@@ -281,11 +266,17 @@ public class Bombe extends BodyAble {
 	}
 
 	private boolean generateFire(int calcX, int calcY, FireEnum fireEnum) {
-		if (this.level.getOccupedWallBrick()[calcX][calcY] != null) {
-			this.level.getOccupedWallBrick()[calcX][calcY].action();
-			if (this.type != BombeTypeEnum.BOMBE_MAX
-					|| this.level.getOccupedWallBrick()[calcX][calcY].getClass().equals(Wall.class)) {
+		if (this.level.getOccupedWallBrickBonus()[calcX][calcY] != null) {
+			this.level.getOccupedWallBrickBonus()[calcX][calcY].action();
+			if (this.level.getOccupedWallBrickBonus()[calcX][calcY].getClass().equals(Wall.class)) {
 				return true;
+			}
+			if (this.type != BombeTypeEnum.BOMBE_MAX) {
+				if (this.level.getOccupedWallBrickBonus()[calcX][calcY].getClass().equals(Bonus.class)) {
+					return false;
+				} else {
+					return true;
+				}
 			}
 		} else {
 			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, calcX, calcY, fireEnum));

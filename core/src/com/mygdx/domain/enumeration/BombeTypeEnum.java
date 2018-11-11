@@ -29,25 +29,28 @@ public enum BombeTypeEnum {
 
 	private static Map<Integer, BombeLight> initBombe() {
 		Map<Integer, BombeLight> v = new HashMap<>();
-		v.put(0, new BombeLight(7, 7, 3));
-		v.put(1, new BombeLight(7, 7, 4));
+		v.put(0, new BombeLight(6, 6, 4));
+		v.put(1, new BombeLight(7, 7, 3));
 		v.put(2, new BombeLight(6, 6, 4));
+		v.put(3, new BombeLight(6, 6, 4));
 		return v;
 	}
 
 	private static Map<Integer, BombeLight> initBombeP() {
 		Map<Integer, BombeLight> v = new HashMap<>();
-		v.put(0, new BombeLight(7, 7, 3));
+		v.put(0, new BombeLight(7, 7, 4));
 		v.put(1, new BombeLight(7, 7, 4));
-		v.put(2, new BombeLight(6, 6, 4));
+		v.put(2, new BombeLight(7, 7, 4));
+		v.put(3, new BombeLight(7, 7, 4));
 		return v;
 	}
 
 	private static Map<Integer, BombeLight> initBombeD() {
 		Map<Integer, BombeLight> v = new HashMap<>();
-		v.put(0, new BombeLight(-1, 0, 8));
-		v.put(1, new BombeLight(-1, 0, 7));
-		v.put(2, new BombeLight(-1, 0, 6));
+		v.put(0, new BombeLight(-1, 0, 7));
+		v.put(1, new BombeLight(-1, 0, 8));
+		v.put(2, new BombeLight(-1, 0, 7));
+		v.put(3, new BombeLight(-1, 0, 6));
 		return v;
 	}
 
@@ -55,7 +58,8 @@ public enum BombeTypeEnum {
 		Map<Integer, BombeLight> v = new HashMap<>();
 		v.put(0, new BombeLight(0, 6, 4));
 		v.put(1, new BombeLight(-2, 6, 4));
-		v.put(2, new BombeLight(2, 6, 4));
+		v.put(2, new BombeLight(0, 6, 4));
+		v.put(3, new BombeLight(2, 6, 4));
 		return v;
 	}
 

@@ -28,21 +28,27 @@ public class Bonus extends BodyAble implements LevelElement {
 	private int countdown;
 	private int indexAnimation;
 
-	public Bonus(Level level, World world, MultiBombermanGame mbGame, int x, int y, BonusTypeEnum type) {
+	public Bonus(Level level, World world, MultiBombermanGame mbGame, int x, int y, BonusTypeEnum type,
+			BonusStateEnum state) {
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
 		this.x = x;
 		this.y = y;
 		this.type = type;
-		this.state = BonusStateEnum.CREATED;
-		Gdx.app.log("BONUS", "CREATED");
+		this.state = state;
+		if (state == BonusStateEnum.REVEALED) {
+			this.level.getOccupedWallBrickBonus()[x][y] = this;
+			this.createBody();
+		}else {
+			Gdx.app.log("BONUS", "CREATED");
+		}
 	}
 
 	public void revealBonus() {
 		Gdx.app.log("BONUS", "REVELEAD");
 		this.state = BonusStateEnum.REVEALED;
-		this.level.getOccupedWallBrick()[x][y] = this;
+		this.level.getOccupedWallBrickBonus()[x][y] = this;
 		this.createBody();
 	}
 
@@ -90,7 +96,7 @@ public class Bonus extends BodyAble implements LevelElement {
 				indexAnimation++;
 				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(SpriteEnum.BONUS_BURN) - 1) {
 					this.state = BonusStateEnum.BURNED;
-					this.level.getOccupedWallBrick()[this.x][this.y] = null;
+					this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
 					dispose();
 				}
 			}

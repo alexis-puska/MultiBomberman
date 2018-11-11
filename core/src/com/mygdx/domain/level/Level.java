@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.enumeration.BonusStateEnum;
 import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.domain.game.Bombe;
@@ -48,8 +49,9 @@ public class Level {
 	private List<CustomTexture> customForegroundTexture;
 	private List<StartPlayer> startPlayer;
 
-	private LevelElement[][] occupedWallBrick;
-	private List<Integer> freeForBonus;
+	private LevelElement[][] occupedWallBrickBonus;
+	private List<Integer> noWall;
+	private List<Integer> occupedByBrick;
 	private List<Brick> bricks;
 	private List<Bombe> bombes;
 	private List<Fire> fires;
@@ -62,15 +64,17 @@ public class Level {
 		this.mbGame = game.getMultiBombermanGame();
 		this.world = world;
 		boolean[][] reservedStartPlayer = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
-		this.occupedWallBrick = new LevelElement[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
+		this.occupedWallBrickBonus = new LevelElement[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
+		this.occupedByBrick = new ArrayList<>();
+		this.noWall = new ArrayList<>();
 		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
 			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 				reservedStartPlayer[x][y] = false;
-				occupedWallBrick[x][y] = null;
+				occupedWallBrickBonus[x][y] = null;
+				noWall.add(x + y * Constante.GRID_SIZE_X);
 			}
 		}
 		this.bricks = new ArrayList<>();
-		this.freeForBonus = new ArrayList<>();
 		this.fires = new ArrayList<>();
 		this.bombes = new ArrayList<>();
 		this.bonuss = new ArrayList<>();
@@ -82,7 +86,8 @@ public class Level {
 		teleporter.stream().forEach(w -> w.init(world, game.getMultiBombermanGame(), this));
 		wall.stream().forEach(w -> {
 			w.init(world, game.getMultiBombermanGame(), this);
-			occupedWallBrick[w.getX()][w.getY()] = w;
+			occupedWallBrickBonus[w.getX()][w.getY()] = w;
+			noWall.remove(new Integer((int) w.getX() + ((int) w.getBodyY() * Constante.GRID_SIZE_X)));
 		});
 		startPlayer.stream().forEach(sp -> {
 			reservedStartPlayer[sp.getX() - 1][sp.getY() - 1] = true;
@@ -102,15 +107,37 @@ public class Level {
 	}
 
 	private void initBonus(Game game, World world) {
-		for (int i = 0; i < bonus.length; i++) {
-			for (int j = 0; j < bonus[i]; j++) {
-				int idx = ThreadLocalRandom.current().nextInt(0, freeForBonus.size());
-				int chx = freeForBonus.get(idx);
-				int x = chx % Constante.GRID_SIZE_X;
-				int y = (chx - x) / Constante.GRID_SIZE_X;
-				bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.BOMBE));
-				Gdx.app.log("BONUS", "created at : " + x + " " + y);
-				freeForBonus.remove(idx);
+		if (isFillWithBrick()) {
+			for (int i = 0; i < bonus.length; i++) {
+				for (int j = 0; j < bonus[i]; j++) {
+					int idx = ThreadLocalRandom.current().nextInt(0, occupedByBrick.size());
+					int chx = occupedByBrick.get(idx);
+					int x = chx % Constante.GRID_SIZE_X;
+					int y = (chx - x) / Constante.GRID_SIZE_X;
+					bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.BOMBE, BonusStateEnum.CREATED));
+					Gdx.app.log("BONUS", "created at : " + x + " " + y);
+					occupedByBrick.remove(idx);
+				}
+			}
+		}
+	}
+
+	public void randomBonus() {
+		if (!isFillWithBrick()) {
+			for (int i = 0; i < bonus.length; i++) {
+				for (int j = 0; j < bonus[i]; j++) {
+					if (noWall.isEmpty()) {
+						break;
+					} else {
+						int idx = ThreadLocalRandom.current().nextInt(0, noWall.size());
+						int chx = noWall.get(idx);
+						int x = chx % Constante.GRID_SIZE_X;
+						int y = (chx - x) / Constante.GRID_SIZE_X;
+						bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.BOMBE, BonusStateEnum.REVEALED));
+						Gdx.app.log("BONUS", "created at : " + x + " " + y);
+						noWall.remove(idx);
+					}
+				}
 			}
 		}
 	}
@@ -118,12 +145,12 @@ public class Level {
 	private void initBricks(Game game, World world, boolean[][] reservedStartPlayer) {
 		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
 			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
-				if (occupedWallBrick[x][y] == null && !reservedStartPlayer[x][y]
+				if (occupedWallBrickBonus[x][y] == null && !reservedStartPlayer[x][y]
 						&& ThreadLocalRandom.current().nextInt(0, 50) > 5) {
 					Brick b = new Brick(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
 					bricks.add(b);
-					occupedWallBrick[x][y] = b;
-					freeForBonus.add(y * Constante.GRID_SIZE_X + x);
+					occupedWallBrickBonus[x][y] = b;
+					occupedByBrick.add(y * Constante.GRID_SIZE_X + x);
 				}
 			}
 		}
@@ -138,7 +165,7 @@ public class Level {
 		trolley.stream().forEach(Trolley::update);
 		wall.stream().filter(w -> !w.isInit()).forEach(w -> {
 			w.init(this.world, mbGame, this);
-			occupedWallBrick[w.getX()][w.getY()] = w;
+			occupedWallBrickBonus[w.getX()][w.getY()] = w;
 		});
 	}
 
@@ -152,7 +179,7 @@ public class Level {
 	public void dispose() {
 		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
 			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
-				occupedWallBrick[x][y] = null;
+				occupedWallBrickBonus[x][y] = null;
 			}
 		}
 		hole.stream().forEach(Hole::dispose);
