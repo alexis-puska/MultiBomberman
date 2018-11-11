@@ -354,7 +354,7 @@ public class Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		level.getFires().stream().filter(f -> !f.isOff()).forEach(Fire::drawIt);
 		level.getBombes().stream().filter(b -> !b.isExploded()).forEach(Bombe::drawIt);
-		level.getBonuss().stream().filter(b -> b.isRevealed()).forEach(Bonus::drawIt);
+		level.getBonuss().stream().filter(b -> b.isRevealed() || b.isBurning()).forEach(Bonus::drawIt);
 		players.stream().forEach(Player::drawIt);
 		mbGame.getBatch().end();
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);

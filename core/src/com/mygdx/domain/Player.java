@@ -21,6 +21,7 @@ import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.BombeTypeEnum;
+import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.domain.enumeration.PlayerStateEnum;
 import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.level.Level;
@@ -66,6 +67,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	// bonus
 	private boolean canPutLineOfBombe;
+	private boolean canKickBombe;
 
 	// teleporte
 	private Teleporter destinationTeleporter;
@@ -97,10 +99,16 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.walkSpeed = Constante.WALK_SPEED;
 		this.bombeType = BombeTypeEnum.BOMBE_MAX;
 		this.canPutLineOfBombe = false;
+		this.canKickBombe = false;
 		this.insideBombe = false;
 		this.insideFire = 0;
 		this.shipSpeed = DEFAULT_SHIP_SPEED;
 		this.createBody();
+
+		this.bombeStrenght = 35;
+		this.nbBombe = 80;
+		this.canPutLineOfBombe = true;
+
 	}
 
 	@Override
@@ -177,7 +185,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	public void teleporteEnd(Teleporter tel) {
 		if (tel.equals(destinationTeleporter) && this.teleportCountDown == 0
 				&& this.state != PlayerStateEnum.TELEPORT) {
-			Gdx.app.log(CLASS_NAME, "teleporte end ok 2! ");
+			// Gdx.app.log(CLASS_NAME, "teleporte end ok 2! ");
 			destinationTeleporter = null;
 		}
 	}
@@ -196,9 +204,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case INSIDE_TROLLEY:
 			break;
 		case NORMAL:
-			if (insideFire > 0) {
-				Gdx.app.log("Player", "Normally i died");
-			}
+//			if (insideFire > 0) {
+//				Gdx.app.log("Player", "Normally i died");
+//			}
 			switch (this.direction) {
 			case center:
 				this.body.setLinearVelocity(0f, 0f);
@@ -277,10 +285,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public void insideFire(boolean value) {
 		if (value) {
-			Gdx.app.log(CLASS_NAME, "fire in");
 			insideFire++;
 		} else {
-			Gdx.app.log(CLASS_NAME, "fire out");
 			insideFire--;
 		}
 	}
@@ -355,8 +361,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private void putBombeLineWest(int nb) {
 		int calcX;
 		int calcY;
+		if (nb > Constante.GRID_SIZE_X) {
+			nb = Constante.GRID_SIZE_X - 1;
+		}
 		for (int i = 0; i < nb; i++) {
-			calcX = GridUtils.calcIdxY((int) this.body.getPosition().x, -i);
+			calcX = GridUtils.calcIdxX((int) this.body.getPosition().x, -i);
 			calcY = (int) this.body.getPosition().y;
 			if (!putBombe(calcX, calcY)) {
 				break;
@@ -367,6 +376,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private void putBombeLineSouth(int nb) {
 		int calcX;
 		int calcY;
+		if (nb > Constante.GRID_SIZE_Y) {
+			nb = Constante.GRID_SIZE_Y - 1;
+		}
 		for (int i = 0; i < nb; i++) {
 			calcX = (int) this.body.getPosition().x;
 			calcY = GridUtils.calcIdxY((int) this.body.getPosition().y, -i);
@@ -379,6 +391,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private void putBombeLineNorth(int nb) {
 		int calcX;
 		int calcY;
+		if (nb > Constante.GRID_SIZE_Y) {
+			nb = Constante.GRID_SIZE_Y - 1;
+		}
 		for (int i = 0; i < nb; i++) {
 			calcX = (int) this.body.getPosition().x;
 			calcY = GridUtils.calcIdxY((int) this.body.getPosition().y, i);
@@ -391,8 +406,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private void putBombeLineEast(int nb) {
 		int calcX;
 		int calcY;
+		if (nb > Constante.GRID_SIZE_X) {
+			nb = Constante.GRID_SIZE_X - 1;
+		}
 		for (int i = 0; i < nb; i++) {
-			calcX = GridUtils.calcIdxY((int) this.body.getPosition().x, i);
+			calcX = GridUtils.calcIdxX((int) this.body.getPosition().x, i);
 			calcY = (int) this.body.getPosition().y;
 			if (!putBombe(calcX, calcY)) {
 				break;
@@ -576,9 +594,53 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 
 		}
-		mbGame.getBatch().draw(
-				SpriteService.getInstance().getSprite(drawSprite, color, character, offsetSprite),
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, offsetSprite),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+	}
+
+	public void takeBonus(BonusTypeEnum type) {
+		Gdx.app.log(CLASS_NAME, "take bonus : " + type.name());
+		switch (type) {
+		case BOMBE:
+			this.nbBombe++;
+			break;
+		case BOMBE_LINE:
+			canPutLineOfBombe = true;
+			break;
+		case BOMBE_MAX:
+			this.bombeType = BombeTypeEnum.BOMBE_MAX;
+			break;
+		case BOMBE_P:
+			this.bombeType = BombeTypeEnum.BOMBE_P;
+			break;
+		case BOMBE_RUBBER:
+			this.bombeType = BombeTypeEnum.BOMBE_RUBBER;
+			break;
+		case DEATH:
+			break;
+		case EGGS:
+			break;
+		case FIRE:
+			this.bombeStrenght++;
+			break;
+		case FIRE_PLUS:
+			this.bombeStrenght += 10;
+			break;
+		case GLOVE:
+			break;
+		case KICK:
+			break;
+		case ROLLER:
+			break;
+		case SHIELD:
+			break;
+		case SHOES:
+			break;
+		case WALL:
+			break;
+		default:
+			break;
+		}
 	}
 
 }

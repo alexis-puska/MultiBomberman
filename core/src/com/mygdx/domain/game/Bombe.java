@@ -1,6 +1,5 @@
 package com.mygdx.domain.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -101,7 +100,6 @@ public class Bombe extends BodyAble {
 		filter.categoryBits = CollisionConstante.CATEGORY_BOMBE;
 		filter.maskBits = CollisionConstante.GROUP_BOMBE_HITBOX;
 		fixture.setFilterData(filter);
-		Gdx.app.log("BOMBE", "BODY CREATED");
 	}
 
 	@Override
@@ -310,7 +308,6 @@ public class Bombe extends BodyAble {
 	 * --- HURT WALL ---
 	 *****************************************/
 	public void hurtWallOrBrick(float x, float y) {
-		Gdx.app.log("BOMBE", "hurt wall");
 		float diffX = Math.abs(this.body.getPosition().x - x);
 		float diffY = Math.abs(this.body.getPosition().y - y);
 		if (direction != PovDirection.center) {
@@ -351,7 +348,6 @@ public class Bombe extends BodyAble {
 	}
 
 	public void hurtBombe() {
-		Gdx.app.log("BOMBE", "hurt bombe");
 		hurtSomethingOnNorthOrSouth();
 		hurtSomethingOnEastOrWest();
 	}

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.enumeration.BonusStateEnum;
@@ -114,8 +113,7 @@ public class Level {
 					int chx = occupedByBrick.get(idx);
 					int x = chx % Constante.GRID_SIZE_X;
 					int y = (chx - x) / Constante.GRID_SIZE_X;
-					bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.BOMBE, BonusStateEnum.CREATED));
-					Gdx.app.log("BONUS", "created at : " + x + " " + y);
+					bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.values()[i], BonusStateEnum.CREATED));
 					occupedByBrick.remove(idx);
 				}
 			}
@@ -133,8 +131,8 @@ public class Level {
 						int chx = noWall.get(idx);
 						int x = chx % Constante.GRID_SIZE_X;
 						int y = (chx - x) / Constante.GRID_SIZE_X;
-						bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.BOMBE, BonusStateEnum.REVEALED));
-						Gdx.app.log("BONUS", "created at : " + x + " " + y);
+						bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.values()[i],
+								BonusStateEnum.REVEALED));
 						noWall.remove(idx);
 					}
 				}
@@ -160,6 +158,7 @@ public class Level {
 		bombes.stream().filter(b -> !b.isExploded()).forEach(Bombe::update);
 		bricks.stream().forEach(Brick::update);
 		fires.stream().forEach(Fire::update);
+		bonuss.stream().forEach(Bonus::update);
 		mine.stream().forEach(Mine::update);
 		teleporter.stream().forEach(Teleporter::update);
 		trolley.stream().forEach(Trolley::update);
@@ -174,6 +173,7 @@ public class Level {
 		bricks.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
 		fires.removeIf(Fire::isOff);
 		trolley.stream().forEach(Trolley::isDestroyed);
+		bonuss.removeIf(b -> b.isBurned() || b.isTaked());
 	}
 
 	public void dispose() {

@@ -59,7 +59,6 @@ public class Hole extends BodyAble implements Initiable {
 	}
 
 	public void walkOn() {
-		Gdx.app.log("HOLE", " walk on");
 		this.walkCounter++;
 		switch (this.walkCounter) {
 		case 1:

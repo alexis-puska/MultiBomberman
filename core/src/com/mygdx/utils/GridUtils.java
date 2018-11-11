@@ -10,10 +10,14 @@ public class GridUtils {
 	public static int calcIdxX(int x, int offset) {
 		int r = x + offset;
 		if (offset < 0 && r < 0) {
-			r = Constante.GRID_SIZE_X + r;
+			while (r < 0) {
+				r = Constante.GRID_SIZE_X + r;
+			}
 		}
-		if (offset > 0 && r >= Constante.GRID_SIZE_X) {
-			r = r - Constante.GRID_SIZE_X;
+		if (offset > 0) {
+			while (r >= Constante.GRID_SIZE_X) {
+				r = r - Constante.GRID_SIZE_X;
+			}
 		}
 		return r;
 	}
@@ -21,10 +25,14 @@ public class GridUtils {
 	public static int calcIdxY(int y, int offset) {
 		int r = y + offset;
 		if (offset < 0 && r < 0) {
-			r = Constante.GRID_SIZE_Y + r;
+			while (r < 0) {
+				r = Constante.GRID_SIZE_Y + r;
+			}
 		}
-		if (offset > 0 && r >= Constante.GRID_SIZE_Y) {
-			r = r - Constante.GRID_SIZE_Y;
+		if (offset > 0) {
+			while (r >= Constante.GRID_SIZE_Y) {
+				r = r - Constante.GRID_SIZE_Y;
+			}
 		}
 		return r;
 	}

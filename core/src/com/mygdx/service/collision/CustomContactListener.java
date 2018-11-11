@@ -7,7 +7,9 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.Player;
+import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.domain.game.Bombe;
+import com.mygdx.domain.game.Bonus;
 import com.mygdx.domain.game.Brick;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
@@ -30,6 +32,7 @@ public class CustomContactListener implements ContactListener {
 		beginContactPlayerFire(contact);
 		beginContactPlayerBombe(contact);
 		beginContactPlayerHitboxBombe(contact);
+		beginContactPlayerHitboxBonus(contact);
 		beginContactBombeFire(contact);
 		beginContactBombes(contact);
 		beginContactBombeWall(contact);
@@ -125,6 +128,32 @@ public class CustomContactListener implements ContactListener {
 				contact.setEnabled(false);
 			} else {
 				b.kick(p.getDirection());
+			}
+		}
+	}
+
+	private void beginContactPlayerHitboxBonus(Contact contact) {
+		Player p = null;
+		Bonus b = null;
+		if (contact.getFixtureA().getUserData().getClass() == Bonus.class
+				&& contact.getFixtureB().getUserData().getClass() == Player.class
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_BONUS
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER_HITBOX) {
+			contact.setEnabled(false);
+			p = (Player) contact.getFixtureB().getUserData();
+			b = (Bonus) contact.getFixtureA().getUserData();
+		} else if (contact.getFixtureB().getUserData().getClass() == Bonus.class
+				&& contact.getFixtureA().getUserData().getClass() == Player.class
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_BONUS
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER_HITBOX) {
+			contact.setEnabled(false);
+			p = (Player) contact.getFixtureA().getUserData();
+			b = (Bonus) contact.getFixtureB().getUserData();
+		}
+		if (b != null && p != null) {
+			BonusTypeEnum type = b.playerTakeBonus();
+			if (type != null) {
+				p.takeBonus(type);
 			}
 		}
 	}
