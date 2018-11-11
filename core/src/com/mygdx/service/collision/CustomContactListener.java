@@ -107,6 +107,8 @@ public class CustomContactListener implements ContactListener {
 			Vector2 bp = b.getPosition();
 			if (distance(pp, bp, DETECT)) {
 				contact.setEnabled(false);
+			} else {
+				b.kick(p.getDirection());
 			}
 		} else if (contact.getFixtureB().getUserData().getClass() == Bombe.class
 				&& contact.getFixtureA().getUserData().getClass() == Player.class) {
@@ -116,6 +118,8 @@ public class CustomContactListener implements ContactListener {
 			Vector2 bp = b.getPosition();
 			if (distance(pp, bp, DETECT)) {
 				contact.setEnabled(false);
+			} else {
+				b.kick(p.getDirection());
 			}
 		}
 	}

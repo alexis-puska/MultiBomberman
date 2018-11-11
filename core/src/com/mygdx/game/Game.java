@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.game.Bombe;
+import com.mygdx.domain.game.BombeLight;
 import com.mygdx.domain.game.Brick;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
@@ -329,6 +330,10 @@ public class Game {
 			players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
 			level.getFires().stream().filter(f -> !f.isOff())
 					.forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
+			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
+				BombeLight light = b.getOffesetShadow();
+				shapeRenderer.circle(b.getX() + light.getX(), b.getY() + light.getY(), light.getRadius());
+			});
 		}
 		shapeRenderer.end();
 		Gdx.gl.glColorMask(true, true, true, true);

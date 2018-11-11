@@ -196,7 +196,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case INSIDE_TROLLEY:
 			break;
 		case NORMAL:
-			if(insideFire>0) {
+			if (insideFire > 0) {
 				Gdx.app.log("Player", "Normally i died");
 			}
 			switch (this.direction) {
@@ -271,11 +271,15 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return (int) (body.getPosition().y * 16f);
 	}
 
+	public PovDirection getDirection() {
+		return direction;
+	}
+
 	public void insideFire(boolean value) {
-		if(value) {
+		if (value) {
 			Gdx.app.log(CLASS_NAME, "fire in");
-			insideFire++;	
-		}else {
+			insideFire++;
+		} else {
 			Gdx.app.log(CLASS_NAME, "fire out");
 			insideFire--;
 		}

@@ -108,7 +108,23 @@ public class Bombe extends BodyAble {
 	@Override
 	public void drawIt() {
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(type.getSpriteEnum(), offsetSpriteAnimation),
-				(float) this.x * 18, (float) this.y * 16);
+				(float) ((body.getPosition().x - 0.5f) * 18f), (float) ((body.getPosition().y - 0.5f) * 16f));
+	}
+
+	public int getX() {
+		return (int) (body.getPosition().x * 18f);
+	}
+
+	public int getY() {
+		return (int) (body.getPosition().y * 16f);
+	}
+
+	public BombeLight getOffesetShadow() {
+		return this.type.getOffsetLight().get(offsetSpriteAnimation);
+	}
+
+	public boolean isCreateLight() {
+		return this.type.isCreateLight();
 	}
 
 	@Override
@@ -170,6 +186,23 @@ public class Bombe extends BodyAble {
 			break;
 		}
 
+		if (this.body.getPosition().x > (float) Constante.GRID_SIZE_X) {
+			this.body.setTransform(this.body.getPosition().x - (float) Constante.GRID_SIZE_X, this.body.getPosition().y,
+					0f);
+		}
+		if (this.body.getPosition().x < 0f) {
+			this.body.setTransform(this.body.getPosition().x + (float) Constante.GRID_SIZE_X, this.body.getPosition().y,
+					0f);
+		}
+		if (this.body.getPosition().y > (float) Constante.GRID_SIZE_Y) {
+			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y - (float) Constante.GRID_SIZE_Y,
+					0f);
+		}
+		if (this.body.getPosition().y < 0f) {
+			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y + (float) Constante.GRID_SIZE_Y,
+					0f);
+		}
+
 		if (countDown == 0) {
 			explode();
 		}
@@ -180,36 +213,37 @@ public class Bombe extends BodyAble {
 	}
 
 	public void explode() {
+		int posX = (int) body.getPosition().x;
+		int posY = (int) body.getPosition().y;
 		int calcX = 0;
 		int calcY = 0;
-		if (this.level.getOccupedWallBrick()[this.x][this.y] == null) {
-			this.level.getFires()
-					.add(new Fire(this.world, this.mbGame, this.level, this.x, this.y, FireEnum.FIRE_CENTER));
+		if (this.level.getOccupedWallBrick()[posX][posY] == null) {
+			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, posX, posY, FireEnum.FIRE_CENTER));
 		}
 		for (int i = 1; i <= this.strenght; i++) {
-			calcX = GridUtils.calcIdxX(this.x, i);
-			calcY = this.y;
+			calcX = GridUtils.calcIdxX(posX, i);
+			calcY = posY;
 			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_RIGHT_EXT : FireEnum.FIRE_RIGHT)) {
 				break;
 			}
 		}
 		for (int i = 1; i <= this.strenght; i++) {
-			calcX = this.x;
-			calcY = GridUtils.calcIdxY(this.y, -i);
+			calcX = posX;
+			calcY = GridUtils.calcIdxY(posY, -i);
 			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_DOWN_EXT : FireEnum.FIRE_DOWN)) {
 				break;
 			}
 		}
 		for (int i = 1; i <= this.strenght; i++) {
-			calcX = GridUtils.calcIdxX(this.x, -i);
-			calcY = this.y;
+			calcX = GridUtils.calcIdxX(posX, -i);
+			calcY = posY;
 			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_LEFT_EXT : FireEnum.FIRE_LEFT)) {
 				break;
 			}
 		}
 		for (int i = 1; i <= this.strenght; i++) {
-			calcX = this.x;
-			calcY = GridUtils.calcIdxY(this.y, i);
+			calcX = posX;
+			calcY = GridUtils.calcIdxY(posY, i);
 			if (generateFire(calcX, calcY, i == this.strenght ? FireEnum.FIRE_UP_EXT : FireEnum.FIRE_UP)) {
 				break;
 			}
