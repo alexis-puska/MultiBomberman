@@ -190,13 +190,13 @@ public class Bombe extends BodyAble {
 					0f);
 		}
 
-		if (countDown == 0) {
+		if (countDown <= 0 && !isExploded()) {
 			explode();
 		}
 	}
 
 	public void inFire() {
-		countDown = 1;
+		countDown = 0;
 	}
 
 	public void explode() {

@@ -31,7 +31,6 @@ public class MenuInputProcessor implements InputProcessor {
 	 ***************************/
 	@Override
 	public boolean keyDown(int keycode) {
-
 		switch (keycode) {
 		case Keys.ENTER:
 			this.playerService.pressStart();
@@ -68,6 +67,9 @@ public class MenuInputProcessor implements InputProcessor {
 			this.playerService.pressR();
 			break;
 		case Keys.Q:
+			if(ctrl) {
+				Gdx.app.exit();
+			}
 			this.playerService.pressY();
 			break;
 		case Keys.S:

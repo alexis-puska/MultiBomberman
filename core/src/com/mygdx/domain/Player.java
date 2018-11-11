@@ -104,11 +104,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.insideFire = 0;
 		this.shipSpeed = DEFAULT_SHIP_SPEED;
 		this.createBody();
-
-		this.bombeStrenght = 35;
-		this.nbBombe = 80;
-		this.canPutLineOfBombe = true;
-
 	}
 
 	@Override
@@ -500,7 +495,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private boolean putBombe(int x, int y) {
-		if (this.level.getOccupedWallBrickBonus()[x][y] != null) {
+		if (x >= 0 && x < Constante.GRID_SIZE_X && y >= 0 && y < Constante.GRID_SIZE_Y
+				&& this.level.getOccupedWallBrickBonus()[x][y] != null) {
 			return false;
 		} else {
 			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
@@ -622,9 +618,15 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		case FIRE:
 			this.bombeStrenght++;
+			if (this.bombeStrenght > Constante.GRID_SIZE_X - 1) {
+				this.bombeStrenght = Constante.GRID_SIZE_X - 1;
+			}
 			break;
 		case FIRE_PLUS:
 			this.bombeStrenght += 10;
+			if (this.bombeStrenght > Constante.GRID_SIZE_X - 1) {
+				this.bombeStrenght = Constante.GRID_SIZE_X - 1;
+			}
 			break;
 		case GLOVE:
 			break;
