@@ -1,0 +1,116 @@
+package com.mygdx.domain.game;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.constante.CollisionConstante;
+import com.mygdx.constante.Constante;
+import com.mygdx.domain.common.BodyAble;
+import com.mygdx.domain.enumeration.BonusStateEnum;
+import com.mygdx.domain.enumeration.BonusTypeEnum;
+import com.mygdx.domain.level.Level;
+import com.mygdx.domain.level.LevelElement;
+import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.main.MultiBombermanGame;
+import com.mygdx.service.SpriteService;
+
+public class Bonus extends BodyAble implements LevelElement {
+
+	protected int x;
+	protected int y;
+	private BonusTypeEnum type;
+	private BonusStateEnum state;
+
+	private int countdown;
+	private int indexAnimation;
+
+	public Bonus(Level level, World world, MultiBombermanGame mbGame, int x, int y, BonusTypeEnum type) {
+		this.world = world;
+		this.mbGame = mbGame;
+		this.level = level;
+		this.x = x;
+		this.y = y;
+		this.type = type;
+		this.state = BonusStateEnum.CREATED;
+		Gdx.app.log("BONUS", "CREATED");
+	}
+
+	public void revealBonus() {
+		Gdx.app.log("BONUS", "REVELEAD");
+		this.state = BonusStateEnum.REVEALED;
+		this.level.getOccupedWallBrick()[x][y] = this;
+		this.createBody();
+	}
+
+	@Override
+	public void drawIt() {
+		if (this.state == BonusStateEnum.BURN) {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS_BURN, this.type.getIndex()),
+					this.x * 18f, this.y * 16f);
+		} else if (this.state == BonusStateEnum.REVEALED) {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, this.type.getIndex()),
+					this.x * 18f, this.y * 16f);
+		}
+	}
+
+	@Override
+	protected void createBody() {
+		BodyDef groundBodyDef = new BodyDef();
+		PolygonShape groundBox = new PolygonShape();
+		groundBox.setAsBox(0.5f, 0.5f);
+		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
+		this.body = world.createBody(groundBodyDef);
+		Fixture fixture = body.createFixture(groundBox, 0.0f);
+		fixture.setFriction(0f);
+		fixture.setUserData(this);
+		Filter filter = new Filter();
+		filter.categoryBits = CollisionConstante.CATEGORY_BONUS;
+		fixture.setFilterData(filter);
+	}
+
+	@Override
+	public void action() {
+		if (state != BonusStateEnum.REVEALED) {
+			this.state = BonusStateEnum.BURN;
+			this.countdown = Constante.BURN_BRICK_COUNTDOWN;
+			this.indexAnimation++;
+		}
+	}
+
+	@Override
+	public void update() {
+		if (this.state == BonusStateEnum.BURN) {
+			this.countdown--;
+			if (this.countdown < 0) {
+				this.countdown = Constante.BURN_BRICK_COUNTDOWN;
+				indexAnimation++;
+				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(SpriteEnum.BONUS_BURN) - 1) {
+					this.state = BonusStateEnum.BURNED;
+					this.level.getOccupedWallBrick()[this.x][this.y] = null;
+					dispose();
+				}
+			}
+		}
+	}
+
+	public BonusTypeEnum getType() {
+		return this.type;
+	}
+
+	public boolean isRevealed() {
+		return this.state == BonusStateEnum.REVEALED;
+	}
+
+	public boolean isBurned() {
+		return this.state == BonusStateEnum.BURNED;
+	}
+
+	public boolean isTaked() {
+		return this.state == BonusStateEnum.TAKED;
+	}
+
+}

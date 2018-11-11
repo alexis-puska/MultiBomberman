@@ -23,6 +23,7 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.game.BombeLight;
+import com.mygdx.domain.game.Bonus;
 import com.mygdx.domain.game.Brick;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
@@ -353,6 +354,7 @@ public class Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		level.getFires().stream().filter(f -> !f.isOff()).forEach(Fire::drawIt);
 		level.getBombes().stream().filter(b -> !b.isExploded()).forEach(Bombe::drawIt);
+		level.getBonuss().stream().filter(b -> b.isRevealed()).forEach(Bonus::drawIt);
 		players.stream().forEach(Player::drawIt);
 		mbGame.getBatch().end();
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);

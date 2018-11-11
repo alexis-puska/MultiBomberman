@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.domain.game.Bombe;
+import com.mygdx.domain.game.Bonus;
 import com.mygdx.domain.game.Brick;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.enumeration.SpriteEnum;
@@ -46,10 +49,11 @@ public class Level {
 	private List<StartPlayer> startPlayer;
 
 	private LevelElement[][] occupedWallBrick;
-	private List<Integer> free;
+	private List<Integer> freeForBonus;
 	private List<Brick> bricks;
 	private List<Bombe> bombes;
 	private List<Fire> fires;
+	private List<Bonus> bonuss;
 
 	private MultiBombermanGame mbGame;
 	private World world;
@@ -66,8 +70,10 @@ public class Level {
 			}
 		}
 		this.bricks = new ArrayList<>();
+		this.freeForBonus = new ArrayList<>();
 		this.fires = new ArrayList<>();
 		this.bombes = new ArrayList<>();
+		this.bonuss = new ArrayList<>();
 		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
@@ -90,15 +96,34 @@ public class Level {
 			reservedStartPlayer[sp.getX() + 1][sp.getY() + 1] = true;
 		});
 		if (fillWithBrick) {
-			for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
-				for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
-					if (occupedWallBrick[x][y] == null && !reservedStartPlayer[x][y]
-							&& ThreadLocalRandom.current().nextInt(0, 50) > 5) {
-						Brick b = new Brick(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x,
-								y);
-						bricks.add(b);
-						occupedWallBrick[x][y] = b;
-					}
+			initBricks(game, world, reservedStartPlayer);
+		}
+		initBonus(game, world);
+	}
+
+	private void initBonus(Game game, World world) {
+		for (int i = 0; i < bonus.length; i++) {
+			for (int j = 0; j < bonus[i]; j++) {
+				int idx = ThreadLocalRandom.current().nextInt(0, freeForBonus.size());
+				int chx = freeForBonus.get(idx);
+				int x = chx % Constante.GRID_SIZE_X;
+				int y = (chx - x) / Constante.GRID_SIZE_X;
+				bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.BOMBE));
+				Gdx.app.log("BONUS", "created at : " + x + " " + y);
+				freeForBonus.remove(idx);
+			}
+		}
+	}
+
+	private void initBricks(Game game, World world, boolean[][] reservedStartPlayer) {
+		for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
+			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
+				if (occupedWallBrick[x][y] == null && !reservedStartPlayer[x][y]
+						&& ThreadLocalRandom.current().nextInt(0, 50) > 5) {
+					Brick b = new Brick(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
+					bricks.add(b);
+					occupedWallBrick[x][y] = b;
+					freeForBonus.add(y * Constante.GRID_SIZE_X + x);
 				}
 			}
 		}
