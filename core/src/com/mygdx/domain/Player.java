@@ -53,6 +53,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private PovDirection previousDirection;
 	private Body collisionBody;
 
+	// player start
+	private StartPlayer startPlayer;
+
 	private float walkSpeed;
 	private float shipSpeed;
 	private int bombeStrenght;
@@ -68,13 +71,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	// bonus
 	private boolean canPutLineOfBombe;
 	private boolean canKickBombe;
+	private boolean canRaiseBombe;
+	private float previousWalkSpeed;
 
 	// teleporte
 	private Teleporter destinationTeleporter;
 	private int teleportCountDown;
-
-	// player start
-	private StartPlayer startPlayer;
 
 	// animation part
 	int frameCounter;
@@ -101,6 +103,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.canPutLineOfBombe = false;
 		this.canKickBombe = false;
 		this.insideBombe = false;
+		this.canRaiseBombe = false;
 		this.insideFire = 0;
 		this.shipSpeed = DEFAULT_SHIP_SPEED;
 		this.createBody();
@@ -190,14 +193,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		switch (this.state) {
 		case BURNING:
 			break;
-		case CARRY_BOMBE:
-			break;
 		case CRYING:
 			break;
 		case DEAD:
 			break;
 		case INSIDE_TROLLEY:
 			break;
+		case CARRY_BOMBE:
+		case ON_LOUIS:
 		case NORMAL:
 //			if (insideFire > 0) {
 //				Gdx.app.log("Player", "Normally i died");
@@ -225,8 +228,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			default:
 				break;
 			}
-			break;
-		case ON_LOUIS:
 			break;
 		case TELEPORT:
 			if (destinationTeleporter != null && teleportCountDown == 0) {
@@ -262,7 +263,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y + (float) Constante.GRID_SIZE_Y,
 					0f);
 		}
-
 		collisionBody.setTransform(this.body.getPosition(), body.getAngle());
 	}
 
@@ -310,6 +310,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		// unused method
 	}
 
+	/******************************************************
+	 * --- PUT BOMBE ---
+	 ******************************************************/
 	@Override
 	public void pressA() {
 		if (this.nbBombe > 0 && !insideBombe) {
@@ -317,6 +320,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	/******************************************************
+	 * --- EXPLODE BOMBE P ---
+	 ******************************************************/
 	@Override
 	public void pressB() {
 		if (bombeType == BombeTypeEnum.BOMBE_P) {
@@ -325,6 +331,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	/******************************************************
+	 * --- PUT BOMBE LINE ---
+	 ******************************************************/
 	@Override
 	public void pressX() {
 		if (canPutLineOfBombe && !insideBombe) {
@@ -413,11 +422,31 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	public void bombeExploded() {
+		this.nbBombe++;
+	}
+
+	private boolean putBombe(int x, int y) {
+		if (x >= 0 && x < Constante.GRID_SIZE_X && y >= 0 && y < Constante.GRID_SIZE_Y
+				&& this.level.getOccupedWallBrickBonus()[x][y] != null) {
+			return false;
+		} else {
+			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
+					75);
+			this.level.getBombes().add(b);
+			this.nbBombe--;
+		}
+		return true;
+	}
+
 	@Override
 	public void pressY() {
 		// unused method
 	}
 
+	/******************************************************
+	 * --- MANAGE SHIP SPEED ---
+	 ******************************************************/
 	@Override
 	public void pressL() {
 		this.shipSpeed += SHIP_SPEED_STEP;
@@ -438,79 +467,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.shipSpeed -= SHIP_SPEED_STEP;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((character == null) ? 0 : character.hashCode());
-		result = prime * result + ((collisionBody == null) ? 0 : collisionBody.hashCode());
-		result = prime * result + ((color == null) ? 0 : color.hashCode());
-		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
-		result = prime * result + ((startPlayer == null) ? 0 : startPlayer.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Player other = (Player) obj;
-		if (character != other.character)
-			return false;
-		if (collisionBody == null) {
-			if (other.collisionBody != null)
-				return false;
-		} else if (!collisionBody.equals(other.collisionBody)) {
-			return false;
-		}
-		if (color != other.color)
-			return false;
-		if (direction != other.direction)
-			return false;
-		if (startPlayer == null) {
-			if (other.startPlayer != null)
-				return false;
-		} else if (!startPlayer.equals(other.startPlayer)) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public int compareTo(Player o) {
-		if (this.body.getPosition().y < o.body.getPosition().y) {
-			return 1;
-		} else if (this.body.getPosition().y > o.body.getPosition().y) {
-			return -1;
-		}
-		return 0;
-	}
-
-	public void bombeExploded() {
-		this.nbBombe++;
-	}
-
-	private boolean putBombe(int x, int y) {
-		if (x >= 0 && x < Constante.GRID_SIZE_X && y >= 0 && y < Constante.GRID_SIZE_Y
-				&& this.level.getOccupedWallBrickBonus()[x][y] != null) {
-			return false;
-		} else {
-			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
-					75);
-			this.level.getBombes().add(b);
-			this.nbBombe--;
-		}
-		return true;
-	}
-
 	/*************************************************
 	 * --- DRAW ---
 	 *************************************************/
-
 	@Override
 	public void drawIt() {
 		switch (this.state) {
@@ -594,6 +553,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
+	/******************************************************
+	 * --- MANAGE PICK UP BONUS ---
+	 ******************************************************/
 	public void takeBonus(BonusTypeEnum type) {
 		Gdx.app.log(CLASS_NAME, "take bonus : " + type.name());
 		switch (type) {
@@ -613,8 +575,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.bombeType = BombeTypeEnum.BOMBE_RUBBER;
 			break;
 		case DEATH:
+			takeDeathBonus();
 			break;
 		case EGGS:
+			this.state = PlayerStateEnum.ON_LOUIS;
 			break;
 		case FIRE:
 			this.bombeStrenght++;
@@ -629,14 +593,18 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 			break;
 		case GLOVE:
+			this.canRaiseBombe = true;
 			break;
 		case KICK:
+			canKickBombe = true;
 			break;
 		case ROLLER:
+			this.walkSpeed += Constante.ADD_WALK_SPEED;
 			break;
 		case SHIELD:
 			break;
 		case SHOES:
+			this.walkSpeed -= Constante.ADD_WALK_SPEED;
 			break;
 		case WALL:
 			break;
@@ -645,4 +613,78 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	private void takeDeathBonus() {
+		int val = ThreadLocalRandom.current().nextInt(0, 7);
+		switch (val) {
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
+	}
+
+	/******************************************************
+	 * --- UTILS ---
+	 ******************************************************/
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((character == null) ? 0 : character.hashCode());
+		result = prime * result + ((collisionBody == null) ? 0 : collisionBody.hashCode());
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
+		result = prime * result + ((startPlayer == null) ? 0 : startPlayer.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (character != other.character)
+			return false;
+		if (collisionBody == null) {
+			if (other.collisionBody != null)
+				return false;
+		} else if (!collisionBody.equals(other.collisionBody)) {
+			return false;
+		}
+		if (color != other.color)
+			return false;
+		if (direction != other.direction)
+			return false;
+		if (startPlayer == null) {
+			if (other.startPlayer != null)
+				return false;
+		} else if (!startPlayer.equals(other.startPlayer)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int compareTo(Player o) {
+		if (this.body.getPosition().y < o.body.getPosition().y) {
+			return 1;
+		} else if (this.body.getPosition().y > o.body.getPosition().y) {
+			return -1;
+		}
+		return 0;
+	}
 }
