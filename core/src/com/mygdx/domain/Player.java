@@ -30,6 +30,8 @@ import com.mygdx.domain.level.Teleporter;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
+import com.mygdx.enumeration.LouisColorEnum;
+import com.mygdx.enumeration.LouisSpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
@@ -82,7 +84,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	int frameCounter;
 	int offsetSprite;
 	int nbFrameForAnimation;
-	int louisType;
+	LouisColorEnum louisColor;
 	boolean louisBurn;
 
 	public Player(World world, MultiBombermanGame mbGame, Level level, CharacterEnum character,
@@ -92,7 +94,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.color = color;
 		this.previousDirection = PovDirection.south;
 		this.direction = PovDirection.center;
-		this.state = PlayerStateEnum.NORMAL;
+		this.state = PlayerStateEnum.ON_LOUIS;
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
@@ -106,6 +108,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.canRaiseBombe = false;
 		this.insideFire = 0;
 		this.shipSpeed = DEFAULT_SHIP_SPEED;
+		this.louisColor = LouisColorEnum.BROWN;
 		this.createBody();
 	}
 
@@ -487,6 +490,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			drawStateNormal();
 			break;
 		case ON_LOUIS:
+			drawStateOnLouis();
 			break;
 		case TELEPORT:
 			break;
@@ -503,7 +507,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawStateNormal() {
-		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(CharacterSpriteEnum.WALK_LEFT);
+		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(LouisSpriteEnum.WALK_DOWN);
 		if (direction != PovDirection.center) {
 			if (frameCounter > NB_FRAME) {
 				frameCounter = 0;
@@ -551,6 +555,75 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, offsetSprite),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+	}
+
+	private void drawStateOnLouis() {
+		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(LouisSpriteEnum.WALK_DOWN);
+		if (direction != PovDirection.center) {
+			if (frameCounter > NB_FRAME) {
+				frameCounter = 0;
+				offsetSprite++;
+				if (offsetSprite >= nbFrameForAnimation) {
+					offsetSprite = 0;
+				}
+			}
+			frameCounter++;
+		} else {
+			offsetSprite = 0;
+		}
+		LouisSpriteEnum drawSpriteLouis = LouisSpriteEnum.WALK_DOWN;
+		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.ON_LOUIS_DOWN;
+		switch (this.direction) {
+		case center:
+			if (previousDirection == PovDirection.west) {
+				drawSprite = CharacterSpriteEnum.ON_LOUIS_LEFT;
+				drawSpriteLouis = LouisSpriteEnum.WALK_LEFT;
+			} else if (previousDirection == PovDirection.north) {
+				drawSprite = CharacterSpriteEnum.ON_LOUIS_UP;
+				drawSpriteLouis = LouisSpriteEnum.WALK_UP;
+			} else if (previousDirection == PovDirection.east) {
+				drawSprite = CharacterSpriteEnum.ON_LOUIS_RIGHT;
+				drawSpriteLouis = LouisSpriteEnum.WALK_RIGHT;
+			} else if (previousDirection == PovDirection.south) {
+				drawSprite = CharacterSpriteEnum.ON_LOUIS_DOWN;
+				drawSpriteLouis = LouisSpriteEnum.WALK_DOWN;
+			}
+			break;
+		case east:
+			drawSprite = CharacterSpriteEnum.ON_LOUIS_RIGHT;
+			drawSpriteLouis = LouisSpriteEnum.WALK_RIGHT;
+			break;
+		case north:
+			drawSprite = CharacterSpriteEnum.ON_LOUIS_UP;
+			drawSpriteLouis = LouisSpriteEnum.WALK_UP;
+			break;
+		case south:
+			drawSprite = CharacterSpriteEnum.ON_LOUIS_DOWN;
+			drawSpriteLouis = LouisSpriteEnum.WALK_DOWN;
+			break;
+		case west:
+			drawSprite = CharacterSpriteEnum.ON_LOUIS_LEFT;
+			drawSpriteLouis = LouisSpriteEnum.WALK_LEFT;
+			break;
+		case northEast:
+		case northWest:
+		case southEast:
+		case southWest:
+		default:
+			break;
+
+		}
+		if (this.direction == PovDirection.south || this.previousDirection == PovDirection.south) {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
+					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSpriteLouis, louisColor, offsetSprite),
+					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+		} else {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSpriteLouis, louisColor, offsetSprite),
+					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
+					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+		}
 	}
 
 	/******************************************************
@@ -617,18 +690,30 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		int val = ThreadLocalRandom.current().nextInt(0, 7);
 		switch (val) {
 		case 0:
+			//walk like an old man 
+			
 			break;
 		case 1:
+			//diarhée
 			break;
 		case 2:
+			//constipation
+			
 			break;
 		case 3:
+			//échange avec un autre joueur
 			break;
 		case 4:
+			//bombe lente
+			
 			break;
 		case 5:
+			//bombe rapide
+			
 			break;
 		case 6:
+			//course folle
+			
 			break;
 		}
 	}

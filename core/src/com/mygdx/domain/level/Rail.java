@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import com.badlogic.gdx.controllers.PovDirection;
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.Drawable;
 import com.mygdx.domain.enumeration.RailEnum;
 import com.mygdx.enumeration.SpriteEnum;
@@ -43,25 +44,33 @@ public class Rail extends Drawable {
 		this.nearest = 0b0000000000000000;
 		List<Rail> nearestRail = level.getRail().stream().filter(r -> (r.getX() == this.x - 1 && r.getY() == this.y)
 				|| (r.getX() == this.x + 1 && r.getY() == this.y) || (r.getY() == this.y - 1 && r.getX() == this.x)
-				|| (r.getY() == this.y + 1 && r.getX() == this.x)).collect(Collectors.toList());
+				|| (r.getY() == this.y + 1 && r.getX() == this.x)
+				|| (this.x == 0 && r.getX() == Constante.GRID_SIZE_X && r.getY() == this.y)
+				|| (this.x == Constante.GRID_SIZE_X && r.getX() == 0 && r.getY() == this.y)
+				|| (this.y == 0 && r.getY() == Constante.GRID_SIZE_Y && r.getX() == this.x)
+				|| (this.y == Constante.GRID_SIZE_Y && r.getY() == 0 && r.getX() == this.x))
+				.collect(Collectors.toList());
 		if (nearestRail.size() > 2) {
 			canSwitch = true;
 		}
 		int p = 0;
 		nearestRail.stream().forEach(r -> {
-			if (r.getY() == this.y && r.getX() == this.x - 1) {
+			if (r.getY() == this.y && (r.getX() == this.x - 1 || (r.getX() == Constante.GRID_SIZE_X && this.x == 0))) {
 				// LEFT
 				this.left = r;
 				nearest += 0b0000000000000001;
-			} else if (r.getY() == this.y + 1 && r.getX() == this.x) {
+			} else if (r.getX() == this.x && (r.getY() == this.y + 1)
+					|| ((r.getY() == Constante.GRID_SIZE_Y && this.y == 0))) {
 				// UP
 				this.up = r;
 				nearest += 0b0000000000000010;
-			} else if (r.getY() == this.y && r.getX() == this.x + 1) {
+			} else if (r.getY() == this.y && (r.getX() == this.x + 1)
+					|| ((r.getX() == 0 && this.x == Constante.GRID_SIZE_X))) {
 				// RIGHT
 				this.right = r;
 				nearest += 0b0000000000000100;
-			} else if (r.getY() == this.y - 1 && r.getX() == this.x) {
+			} else if (r.getX() == this.x && (r.getY() == this.y - 1)
+					|| ((r.getY() == 0 && this.y == Constante.GRID_SIZE_Y))) {
 				// DOWN
 				this.down = r;
 				nearest += 0b0000000000001000;
@@ -177,13 +186,17 @@ public class Rail extends Drawable {
 		}
 		// convertion rail en position précédente
 		int val = 0b0000000000000000;
-		if (previous.getY() == this.y && previous.getX() == this.x - 1) {
+		if (previous.getY() == this.y
+				&& (previous.getX() == this.x - 1 || (previous.getX() == Constante.GRID_SIZE_X && this.x == 0))) {
 			val += 0b0000000000000001;
-		} else if (previous.getY() == this.y + 1 && previous.getX() == this.x) {
+		} else if (previous.getX() == this.x
+				&& (previous.getY() == this.y + 1 || (previous.getY() == 0 && this.y == Constante.GRID_SIZE_Y))) {
 			val += 0b0000000000000010;
-		} else if (previous.getY() == this.y && previous.getX() == this.x + 1) {
+		} else if (previous.getY() == this.y
+				&& (previous.getX() == this.x + 1 || (previous.getX() == 0 && this.x == Constante.GRID_SIZE_X))) {
 			val += 0b0000000000000100;
-		} else if (previous.getY() == this.y - 1 && previous.getX() == this.x) {
+		} else if (previous.getX() == this.x
+				&& (previous.getY() == this.y - 1 || (previous.getY() == Constante.GRID_SIZE_Y && this.y == 0))) {
 			val += 0b0000000000001000;
 		}
 		// si connecté à 2 rail, on retourne la direction du rail non précédent.
