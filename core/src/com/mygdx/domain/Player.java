@@ -470,6 +470,158 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.shipSpeed -= SHIP_SPEED_STEP;
 	}
 
+	/******************************************************
+	 * --- MANAGE PICK UP BONUS ---
+	 ******************************************************/
+	public void takeBonus(BonusTypeEnum type) {
+		Gdx.app.log(CLASS_NAME, "take bonus : " + type.name());
+		switch (type) {
+		case BOMBE:
+			this.nbBombe++;
+			break;
+		case BOMBE_LINE:
+			canPutLineOfBombe = true;
+			break;
+		case BOMBE_MAX:
+			this.bombeType = BombeTypeEnum.BOMBE_MAX;
+			break;
+		case BOMBE_P:
+			this.bombeType = BombeTypeEnum.BOMBE_P;
+			break;
+		case BOMBE_RUBBER:
+			this.bombeType = BombeTypeEnum.BOMBE_RUBBER;
+			break;
+		case DEATH:
+			takeDeathBonus();
+			break;
+		case EGGS:
+			this.state = PlayerStateEnum.ON_LOUIS;
+			break;
+		case FIRE:
+			this.bombeStrenght++;
+			if (this.bombeStrenght > Constante.GRID_SIZE_X - 1) {
+				this.bombeStrenght = Constante.GRID_SIZE_X - 1;
+			}
+			break;
+		case FIRE_PLUS:
+			this.bombeStrenght += 10;
+			if (this.bombeStrenght > Constante.GRID_SIZE_X - 1) {
+				this.bombeStrenght = Constante.GRID_SIZE_X - 1;
+			}
+			break;
+		case GLOVE:
+			this.canRaiseBombe = true;
+			break;
+		case KICK:
+			canKickBombe = true;
+			break;
+		case ROLLER:
+			this.walkSpeed += Constante.ADD_WALK_SPEED;
+			break;
+		case SHIELD:
+			break;
+		case SHOES:
+			this.walkSpeed -= Constante.ADD_WALK_SPEED;
+			break;
+		case WALL:
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void takeDeathBonus() {
+		int val = ThreadLocalRandom.current().nextInt(0, 7);
+		switch (val) {
+		case 0:
+			// walk like an old man
+
+			break;
+		case 1:
+			// diarhée
+
+			break;
+		case 2:
+			// constipation
+
+			break;
+		case 3:
+			// échange avec un autre joueur
+			break;
+		case 4:
+			// bombe lente
+
+			break;
+		case 5:
+			// bombe rapide
+
+			break;
+		case 6:
+			// course folle
+
+			break;
+		}
+	}
+
+	private void cancelLastMalus() {
+
+	}
+
+	/******************************************************
+	 * --- UTILS ---
+	 ******************************************************/
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((character == null) ? 0 : character.hashCode());
+		result = prime * result + ((collisionBody == null) ? 0 : collisionBody.hashCode());
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
+		result = prime * result + ((startPlayer == null) ? 0 : startPlayer.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (character != other.character)
+			return false;
+		if (collisionBody == null) {
+			if (other.collisionBody != null)
+				return false;
+		} else if (!collisionBody.equals(other.collisionBody)) {
+			return false;
+		}
+		if (color != other.color)
+			return false;
+		if (direction != other.direction)
+			return false;
+		if (startPlayer == null) {
+			if (other.startPlayer != null)
+				return false;
+		} else if (!startPlayer.equals(other.startPlayer)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int compareTo(Player o) {
+		if (this.body.getPosition().y < o.body.getPosition().y) {
+			return 1;
+		} else if (this.body.getPosition().y > o.body.getPosition().y) {
+			return -1;
+		}
+		return 0;
+	}
+
 	/*************************************************
 	 * --- DRAW ---
 	 *************************************************/
@@ -504,6 +656,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 
 		}
+	}
+
+	private void drawBurning() {
+
 	}
 
 	private void drawStateNormal() {
@@ -624,152 +780,5 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
 					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 		}
-	}
-
-	/******************************************************
-	 * --- MANAGE PICK UP BONUS ---
-	 ******************************************************/
-	public void takeBonus(BonusTypeEnum type) {
-		Gdx.app.log(CLASS_NAME, "take bonus : " + type.name());
-		switch (type) {
-		case BOMBE:
-			this.nbBombe++;
-			break;
-		case BOMBE_LINE:
-			canPutLineOfBombe = true;
-			break;
-		case BOMBE_MAX:
-			this.bombeType = BombeTypeEnum.BOMBE_MAX;
-			break;
-		case BOMBE_P:
-			this.bombeType = BombeTypeEnum.BOMBE_P;
-			break;
-		case BOMBE_RUBBER:
-			this.bombeType = BombeTypeEnum.BOMBE_RUBBER;
-			break;
-		case DEATH:
-			takeDeathBonus();
-			break;
-		case EGGS:
-			this.state = PlayerStateEnum.ON_LOUIS;
-			break;
-		case FIRE:
-			this.bombeStrenght++;
-			if (this.bombeStrenght > Constante.GRID_SIZE_X - 1) {
-				this.bombeStrenght = Constante.GRID_SIZE_X - 1;
-			}
-			break;
-		case FIRE_PLUS:
-			this.bombeStrenght += 10;
-			if (this.bombeStrenght > Constante.GRID_SIZE_X - 1) {
-				this.bombeStrenght = Constante.GRID_SIZE_X - 1;
-			}
-			break;
-		case GLOVE:
-			this.canRaiseBombe = true;
-			break;
-		case KICK:
-			canKickBombe = true;
-			break;
-		case ROLLER:
-			this.walkSpeed += Constante.ADD_WALK_SPEED;
-			break;
-		case SHIELD:
-			break;
-		case SHOES:
-			this.walkSpeed -= Constante.ADD_WALK_SPEED;
-			break;
-		case WALL:
-			break;
-		default:
-			break;
-		}
-	}
-
-	private void takeDeathBonus() {
-		int val = ThreadLocalRandom.current().nextInt(0, 7);
-		switch (val) {
-		case 0:
-			//walk like an old man 
-			
-			break;
-		case 1:
-			//diarhée
-			break;
-		case 2:
-			//constipation
-			
-			break;
-		case 3:
-			//échange avec un autre joueur
-			break;
-		case 4:
-			//bombe lente
-			
-			break;
-		case 5:
-			//bombe rapide
-			
-			break;
-		case 6:
-			//course folle
-			
-			break;
-		}
-	}
-
-	/******************************************************
-	 * --- UTILS ---
-	 ******************************************************/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((character == null) ? 0 : character.hashCode());
-		result = prime * result + ((collisionBody == null) ? 0 : collisionBody.hashCode());
-		result = prime * result + ((color == null) ? 0 : color.hashCode());
-		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
-		result = prime * result + ((startPlayer == null) ? 0 : startPlayer.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Player other = (Player) obj;
-		if (character != other.character)
-			return false;
-		if (collisionBody == null) {
-			if (other.collisionBody != null)
-				return false;
-		} else if (!collisionBody.equals(other.collisionBody)) {
-			return false;
-		}
-		if (color != other.color)
-			return false;
-		if (direction != other.direction)
-			return false;
-		if (startPlayer == null) {
-			if (other.startPlayer != null)
-				return false;
-		} else if (!startPlayer.equals(other.startPlayer)) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public int compareTo(Player o) {
-		if (this.body.getPosition().y < o.body.getPosition().y) {
-			return 1;
-		} else if (this.body.getPosition().y > o.body.getPosition().y) {
-			return -1;
-		}
-		return 0;
 	}
 }
