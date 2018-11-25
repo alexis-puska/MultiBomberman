@@ -49,6 +49,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private static final int NB_FRAME_INC_ACTION = 5;
 	private static final int NB_FRAME_UNDERWATER = 60;
 
+	private static final int INVINCIBLE_TIME = 50;
+
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
 	private PovDirection direction;
@@ -86,6 +88,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	int nbFrameForAnimation;
 	LouisColorEnum louisColor;
 	boolean louisBurn;
+
+	private int invincibleTime;
 
 	public Player(World world, MultiBombermanGame mbGame, Level level, CharacterEnum character,
 			CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe) {
@@ -205,9 +209,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case CARRY_BOMBE:
 		case ON_LOUIS:
 		case NORMAL:
-//			if (insideFire > 0) {
-//				Gdx.app.log("Player", "Normally i died");
-//			}
+			if (insideFire > 0 && invincibleTime <= 0) {
+				if (state == PlayerStateEnum.ON_LOUIS) {
+					this.state = PlayerStateEnum.NORMAL;
+					this.invincibleTime = 50;
+				} else if (state == PlayerStateEnum.NORMAL) {
+					this.state = PlayerStateEnum.BURNING;
+				}
+			}
 			switch (this.direction) {
 			case center:
 				this.body.setLinearVelocity(0f, 0f);
@@ -267,6 +276,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 					0f);
 		}
 		collisionBody.setTransform(this.body.getPosition(), body.getAngle());
+		if (invincibleTime > 0) {
+			invincibleTime--;
+		}
 	}
 
 	public int getX() {
@@ -519,11 +531,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.walkSpeed += Constante.ADD_WALK_SPEED;
 			break;
 		case SHIELD:
+			this.invincibleTime = INVINCIBLE_TIME;
 			break;
 		case SHOES:
 			this.walkSpeed -= Constante.ADD_WALK_SPEED;
 			break;
 		case WALL:
+
 			break;
 		default:
 			break;
@@ -547,6 +561,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		case 3:
 			// échange avec un autre joueur
+
 			break;
 		case 4:
 			// bombe lente
@@ -629,6 +644,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	public void drawIt() {
 		switch (this.state) {
 		case BURNING:
+			drawBurning();
 			break;
 		case CARRY_BOMBE:
 			break;
@@ -658,8 +674,23 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	
+	
 	private void drawBurning() {
-
+		boolean died = false;
+		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(CharacterSpriteEnum.BURN);
+		if (frameCounter > NB_FRAME) {
+			frameCounter = 0;
+			offsetSprite++;
+			if (offsetSprite >= nbFrameForAnimation) {
+				offsetSprite = 0;
+				this.state = PlayerStateEnum.DEAD;
+			}
+		}
+		mbGame.getBatch().draw(
+				SpriteService.getInstance().getSprite(CharacterSpriteEnum.BURN, color, character, offsetSprite),
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+		frameCounter++;
 	}
 
 	private void drawStateNormal() {
@@ -767,7 +798,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case southWest:
 		default:
 			break;
-
 		}
 		if (this.direction == PovDirection.south || this.previousDirection == PovDirection.south) {
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
