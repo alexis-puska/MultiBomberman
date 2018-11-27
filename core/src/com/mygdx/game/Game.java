@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -94,7 +95,20 @@ public class Game {
 
 	private int lightCountdown;
 
+	/********************
+	 * SHADER
+	 *******************/
+	String vertexShader;
+	String fragmentShader;
+	ShaderProgram shaderProgram;
+	float deltaTime;
+
 	public Game(final MultiBombermanGame mbGame) {
+		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
+		this.fragmentShader = Gdx.files.internal("shader/fragment.glsl").readString();
+
+		this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
+
 		this.lightCountdown = 50;
 		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
@@ -188,6 +202,7 @@ public class Game {
 	}
 
 	public void dispose() {
+		mbGame.getBatch().setShader(null);
 		SoundService.getInstance().playMusic(MusicEnum.MENU);
 		this.shapeRenderer.dispose();
 		this.font.dispose();
@@ -363,11 +378,21 @@ public class Game {
 	}
 
 	private void merge() {
+		
+		
+		
 		mbGame.getBatch().begin();
+		
 		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
 		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
+		
+		float delta = Gdx.graphics.getDeltaTime();
+		deltaTime += delta;
+		Gdx.app.log("delta ", ""+deltaTime % 1f);
+		shaderProgram.setUniformf("time", deltaTime %40f);
+		mbGame.getBatch().setShader(shaderProgram);
 		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
@@ -378,6 +403,7 @@ public class Game {
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
+
 		mbGame.getBatch().end();
 	}
 
