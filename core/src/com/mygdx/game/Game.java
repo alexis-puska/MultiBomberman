@@ -309,7 +309,7 @@ public class Game {
 		mbGame.getBatch().end();
 		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
 		bricksLayerTextureRegion.flip(false, true);
-		bricksLayer.end();
+		bricksLayer.end();		
 	}
 
 	private void drawFront() {
@@ -378,21 +378,23 @@ public class Game {
 	}
 
 	private void merge() {
+
+		mbGame.getBatch().begin();	
 		
-		
-		
-		mbGame.getBatch().begin();
-		
+	
+			
 		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
-		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
-				Constante.GAME_SCREEN_SIZE_Y);
 		
+		
+		mbGame.getBatch().setShader(shaderProgram);
 		float delta = Gdx.graphics.getDeltaTime();
 		deltaTime += delta;
-		Gdx.app.log("delta ", ""+deltaTime % 1f);
-		shaderProgram.setUniformf("time", deltaTime %40f);
-		mbGame.getBatch().setShader(shaderProgram);
+		Gdx.app.log("delta ", "" + deltaTime % 1f);
+		shaderProgram.setUniformf("time", deltaTime % 40f);
+	
+		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
@@ -404,7 +406,9 @@ public class Game {
 		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 
+		mbGame.getBatch().setShader(null);
 		mbGame.getBatch().end();
+		
 	}
 
 	public MultiBombermanGame getMultiBombermanGame() {
