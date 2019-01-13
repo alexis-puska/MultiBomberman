@@ -1,1 +1,1 @@
-include 'desktop', 'core', 'common', 'raspberry', 'editor'
+include 'desktop', 'core', 'common', 'raspberry', 'editor', 'server'
