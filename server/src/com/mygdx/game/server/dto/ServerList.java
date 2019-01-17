@@ -7,7 +7,7 @@ public class ServerList implements Serializable {
 
 	private static final long serialVersionUID = -6486535246863304843L;
 
-	public List<Server> servers;
+	private List<Server> servers;
 
 	public List<Server> getServers() {
 		return servers;

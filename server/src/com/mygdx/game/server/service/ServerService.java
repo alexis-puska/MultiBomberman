@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
+import com.mygdx.dto.server.ServerRegistration;
 import com.mygdx.game.server.dto.Lookup;
 import com.mygdx.game.server.dto.Server;
 import com.mygdx.game.server.dto.ServerList;
-import com.mygdx.game.server.dto.ServerRegistration;
 
 @Service
 public class ServerService {

@@ -8,12 +8,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net.HttpMethods;
+import com.badlogic.gdx.Net.HttpRequest;
+import com.badlogic.gdx.Net.HttpResponse;
+import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
+import com.mygdx.dto.server.ServerRegistration;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
@@ -53,6 +60,9 @@ public class NetworkService {
 		try {
 			server.init();
 			server.start();
+			register();
+			create();
+
 			if (Context.isUseUpnp()) {
 				upnpService.openPortWithUpnp();
 			}
@@ -68,6 +78,62 @@ public class NetworkService {
 			upnpService.closePortWithUpnp();
 		}
 		server.kill();
+	}
+
+	public void create() {
+		HttpRequest request = new HttpRequest(HttpMethods.GET);
+		request.setUrl("http://localhost:8080/api/servers");
+		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				Gdx.app.log("HttpRequestExample", "response: " + httpResponse.getResultAsString());
+			}
+
+			@Override
+			public void failed(Throwable t) {
+				Gdx.app.error("HttpRequestExample", "something went wrong", t);
+			}
+
+			@Override
+			public void cancelled() {
+				Gdx.app.log("HttpRequestExample", "cancelled");
+			}
+		});
+	}
+
+	public void register() {
+		HttpRequest request = new HttpRequest(HttpMethods.POST);
+		request.setUrl("http://localhost:8080/api/register");
+		ServerRegistration registration = new ServerRegistration();
+		registration.setCurrentNetPlayer(0);
+		registration.setMaxNetPlayer(0);
+		registration.setMaxPlayer(0);
+		registration.setWanIp("90.250.20.5");
+		registration.setPort(7777);
+		registration.setUuid("123");
+		try {
+			request.setContent(new ObjectMapper().writeValueAsString(registration));
+			request.setHeader("content-type", "application/json");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				Gdx.app.log("HttpRequestExample", "response: " + httpResponse.getResultAsString());
+			}
+
+			@Override
+			public void failed(Throwable t) {
+				Gdx.app.error("HttpRequestExample", "something went wrong", t);
+			}
+
+			@Override
+			public void cancelled() {
+				Gdx.app.log("HttpRequestExample", "cancelled");
+			}
+		});
 	}
 
 	public void sendToClient(String value) {

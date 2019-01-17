@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mygdx.dto.server.ServerRegistration;
 import com.mygdx.game.server.dto.ServerList;
-import com.mygdx.game.server.dto.ServerRegistration;
 import com.mygdx.game.server.service.ServerService;
 
 @RestController
