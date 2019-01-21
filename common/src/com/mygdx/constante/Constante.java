@@ -18,6 +18,10 @@ public class Constante {
 	public static final int NETWORK_EXTERNAL_IP_POSITION = 0;
 	public static final int NETWORK_INTERNET_IP_POSITION = 0;
 
+	public static final int NETWORK_REGISTRATION_TIMEOUT = 30000;
+	public static final int NETWORK_REGISTRATION_SCHEDULE_TIME = 5000;
+	public static final int NETWORK_REGISTRATION_HEARTHBEAT_TIME = 5000;
+
 	// SCREEN DEFAULT VALUE
 	public static final int SCREEN_SIZE_X = 640;
 	public static final int SCREEN_SIZE_Y = 360;
@@ -50,7 +54,7 @@ public class Constante {
 
 	public static final float WALK_SPEED = 6f;
 	public static final float ADD_WALK_SPEED = 1f;
-	
+
 	private Constante() {
 		// empty private constructor
 	}

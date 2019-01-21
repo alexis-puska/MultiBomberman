@@ -8,24 +8,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net.HttpMethods;
-import com.badlogic.gdx.Net.HttpRequest;
-import com.badlogic.gdx.Net.HttpResponse;
-import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
-import com.mygdx.dto.server.ServerRegistration;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.network.client.Client;
 import com.mygdx.service.network.server.Server;
+import com.mygdx.service.network.server.ServerRegistrationService;
 import com.mygdx.service.network.server.UpnpService;
 import com.mygdx.view.ClientViewScreen;
 
@@ -38,6 +32,7 @@ public class NetworkService {
 	private Server server;
 	private Client client;
 	private UpnpService upnpService;
+	private ServerRegistrationService serverRegistrationService;
 
 	private String externalIp;
 	private String hostName;
@@ -47,6 +42,7 @@ public class NetworkService {
 
 	public NetworkService(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
+		serverRegistrationService = new ServerRegistrationService();
 		upnpService = new UpnpService();
 		Context.setPort(Constante.NETWORK_PORT);
 		retrieveIp();
@@ -60,9 +56,7 @@ public class NetworkService {
 		try {
 			server.init();
 			server.start();
-			register();
-			create();
-
+			serverRegistrationService.register(this.internetIp, this.externalIp);
 			if (Context.isUseUpnp()) {
 				upnpService.openPortWithUpnp();
 			}
@@ -77,63 +71,8 @@ public class NetworkService {
 		if (Context.isUseUpnp()) {
 			upnpService.closePortWithUpnp();
 		}
+		serverRegistrationService.unregister();
 		server.kill();
-	}
-
-	public void create() {
-		HttpRequest request = new HttpRequest(HttpMethods.GET);
-		request.setUrl("http://localhost:8080/api/servers");
-		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
-			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
-				Gdx.app.log("HttpRequestExample", "response: " + httpResponse.getResultAsString());
-			}
-
-			@Override
-			public void failed(Throwable t) {
-				Gdx.app.error("HttpRequestExample", "something went wrong", t);
-			}
-
-			@Override
-			public void cancelled() {
-				Gdx.app.log("HttpRequestExample", "cancelled");
-			}
-		});
-	}
-
-	public void register() {
-		HttpRequest request = new HttpRequest(HttpMethods.POST);
-		request.setUrl("http://localhost:8080/api/register");
-		ServerRegistration registration = new ServerRegistration();
-		registration.setCurrentNetPlayer(0);
-		registration.setMaxNetPlayer(0);
-		registration.setMaxPlayer(0);
-		registration.setWanIp("90.250.20.5");
-		registration.setPort(7777);
-		registration.setUuid("123");
-		try {
-			request.setContent(new ObjectMapper().writeValueAsString(registration));
-			request.setHeader("content-type", "application/json");
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
-			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
-				Gdx.app.log("HttpRequestExample", "response: " + httpResponse.getResultAsString());
-			}
-
-			@Override
-			public void failed(Throwable t) {
-				Gdx.app.error("HttpRequestExample", "something went wrong", t);
-			}
-
-			@Override
-			public void cancelled() {
-				Gdx.app.log("HttpRequestExample", "cancelled");
-			}
-		});
 	}
 
 	public void sendToClient(String value) {
@@ -147,24 +86,28 @@ public class NetworkService {
 		URL whatismyip;
 		try {
 			whatismyip = new URL(Constante.NETWORK_IP_SERVICE);
-			try (BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()))) {
-				String ip = in.readLine();
-				String[] ips = ip.split(", ");
-				if (ips.length > 0) {
-					internetIp = ips[ips.length - 1];
-				}
-				InetAddress inetAddress = InetAddress.getLocalHost();
-				externalIp = inetAddress.getHostAddress();
-				hostName = inetAddress.getHostName();
-			} catch (IOException ex) {
-				Gdx.app.error(CLASS_NAME, "Error getting internet ip from : " + Constante.NETWORK_IP_SERVICE);
-			}
+			retrieveIpImpl(whatismyip);
 		} catch (MalformedURLException e1) {
 			Gdx.app.error(CLASS_NAME, "MalformedURLException : " + e1.getMessage());
 		}
 		Gdx.app.debug(CLASS_NAME, "IP internet:- " + internetIp);
 		Gdx.app.debug(CLASS_NAME, "IP Address:- " + externalIp);
 		Gdx.app.debug(CLASS_NAME, "Host Name:- " + hostName);
+	}
+
+	private void retrieveIpImpl(URL whatismyip) {
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()))) {
+			String ip = in.readLine();
+			String[] ips = ip.split(", ");
+			if (ips.length > 0) {
+				internetIp = ips[ips.length - 1];
+			}
+			InetAddress inetAddress = InetAddress.getLocalHost();
+			externalIp = inetAddress.getHostAddress();
+			hostName = inetAddress.getHostName();
+		} catch (IOException ex) {
+			Gdx.app.error(CLASS_NAME, "Error getting internet ip from : " + Constante.NETWORK_IP_SERVICE);
+		}
 	}
 
 	public String getExternalIp() {

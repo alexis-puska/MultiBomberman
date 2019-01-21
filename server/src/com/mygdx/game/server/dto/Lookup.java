@@ -42,4 +42,10 @@ public class Lookup implements Serializable {
 		this.state = state;
 	}
 
+	@Override
+	public String toString() {
+		return "Lookup [countryName=" + countryName + ", cityName=" + cityName + ", postal=" + postal + ", state="
+				+ state + "]";
+	}
+
 }

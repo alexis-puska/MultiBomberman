@@ -8,6 +8,7 @@ public class ServerRegistration implements Serializable {
 
 	private String uuid;
 	private String wanIp;
+	private String lanIp;
 	private int port;
 	private int maxNetPlayer;
 	private int currentNetPlayer;
@@ -27,6 +28,14 @@ public class ServerRegistration implements Serializable {
 
 	public void setWanIp(String wanIp) {
 		this.wanIp = wanIp;
+	}
+
+	public String getLanIp() {
+		return lanIp;
+	}
+
+	public void setLanIp(String lanIp) {
+		this.lanIp = lanIp;
 	}
 
 	public int getPort() {

@@ -15,6 +15,7 @@ public class Server implements Serializable {
 	@JsonIgnore
 	private String uuid;
 	private String wanIp;
+	private String lanIp;
 	private int port;
 	private int maxNetPlayer;
 	private int currentNetPlayer;
@@ -52,6 +53,14 @@ public class Server implements Serializable {
 		this.wanIp = wanIp;
 	}
 
+	public String getLanIp() {
+		return lanIp;
+	}
+
+	public void setLanIp(String lanIp) {
+		this.lanIp = lanIp;
+	}
+
 	public int getPort() {
 		return port;
 	}
@@ -82,6 +91,13 @@ public class Server implements Serializable {
 
 	public void setMaxPlayer(int maxPlayer) {
 		this.maxPlayer = maxPlayer;
+	}
+
+	@Override
+	public String toString() {
+		return "Server [lookup=" + lookup + ", lastUpdate=" + lastUpdate + ", uuid=" + uuid + ", wanIp=" + wanIp
+				+ ", lanIp=" + lanIp + ", port=" + port + ", maxNetPlayer=" + maxNetPlayer + ", currentNetPlayer="
+				+ currentNetPlayer + ", maxPlayer=" + maxPlayer + "]";
 	}
 
 }

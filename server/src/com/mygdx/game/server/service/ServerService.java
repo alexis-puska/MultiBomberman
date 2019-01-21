@@ -18,7 +18,10 @@ import org.springframework.stereotype.Service;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
+import com.mygdx.constante.Constante;
+import com.mygdx.dto.server.HeartBeatResponse;
 import com.mygdx.dto.server.ServerRegistration;
+import com.mygdx.enumeration.HeartBeatStatusEnum;
 import com.mygdx.game.server.dto.Lookup;
 import com.mygdx.game.server.dto.Server;
 import com.mygdx.game.server.dto.ServerList;
@@ -27,8 +30,6 @@ import com.mygdx.game.server.dto.ServerList;
 public class ServerService {
 
 	private static final Logger LOG = LogManager.getLogger(ServerService.class);
-	private static final int TIMEOUT = 30000;
-	private static final int SCHEDULE_TIME = 5000;
 
 	private final DatabaseReader dbReader;
 	private Map<String, Server> servers;
@@ -59,7 +60,9 @@ public class ServerService {
 				server.setPort(serverRegistration.getPort());
 				server.setUuid(serverRegistration.getUuid());
 				server.setWanIp(serverRegistration.getWanIp());
+				server.setLanIp(serverRegistration.getLanIp());
 				this.servers.put(serverRegistration.getUuid(), server);
+				LOG.info("Registration of : {}", server);
 			} catch (IOException e) {
 				LOG.error("Lookup IOException : " + e.getMessage());
 			} catch (GeoIp2Exception e) {
@@ -70,21 +73,23 @@ public class ServerService {
 
 	public void unregisterServer(String uuid) {
 		this.servers.remove(uuid);
+		LOG.info("UnRegistration of server UUID : {}", uuid);
 	}
 
-	public void hearthBeatServer(String uuid) {
+	public HeartBeatResponse hearthBeatServer(String uuid) {
 		if (servers.containsKey(uuid)) {
 			Server s = servers.get(uuid);
 			s.setLastUpdate(LocalDateTime.now());
 			servers.put(uuid, s);
+			return new HeartBeatResponse(HeartBeatStatusEnum.OK);
 		}
+		return new HeartBeatResponse(HeartBeatStatusEnum.KO);
 	}
 
-	@Scheduled(fixedRate = SCHEDULE_TIME)
+	@Scheduled(fixedRate = Constante.NETWORK_REGISTRATION_SCHEDULE_TIME)
 	public void checkServerAvailability() {
-		LOG.info("check ip task !");
 		for (Entry<String, Server> s : servers.entrySet()) {
-			if (s.getValue().getLastUpdate().plus(TIMEOUT, ChronoUnit.MILLIS).isBefore(LocalDateTime.now())) {
+			if (s.getValue().getLastUpdate().plus(Constante.NETWORK_REGISTRATION_TIMEOUT, ChronoUnit.MILLIS).isBefore(LocalDateTime.now())) {
 				LOG.info("remove server with UUID : " + s.getValue().getUuid());
 				servers.remove(s.getKey());
 			}
@@ -101,5 +106,4 @@ public class ServerService {
 		lookup.setState(response.getLeastSpecificSubdivision().getName());
 		return lookup;
 	}
-
 }
