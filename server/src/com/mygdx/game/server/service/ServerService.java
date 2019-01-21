@@ -27,7 +27,7 @@ import com.mygdx.game.server.dto.ServerList;
 public class ServerService {
 
 	private static final Logger LOG = LogManager.getLogger(ServerService.class);
-	private static final int TIMEOUT = 10000;
+	private static final int TIMEOUT = 30000;
 	private static final int SCHEDULE_TIME = 5000;
 
 	private final DatabaseReader dbReader;
