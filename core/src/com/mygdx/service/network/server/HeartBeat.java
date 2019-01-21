@@ -33,6 +33,7 @@ public class HeartBeat extends Thread {
 				Thread.sleep(Constante.NETWORK_REGISTRATION_HEARTHBEAT_TIME);
 			} catch (InterruptedException e) {
 				Gdx.app.error(LOG_NAME, "HeartBeat InterruptedException : " + e.getMessage());
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
