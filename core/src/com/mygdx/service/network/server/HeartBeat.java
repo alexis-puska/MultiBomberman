@@ -26,6 +26,7 @@ public class HeartBeat extends Thread {
 		this.status = true;
 	}
 
+	@Override
 	public void run() {
 		while (status) {
 			hearthbeat();

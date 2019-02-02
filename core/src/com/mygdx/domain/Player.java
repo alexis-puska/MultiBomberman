@@ -552,7 +552,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 			break;
 		case 1:
-			// diarhée
+			// diarhee
 
 			break;
 		case 2:
@@ -560,7 +560,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 			break;
 		case 3:
-			// échange avec un autre joueur
+			// echange avec un autre joueur
 
 			break;
 		case 4:
