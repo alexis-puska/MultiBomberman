@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mygdx.dto.server.HeartBeatResponse;
+import com.mygdx.dto.server.ServerList;
 import com.mygdx.dto.server.ServerRegistration;
-import com.mygdx.game.server.dto.ServerList;
 import com.mygdx.game.server.service.ServerService;
 
 @RestController

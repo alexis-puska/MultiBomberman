@@ -60,7 +60,7 @@
 				{"x": 240, "y": 80,  "nx": 2, "ny": 1, "n": 2,  "sx": 18, "sy": 16, "r": false, "animation": "BUTTON"},
 				{"x": 96,  "y": 96,  "nx": 2, "ny": 1, "n": 2,  "sx": 18, "sy": 16, "r": false, "animation": "HOLE"},
 				{"x": 132, "y": 96,  "nx": 2, "ny": 1, "n": 2,  "sx": 18, "sy": 16, "r": false, "animation": "UNDERWATER"},
-				{"x": 96,  "y": 112, "nx": 4, "ny": 1, "n": 4,  "sx": 18, "sy": 16, "r": false, "animation": "TELEPORTER"}
+				{"x": 96,  "y": 112, "nx": 8, "ny": 1, "n": 8,  "sx": 18, "sy": 16, "r": false, "animation": "TELEPORTER"}
 			]
 		},{
 			"files": ["sprite/other/sprite_fire.png"],

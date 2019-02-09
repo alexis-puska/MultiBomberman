@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -91,8 +93,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private int invincibleTime;
 
+	private Animation<TextureRegion> animation;
+	private float animationTime;
+
 	public Player(World world, MultiBombermanGame mbGame, Level level, CharacterEnum character,
 			CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe) {
+		this.animation = new Animation<TextureRegion>(1f / 4f, SpriteService.getInstance().getSpriteForAnimation(
+				CharacterSpriteEnum.WALK_DOWN, CharacterColorEnum.BLUE, CharacterEnum.BOMBERMAN));
 		this.startPlayer = startPlayer;
 		this.character = character;
 		this.color = color;
@@ -674,8 +681,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
-	
-	
 	private void drawBurning() {
 		boolean died = false;
 		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(CharacterSpriteEnum.BURN);
@@ -799,6 +804,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
+//		animationTime += Gdx.graphics.getDeltaTime();
+//		mbGame.getBatch().draw(animation.getKeyFrame(animationTime, true), (body.getPosition().x * 18f) - 15,
+//				(body.getPosition().y * 16f) - 5f);
+
 		if (this.direction == PovDirection.south || this.previousDirection == PovDirection.south) {
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
 					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);

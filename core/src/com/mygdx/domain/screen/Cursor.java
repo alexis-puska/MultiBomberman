@@ -1,33 +1,33 @@
 package com.mygdx.domain.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.service.SpriteService;
 
 public class Cursor {
 	private int x;
 	private int y;
-	private int idx;
+	private float time;
+	private Animation<TextureRegion> animation;
 
 	public Cursor(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.idx = 0;
+		this.time = 0.0f;
+		this.animation = new Animation<TextureRegion>(1f / 10f,
+				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.CURSOR));
 	}
-	
+
 	public void updateCursorPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
 	public void draw(SpriteBatch batch) {
-		batch.draw(SpriteService.getInstance().getSprite(SpriteEnum.CURSOR, idx), x, y);
-		if (Gdx.graphics.getFrameId() % 2 == 0) {
-			idx++;
-			if (idx >= SpriteService.getInstance().getAnimationSize(SpriteEnum.CURSOR)) {
-				idx = 0;
-			}
-		}
+		time += Gdx.graphics.getDeltaTime();
+		batch.draw(animation.getKeyFrame(time, true), x, y);
 	}
 }

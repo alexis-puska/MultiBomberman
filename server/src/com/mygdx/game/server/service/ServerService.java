@@ -20,11 +20,11 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.mygdx.constante.Constante;
 import com.mygdx.dto.server.HeartBeatResponse;
+import com.mygdx.dto.server.Lookup;
+import com.mygdx.dto.server.Server;
+import com.mygdx.dto.server.ServerList;
 import com.mygdx.dto.server.ServerRegistration;
 import com.mygdx.enumeration.HeartBeatStatusEnum;
-import com.mygdx.game.server.dto.Lookup;
-import com.mygdx.game.server.dto.Server;
-import com.mygdx.game.server.dto.ServerList;
 
 @Service
 public class ServerService {
@@ -89,7 +89,8 @@ public class ServerService {
 	@Scheduled(fixedRate = Constante.NETWORK_REGISTRATION_SCHEDULE_TIME)
 	public void checkServerAvailability() {
 		for (Entry<String, Server> s : servers.entrySet()) {
-			if (s.getValue().getLastUpdate().plus(Constante.NETWORK_REGISTRATION_TIMEOUT, ChronoUnit.MILLIS).isBefore(LocalDateTime.now())) {
+			if (s.getValue().getLastUpdate().plus(Constante.NETWORK_REGISTRATION_TIMEOUT, ChronoUnit.MILLIS)
+					.isBefore(LocalDateTime.now())) {
 				LOG.info("remove server with UUID : " + s.getValue().getUuid());
 				servers.remove(s.getKey());
 			}

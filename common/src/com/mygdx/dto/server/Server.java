@@ -1,4 +1,4 @@
-package com.mygdx.game.server.dto;
+package com.mygdx.dto.server;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

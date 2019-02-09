@@ -1,5 +1,8 @@
 package com.mygdx.domain.level;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -25,17 +28,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Teleporter extends BodyAble implements Initiable {
 
-	private static final int NB_FRAME_TELEPORTER = 3;
-
 	protected int x;
 	protected int y;
-
 	private boolean animate;
-	private int frameCounter = 0;
-	private int offsetSprite = 0;
-	private int offsetSpriteAnimation = 0;
-	private int nbFrameForAnimation = 7;
-	private boolean playSound;
+	private boolean secondSoundPlayed;
+	private float time;
+	private Animation<TextureRegion> animation;
 
 	@Override
 	public void createBody() {
@@ -58,68 +56,41 @@ public class Teleporter extends BodyAble implements Initiable {
 		this.mbGame = mbGame;
 		this.world = world;
 		this.level = level;
+		this.time = 0.0f;
+		this.animation = new Animation<TextureRegion>(1f / 10f,
+				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.TELEPORTER));
 		createBody();
 	}
 
 	public void animate(boolean playSound) {
 		this.animate = true;
-		this.playSound = playSound;
-		this.frameCounter = 0;
-		this.offsetSprite = 0;
-		this.offsetSpriteAnimation = 0;
-		this.nbFrameForAnimation = 7;
+		this.secondSoundPlayed = !playSound;
+		this.time = 0.0f;
+		if (playSound) {
+			SoundService.getInstance().playSound(SoundEnum.TELEPORTER_OPEN);
+		}
 	}
 
 	public void update() {
+		time += Gdx.graphics.getDeltaTime();
 		if (animate) {
-			if (frameCounter > NB_FRAME_TELEPORTER) {
-				frameCounter = 0;
-				offsetSprite++;
-				if (offsetSprite >= nbFrameForAnimation) {
-					offsetSprite = 0;
-				}
-			}
-			frameCounter++;
-			this.offsetSpriteAnimation = 0;
-			switch (offsetSprite) {
-			case 0:
-				if (playSound) {
-					SoundService.getInstance().playSound(SoundEnum.TELEPORTER_OPEN);
-				}
-				offsetSpriteAnimation = 0;
-				break;
-			case 1:
-				offsetSpriteAnimation = 1;
-				break;
-			case 2:
-				offsetSpriteAnimation = 2;
-				break;
-			case 3:
-				if (playSound) {
-					SoundService.getInstance().playSound(SoundEnum.TELEPORTER_CLOSE);
-				}
-				offsetSpriteAnimation = 3;
-				break;
-			case 4:
-				offsetSpriteAnimation = 2;
-				break;
-			case 5:
-				offsetSpriteAnimation = 1;
-				break;
-			case 6:
-			default:
-				offsetSpriteAnimation = 0;
-				offsetSprite = 0;
-				frameCounter = 0;
+			if (animation.isAnimationFinished(time)) {
 				animate = false;
-				break;
+			}
+			if (time > 0.4f && !secondSoundPlayed) {
+				SoundService.getInstance().playSound(SoundEnum.TELEPORTER_CLOSE);
+				secondSoundPlayed = true;
 			}
 		}
 	}
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TELEPORTER, offsetSpriteAnimation),
-				this.x * 18, this.y * 16);
+		if (animate) {
+			mbGame.getBatch().draw(animation.getKeyFrame(time, false), this.x * 18, this.y * 16);
+		} else {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TELEPORTER, 0), this.x * 18,
+					this.y * 16);
+		}
 	}
 }

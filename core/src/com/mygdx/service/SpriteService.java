@@ -149,7 +149,8 @@ public class SpriteService {
 				if (louisColorsEnum[i] == LouisColorEnum.NONE) {
 					texture = new Texture(Gdx.files.internal(louisFilename));
 				} else {
-					texture = changeLouisColorTexture(new Texture(Gdx.files.internal(louisFilename)), louisColorsEnum[i]);
+					texture = changeLouisColorTexture(new Texture(Gdx.files.internal(louisFilename)),
+							louisColorsEnum[i]);
 				}
 				for (SpriteLouis sprite : area) {
 					int idx = 0;
@@ -244,20 +245,16 @@ public class SpriteService {
 		return characterMainColor.get(color);
 	}
 
+	/**
+	 * Classique Sprite
+	 */
 	public TextureRegion getSprite(SpriteEnum spriteEnum, int idx) {
 		TextureRegion[] t = sprites.get(spriteEnum);
 		return t[idx];
 	}
 
-	public TextureRegion getSprite(LouisSpriteEnum spriteEnum, LouisColorEnum colorEnum, int idx) {
-		TextureRegion[] t = louisSprites.get(colorEnum).get(spriteEnum);
-		return t[idx];
-	}
-
-	public TextureRegion getSprite(CharacterSpriteEnum spriteEnum, CharacterColorEnum colorEnum,
-			CharacterEnum characterEnum, int idx) {
-		TextureRegion[] t = playerSprites.get(characterEnum).get(colorEnum).get(spriteEnum);
-		return t[idx];
+	public TextureRegion[] getSpriteForAnimation(SpriteEnum spriteEnum) {
+		return sprites.get(spriteEnum);
 	}
 
 	public int getAnimationSize(SpriteEnum spriteEnum) {
@@ -265,14 +262,40 @@ public class SpriteService {
 		return t.length;
 	}
 
-	public int getAnimationSize(CharacterSpriteEnum characterSpriteEnum) {
-		TextureRegion[] t = playerSprites.get(CharacterEnum.BOMBERMAN).get(CharacterColorEnum.BLUE)
-				.get(characterSpriteEnum);
-		return t.length;
+	/**
+	 * Louis Sprite
+	 */
+	public TextureRegion getSprite(LouisSpriteEnum spriteEnum, LouisColorEnum colorEnum, int idx) {
+		TextureRegion[] t = louisSprites.get(colorEnum).get(spriteEnum);
+		return t[idx];
+	}
+
+	public TextureRegion[] getSpriteForAnimation(LouisSpriteEnum spriteEnum, LouisColorEnum colorEnum) {
+		return louisSprites.get(colorEnum).get(spriteEnum);
 	}
 
 	public int getAnimationSize(LouisSpriteEnum louisSpriteEnum) {
 		TextureRegion[] t = louisSprites.get(LouisColorEnum.NONE).get(louisSpriteEnum);
+		return t.length;
+	}
+
+	/**
+	 * Character Sprite
+	 */
+	public TextureRegion getSprite(CharacterSpriteEnum spriteEnum, CharacterColorEnum colorEnum,
+			CharacterEnum characterEnum, int idx) {
+		TextureRegion[] t = playerSprites.get(characterEnum).get(colorEnum).get(spriteEnum);
+		return t[idx];
+	}
+
+	public TextureRegion[] getSpriteForAnimation(CharacterSpriteEnum spriteEnum, CharacterColorEnum colorEnum,
+			CharacterEnum characterEnum) {
+		return playerSprites.get(characterEnum).get(colorEnum).get(spriteEnum);
+	}
+
+	public int getAnimationSize(CharacterSpriteEnum characterSpriteEnum) {
+		TextureRegion[] t = playerSprites.get(CharacterEnum.BOMBERMAN).get(CharacterColorEnum.BLUE)
+				.get(characterSpriteEnum);
 		return t.length;
 	}
 

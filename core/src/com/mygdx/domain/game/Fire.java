@@ -1,5 +1,8 @@
 package com.mygdx.domain.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -23,9 +26,8 @@ public class Fire extends BodyAble {
 	private FireEnum fireEnum;
 	private boolean off;
 
-	private int frameCounter;
-	private int offsetSprite;
-	private int nbFrameForAnimation;
+	private Animation<TextureRegion> animation;
+	private float time;
 
 	public Fire(World world, MultiBombermanGame mbGame, Level level, int x, int y, FireEnum fireEnum) {
 		this.world = world;
@@ -34,9 +36,9 @@ public class Fire extends BodyAble {
 		this.x = x;
 		this.y = y;
 		this.fireEnum = fireEnum;
-		this.frameCounter = 0;
-		this.offsetSprite = 0;
-		this.nbFrameForAnimation = 7;
+		this.animation = new Animation<TextureRegion>(1f / 6.25f,
+				SpriteService.getInstance().getSpriteForAnimation(fireEnum.getSpriteEnum()));
+		this.time = 0.0f;
 		this.createBody();
 	}
 
@@ -90,21 +92,16 @@ public class Fire extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(fireEnum.getSpriteEnum(), offsetSprite),
-				(float) this.x * 18, (float) this.y * 16);
+		mbGame.getBatch().draw(animation.getKeyFrame(time, false), (float) this.x * 18, (float) this.y * 16);
 	}
 
 	@Override
 	public void update() {
-		if (frameCounter > NB_FRAME) {
-			frameCounter = 0;
-			offsetSprite++;
-			if (offsetSprite >= nbFrameForAnimation) {
-				off = true;
-				this.dispose();
-			}
+		if (this.animation.isAnimationFinished(time)) {
+			this.dispose();
+			off = true;
 		}
-		frameCounter++;
+		time += Gdx.graphics.getDeltaTime();
 	}
 
 	public boolean isOff() {

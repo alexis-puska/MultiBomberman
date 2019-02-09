@@ -98,16 +98,16 @@ public class Game {
 	/********************
 	 * SHADER
 	 *******************/
-	String vertexShader;
-	String fragmentShader;
-	ShaderProgram shaderProgram;
+//	String vertexShader;
+//	String fragmentShader;
+//	ShaderProgram shaderProgram;
 	float deltaTime;
 
 	public Game(final MultiBombermanGame mbGame) {
-		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
-		this.fragmentShader = Gdx.files.internal("shader/fragment.glsl").readString();
-
-		this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
+//		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
+//		this.fragmentShader = Gdx.files.internal("shader/fragment.glsl").readString();
+//
+//		this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
 
 		this.lightCountdown = 50;
 		this.mbGame = mbGame;
@@ -387,11 +387,11 @@ public class Game {
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
 		
 		
-		mbGame.getBatch().setShader(shaderProgram);
-		float delta = Gdx.graphics.getDeltaTime();
-		deltaTime += delta;
-		Gdx.app.log("delta ", "" + deltaTime % 1f);
-		shaderProgram.setUniformf("time", deltaTime % 40f);
+//		mbGame.getBatch().setShader(shaderProgram);
+//		float delta = Gdx.graphics.getDeltaTime();
+//		deltaTime += delta;
+//		Gdx.app.log("delta ", "" + deltaTime % 1f);
+//		shaderProgram.setUniformf("time", deltaTime % 40f);
 	
 		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
