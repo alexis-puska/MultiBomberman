@@ -57,7 +57,7 @@ public class Bombe extends BodyAble {
 		this.direction = PovDirection.center;
 		this.walkSpeed = Constante.WALK_SPEED;
 		this.stateTime = 0f;
-		this.animation = new Animation<TextureRegion>((1f / 25f) * 4f,
+		this.animation = new Animation<>((1f / 25f) * 4f,
 				SpriteService.getInstance().getSpriteForAnimation(type.getSpriteEnum()));
 		createBody();
 	}
@@ -261,11 +261,7 @@ public class Bombe extends BodyAble {
 				return true;
 			}
 			if (this.type != BombeTypeEnum.BOMBE_MAX) {
-				if (this.level.getOccupedWallBrickBonus()[calcX][calcY].getClass().equals(Bonus.class)) {
-					return false;
-				} else {
-					return true;
-				}
+				return !this.level.getOccupedWallBrickBonus()[calcX][calcY].getClass().equals(Bonus.class);
 			}
 		} else {
 			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, calcX, calcY, fireEnum));

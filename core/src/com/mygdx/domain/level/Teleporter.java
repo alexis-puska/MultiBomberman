@@ -57,7 +57,7 @@ public class Teleporter extends BodyAble implements Initiable {
 		this.world = world;
 		this.level = level;
 		this.time = 0.0f;
-		this.animation = new Animation<TextureRegion>(1f / 10f,
+		this.animation = new Animation<>(1f / 10f,
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.TELEPORTER));
 		createBody();
 	}

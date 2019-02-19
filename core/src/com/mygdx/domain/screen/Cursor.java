@@ -17,7 +17,7 @@ public class Cursor {
 		this.x = x;
 		this.y = y;
 		this.time = 0.0f;
-		this.animation = new Animation<TextureRegion>(1f / 10f,
+		this.animation = new Animation<>(1f / 10f,
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.CURSOR));
 	}
 
