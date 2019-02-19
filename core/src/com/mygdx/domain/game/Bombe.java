@@ -1,6 +1,9 @@
 package com.mygdx.domain.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -25,26 +28,19 @@ import com.mygdx.service.SpriteService;
 import com.mygdx.utils.GridUtils;
 
 public class Bombe extends BodyAble {
-
 	private static final float BORDER_MAX = 0.45f;
 	private static final float BORDER_MIN = 0.3f;
-
-	private static final int NB_FRAME = 4;
-
-	protected int x;
-	protected int y;
+	private float stateTime;
+	private Animation<TextureRegion> animation;
 	private int strenght;
 	private BombeTypeEnum type;
 	private Player player;
 	private int countDown;
 	private boolean exploded;
-
 	private PovDirection direction;
 	private float walkSpeed;
-
-	private int frameCounter;
-	private int offsetSprite;
-	private int nbFrameForAnimation;
+	protected int x;
+	protected int y;
 
 	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
 			Player player, int countDown) {
@@ -58,11 +54,11 @@ public class Bombe extends BodyAble {
 		this.type = type;
 		this.player = player;
 		this.countDown = countDown;
-		this.frameCounter = 0;
-		this.offsetSprite = 0;
-		this.nbFrameForAnimation = 4;
 		this.direction = PovDirection.center;
 		this.walkSpeed = Constante.WALK_SPEED;
+		this.stateTime = 0f;
+		this.animation = new Animation<TextureRegion>((1f / 25f) * 4f,
+				SpriteService.getInstance().getSpriteForAnimation(type.getSpriteEnum()));
 		createBody();
 	}
 
@@ -104,8 +100,9 @@ public class Bombe extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(type.getSpriteEnum(), offsetSprite),
-				(float) ((body.getPosition().x - 0.5f) * 18f), (float) ((body.getPosition().y - 0.5f) * 16f));
+		this.stateTime += Gdx.graphics.getDeltaTime();
+		mbGame.getBatch().draw(animation.getKeyFrame(stateTime, true), (float) ((body.getPosition().x - 0.5f) * 18f),
+				(float) ((body.getPosition().y - 0.5f) * 16f));
 	}
 
 	public int getX() {
@@ -117,7 +114,10 @@ public class Bombe extends BodyAble {
 	}
 
 	public BombeLight getOffesetShadow() {
-		return this.type.getOffsetLight().get(offsetSprite);
+		return this.type.getOffsetLight()
+				.get(Double.valueOf(Math
+						.floor((stateTime % this.animation.getAnimationDuration()) / this.animation.getFrameDuration()))
+						.intValue());
 	}
 
 	public boolean isCreateLight() {
@@ -130,15 +130,6 @@ public class Bombe extends BodyAble {
 
 	@Override
 	public void update() {
-		if (frameCounter > NB_FRAME) {
-			frameCounter = 0;
-			offsetSprite++;
-			if (offsetSprite >= nbFrameForAnimation) {
-				offsetSprite = 0;
-			}
-		}
-		frameCounter++;
-
 		switch (type) {
 		case BOMBE:
 		case BOMBE_MAX:

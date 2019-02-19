@@ -1,5 +1,8 @@
 package com.mygdx.domain.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -24,9 +27,9 @@ public class Bonus extends BodyAble implements LevelElement {
 	protected int y;
 	private BonusTypeEnum type;
 	private BonusStateEnum state;
-
 	private int countdown;
-	private int indexAnimation;
+	private float stateTime;
+	private Animation<TextureRegion> animation;
 
 	public Bonus(Level level, World world, MultiBombermanGame mbGame, int x, int y, BonusTypeEnum type,
 			BonusStateEnum state) {
@@ -37,7 +40,9 @@ public class Bonus extends BodyAble implements LevelElement {
 		this.y = y;
 		this.type = type;
 		this.state = state;
-		this.indexAnimation = 0;
+		this.stateTime = 0f;
+		this.animation = new Animation<TextureRegion>((1f / 25f) * 4f,
+				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.BONUS_BURN));
 		if (state == BonusStateEnum.REVEALED) {
 			this.level.getOccupedWallBrickBonus()[x][y] = this;
 			this.createBody();
@@ -47,8 +52,8 @@ public class Bonus extends BodyAble implements LevelElement {
 	@Override
 	public void drawIt() {
 		if (this.state == BonusStateEnum.BURN) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS_BURN, indexAnimation),
-					this.x * 18f - 6, this.y * 16f);
+			this.stateTime += Gdx.graphics.getDeltaTime();
+			mbGame.getBatch().draw(animation.getKeyFrame(stateTime, false), this.x * 18f - 6, this.y * 16f);
 		} else if (this.state == BonusStateEnum.REVEALED) {
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, this.type.getIndex()),
 					this.x * 18f, this.y * 16f);
@@ -89,8 +94,8 @@ public class Bonus extends BodyAble implements LevelElement {
 			this.countdown--;
 			if (this.countdown < 0) {
 				this.countdown = Constante.BURN_BRICK_COUNTDOWN;
-				indexAnimation++;
-				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(SpriteEnum.BONUS_BURN) - 1) {
+
+				if (this.stateTime >= animation.getAnimationDuration()) {
 					this.state = BonusStateEnum.BURNED;
 					this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
 					dispose();
@@ -132,5 +137,4 @@ public class Bonus extends BodyAble implements LevelElement {
 	public boolean isBurning() {
 		return this.state == BonusStateEnum.BURN;
 	}
-
 }

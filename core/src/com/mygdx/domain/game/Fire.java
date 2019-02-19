@@ -18,14 +18,10 @@ import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
 public class Fire extends BodyAble {
-
-	private static final int NB_FRAME = 4;
-
 	protected int x;
 	protected int y;
 	private FireEnum fireEnum;
 	private boolean off;
-
 	private Animation<TextureRegion> animation;
 	private float time;
 
@@ -36,7 +32,7 @@ public class Fire extends BodyAble {
 		this.x = x;
 		this.y = y;
 		this.fireEnum = fireEnum;
-		this.animation = new Animation<TextureRegion>(1f / 6.25f,
+		this.animation = new Animation<>(1f / 6.25f,
 				SpriteService.getInstance().getSpriteForAnimation(fireEnum.getSpriteEnum()));
 		this.time = 0.0f;
 		this.createBody();
