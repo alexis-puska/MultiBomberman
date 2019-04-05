@@ -3,32 +3,32 @@ package com.mygdx.game.ia;
 import com.mygdx.constante.Constante;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class AStarCell implements Comparable<AStarCell> {
-
+	private int pos;
 	private int finalCost;
 	private int heuristicCost;
-	private int x;
-	private int y;
 	private boolean origin;
 	private AStarCell parent;
 
-	public void configure(int x, int y, boolean origin, int endX, int endY) {
-		this.x = x;
-		this.y = y;
-		finalCost = 0;
-		heuristicCost = Math.abs(x - endX) + Math.abs(y - endY);
+	public AStarCell(int pos, int end, boolean origin, AStarCell parent) {
+		this.pos = pos;
+		int x = pos % Constante.GRID_SIZE_X;
+		int y = pos / Constante.GRID_SIZE_X;
+		int endX = end % Constante.GRID_SIZE_X;
+		int endY = end / Constante.GRID_SIZE_X;
+		int heuristicCostStandart = Math.abs(x - endX) + Math.abs(y - endY);
+		this.heuristicCost = heuristicCostStandart;
+		this.finalCost = heuristicCost + 1;
 		this.origin = origin;
-		this.parent = null;
+		this.parent = parent;
 	}
 
 	public int getIndex() {
-		return this.x + this.y * Constante.GRID_SIZE_X;
+		return this.pos;
 	}
 
 	@Override
@@ -39,6 +39,18 @@ public class AStarCell implements Comparable<AStarCell> {
 			return -1;
 		}
 		return 0;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + finalCost;
+		result = prime * result + heuristicCost;
+		result = prime * result + (origin ? 1231 : 1237);
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		result = prime * result + pos;
+		return result;
 	}
 
 	@Override
@@ -61,23 +73,9 @@ public class AStarCell implements Comparable<AStarCell> {
 				return false;
 		} else if (!parent.equals(other.parent)) {
 			return false;
-		}
-		if (x != other.x) {
+		} else if (pos != other.pos) {
 			return false;
 		}
-		return y == other.y;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + finalCost;
-		result = prime * result + heuristicCost;
-		result = prime * result + (origin ? 1231 : 1237);
-		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
-		result = prime * result + x;
-		result = prime * result + y;
-		return result;
+		return true;
 	}
 }

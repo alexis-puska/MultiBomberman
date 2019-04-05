@@ -34,13 +34,14 @@ import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.LouisColorEnum;
 import com.mygdx.enumeration.LouisSpriteEnum;
+import com.mygdx.game.ia.AStar;
+import com.mygdx.game.ia.AStarCell;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
 import com.mygdx.utils.GridUtils;
 
 public class Player extends BodyAble implements ControlEventListener, Comparable<Player> {
-
 	private static final String CLASS_NAME = "Player.class";
 
 	private static final float RADIUS = 0.48f;
@@ -204,6 +205,25 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void update() {
+//		if (this.state != PlayerStateEnum.DEAD) {
+//			AStar astar = new AStar();
+//			short evicted = CollisionConstante.CATEGORY_WALL | CollisionConstante.CATEGORY_BRICKS
+//					| CollisionConstante.CATEGORY_BOMBE;
+//
+//			astar.init(this.getGridIndex(), 699, evicted, this.level.getState());
+//			astar.solve();
+//			System.out.println("path");
+//			if (astar.isSolved()) {
+//				AStarCell current = astar.getEnd();
+//				while (current.getParent() != null) {
+//					System.out.println(current.getIndex());
+//					current = current.getParent();
+//				}
+//			} else {
+//				System.out.println("NO PATH FOUND !!!!!!!!");
+//			}
+//		}
+
 		switch (this.state) {
 		case BURNING:
 			break;

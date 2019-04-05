@@ -1,10 +1,13 @@
 package com.mygdx.domain.level;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.enumeration.BonusStateEnum;
 import com.mygdx.domain.enumeration.BonusTypeEnum;
@@ -55,6 +58,8 @@ public class Level {
 	private List<Bombe> bombes;
 	private List<Fire> fires;
 	private List<Bonus> bonuss;
+
+	private Map<Integer, Short> state;
 
 	private MultiBombermanGame mbGame;
 	private World world;
@@ -166,6 +171,32 @@ public class Level {
 			w.init(this.world, mbGame, this);
 			occupedWallBrickBonus[w.getX()][w.getY()] = w;
 		});
+		this.buildState();
+	}
+
+	private void buildState() {
+		this.state = new HashMap<Integer, Short>();
+		hole.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_HOLE));
+		interrupter.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_BUTTONS));
+		mine.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_MINE));
+		trolley.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_TROLLEY));
+		teleporter.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_TELEPORTER));
+		wall.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_WALL));
+		bricks.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_BRICKS));
+	}
+
+	public Map<Integer, Short> getState() {
+		return this.state;
+	}
+
+	private void updateValueInState(int index, short val) {
+		if (index != -1) {
+			short value = val;
+			if (this.state.containsKey(index)) {
+				value = (short) (value | this.state.get(index));
+			}
+			this.state.put(index, value);
+		}
 	}
 
 	public void cleanUp() {

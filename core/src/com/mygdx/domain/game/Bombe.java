@@ -105,14 +105,6 @@ public class Bombe extends BodyAble {
 				(float) ((body.getPosition().y - 0.5f) * 16f));
 	}
 
-	public int getX() {
-		return (int) (body.getPosition().x * 18f);
-	}
-
-	public int getY() {
-		return (int) (body.getPosition().y * 16f);
-	}
-
 	public BombeLight getOffesetShadow() {
 		return this.type.getOffsetLight()
 				.get(Double.valueOf(Math
