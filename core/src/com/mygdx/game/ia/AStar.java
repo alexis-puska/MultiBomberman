@@ -20,38 +20,6 @@ public class AStar {
 	private AStarCell endOfPath;
 	private boolean solve;
 
-	public static void main(String[] args) {
-		Map<Integer, Short> m = new HashMap<>();
-		m.put(19, CollisionConstante.CATEGORY_WALL);
-		m.put(20, CollisionConstante.CATEGORY_WALL);
-		m.put(22, CollisionConstante.CATEGORY_WALL);
-		m.put(52, CollisionConstante.CATEGORY_WALL);
-		m.put(87, CollisionConstante.CATEGORY_WALL);
-		m.put(122, CollisionConstante.CATEGORY_WALL);
-		m.put(82, CollisionConstante.CATEGORY_WALL);
-		m.put(0, CollisionConstante.CATEGORY_WALL);
-		m.put(10, CollisionConstante.CATEGORY_WALL);
-		m.put(12, CollisionConstante.CATEGORY_WALL);
-		m.put(46, CollisionConstante.CATEGORY_WALL);
-		m.put(47, CollisionConstante.CATEGORY_WALL);
-		m.put(48, CollisionConstante.CATEGORY_WALL);
-		m.put(709, CollisionConstante.CATEGORY_WALL);
-		m.put(710, CollisionConstante.CATEGORY_WALL);
-		m.put(711, CollisionConstante.CATEGORY_WALL);
-		AStar astar = new AStar();
-		short evicted = CollisionConstante.CATEGORY_WALL | CollisionConstante.CATEGORY_BOMBE;
-		astar.init(11, 50, evicted, m);
-		astar.solve();
-		if (astar.isSolved()) {
-			AStarCell current = astar.getEnd();
-			while (current.getParent() != null) {
-				System.out.println(current.getIndex());
-				current = current.getParent();
-			}
-		} else {
-			System.out.println("NO PATH FOUND !!!!!!!!");
-		}
-	}
 
 	public void init(int start, int end, Short evicted, Map<Integer, Short> level) {
 		tested = new HashSet<>();
