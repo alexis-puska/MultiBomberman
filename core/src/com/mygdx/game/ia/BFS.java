@@ -8,12 +8,12 @@ import java.util.Set;
 public class BFS {
 
 	LinkedList<Integer> open;
-	private Map<Integer, Integer> level;
+	private Map<Integer, Short> level;
 	private Set<Integer> tested;
 	private int start;
-	private Integer search;
+	private Short search;
 
-	public void init(int start, Integer search, Map<Integer, Integer> level) {
+	public void init(int start, Short search, Map<Integer, Short> level) {
 		tested = new HashSet<>();
 		open = new LinkedList<>();
 		this.level = level;
@@ -27,7 +27,7 @@ public class BFS {
 		while (true) {
 			current = open.pop();
 			tested.add(current);
-			if (level.get(current) == search) {
+			if ((level.get(current) & search) > 0) {
 				break;
 			}
 			verifCell(IAUtils.getLeftPos(current));

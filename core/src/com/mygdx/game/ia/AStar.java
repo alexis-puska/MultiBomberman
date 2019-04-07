@@ -1,12 +1,9 @@
 package com.mygdx.game.ia;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
-
-import com.mygdx.constante.CollisionConstante;
 
 public class AStar {
 
@@ -19,7 +16,6 @@ public class AStar {
 
 	private AStarCell endOfPath;
 	private boolean solve;
-
 
 	public void init(int start, int end, Short evicted, Map<Integer, Short> level) {
 		tested = new HashSet<>();
@@ -46,7 +42,6 @@ public class AStar {
 		while (true) {
 			current = open.poll();
 
-			
 			if (current == null) {
 				return;
 			}
