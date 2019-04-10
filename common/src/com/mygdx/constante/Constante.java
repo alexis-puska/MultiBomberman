@@ -54,6 +54,7 @@ public class Constante {
 
 	public static final float WALK_SPEED = 6f;
 	public static final float ADD_WALK_SPEED = 1f;
+	public static final int INVINCIBLE_TIME = 50;
 
 	private Constante() {
 		// empty private constructor

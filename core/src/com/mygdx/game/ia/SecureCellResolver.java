@@ -5,26 +5,25 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 
 public class SecureCellResolver {
 	LinkedList<Integer> open;
-	private Map<Integer, Integer> level;
+	private Map<Integer, Short> level;
 	private Set<Integer> tested;
 	private int start;
 	private int securedCellIndex;
+	private Short unsecured;
+	private Short unTestCell;
 
-	private Short unsecured = CollisionConstante.CATEGORY_BOMBE | CollisionConstante.CATEGORY_FIRE
-			| CollisionConstante.CATEGORY_MINE;
-	private Short unTestCell = CollisionConstante.CATEGORY_BRICKS | CollisionConstante.CATEGORY_WALL;
-
-	public void init(int start, Map<Integer, Integer> level) {
+	public void init(int start, Map<Integer, Short> level, Short unSecured, Short unTestCell) {
 		tested = new HashSet<>();
 		open = new LinkedList<>();
 		this.level = level;
 		this.start = start;
 		this.securedCellIndex = -1;
+		this.unsecured = unSecured;
+		this.unTestCell = unTestCell;
 	}
 
 	public int getSecuredCell() {
@@ -33,13 +32,13 @@ public class SecureCellResolver {
 
 	public void solve() {
 		open.add(start);
+		tested.add(start);
 		Integer current;
 		while (true) {
 			if (open.isEmpty()) {
 				return;
 			}
 			current = open.pop();
-			tested.add(current);
 			if (cellIsSecured(current)) {
 				securedCellIndex = current;
 				return;
@@ -51,9 +50,10 @@ public class SecureCellResolver {
 		}
 	}
 
-	private void loadNextCell(int left) {
-		if (!tested.contains(left)) {
-			open.add(left);
+	private void loadNextCell(int val) {
+		if (!tested.contains(val)) {
+			tested.add(val);
+			open.add(val);
 		}
 	}
 

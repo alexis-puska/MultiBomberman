@@ -14,9 +14,18 @@ public class AStar {
 	private int end;
 	private Short evicted;
 
+	// result
 	private AStarCell endOfPath;
 	private boolean solve;
 
+	/**
+	 * Initialization of AStart algorithm.
+	 * 
+	 * @param start   index of start cell
+	 * @param end     index to destination cell
+	 * @param evicted mask of element to be evicted when path is search
+	 * @param level   desciption of the level
+	 */
 	public void init(int start, int end, Short evicted, Map<Integer, Short> level) {
 		tested = new HashSet<>();
 		open = new PriorityQueue<>((o1, o2) -> {
@@ -35,13 +44,15 @@ public class AStar {
 		this.solve = false;
 	}
 
+	/**
+	 * Start the path search.
+	 */
 	public void solve() {
 		tested.add(start);
 		open.add(new AStarCell(start, this.end, true, null));
 		AStarCell current;
 		while (true) {
 			current = open.poll();
-
 			if (current == null) {
 				return;
 			}
@@ -58,6 +69,14 @@ public class AStar {
 		}
 	}
 
+	/**
+	 * Verify the index cell, if the cell desciption in level is not in the evicted
+	 * mask, create and add the cell to the sortedList for the next iteration of
+	 * Astar
+	 * 
+	 * @param current the current Cell (parent of the cell created on the index)
+	 * @param index   cell index to test
+	 */
 	private void verifCell(AStarCell current, int index) {
 		if (!tested.contains(index)) {
 			if (level.containsKey(index) && (level.get(index) & evicted) > 0) {

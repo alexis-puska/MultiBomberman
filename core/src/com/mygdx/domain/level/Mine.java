@@ -21,6 +21,8 @@ public class Mine extends BodyAble implements Initiable {
 	@Override
 	public void createBody() {
 		// make
+		//TODO
+		
 	}
 
 	@Override

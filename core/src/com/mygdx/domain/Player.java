@@ -1,6 +1,8 @@
 package com.mygdx.domain;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -34,8 +36,8 @@ import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.LouisColorEnum;
 import com.mygdx.enumeration.LouisSpriteEnum;
-import com.mygdx.game.ia.AStar;
-import com.mygdx.game.ia.AStarCell;
+import com.mygdx.enumeration.PlayerTypeEnum;
+import com.mygdx.game.ia.Brain;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
@@ -52,13 +54,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private static final int NB_FRAME_INC_ACTION = 5;
 	private static final int NB_FRAME_UNDERWATER = 60;
 
-	private static final int INVINCIBLE_TIME = 50;
-
+	private final PlayerTypeEnum type;
 	private final CharacterEnum character;
 	private final CharacterColorEnum color;
 	private PovDirection direction;
 	private PovDirection previousDirection;
 	private Body collisionBody;
+	private Brain brain;
 
 	// player start
 	private StartPlayer startPlayer;
@@ -94,14 +96,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private int invincibleTime;
 
-	private Animation<TextureRegion> animation;
+	private Map<CharacterSpriteEnum, Animation<TextureRegion>> animations;
+	private Map<LouisSpriteEnum, Animation<TextureRegion>> animationsLouis;
 	private float animationTime;
 
-	public Player(World world, MultiBombermanGame mbGame, Level level, CharacterEnum character,
+	public Player(World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type, CharacterEnum character,
 			CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe) {
-		this.animation = new Animation<TextureRegion>(1f / 4f, SpriteService.getInstance().getSpriteForAnimation(
-				CharacterSpriteEnum.WALK_DOWN, CharacterColorEnum.BLUE, CharacterEnum.BOMBERMAN));
 		this.startPlayer = startPlayer;
+		this.type = type;
 		this.character = character;
 		this.color = color;
 		this.previousDirection = PovDirection.south;
@@ -120,8 +122,21 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.canRaiseBombe = false;
 		this.insideFire = 0;
 		this.shipSpeed = DEFAULT_SHIP_SPEED;
-		this.louisColor = LouisColorEnum.BROWN;
+		this.louisColor = this.louisColor = LouisColorEnum.random();
+		this.animations = new HashMap<>();
+		for (CharacterSpriteEnum e : CharacterSpriteEnum.values()) {
+			this.animations.put(e, new Animation<TextureRegion>((1f / 5f),
+					SpriteService.getInstance().getSpriteForAnimation(e, this.color, this.character)));
+		}
+		this.animationsLouis = new HashMap<>();
+		for (LouisSpriteEnum e : LouisSpriteEnum.values()) {
+			this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
+					SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
+		}
 		this.createBody();
+		if (type == PlayerTypeEnum.CPU) {
+			this.brain = new Brain(this);
+		}
 	}
 
 	@Override
@@ -154,7 +169,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		filter.maskBits = CollisionConstante.GROUP_PLAYER_MOVE;
 		fixture.setFilterData(filter);
 		diamondBody.dispose();
-
 		collisionBody = world.createBody(bodyDef);
 		collisionBody.setFixedRotation(false);
 		collisionBody.setUserData(this);
@@ -205,25 +219,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void update() {
-//		if (this.state != PlayerStateEnum.DEAD) {
-//			AStar astar = new AStar();
-//			short evicted = CollisionConstante.CATEGORY_WALL | CollisionConstante.CATEGORY_BRICKS
-//					| CollisionConstante.CATEGORY_BOMBE;
-//
-//			astar.init(this.getGridIndex(), 699, evicted, this.level.getState());
-//			astar.solve();
-//			System.out.println("path");
-//			if (astar.isSolved()) {
-//				AStarCell current = astar.getEnd();
-//				while (current.getParent() != null) {
-//					System.out.println(current.getIndex());
-//					current = current.getParent();
-//				}
-//			} else {
-//				System.out.println("NO PATH FOUND !!!!!!!!");
-//			}
-//		}
-
+		if (this.brain != null) {
+			this.brain.think();
+		}
 		switch (this.state) {
 		case BURNING:
 			break;
@@ -239,9 +237,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			if (insideFire > 0 && invincibleTime <= 0) {
 				if (state == PlayerStateEnum.ON_LOUIS) {
 					this.state = PlayerStateEnum.NORMAL;
-					this.invincibleTime = 50;
+					this.invincibleTime = 50*5;
 				} else if (state == PlayerStateEnum.NORMAL) {
-					this.state = PlayerStateEnum.BURNING;
+					changeState(PlayerStateEnum.BURNING);
 				}
 			}
 			switch (this.direction) {
@@ -357,7 +355,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	 ******************************************************/
 	@Override
 	public void pressA() {
-		if (this.nbBombe > 0 && !insideBombe) {
+		if (this.state != PlayerStateEnum.BURNING && this.state != PlayerStateEnum.DEAD && this.nbBombe > 0
+				&& !insideBombe) {
 			putBombe((int) (body.getPosition().x), (int) (body.getPosition().y));
 		}
 	}
@@ -367,7 +366,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	 ******************************************************/
 	@Override
 	public void pressB() {
-		if (bombeType == BombeTypeEnum.BOMBE_P) {
+		if (this.state != PlayerStateEnum.BURNING && this.state != PlayerStateEnum.DEAD
+				&& bombeType == BombeTypeEnum.BOMBE_P) {
 			this.level.getBombes().stream().filter(b -> b.bombeOfPlayer(this) && b.getType() == BombeTypeEnum.BOMBE_P)
 					.forEach(Bombe::explode);
 		}
@@ -378,7 +378,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	 ******************************************************/
 	@Override
 	public void pressX() {
-		if (canPutLineOfBombe && !insideBombe) {
+		if (this.state != PlayerStateEnum.BURNING && this.state != PlayerStateEnum.DEAD && canPutLineOfBombe
+				&& !insideBombe) {
 			int nb = nbBombe;
 			switch (this.previousDirection) {
 			case east:
@@ -534,7 +535,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			takeDeathBonus();
 			break;
 		case EGGS:
-			this.state = PlayerStateEnum.ON_LOUIS;
+			this.animationsLouis = new HashMap<>();
+			for (LouisSpriteEnum e : LouisSpriteEnum.values()) {
+				this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
+						SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
+			}
+			this.louisColor = LouisColorEnum.random();
+			this.changeState(PlayerStateEnum.ON_LOUIS);
 			break;
 		case FIRE:
 			this.bombeStrenght++;
@@ -558,13 +565,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.walkSpeed += Constante.ADD_WALK_SPEED;
 			break;
 		case SHIELD:
-			this.invincibleTime = INVINCIBLE_TIME;
+			this.invincibleTime = Constante.INVINCIBLE_TIME;
 			break;
 		case SHOES:
 			this.walkSpeed -= Constante.ADD_WALK_SPEED;
 			break;
 		case WALL:
-
+			// désactivation collision avec brick !
 			break;
 		default:
 			break;
@@ -702,36 +709,15 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawBurning() {
-		boolean died = false;
-		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(CharacterSpriteEnum.BURN);
-		if (frameCounter > NB_FRAME) {
-			frameCounter = 0;
-			offsetSprite++;
-			if (offsetSprite >= nbFrameForAnimation) {
-				offsetSprite = 0;
-				this.state = PlayerStateEnum.DEAD;
-			}
-		}
-		mbGame.getBatch().draw(
-				SpriteService.getInstance().getSprite(CharacterSpriteEnum.BURN, color, character, offsetSprite),
+		animationTime += Gdx.graphics.getDeltaTime();
+		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.BURN).getKeyFrame(animationTime, false),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
-		frameCounter++;
+		if (animations.get(CharacterSpriteEnum.BURN).isAnimationFinished(animationTime)) {
+			changeState(PlayerStateEnum.DEAD);
+		}
 	}
 
 	private void drawStateNormal() {
-		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(LouisSpriteEnum.WALK_DOWN);
-		if (direction != PovDirection.center) {
-			if (frameCounter > NB_FRAME) {
-				frameCounter = 0;
-				offsetSprite++;
-				if (offsetSprite >= nbFrameForAnimation) {
-					offsetSprite = 0;
-				}
-			}
-			frameCounter++;
-		} else {
-			offsetSprite = 0;
-		}
 		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.WALK_DOWN;
 		switch (this.direction) {
 		case center:
@@ -763,26 +749,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case southWest:
 		default:
 			break;
-
 		}
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, offsetSprite),
+		animationTime += Gdx.graphics.getDeltaTime();
+		mbGame.getBatch().draw(
+				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
 	private void drawStateOnLouis() {
-		nbFrameForAnimation = SpriteService.getInstance().getAnimationSize(LouisSpriteEnum.WALK_DOWN);
-		if (direction != PovDirection.center) {
-			if (frameCounter > NB_FRAME) {
-				frameCounter = 0;
-				offsetSprite++;
-				if (offsetSprite >= nbFrameForAnimation) {
-					offsetSprite = 0;
-				}
-			}
-			frameCounter++;
-		} else {
-			offsetSprite = 0;
-		}
 		LouisSpriteEnum drawSpriteLouis = LouisSpriteEnum.WALK_DOWN;
 		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.ON_LOUIS_DOWN;
 		switch (this.direction) {
@@ -824,20 +798,41 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-//		animationTime += Gdx.graphics.getDeltaTime();
-//		mbGame.getBatch().draw(animation.getKeyFrame(animationTime, true), (body.getPosition().x * 18f) - 15,
-//				(body.getPosition().y * 16f) - 5f);
-
+		animationTime += Gdx.graphics.getDeltaTime();
 		if (this.direction == PovDirection.south || this.previousDirection == PovDirection.south) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
-					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSpriteLouis, louisColor, offsetSprite),
-					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), (body.getPosition().x * 18f) - 15,
+					(body.getPosition().y * 16f) - 5f);
+			mbGame.getBatch()
+					.draw(animationsLouis.get(drawSpriteLouis)
+							.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
+							(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 		} else {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSpriteLouis, louisColor, offsetSprite),
-					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(drawSprite, color, character, 0),
-					(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+			mbGame.getBatch()
+					.draw(animationsLouis.get(drawSpriteLouis)
+							.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
+							(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), (body.getPosition().x * 18f) - 15,
+					(body.getPosition().y * 16f) - 5f);
 		}
+	}
+
+	public Map<Integer, Short> getLevelDefinition() {
+		return this.level.getState();
+	}
+
+	/*****************************************
+	 * TROLLEY PART
+	 *****************************************/
+	public void crush() {
+		this.changeState(PlayerStateEnum.BURNING);
+	}
+
+	public void enterInTrolley() {
+
+	}
+
+	private void changeState(PlayerStateEnum newState) {
+		this.animationTime = 0;
+		this.state = newState;
 	}
 }

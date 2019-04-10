@@ -15,6 +15,7 @@ import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
 import com.mygdx.domain.level.Teleporter;
+import com.mygdx.domain.level.Trolley;
 import com.mygdx.domain.level.Wall;
 
 public class CustomContactListener implements ContactListener {
@@ -37,6 +38,7 @@ public class CustomContactListener implements ContactListener {
 		beginContactBombes(contact);
 		beginContactBombeWall(contact);
 		beginContactBombeBrick(contact);
+		beginContactPlayerHitboxTrolley(contact);
 	}
 
 	private void beginContactPlayerInterrupter(Contact contact) {
@@ -155,6 +157,36 @@ public class CustomContactListener implements ContactListener {
 			if (type != null) {
 				p.takeBonus(type);
 			}
+		}
+	}
+
+	private void beginContactPlayerHitboxTrolley(Contact contact) {
+		Player p = null;
+		Trolley t = null;
+		if (contact.getFixtureA().getUserData().getClass() == Bonus.class
+				&& contact.getFixtureB().getUserData().getClass() == Player.class
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER_HITBOX) {
+			contact.setEnabled(false);
+			p = (Player) contact.getFixtureB().getUserData();
+			t = (Trolley) contact.getFixtureA().getUserData();
+		} else if (contact.getFixtureB().getUserData().getClass() == Bonus.class
+				&& contact.getFixtureA().getUserData().getClass() == Player.class
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER_HITBOX) {
+			contact.setEnabled(false);
+			p = (Player) contact.getFixtureA().getUserData();
+			t = (Trolley) contact.getFixtureB().getUserData();
+		}
+		if (t != null && p != null) {
+			if(t.isMoving()) {
+				p.crush();
+			}else {
+				p.enterInTrolley();
+			}
+			// Notify player to enter the trolley.
+			// start the trolley move
+			// if trolley in move, just crush the player
 		}
 	}
 

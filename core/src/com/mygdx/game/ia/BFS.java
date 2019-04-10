@@ -23,11 +23,14 @@ public class BFS {
 
 	public void solve() {
 		open.add(start);
+		tested.add(start);
 		Integer current;
 		while (true) {
+			if (open.isEmpty()) {
+				break;
+			}
 			current = open.pop();
-			tested.add(current);
-			if ((level.get(current) & search) > 0) {
+			if (level.containsKey(current) && (level.get(current) & search) > 0) {
 				break;
 			}
 			verifCell(IAUtils.getLeftPos(current));
@@ -37,9 +40,10 @@ public class BFS {
 		}
 	}
 
-	private void verifCell(int left) {
-		if (!tested.contains(left)) {
-			open.add(left);
+	private void verifCell(int val) {
+		if (!tested.contains(val)) {
+			tested.add(val);
+			open.add(val);
 		}
 	}
 
