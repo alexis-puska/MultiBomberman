@@ -1,6 +1,6 @@
 package com.mygdx.domain;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -26,6 +26,7 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.BombeTypeEnum;
 import com.mygdx.domain.enumeration.BonusTypeEnum;
+import com.mygdx.domain.enumeration.DeathBonusEnum;
 import com.mygdx.domain.enumeration.PlayerStateEnum;
 import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.level.Level;
@@ -81,7 +82,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private boolean canPutLineOfBombe;
 	private boolean canKickBombe;
 	private boolean canRaiseBombe;
-	private float previousWalkSpeed;
 
 	// teleporte
 	private Teleporter destinationTeleporter;
@@ -95,6 +95,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	boolean louisBurn;
 
 	private int invincibleTime;
+	private int malusTime;
+	private DeathBonusEnum deathBonus;
+	private float previousWalkSpeed;
 
 	private Map<CharacterSpriteEnum, Animation<TextureRegion>> animations;
 	private Map<LouisSpriteEnum, Animation<TextureRegion>> animationsLouis;
@@ -122,19 +125,19 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.canRaiseBombe = false;
 		this.insideFire = 0;
 		this.shipSpeed = DEFAULT_SHIP_SPEED;
-		this.louisColor = this.louisColor = LouisColorEnum.random();
-		this.animations = new HashMap<>();
+		this.louisColor = LouisColorEnum.random();
+		this.animations = new EnumMap<>(CharacterSpriteEnum.class);
 		for (CharacterSpriteEnum e : CharacterSpriteEnum.values()) {
 			this.animations.put(e, new Animation<TextureRegion>((1f / 5f),
 					SpriteService.getInstance().getSpriteForAnimation(e, this.color, this.character)));
 		}
-		this.animationsLouis = new HashMap<>();
+		this.animationsLouis = new EnumMap<>(LouisSpriteEnum.class);
 		for (LouisSpriteEnum e : LouisSpriteEnum.values()) {
 			this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
 					SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
 		}
 		this.createBody();
-		if (type == PlayerTypeEnum.CPU) {
+		if (this.type == PlayerTypeEnum.CPU) {
 			this.brain = new Brain(this);
 		}
 	}
@@ -217,6 +220,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	private void changeState(PlayerStateEnum newState) {
+		this.animationTime = 0;
+		this.state = newState;
+	}
+
 	@Override
 	public void update() {
 		if (this.brain != null) {
@@ -237,7 +245,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			if (insideFire > 0 && invincibleTime <= 0) {
 				if (state == PlayerStateEnum.ON_LOUIS) {
 					this.state = PlayerStateEnum.NORMAL;
-					this.invincibleTime = 50*5;
+					this.invincibleTime = 50 * 5;
 				} else if (state == PlayerStateEnum.NORMAL) {
 					changeState(PlayerStateEnum.BURNING);
 				}
@@ -304,14 +312,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (invincibleTime > 0) {
 			invincibleTime--;
 		}
-	}
-
-	public int getX() {
-		return (int) (body.getPosition().x * 18f);
-	}
-
-	public int getY() {
-		return (int) (body.getPosition().y * 16f);
+		if (malusTime > 0) {
+			malusTime--;
+		}
+		if (malusTime == 0) {
+			this.cancelLastMalus();
+		}
 	}
 
 	public PovDirection getDirection() {
@@ -329,6 +335,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	public void insideBombe(boolean value) {
 		insideBombe = value;
 	}
+
+	/************************************************************************************************************
+	 * --- CONTROLE ---
+	 ************************************************************************************************************/
 
 	@Override
 	public void move(PovDirection value) {
@@ -474,10 +484,42 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				&& this.level.getOccupedWallBrickBonus()[x][y] != null) {
 			return false;
 		} else {
-			Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
-					75);
-			this.level.getBombes().add(b);
-			this.nbBombe--;
+			// TODO DIARHEE CONSTIPATION TEST !
+
+			int bombeTime = 75;
+			if (this.deathBonus != null) {
+				switch (this.deathBonus) {
+				case DIAREE:
+					break;
+				case EXCHANGE:
+					break;
+				case FAST_BOMBE:
+					bombeTime = 40;
+					break;
+				case FAST_MOVE:
+					break;
+				case LOW_BOMBE:
+					break;
+				case REVERSE_MOVE:
+					break;
+				case SLOW_BOMBE:
+					bombeTime = 150;
+					break;
+				case SLOW_MOVE:
+					break;
+				default:
+					break;
+
+				}
+
+			}
+
+			if (deathBonus != null && deathBonus != DeathBonusEnum.CONSTIPATION) {
+				Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
+						bombeTime);
+				this.level.getBombes().add(b);
+				this.nbBombe--;
+			}
 		}
 		return true;
 	}
@@ -535,7 +577,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			takeDeathBonus();
 			break;
 		case EGGS:
-			this.animationsLouis = new HashMap<>();
+			this.animationsLouis = new EnumMap<>(LouisSpriteEnum.class);
 			for (LouisSpriteEnum e : LouisSpriteEnum.values()) {
 				this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
 						SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
@@ -579,96 +621,37 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void takeDeathBonus() {
-		int val = ThreadLocalRandom.current().nextInt(0, 7);
-		switch (val) {
-		case 0:
-			// walk like an old man
-
+		this.cancelLastMalus();
+		this.deathBonus = DeathBonusEnum.random();
+		switch (this.deathBonus) {
+		case CONSTIPATION:
+		case DIAREE:
 			break;
-		case 1:
-			// diarhee
-
+		case EXCHANGE:
+			this.deathBonus = null;
 			break;
-		case 2:
-			// constipation
-
+		case FAST_BOMBE:
 			break;
-		case 3:
-			// echange avec un autre joueur
-
+		case FAST_MOVE:
 			break;
-		case 4:
-			// bombe lente
-
+		case LOW_BOMBE:
 			break;
-		case 5:
-			// bombe rapide
-
+		case REVERSE_MOVE:
 			break;
-		case 6:
-			// course folle
-
+		case SLOW_BOMBE:
+			break;
+		case SLOW_MOVE:
+			break;
+		default:
 			break;
 		}
+		malusTime = 25 * 10;
 	}
 
 	private void cancelLastMalus() {
-
-	}
-
-	/******************************************************
-	 * --- UTILS ---
-	 ******************************************************/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((character == null) ? 0 : character.hashCode());
-		result = prime * result + ((collisionBody == null) ? 0 : collisionBody.hashCode());
-		result = prime * result + ((color == null) ? 0 : color.hashCode());
-		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
-		result = prime * result + ((startPlayer == null) ? 0 : startPlayer.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Player other = (Player) obj;
-		if (character != other.character)
-			return false;
-		if (collisionBody == null) {
-			if (other.collisionBody != null)
-				return false;
-		} else if (!collisionBody.equals(other.collisionBody)) {
-			return false;
+		if (this.deathBonus != null) {
+			this.deathBonus = null;
 		}
-		if (color != other.color)
-			return false;
-		if (direction != other.direction)
-			return false;
-		if (startPlayer == null) {
-			if (other.startPlayer != null)
-				return false;
-		} else if (!startPlayer.equals(other.startPlayer)) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public int compareTo(Player o) {
-		if (this.body.getPosition().y < o.body.getPosition().y) {
-			return 1;
-		} else if (this.body.getPosition().y > o.body.getPosition().y) {
-			return -1;
-		}
-		return 0;
 	}
 
 	/*************************************************
@@ -828,11 +811,61 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void enterInTrolley() {
-
+		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
 	}
 
-	private void changeState(PlayerStateEnum newState) {
-		this.animationTime = 0;
-		this.state = newState;
+	/******************************************************
+	 * --- UTILS ---
+	 ******************************************************/
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((character == null) ? 0 : character.hashCode());
+		result = prime * result + ((collisionBody == null) ? 0 : collisionBody.hashCode());
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
+		result = prime * result + ((startPlayer == null) ? 0 : startPlayer.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (character != other.character)
+			return false;
+		if (collisionBody == null) {
+			if (other.collisionBody != null)
+				return false;
+		} else if (!collisionBody.equals(other.collisionBody)) {
+			return false;
+		}
+		if (color != other.color)
+			return false;
+		if (direction != other.direction)
+			return false;
+		if (startPlayer == null) {
+			if (other.startPlayer != null)
+				return false;
+		} else if (!startPlayer.equals(other.startPlayer)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int compareTo(Player o) {
+		if (this.body.getPosition().y < o.body.getPosition().y) {
+			return 1;
+		} else if (this.body.getPosition().y > o.body.getPosition().y) {
+			return -1;
+		}
+		return 0;
 	}
 }
