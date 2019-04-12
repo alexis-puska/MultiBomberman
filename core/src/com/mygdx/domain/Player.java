@@ -209,6 +209,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void enterInTrolley(Trolley trolley) {
+		//TODO 
 		this.trolley = trolley;
 		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
 	}
