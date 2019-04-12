@@ -97,8 +97,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	boolean louisBurn;
 
 	private int invincibleTime;
-	private int malusTime = 100;
-	private DeathBonusEnum deathBonus = DeathBonusEnum.DIAREE;
+	private int malusTime;
+	private DeathBonusEnum deathBonus;
 
 	private Map<CharacterSpriteEnum, Animation<TextureRegion>> animations;
 	private Map<LouisSpriteEnum, Animation<TextureRegion>> animationsLouis;
@@ -239,7 +239,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			if (insideFire > 0 && invincibleTime <= 0) {
 				if (state == PlayerStateEnum.ON_LOUIS) {
 					this.state = PlayerStateEnum.NORMAL;
-					this.invincibleTime = 50 * 5;
+					this.invincibleTime = Constante.INVINCIBLE_TIME;
 				} else if (state == PlayerStateEnum.NORMAL) {
 					this.direction = PovDirection.center;
 					this.previousDirection = PovDirection.center;
@@ -251,16 +251,40 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				this.body.setLinearVelocity(0f, 0f);
 				break;
 			case east:
-				this.body.setLinearVelocity(walkSpeed, 0f);
+				if (this.deathBonus == DeathBonusEnum.FAST_MOVE) {
+					this.body.setLinearVelocity(Constante.FAST_WALK_SPEED, 0f);
+				} else if (this.deathBonus == DeathBonusEnum.SLOW_MOVE) {
+					this.body.setLinearVelocity(Constante.SLOW_WALK_SPEED, 0f);
+				} else {
+					this.body.setLinearVelocity(walkSpeed, 0f);
+				}
 				break;
 			case north:
-				this.body.setLinearVelocity(0f, walkSpeed);
+				if (this.deathBonus == DeathBonusEnum.FAST_MOVE) {
+					this.body.setLinearVelocity(0f, Constante.FAST_WALK_SPEED);
+				} else if (this.deathBonus == DeathBonusEnum.SLOW_MOVE) {
+					this.body.setLinearVelocity(0f, Constante.SLOW_WALK_SPEED);
+				} else {
+					this.body.setLinearVelocity(0f, walkSpeed);
+				}
 				break;
 			case south:
-				this.body.setLinearVelocity(0f, -walkSpeed);
+				if (this.deathBonus == DeathBonusEnum.FAST_MOVE) {
+					this.body.setLinearVelocity(0f, -Constante.FAST_WALK_SPEED);
+				} else if (this.deathBonus == DeathBonusEnum.SLOW_MOVE) {
+					this.body.setLinearVelocity(0f, -Constante.SLOW_WALK_SPEED);
+				} else {
+					this.body.setLinearVelocity(0f, -walkSpeed);
+				}
 				break;
 			case west:
-				this.body.setLinearVelocity(-walkSpeed, 0f);
+				if (this.deathBonus == DeathBonusEnum.FAST_MOVE) {
+					this.body.setLinearVelocity(-Constante.FAST_WALK_SPEED, 0f);
+				} else if (this.deathBonus == DeathBonusEnum.SLOW_MOVE) {
+					this.body.setLinearVelocity(-Constante.SLOW_WALK_SPEED, 0f);
+				} else {
+					this.body.setLinearVelocity(-walkSpeed, 0f);
+				}
 				break;
 			case southEast:
 			case southWest:
@@ -288,7 +312,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		if (body != null && this.state != PlayerStateEnum.DEAD) {
+		if (body != null && this.state != PlayerStateEnum.DEAD && this.state != PlayerStateEnum.BURNING
+				&& this.state != PlayerStateEnum.CRYING) {
 			if (this.body.getPosition().x > (float) Constante.GRID_SIZE_X) {
 				this.body.setTransform(this.body.getPosition().x - (float) Constante.GRID_SIZE_X,
 						this.body.getPosition().y, 0f);
@@ -318,7 +343,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 
 		if (deathBonus == DeathBonusEnum.DIAREE && this.state != PlayerStateEnum.BURNING
-				&& this.state != PlayerStateEnum.DEAD && this.nbBombe > 0 && !insideBombe) {
+				&& this.state != PlayerStateEnum.DEAD && this.nbBombe > 0 && !insideBombe && body != null) {
 			putBombe((int) (body.getPosition().x), (int) (body.getPosition().y));
 		}
 	}
@@ -363,7 +388,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	public void teleporteEnd(Teleporter tel) {
 		if (tel.equals(destinationTeleporter) && this.teleportCountDown == 0
 				&& this.state != PlayerStateEnum.TELEPORT) {
-			// Gdx.app.log(CLASS_NAME, "teleporte end ok 2! ");
 			destinationTeleporter = null;
 		}
 	}
@@ -377,6 +401,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return this.level.getState();
 	}
 
+	public boolean isCanKickBombe() {
+		return canKickBombe;
+	}
+
+	public boolean isDead() {
+		return this.state == PlayerStateEnum.DEAD;
+	}
+
 	/************************************************************************************************************
 	 * -------------------------------------------- CONTROLE
 	 * ----------------------------------------------------
@@ -384,11 +416,49 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	@Override
 	public void move(PovDirection value) {
 		Gdx.app.debug(CLASS_NAME, "press move : " + value.toString());
+		if (this.deathBonus == DeathBonusEnum.REVERSE_MOVE) {
+			value = inverteDirection(value);
+		}
 		if (value == PovDirection.east || value == PovDirection.south || value == PovDirection.north
 				|| value == PovDirection.west) {
 			this.previousDirection = value;
 		}
 		this.direction = value;
+	}
+
+	private PovDirection inverteDirection(PovDirection value) {
+		PovDirection tmp = value;
+		switch (value) {
+		case center:
+			break;
+		case east:
+			tmp = PovDirection.west;
+			break;
+		case north:
+			tmp = PovDirection.south;
+			break;
+		case northEast:
+			tmp = PovDirection.southWest;
+			break;
+		case northWest:
+			tmp = PovDirection.southEast;
+			break;
+		case south:
+			tmp = PovDirection.north;
+			break;
+		case southEast:
+			tmp = PovDirection.northWest;
+			break;
+		case southWest:
+			tmp = PovDirection.northEast;
+			break;
+		case west:
+			tmp = PovDirection.east;
+			break;
+		default:
+			break;
+		}
+		return tmp;
 	}
 
 	@Override
@@ -553,7 +623,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				&& this.level.getOccupedWallBrickBonus()[x][y] != null) {
 			return false;
 		} else {
-			// TODO DIARHEE CONSTIPATION TEST !
 			int bombeTime = 75;
 			if (this.deathBonus != null) {
 				switch (this.deathBonus) {
@@ -562,7 +631,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				case EXCHANGE:
 					break;
 				case FAST_BOMBE:
-					bombeTime = 40;
+					bombeTime = Constante.FASTE_BOMBE_TIME;
 					break;
 				case FAST_MOVE:
 					break;
@@ -571,7 +640,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				case REVERSE_MOVE:
 					break;
 				case SLOW_BOMBE:
-					bombeTime = 150;
+					bombeTime = Constante.SLOW_BOMBE_TIME;
 					break;
 				case SLOW_MOVE:
 					break;
@@ -662,6 +731,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private void takeDeathBonus() {
 		this.cancelLastMalus();
 		this.deathBonus = DeathBonusEnum.random();
+		this.deathBonus = DeathBonusEnum.REVERSE_MOVE;
 		switch (this.deathBonus) {
 		case CONSTIPATION:
 		case DIAREE:
@@ -676,6 +746,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case LOW_BOMBE:
 			break;
 		case REVERSE_MOVE:
+			if (this.deathBonus == DeathBonusEnum.REVERSE_MOVE) {
+				direction = inverteDirection(this.direction);
+			}
 			break;
 		case SLOW_BOMBE:
 			break;
@@ -684,7 +757,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		malusTime = 25 * 10;
+		malusTime = Constante.MALUS_TIME;
 	}
 
 	private void cancelLastMalus() {
@@ -730,23 +803,29 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		default:
 			break;
-
 		}
 	}
 
 	private void drawVictoryOnLouis() {
-		// TODO Auto-generated method stub
-
+		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_DOWN).getKeyFrame(0, false),
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+		mbGame.getBatch()
+				.draw(animationsLouis.get(LouisSpriteEnum.VICTORY)
+						.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
+						(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
 	private void drawVictory() {
-		// TODO Auto-generated method stub
-
+		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.VICTORY).getKeyFrame(animationTime, false),
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
 	private void drawCrying() {
-		// TODO Auto-generated method stub
-
+		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ANGRY).getKeyFrame(animationTime, false),
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+		if (animations.get(CharacterSpriteEnum.ANGRY).isAnimationFinished(animationTime)) {
+			changeState(PlayerStateEnum.NORMAL);
+		}
 	}
 
 	private void drawBurning() {
@@ -801,31 +880,30 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawCarryBombe() {
-		// TODO
-		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.WALK_DOWN;
+		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.CARRY_WALK_DOWN;
 		switch (this.direction) {
 		case center:
 			if (previousDirection == PovDirection.west) {
-				drawSprite = CharacterSpriteEnum.WALK_LEFT;
+				drawSprite = CharacterSpriteEnum.CARRY_WALK_LEFT;
 			} else if (previousDirection == PovDirection.north) {
-				drawSprite = CharacterSpriteEnum.WALK_UP;
+				drawSprite = CharacterSpriteEnum.CARRY_WALK_UP;
 			} else if (previousDirection == PovDirection.east) {
-				drawSprite = CharacterSpriteEnum.WALK_RIGHT;
+				drawSprite = CharacterSpriteEnum.CARRY_WALK_RIGHT;
 			} else if (previousDirection == PovDirection.south) {
-				drawSprite = CharacterSpriteEnum.WALK_DOWN;
+				drawSprite = CharacterSpriteEnum.CARRY_WALK_DOWN;
 			}
 			break;
 		case east:
-			drawSprite = CharacterSpriteEnum.WALK_RIGHT;
+			drawSprite = CharacterSpriteEnum.CARRY_WALK_RIGHT;
 			break;
 		case north:
-			drawSprite = CharacterSpriteEnum.WALK_UP;
+			drawSprite = CharacterSpriteEnum.CARRY_WALK_UP;
 			break;
 		case south:
-			drawSprite = CharacterSpriteEnum.WALK_DOWN;
+			drawSprite = CharacterSpriteEnum.CARRY_WALK_DOWN;
 			break;
 		case west:
-			drawSprite = CharacterSpriteEnum.WALK_LEFT;
+			drawSprite = CharacterSpriteEnum.CARRY_WALK_LEFT;
 			break;
 		case northEast:
 		case northWest:
@@ -993,11 +1071,4 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return 0;
 	}
 
-	public boolean isCanKickBombe() {
-		return canKickBombe;
-	}
-
-	public boolean isDead() {
-		return this.state == PlayerStateEnum.DEAD;
-	}
 }
