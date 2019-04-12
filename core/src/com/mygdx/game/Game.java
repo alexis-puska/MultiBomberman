@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -309,7 +308,7 @@ public class Game {
 		mbGame.getBatch().end();
 		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
 		bricksLayerTextureRegion.flip(false, true);
-		bricksLayer.end();		
+		bricksLayer.end();
 	}
 
 	private void drawFront() {
@@ -343,7 +342,11 @@ public class Game {
 
 		if (lightCountdown == 0) {
 			Collections.sort(players);
-			players.stream().forEach(p -> shapeRenderer.circle(p.getX(), p.getY(), 24));
+			players.stream().forEach(p -> {
+				if (!p.isDead()) {
+					shapeRenderer.circle(p.getX(), p.getY(), 24);
+				}
+			});
 			level.getFires().stream().filter(f -> !f.isOff())
 					.forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
 			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
@@ -379,20 +382,17 @@ public class Game {
 
 	private void merge() {
 
-		mbGame.getBatch().begin();	
-		
-	
-			
+		mbGame.getBatch().begin();
+
 		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
-		
-		
+
 //		mbGame.getBatch().setShader(shaderProgram);
 //		float delta = Gdx.graphics.getDeltaTime();
 //		deltaTime += delta;
 //		Gdx.app.log("delta ", "" + deltaTime % 1f);
 //		shaderProgram.setUniformf("time", deltaTime % 40f);
-	
+
 		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
@@ -408,7 +408,7 @@ public class Game {
 
 		mbGame.getBatch().setShader(null);
 		mbGame.getBatch().end();
-		
+
 	}
 
 	public MultiBombermanGame getMultiBombermanGame() {

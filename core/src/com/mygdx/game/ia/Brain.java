@@ -22,26 +22,28 @@ public class Brain {
 	}
 
 	public void think() {
+		if (!player.isDead()) {
+			bfs.init(player.getGridIndex(), CollisionConstante.CATEGORY_BUTTONS, player.getLevelDefinition());
+			astar.init(0, 400, CollisionConstante.CATEGORY_WALL, player.getLevelDefinition());
+			scr.init(0, player.getLevelDefinition(), CollisionConstante.CATEGORY_BOMBE,
+					CollisionConstante.CATEGORY_WALL);
+			bfs.solve();
+			astar.solve();
+			scr.solve();
 
-		bfs.init(player.getGridIndex(), CollisionConstante.CATEGORY_BUTTONS, player.getLevelDefinition());
-		astar.init(0, 400, CollisionConstante.CATEGORY_WALL, player.getLevelDefinition());
-		scr.init(0, player.getLevelDefinition(), CollisionConstante.CATEGORY_BOMBE, CollisionConstante.CATEGORY_WALL);
-		bfs.solve();
-		astar.solve();
-		scr.solve();
-
-		if (prev == PovDirection.east) {
-			player.move(PovDirection.north);
-			prev = PovDirection.north;
-		} else if (prev == PovDirection.north) {
-			player.move(PovDirection.west);
-			prev = PovDirection.west;
-		} else if (prev == PovDirection.west) {
-			player.move(PovDirection.south);
-			prev = PovDirection.south;
-		} else {
-			player.move(PovDirection.east);
-			prev = PovDirection.east;
+			if (prev == PovDirection.east) {
+				player.move(PovDirection.north);
+				prev = PovDirection.north;
+			} else if (prev == PovDirection.north) {
+				player.move(PovDirection.west);
+				prev = PovDirection.west;
+			} else if (prev == PovDirection.west) {
+				player.move(PovDirection.south);
+				prev = PovDirection.south;
+			} else {
+				player.move(PovDirection.east);
+				prev = PovDirection.east;
+			}
 		}
 	}
 }

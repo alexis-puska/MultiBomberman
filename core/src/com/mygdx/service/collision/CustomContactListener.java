@@ -117,7 +117,7 @@ public class CustomContactListener implements ContactListener {
 			Vector2 bp = b.getPosition();
 			if (distance(pp, bp, DETECT)) {
 				contact.setEnabled(false);
-			} else {
+			} else if (p.isCanKickBombe()) {
 				b.kick(p.getDirection());
 			}
 		} else if (contact.getFixtureB().getUserData().getClass() == Bombe.class
@@ -128,7 +128,7 @@ public class CustomContactListener implements ContactListener {
 			Vector2 bp = b.getPosition();
 			if (distance(pp, bp, DETECT)) {
 				contact.setEnabled(false);
-			} else {
+			} else if (p.isCanKickBombe()) {
 				b.kick(p.getDirection());
 			}
 		}
@@ -179,10 +179,10 @@ public class CustomContactListener implements ContactListener {
 			t = (Trolley) contact.getFixtureB().getUserData();
 		}
 		if (t != null && p != null) {
-			if(t.isMoving()) {
+			if (t.isMoving()) {
 				p.crush();
-			}else {
-				p.enterInTrolley();
+			} else {
+				p.enterInTrolley(t);
 			}
 			// Notify player to enter the trolley.
 			// start the trolley move

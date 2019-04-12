@@ -32,6 +32,7 @@ import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.StartPlayer;
 import com.mygdx.domain.level.Teleporter;
+import com.mygdx.domain.level.Trolley;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
@@ -73,6 +74,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private boolean insideBombe;
 	private int insideFire;
+	private Trolley trolley;
 
 	// state
 	private PlayerStateEnum state;
@@ -95,9 +97,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	boolean louisBurn;
 
 	private int invincibleTime;
-	private int malusTime;
-	private DeathBonusEnum deathBonus;
-	private float previousWalkSpeed;
+	private int malusTime = 100;
+	private DeathBonusEnum deathBonus = DeathBonusEnum.DIAREE;
 
 	private Map<CharacterSpriteEnum, Animation<TextureRegion>> animations;
 	private Map<LouisSpriteEnum, Animation<TextureRegion>> animationsLouis;
@@ -192,42 +193,34 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.world.destroyBody(body);
 			body = null;
 		}
+		if (collisionBody != null) {
+			this.world.destroyBody(collisionBody);
+			collisionBody = null;
+		}
 		this.level = null;
 	}
 
-	public void teleporte(Teleporter tel) {
-		if (destinationTeleporter == null) {
-			List<Teleporter> destination = this.level.getTeleporter().stream()
-					.filter(t -> ((t.getX() != tel.getX() || t.getY() != tel.getY())
-							&& this.level.getOccupedWallBrickBonus()[t.getX()][t.getY()] == null))
-					.collect(Collectors.toList());
-			if (!destination.isEmpty()) {
-				int idx = ThreadLocalRandom.current().nextInt(0, destination.size());
-				destinationTeleporter = destination.get(idx);
-				this.state = PlayerStateEnum.TELEPORT;
-				this.teleportCountDown = 6;
-				tel.animate(true);
-				destinationTeleporter.animate(false);
-			}
-		}
+	/************************************************************************************************************
+	 * -------------------------------------------- TROLLEY PART
+	 * ------------------------------------------------
+	 ************************************************************************************************************/
+	public void crush() {
+		this.changeState(PlayerStateEnum.BURNING);
 	}
 
-	public void teleporteEnd(Teleporter tel) {
-		if (tel.equals(destinationTeleporter) && this.teleportCountDown == 0
-				&& this.state != PlayerStateEnum.TELEPORT) {
-			// Gdx.app.log(CLASS_NAME, "teleporte end ok 2! ");
-			destinationTeleporter = null;
-		}
+	public void enterInTrolley(Trolley trolley) {
+		this.trolley = trolley;
+		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
 	}
 
-	private void changeState(PlayerStateEnum newState) {
-		this.animationTime = 0;
-		this.state = newState;
-	}
+	/************************************************************************************************************
+	 * -------------------------------------------- COMMONS
+	 * ----------------------------------------------------
+	 ************************************************************************************************************/
 
 	@Override
 	public void update() {
-		if (this.brain != null) {
+		if (this.type != PlayerTypeEnum.HUMAN && this.type != PlayerTypeEnum.NET && this.brain != null) {
 			this.brain.think();
 		}
 		switch (this.state) {
@@ -236,6 +229,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case CRYING:
 			break;
 		case DEAD:
+			this.dispose();
 			break;
 		case INSIDE_TROLLEY:
 			break;
@@ -247,6 +241,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 					this.state = PlayerStateEnum.NORMAL;
 					this.invincibleTime = 50 * 5;
 				} else if (state == PlayerStateEnum.NORMAL) {
+					this.direction = PovDirection.center;
+					this.previousDirection = PovDirection.center;
 					changeState(PlayerStateEnum.BURNING);
 				}
 			}
@@ -292,31 +288,38 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		if (this.body.getPosition().x > (float) Constante.GRID_SIZE_X) {
-			this.body.setTransform(this.body.getPosition().x - (float) Constante.GRID_SIZE_X, this.body.getPosition().y,
-					0f);
+		if (body != null && this.state != PlayerStateEnum.DEAD) {
+			if (this.body.getPosition().x > (float) Constante.GRID_SIZE_X) {
+				this.body.setTransform(this.body.getPosition().x - (float) Constante.GRID_SIZE_X,
+						this.body.getPosition().y, 0f);
+			}
+			if (this.body.getPosition().x < 0f) {
+				this.body.setTransform(this.body.getPosition().x + (float) Constante.GRID_SIZE_X,
+						this.body.getPosition().y, 0f);
+			}
+			if (this.body.getPosition().y > (float) Constante.GRID_SIZE_Y) {
+				this.body.setTransform(this.body.getPosition().x,
+						this.body.getPosition().y - (float) Constante.GRID_SIZE_Y, 0f);
+			}
+			if (this.body.getPosition().y < 0f) {
+				this.body.setTransform(this.body.getPosition().x,
+						this.body.getPosition().y + (float) Constante.GRID_SIZE_Y, 0f);
+			}
+			collisionBody.setTransform(this.body.getPosition(), body.getAngle());
 		}
-		if (this.body.getPosition().x < 0f) {
-			this.body.setTransform(this.body.getPosition().x + (float) Constante.GRID_SIZE_X, this.body.getPosition().y,
-					0f);
-		}
-		if (this.body.getPosition().y > (float) Constante.GRID_SIZE_Y) {
-			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y - (float) Constante.GRID_SIZE_Y,
-					0f);
-		}
-		if (this.body.getPosition().y < 0f) {
-			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y + (float) Constante.GRID_SIZE_Y,
-					0f);
-		}
-		collisionBody.setTransform(this.body.getPosition(), body.getAngle());
 		if (invincibleTime > 0) {
 			invincibleTime--;
 		}
 		if (malusTime > 0) {
 			malusTime--;
+			if (malusTime == 0) {
+				this.cancelLastMalus();
+			}
 		}
-		if (malusTime == 0) {
-			this.cancelLastMalus();
+
+		if (deathBonus == DeathBonusEnum.DIAREE && this.state != PlayerStateEnum.BURNING
+				&& this.state != PlayerStateEnum.DEAD && this.nbBombe > 0 && !insideBombe) {
+			putBombe((int) (body.getPosition().x), (int) (body.getPosition().y));
 		}
 	}
 
@@ -336,10 +339,48 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		insideBombe = value;
 	}
 
-	/************************************************************************************************************
-	 * --- CONTROLE ---
-	 ************************************************************************************************************/
+	public void bombeExploded() {
+		this.nbBombe++;
+	}
 
+	public void teleporte(Teleporter tel) {
+		if (destinationTeleporter == null) {
+			List<Teleporter> destination = this.level.getTeleporter().stream()
+					.filter(t -> ((t.getX() != tel.getX() || t.getY() != tel.getY())
+							&& this.level.getOccupedWallBrickBonus()[t.getX()][t.getY()] == null))
+					.collect(Collectors.toList());
+			if (!destination.isEmpty()) {
+				int idx = ThreadLocalRandom.current().nextInt(0, destination.size());
+				destinationTeleporter = destination.get(idx);
+				this.state = PlayerStateEnum.TELEPORT;
+				this.teleportCountDown = 6;
+				tel.animate(true);
+				destinationTeleporter.animate(false);
+			}
+		}
+	}
+
+	public void teleporteEnd(Teleporter tel) {
+		if (tel.equals(destinationTeleporter) && this.teleportCountDown == 0
+				&& this.state != PlayerStateEnum.TELEPORT) {
+			// Gdx.app.log(CLASS_NAME, "teleporte end ok 2! ");
+			destinationTeleporter = null;
+		}
+	}
+
+	private void changeState(PlayerStateEnum newState) {
+		this.animationTime = 0;
+		this.state = newState;
+	}
+
+	public Map<Integer, Short> getLevelDefinition() {
+		return this.level.getState();
+	}
+
+	/************************************************************************************************************
+	 * -------------------------------------------- CONTROLE
+	 * ----------------------------------------------------
+	 ************************************************************************************************************/
 	@Override
 	public void move(PovDirection value) {
 		Gdx.app.debug(CLASS_NAME, "press move : " + value.toString());
@@ -415,6 +456,38 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	@Override
+	public void pressY() {
+		// unused method
+	}
+
+	/******************************************************
+	 * --- MANAGE SHIP SPEED ---
+	 ******************************************************/
+	@Override
+	public void pressL() {
+		this.shipSpeed += SHIP_SPEED_STEP;
+	}
+
+	@Override
+	public void pressR() {
+		this.shipSpeed += SHIP_SPEED_STEP;
+	}
+
+	@Override
+	public void releaseL() {
+		this.shipSpeed -= SHIP_SPEED_STEP;
+	}
+
+	@Override
+	public void releaseR() {
+		this.shipSpeed -= SHIP_SPEED_STEP;
+	}
+
+	/************************************************************************************************************
+	 * ------------------------------------------- DROP BOMBE
+	 * ---------------------------------------------------
+	 ************************************************************************************************************/
 	private void putBombeLineWest(int nb) {
 		int calcX;
 		int calcY;
@@ -475,17 +548,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
-	public void bombeExploded() {
-		this.nbBombe++;
-	}
-
 	private boolean putBombe(int x, int y) {
 		if (x >= 0 && x < Constante.GRID_SIZE_X && y >= 0 && y < Constante.GRID_SIZE_Y
 				&& this.level.getOccupedWallBrickBonus()[x][y] != null) {
 			return false;
 		} else {
 			// TODO DIARHEE CONSTIPATION TEST !
-
 			int bombeTime = 75;
 			if (this.deathBonus != null) {
 				switch (this.deathBonus) {
@@ -509,12 +577,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 					break;
 				default:
 					break;
-
 				}
-
 			}
-
-			if (deathBonus != null && deathBonus != DeathBonusEnum.CONSTIPATION) {
+			if (deathBonus == null || deathBonus != DeathBonusEnum.CONSTIPATION) {
 				Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
 						bombeTime);
 				this.level.getBombes().add(b);
@@ -524,37 +589,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return true;
 	}
 
-	@Override
-	public void pressY() {
-		// unused method
-	}
-
-	/******************************************************
-	 * --- MANAGE SHIP SPEED ---
-	 ******************************************************/
-	@Override
-	public void pressL() {
-		this.shipSpeed += SHIP_SPEED_STEP;
-	}
-
-	@Override
-	public void pressR() {
-		this.shipSpeed += SHIP_SPEED_STEP;
-	}
-
-	@Override
-	public void releaseL() {
-		this.shipSpeed -= SHIP_SPEED_STEP;
-	}
-
-	@Override
-	public void releaseR() {
-		this.shipSpeed -= SHIP_SPEED_STEP;
-	}
-
-	/******************************************************
-	 * --- MANAGE PICK UP BONUS ---
-	 ******************************************************/
+	/*******************************************************************************
+	 * -----------------------------------------------------------------------------
+	 * --------------------------- MANAGE PICK UP BONUS ----------------------------
+	 * -----------------------------------------------------------------------------
+	 *******************************************************************************/
 	public void takeBonus(BonusTypeEnum type) {
 		Gdx.app.log(CLASS_NAME, "take bonus : " + type.name());
 		switch (type) {
@@ -654,22 +693,23 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
-	/*************************************************
-	 * --- DRAW ---
-	 *************************************************/
 	@Override
 	public void drawIt() {
+		animationTime += Gdx.graphics.getDeltaTime();
 		switch (this.state) {
 		case BURNING:
 			drawBurning();
 			break;
 		case CARRY_BOMBE:
+			drawCarryBombe();
 			break;
 		case CRYING:
+			drawCrying();
 			break;
 		case DEAD:
 			break;
 		case INSIDE_TROLLEY:
+			drawInsideTrolley();
 			break;
 		case NORMAL:
 			drawStateNormal();
@@ -680,10 +720,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case TELEPORT:
 			break;
 		case THROW_BOMBE:
+			drawThrowBombe();
 			break;
 		case VICTORY:
+			drawVictory();
 			break;
 		case VICTORY_ON_LOUIS:
+			drawVictoryOnLouis();
 			break;
 		default:
 			break;
@@ -691,13 +734,109 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	private void drawVictoryOnLouis() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void drawVictory() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void drawCrying() {
+		// TODO Auto-generated method stub
+
+	}
+
 	private void drawBurning() {
-		animationTime += Gdx.graphics.getDeltaTime();
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.BURN).getKeyFrame(animationTime, false),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 		if (animations.get(CharacterSpriteEnum.BURN).isAnimationFinished(animationTime)) {
 			changeState(PlayerStateEnum.DEAD);
 		}
+	}
+
+	private void drawThrowBombe() {
+		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.THROW_BOMBE_DOWN;
+		switch (this.direction) {
+		case center:
+			if (previousDirection == PovDirection.west) {
+				drawSprite = CharacterSpriteEnum.THROW_BOMBE_LEFT;
+			} else if (previousDirection == PovDirection.north) {
+				drawSprite = CharacterSpriteEnum.THROW_BOMBE_UP;
+			} else if (previousDirection == PovDirection.east) {
+				drawSprite = CharacterSpriteEnum.THROW_BOMBE_RIGHT;
+			} else if (previousDirection == PovDirection.south) {
+				drawSprite = CharacterSpriteEnum.THROW_BOMBE_DOWN;
+			}
+			break;
+		case east:
+			drawSprite = CharacterSpriteEnum.THROW_BOMBE_RIGHT;
+			break;
+		case north:
+			drawSprite = CharacterSpriteEnum.THROW_BOMBE_UP;
+			break;
+		case south:
+			drawSprite = CharacterSpriteEnum.THROW_BOMBE_DOWN;
+			break;
+		case west:
+			drawSprite = CharacterSpriteEnum.THROW_BOMBE_LEFT;
+			break;
+		case northEast:
+		case northWest:
+		case southEast:
+		case southWest:
+		default:
+			break;
+		}
+		mbGame.getBatch().draw(
+				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+	}
+
+	private void drawInsideTrolley() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void drawCarryBombe() {
+		// TODO
+		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.WALK_DOWN;
+		switch (this.direction) {
+		case center:
+			if (previousDirection == PovDirection.west) {
+				drawSprite = CharacterSpriteEnum.WALK_LEFT;
+			} else if (previousDirection == PovDirection.north) {
+				drawSprite = CharacterSpriteEnum.WALK_UP;
+			} else if (previousDirection == PovDirection.east) {
+				drawSprite = CharacterSpriteEnum.WALK_RIGHT;
+			} else if (previousDirection == PovDirection.south) {
+				drawSprite = CharacterSpriteEnum.WALK_DOWN;
+			}
+			break;
+		case east:
+			drawSprite = CharacterSpriteEnum.WALK_RIGHT;
+			break;
+		case north:
+			drawSprite = CharacterSpriteEnum.WALK_UP;
+			break;
+		case south:
+			drawSprite = CharacterSpriteEnum.WALK_DOWN;
+			break;
+		case west:
+			drawSprite = CharacterSpriteEnum.WALK_LEFT;
+			break;
+		case northEast:
+		case northWest:
+		case southEast:
+		case southWest:
+		default:
+			break;
+		}
+		mbGame.getBatch().draw(
+				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
+				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
 	}
 
 	private void drawStateNormal() {
@@ -733,7 +872,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		animationTime += Gdx.graphics.getDeltaTime();
 		mbGame.getBatch().draw(
 				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
 				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
@@ -781,7 +919,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		animationTime += Gdx.graphics.getDeltaTime();
 		if (this.direction == PovDirection.south || this.previousDirection == PovDirection.south) {
 			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), (body.getPosition().x * 18f) - 15,
 					(body.getPosition().y * 16f) - 5f);
@@ -797,21 +934,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), (body.getPosition().x * 18f) - 15,
 					(body.getPosition().y * 16f) - 5f);
 		}
-	}
-
-	public Map<Integer, Short> getLevelDefinition() {
-		return this.level.getState();
-	}
-
-	/*****************************************
-	 * TROLLEY PART
-	 *****************************************/
-	public void crush() {
-		this.changeState(PlayerStateEnum.BURNING);
-	}
-
-	public void enterInTrolley() {
-		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
 	}
 
 	/******************************************************
@@ -861,11 +983,21 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public int compareTo(Player o) {
-		if (this.body.getPosition().y < o.body.getPosition().y) {
-			return 1;
-		} else if (this.body.getPosition().y > o.body.getPosition().y) {
-			return -1;
+		if (this.body != null && o.body != null) {
+			if (this.body.getPosition().y < o.body.getPosition().y) {
+				return 1;
+			} else if (this.body.getPosition().y > o.body.getPosition().y) {
+				return -1;
+			}
 		}
 		return 0;
+	}
+
+	public boolean isCanKickBombe() {
+		return canKickBombe;
+	}
+
+	public boolean isDead() {
+		return this.state == PlayerStateEnum.DEAD;
 	}
 }
