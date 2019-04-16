@@ -39,22 +39,19 @@ import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.LouisColorEnum;
 import com.mygdx.enumeration.LouisSpriteEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
+import com.mygdx.game.Game;
 import com.mygdx.game.ia.Brain;
 import com.mygdx.main.MultiBombermanGame;
+import com.mygdx.service.Context;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
 import com.mygdx.utils.GridUtils;
 
 public class Player extends BodyAble implements ControlEventListener, Comparable<Player> {
 	private static final String CLASS_NAME = "Player.class";
-
 	private static final float RADIUS = 0.48f;
-	private static final float DEFAULT_SHIP_SPEED = 0.8f;
-	private static final float SHIP_SPEED_STEP = 0.5f;
 
-	private static final int NB_FRAME = 4;
-	private static final int NB_FRAME_INC_ACTION = 5;
-	private static final int NB_FRAME_UNDERWATER = 60;
+	private final Game game;
 
 	private final PlayerTypeEnum type;
 	private final CharacterEnum character;
@@ -90,11 +87,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private int teleportCountDown;
 
 	// animation part
-	int frameCounter;
-	int offsetSprite;
-	int nbFrameForAnimation;
-	LouisColorEnum louisColor;
-	boolean louisBurn;
+	private LouisColorEnum louisColor;
 
 	private int invincibleTime;
 	private int malusTime;
@@ -104,8 +97,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private Map<LouisSpriteEnum, Animation<TextureRegion>> animationsLouis;
 	private float animationTime;
 
-	public Player(World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type, CharacterEnum character,
-			CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe) {
+	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
+			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght,
+			int nbBombe) {
 		this.startPlayer = startPlayer;
 		this.type = type;
 		this.character = character;
@@ -113,6 +107,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.previousDirection = PovDirection.south;
 		this.direction = PovDirection.center;
 		this.state = PlayerStateEnum.ON_LOUIS;
+		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
@@ -125,7 +120,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.insideBombe = false;
 		this.canRaiseBombe = false;
 		this.insideFire = 0;
-		this.shipSpeed = DEFAULT_SHIP_SPEED;
+		this.shipSpeed = Constante.DEFAULT_SHIP_SPEED;
 		this.louisColor = LouisColorEnum.random();
 		this.animations = new EnumMap<>(CharacterSpriteEnum.class);
 		for (CharacterSpriteEnum e : CharacterSpriteEnum.values()) {
@@ -148,12 +143,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(this.startPlayer.getX() + 0.5f, this.startPlayer.getY() + 0.5f);
-		body = world.createBody(bodyDef);
-		body.setFixedRotation(false);
+		this.body = world.createBody(bodyDef);
+		this.body.setFixedRotation(false);
 		MassData data = new MassData();
 		data.mass = 1f;
-		body.setMassData(data);
-		body.setUserData(this);
+		this.body.setMassData(data);
+		this.body.setUserData(this);
 		PolygonShape diamondBody = new PolygonShape();
 		Vector2[] vertices = new Vector2[4];
 		vertices[0] = new Vector2(-RADIUS, 0);
@@ -189,13 +184,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void dispose() {
-		if (body != null) {
+		if (this.body != null) {
 			this.world.destroyBody(body);
-			body = null;
+			this.body = null;
 		}
-		if (collisionBody != null) {
-			this.world.destroyBody(collisionBody);
-			collisionBody = null;
+		if (this.collisionBody != null) {
+			this.world.destroyBody(this.collisionBody);
+			this.collisionBody = null;
 		}
 		this.level = null;
 	}
@@ -209,7 +204,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void enterInTrolley(Trolley trolley) {
-		//TODO 
+		// TODO
 		this.trolley = trolley;
 		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
 	}
@@ -231,6 +226,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		case DEAD:
 			this.dispose();
+			if (Context.isBadBomber() && game.isSuddentDeathTime()) {
+
+			}
 			break;
 		case INSIDE_TROLLEY:
 			break;
@@ -313,7 +311,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		if (body != null && this.state != PlayerStateEnum.DEAD && this.state != PlayerStateEnum.BURNING
+		if (this.body != null && this.state != PlayerStateEnum.DEAD && this.state != PlayerStateEnum.BURNING
 				&& this.state != PlayerStateEnum.CRYING) {
 			if (this.body.getPosition().x > (float) Constante.GRID_SIZE_X) {
 				this.body.setTransform(this.body.getPosition().x - (float) Constante.GRID_SIZE_X,
@@ -331,38 +329,38 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				this.body.setTransform(this.body.getPosition().x,
 						this.body.getPosition().y + (float) Constante.GRID_SIZE_Y, 0f);
 			}
-			collisionBody.setTransform(this.body.getPosition(), body.getAngle());
+			this.collisionBody.setTransform(this.body.getPosition(), this.body.getAngle());
 		}
-		if (invincibleTime > 0) {
-			invincibleTime--;
+		if (this.invincibleTime > 0) {
+			this.invincibleTime--;
 		}
-		if (malusTime > 0) {
-			malusTime--;
-			if (malusTime == 0) {
+		if (this.malusTime > 0) {
+			this.malusTime--;
+			if (this.malusTime == 0) {
 				this.cancelLastMalus();
 			}
 		}
 
-		if (deathBonus == DeathBonusEnum.DIAREE && this.state != PlayerStateEnum.BURNING
-				&& this.state != PlayerStateEnum.DEAD && this.nbBombe > 0 && !insideBombe && body != null) {
-			putBombe((int) (body.getPosition().x), (int) (body.getPosition().y));
+		if (this.deathBonus == DeathBonusEnum.DIAREE && this.state != PlayerStateEnum.BURNING
+				&& this.state != PlayerStateEnum.DEAD && this.nbBombe > 0 && !this.insideBombe && body != null) {
+			putBombe((int) (this.body.getPosition().x), (int) (this.body.getPosition().y));
 		}
 	}
 
 	public PovDirection getDirection() {
-		return direction;
+		return this.direction;
 	}
 
 	public void insideFire(boolean value) {
 		if (value) {
-			insideFire++;
+			this.insideFire++;
 		} else {
-			insideFire--;
+			this.insideFire--;
 		}
 	}
 
 	public void insideBombe(boolean value) {
-		insideBombe = value;
+		this.insideBombe = value;
 	}
 
 	public void bombeExploded() {
@@ -370,18 +368,18 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void teleporte(Teleporter tel) {
-		if (destinationTeleporter == null) {
+		if (this.destinationTeleporter == null) {
 			List<Teleporter> destination = this.level.getTeleporter().stream()
 					.filter(t -> ((t.getX() != tel.getX() || t.getY() != tel.getY())
 							&& this.level.getOccupedWallBrickBonus()[t.getX()][t.getY()] == null))
 					.collect(Collectors.toList());
 			if (!destination.isEmpty()) {
 				int idx = ThreadLocalRandom.current().nextInt(0, destination.size());
-				destinationTeleporter = destination.get(idx);
+				this.destinationTeleporter = destination.get(idx);
 				this.state = PlayerStateEnum.TELEPORT;
 				this.teleportCountDown = 6;
 				tel.animate(true);
-				destinationTeleporter.animate(false);
+				this.destinationTeleporter.animate(false);
 			}
 		}
 	}
@@ -389,7 +387,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	public void teleporteEnd(Teleporter tel) {
 		if (tel.equals(destinationTeleporter) && this.teleportCountDown == 0
 				&& this.state != PlayerStateEnum.TELEPORT) {
-			destinationTeleporter = null;
+			this.destinationTeleporter = null;
 		}
 	}
 
@@ -537,22 +535,22 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	 ******************************************************/
 	@Override
 	public void pressL() {
-		this.shipSpeed += SHIP_SPEED_STEP;
+		this.shipSpeed += Constante.SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void pressR() {
-		this.shipSpeed += SHIP_SPEED_STEP;
+		this.shipSpeed += Constante.SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void releaseL() {
-		this.shipSpeed -= SHIP_SPEED_STEP;
+		this.shipSpeed -= Constante.SHIP_SPEED_STEP;
 	}
 
 	@Override
 	public void releaseR() {
-		this.shipSpeed -= SHIP_SPEED_STEP;
+		this.shipSpeed -= Constante.SHIP_SPEED_STEP;
 	}
 
 	/************************************************************************************************************
@@ -722,7 +720,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.walkSpeed -= Constante.ADD_WALK_SPEED;
 			break;
 		case WALL:
-			// désactivation collision avec brick !
+			// TODO désactivation collision avec brick !
 			break;
 		default:
 			break;

@@ -172,7 +172,7 @@ public class Game {
 		LevelMapper levelMapper = new LevelMapper();
 		this.level = levelMapper.toEntity(Context.getLevel());
 		this.level.init(this, world);
-		this.players = this.mbGame.getPlayerService().generatePlayer(this.world, this.level,
+		this.players = this.mbGame.getPlayerService().generatePlayer(this, this.world, this.level,
 				this.level.getStartPlayer());
 
 		if (this.level.getShadow() > 0f) {
@@ -413,5 +413,10 @@ public class Game {
 
 	public MultiBombermanGame getMultiBombermanGame() {
 		return this.mbGame;
+	}
+
+	public boolean isSuddentDeathTime() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

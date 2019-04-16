@@ -58,6 +58,9 @@ public class Constante {
 	public static final float SLOW_WALK_SPEED = 1f;
 	public static final float FAST_WALK_SPEED = 15f;
 
+	public static final float DEFAULT_SHIP_SPEED = 0.8f;
+	public static final float SHIP_SPEED_STEP = 0.5f;
+
 	public static final int INVINCIBLE_TIME = 50;
 	public static final int FASTE_BOMBE_TIME = 40;
 	public static final int SLOW_BOMBE_TIME = 150;

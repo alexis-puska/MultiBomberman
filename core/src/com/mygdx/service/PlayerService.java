@@ -20,6 +20,7 @@ import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
+import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.input_processor.ControlEventListener;
 import com.mygdx.service.input_processor.MenuListener;
@@ -175,7 +176,7 @@ public class PlayerService {
 		return definitions.get(index).getColor();
 	}
 
-	public List<Player> generatePlayer(World world, Level level, List<StartPlayer> startPlayer) {
+	public List<Player> generatePlayer(Game game, World world, Level level, List<StartPlayer> startPlayer) {
 		controlEventListeners = new HashMap<>();
 		List<Player> players = new ArrayList<>();
 
@@ -186,8 +187,9 @@ public class PlayerService {
 							+ def.getValue().getPlayerType().toString() + ",  "
 							+ def.getValue().getCharacter().toString() + ",  " + def.getValue().getColor().toString());
 			if (idx < startPlayer.size()) {
-				Player p = new Player(world, mbGame, level, def.getValue().getPlayerType(), def.getValue().getCharacter(), def.getValue().getColor(),
-						startPlayer.get(idx), Context.getStrength(), Context.getBombe());
+				Player p = new Player(game, world, mbGame, level, def.getValue().getPlayerType(),
+						def.getValue().getCharacter(), def.getValue().getColor(), startPlayer.get(idx),
+						Context.getStrength(), Context.getBombe());
 				players.add(p);
 				controlEventListeners.put(def.getKey(), p);
 				idx++;
