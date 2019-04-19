@@ -88,7 +88,7 @@ public class Fire extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(animation.getKeyFrame(time, false), (float) this.x * 18, (float) this.y * 16);
+		mbGame.getBatch().draw(animation.getKeyFrame(time, false), (float) this.x * 18f, (float) this.y * 16f);
 	}
 
 	@Override

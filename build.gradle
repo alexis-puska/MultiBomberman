@@ -4,6 +4,7 @@ buildscript {
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
         google()
     }
@@ -18,12 +19,14 @@ buildscript {
   		classpath "com.maxmind.geoip2:geoip2:2.12.0"
   		classpath "com.maxmind.db:maxmind-db:1.2.2"
   		classpath "org.springframework.boot:spring-boot-starter-web:2.1.1.RELEASE"
+  		classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
+    apply plugin: "org.sonarqube"
 
     version = '1.0'
     ext {

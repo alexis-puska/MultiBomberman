@@ -107,9 +107,9 @@ public class Bombe extends BodyAble {
 
 	public BombeLight getOffesetShadow() {
 		return this.type.getOffsetLight()
-				.get(Double.valueOf(Math
+				.get(Integer.valueOf(Double.valueOf(Math
 						.floor((stateTime % this.animation.getAnimationDuration()) / this.animation.getFrameDuration()))
-						.intValue());
+						.intValue()));
 	}
 
 	public boolean isCreateLight() {

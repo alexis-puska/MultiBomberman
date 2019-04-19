@@ -87,10 +87,10 @@ public class Teleporter extends BodyAble implements Initiable {
 	@Override
 	public void drawIt() {
 		if (animate) {
-			mbGame.getBatch().draw(animation.getKeyFrame(time, false), this.x * 18, this.y * 16);
+			mbGame.getBatch().draw(animation.getKeyFrame(time, false), this.x * 18f, this.y * 16f);
 		} else {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TELEPORTER, 0), this.x * 18,
-					this.y * 16);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TELEPORTER, 0), this.x * 18f,
+					this.y * 16f);
 		}
 	}
 }

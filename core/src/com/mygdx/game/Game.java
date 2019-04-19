@@ -352,7 +352,7 @@ public class Game {
 			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
 				shapeRenderer.setColor(new Color(b.getLight(), b.getLight(), b.getLight(), 0f));
 				BombeLight light = b.getOffesetShadow();
-				shapeRenderer.circle(b.getX() + light.getX(), b.getY() + light.getY(), light.getRadius());
+				shapeRenderer.circle((float)(b.getX() + light.getX()), (float)b.getY() + (float)light.getY(), (float)light.getRadius());
 			});
 		}
 		shapeRenderer.end();
