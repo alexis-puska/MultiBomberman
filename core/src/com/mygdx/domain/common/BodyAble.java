@@ -52,7 +52,8 @@ public abstract class BodyAble {
 
 	public int getGridIndex() {
 		if (body != null) {
-			return (int)(Math.floor(body.getPosition().y)) * Constante.GRID_SIZE_X + ((int) (Math.floor(this.body.getPosition().x)));
+			return (int) (Math.floor(body.getPosition().y)) * Constante.GRID_SIZE_X
+					+ ((int) (Math.floor(this.body.getPosition().x)));
 		}
 		return -1;
 	}

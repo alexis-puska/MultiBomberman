@@ -96,6 +96,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private Map<CharacterSpriteEnum, Animation<TextureRegion>> animations;
 	private Map<LouisSpriteEnum, Animation<TextureRegion>> animationsLouis;
 	private float animationTime;
+	private boolean canPassWall;
+	private int wallTimeout;
 
 	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
 			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght,
@@ -119,6 +121,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.canKickBombe = false;
 		this.insideBombe = false;
 		this.canRaiseBombe = false;
+		this.canPassWall = false;
+		this.wallTimeout = 0;
 		this.insideFire = 0;
 		this.shipSpeed = Constante.DEFAULT_SHIP_SPEED;
 		this.louisColor = LouisColorEnum.random();
@@ -340,6 +344,19 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				this.cancelLastMalus();
 			}
 		}
+		if (this.wallTimeout <= 0 && canPassWall && !isInsideBrick()) {
+			System.out.println("désactivation bonus WALL");
+			for (int i = 0; i < this.body.getFixtureList().size; i++) {
+				Filter f = new Filter();
+				f.categoryBits = CollisionConstante.CATEGORY_PLAYER;
+				f.maskBits = CollisionConstante.GROUP_PLAYER_MOVE;
+				this.body.getFixtureList().get(i).setFilterData(f);
+				System.out.println("collision reactivée");
+			}
+			canPassWall = false;
+		} else {
+			wallTimeout--;
+		}
 
 		if (this.deathBonus == DeathBonusEnum.DIAREE && this.state != PlayerStateEnum.BURNING
 				&& this.state != PlayerStateEnum.DEAD && this.nbBombe > 0 && !this.insideBombe && body != null) {
@@ -365,6 +382,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public void bombeExploded() {
 		this.nbBombe++;
+	}
+
+	public boolean isInsideBrick() {
+		return this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()] != null;
 	}
 
 	public void teleporte(Teleporter tel) {
@@ -720,7 +741,16 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.walkSpeed -= Constante.ADD_WALK_SPEED;
 			break;
 		case WALL:
-			// TODO désactivation collision avec brick !
+			System.out.println("j'ai pris un bonus WALL");
+			for (int i = 0; i < this.body.getFixtureList().size; i++) {
+				Filter f = new Filter();
+				f.categoryBits = CollisionConstante.CATEGORY_PLAYER;
+				f.maskBits = CollisionConstante.GROUP_PLAYER_MOVE_PASS_WALL;
+				this.body.getFixtureList().get(i).setFilterData(f);
+				System.out.println("collision desactivée");
+			}
+			this.canPassWall = true;
+			this.wallTimeout = 250;
 			break;
 		default:
 			break;
