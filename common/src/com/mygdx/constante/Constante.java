@@ -32,6 +32,8 @@ public class Constante {
 
 	public static final int GRID_SIZE_X = 35;
 	public static final int GRID_SIZE_Y = 21;
+	public static final float GRID_PIXELS_SIZE_X = 18f;
+	public static final float GRID_PIXELS_SIZE_Y = 16f;
 	public static final int BURN_BRICK_COUNTDOWN = 3;
 
 	// GAME PARAM DEFAULT VALUE

@@ -101,8 +101,9 @@ public class Bombe extends BodyAble {
 	@Override
 	public void drawIt() {
 		this.stateTime += Gdx.graphics.getDeltaTime();
-		mbGame.getBatch().draw(animation.getKeyFrame(stateTime, true), (float) ((body.getPosition().x - 0.5f) * 18f),
-				(float) ((body.getPosition().y - 0.5f) * 16f));
+		mbGame.getBatch().draw(animation.getKeyFrame(stateTime, true),
+				(float) ((body.getPosition().x - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
+				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y));
 	}
 
 	public BombeLight getOffesetShadow() {

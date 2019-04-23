@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.level.Level;
@@ -88,7 +89,8 @@ public class Fire extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		mbGame.getBatch().draw(animation.getKeyFrame(time, false), (float) this.x * 18f, (float) this.y * 16f);
+		mbGame.getBatch().draw(animation.getKeyFrame(time, false), (float) this.x * Constante.GRID_PIXELS_SIZE_X,
+				(float) this.y * Constante.GRID_PIXELS_SIZE_Y);
 	}
 
 	@Override
@@ -103,13 +105,4 @@ public class Fire extends BodyAble {
 	public boolean isOff() {
 		return off;
 	}
-
-	public int getX() {
-		return (int) (body.getPosition().x * 18f);
-	}
-
-	public int getY() {
-		return (int) (body.getPosition().y * 16f);
-	}
-
 }

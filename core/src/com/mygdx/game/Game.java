@@ -97,16 +97,17 @@ public class Game {
 	/********************
 	 * SHADER
 	 *******************/
-//	String vertexShader;
-//	String fragmentShader;
-//	ShaderProgram shaderProgram;
+	// String vertexShader;
+	// String fragmentShader;
+	// ShaderProgram shaderProgram;
 	float deltaTime;
 
 	public Game(final MultiBombermanGame mbGame) {
-//		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
-//		this.fragmentShader = Gdx.files.internal("shader/fragment.glsl").readString();
-//
-//		this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
+		// this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
+		// this.fragmentShader =
+		// Gdx.files.internal("shader/fragment.glsl").readString();
+		//
+		// this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
 
 		this.lightCountdown = 50;
 		this.mbGame = mbGame;
@@ -267,13 +268,14 @@ public class Game {
 			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 				mbGame.getBatch()
 						.draw(SpriteService.getInstance().getSprite(this.level.getDefaultBackground().getAnimation(),
-								this.level.getDefaultBackground().getIndex()), x * 18f, y * 16f);
+								this.level.getDefaultBackground().getIndex()), x * Constante.GRID_PIXELS_SIZE_X,
+								y * Constante.GRID_PIXELS_SIZE_Y);
 			}
 		}
 		this.level.getCustomBackgroundTexture().stream()
 				.forEach(cbt -> mbGame.getBatch().draw(
-						SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()), cbt.getX() * 18f,
-						cbt.getY() * 16f));
+						SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()),
+						cbt.getX() * Constante.GRID_PIXELS_SIZE_X, cbt.getY() * Constante.GRID_PIXELS_SIZE_Y));
 		this.level.getRail().stream().forEach(Rail::drawIt);
 		this.level.getInterrupter().stream().forEach(Interrupter::drawIt);
 		this.level.getTeleporter().stream().forEach(Teleporter::drawIt);
@@ -320,7 +322,8 @@ public class Game {
 		this.level.getCustomForegroundTexture().stream()
 				.forEach(cft -> mbGame.getBatch().draw(
 						SpriteService.getInstance().getSprite(cft.getAnimation(), cft.getIndex()),
-						(cft.getX() * 18f) - 18f, (cft.getY() * 16f) - 16f));
+						(cft.getX() * Constante.GRID_PIXELS_SIZE_X) - Constante.GRID_PIXELS_SIZE_X,
+						(cft.getY() * Constante.GRID_PIXELS_SIZE_Y) - Constante.GRID_PIXELS_SIZE_Y));
 
 		mbGame.getBatch().end();
 		frontLayerTextureRegion = new TextureRegion(frontLayerTexture);
@@ -344,15 +347,16 @@ public class Game {
 			Collections.sort(players);
 			players.stream().forEach(p -> {
 				if (!p.isDead()) {
-					shapeRenderer.circle(p.getX(), p.getY(), 24);
+					shapeRenderer.circle(p.getPixelX(), p.getPixelY(), 24);
 				}
 			});
 			level.getFires().stream().filter(f -> !f.isOff())
-					.forEach(f -> shapeRenderer.circle(f.getX(), f.getY(), 24));
+					.forEach(f -> shapeRenderer.circle(f.getPixelX(), f.getPixelY(), 24));
 			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
 				shapeRenderer.setColor(new Color(b.getLight(), b.getLight(), b.getLight(), 0f));
 				BombeLight light = b.getOffesetShadow();
-				shapeRenderer.circle((float)(b.getX() + light.getX()), (float)b.getY() + (float)light.getY(), (float)light.getRadius());
+				shapeRenderer.circle((float) (b.getPixelX() + light.getX()), (float) b.getPixelY() + (float) light.getY(),
+						(float) light.getRadius());
 			});
 		}
 		shapeRenderer.end();
@@ -387,11 +391,11 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
 
-//		mbGame.getBatch().setShader(shaderProgram);
-//		float delta = Gdx.graphics.getDeltaTime();
-//		deltaTime += delta;
-//		Gdx.app.log("delta ", "" + deltaTime % 1f);
-//		shaderProgram.setUniformf("time", deltaTime % 40f);
+		// mbGame.getBatch().setShader(shaderProgram);
+		// float delta = Gdx.graphics.getDeltaTime();
+		// deltaTime += delta;
+		// Gdx.app.log("delta ", "" + deltaTime % 1f);
+		// shaderProgram.setUniformf("time", deltaTime % 40f);
 
 		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);

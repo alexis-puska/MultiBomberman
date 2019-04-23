@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
@@ -49,12 +50,12 @@ public class Wall extends BodyAble implements LevelElement, Initiable {
 	public void drawIt() {
 		if (draw) {
 			if (customSkin) {
-				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.index), this.x * 18f,
-						this.y * 16f);
+				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.index), this.x * Constante.GRID_PIXELS_SIZE_X,
+						this.y * Constante.GRID_PIXELS_SIZE_Y);
 			} else {
 				mbGame.getBatch().draw(
-						SpriteService.getInstance().getSprite(this.defaultAnimation, this.defaultTexture), this.x * 18f,
-						this.y * 16f);
+						SpriteService.getInstance().getSprite(this.defaultAnimation, this.defaultTexture), this.x * Constante.GRID_PIXELS_SIZE_X,
+						this.y * Constante.GRID_PIXELS_SIZE_Y);
 			}
 		}
 	}
