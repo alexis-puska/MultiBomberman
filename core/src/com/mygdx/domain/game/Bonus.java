@@ -41,7 +41,7 @@ public class Bonus extends BodyAble implements LevelElement {
 		this.type = type;
 		this.state = state;
 		this.stateTime = 0f;
-		this.animation = new Animation<>((1f / 25f) * 4f,
+		this.animation = new Animation<>((1f / (float)Constante.FPS) * 4f,
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.BONUS_BURN));
 		if (state == BonusStateEnum.REVEALED) {
 			this.level.getOccupedWallBrickBonus()[x][y] = this;

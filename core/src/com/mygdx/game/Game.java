@@ -255,7 +255,7 @@ public class Game {
 	}
 
 	public void step() {
-		world.step(1 / 25f, 6, 2);
+		world.step(1 / (float)Constante.FPS, 6, 2);
 	}
 
 	private void drawBackground() {
