@@ -39,6 +39,7 @@ import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.LouisColorEnum;
 import com.mygdx.enumeration.LouisSpriteEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 import com.mygdx.game.ia.Brain;
 import com.mygdx.main.MultiBombermanGame;
@@ -96,6 +97,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private Map<CharacterSpriteEnum, Animation<TextureRegion>> animations;
 	private Map<LouisSpriteEnum, Animation<TextureRegion>> animationsLouis;
+	private Animation<TextureRegion> footInWaterAnimation;
 	private float animationTime;
 
 	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
@@ -134,6 +136,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
 					SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
 		}
+		footInWaterAnimation = new Animation<TextureRegion>((1f / 12),
+				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.UNDERWATER));
 		this.createBody();
 		if (this.type == PlayerTypeEnum.CPU) {
 			this.brain = new Brain(this);
@@ -211,6 +215,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
 	}
 
+	public void exitTrolley(Trolley trolley) {
+		// TODO
+		this.changeState(this.previousState);
+		this.trolley = null;
+	}
+
 	/************************************************************************************************************
 	 * -------------------------------------------- COMMONS
 	 * ----------------------------------------------------
@@ -233,6 +243,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 			break;
 		case INSIDE_TROLLEY:
+			this.body.setTransform(this.trolley.getX() + 0.5f, this.trolley.getY() + 0.5f, 0f);
 			break;
 		case CARRY_BOMBE:
 		case ON_LOUIS:
@@ -313,8 +324,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		if (this.body != null && this.state != PlayerStateEnum.DEAD && this.state != PlayerStateEnum.BURNING
-				&& this.state != PlayerStateEnum.CRYING) {
+		if (this.body != null && this.state != PlayerStateEnum.INSIDE_TROLLEY && this.state != PlayerStateEnum.DEAD
+				&& this.state != PlayerStateEnum.BURNING && this.state != PlayerStateEnum.CRYING) {
 			if (this.body.getPosition().x > (float) Constante.GRID_SIZE_X) {
 				this.body.setTransform(this.body.getPosition().x - (float) Constante.GRID_SIZE_X,
 						this.body.getPosition().y, 0f);
@@ -806,6 +817,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
+		if (this.level.isFootInWater()) {
+			mbGame.getBatch().draw(footInWaterAnimation.getKeyFrame(animationTime, true), getPixelX() - 9f,
+					getPixelY() - 5f);
+		}
 	}
 
 	private void drawVictoryOnLouis() {
@@ -877,7 +892,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawInsideTrolley() {
-		// TODO Auto-generated method stub
+		//TODO
+		//PovDirection direction = this.trolley.getDirection();
 
 	}
 

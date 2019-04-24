@@ -45,6 +45,8 @@ public class LevelMapper {
 		level.setDefaultWall(defaultTextureMapper.toEntity(dto.getDefaultWall()));
 		level.setDescription(textMapper.toEntitys(dto.getDescription()));
 		level.setFillWithBrick(dto.isFillWithBrick());
+		level.setFootInWater(dto.isFootInWater());
+		level.setLevelUnderWater(dto.isLevelUnderWater());
 		level.setHole(holeMapper.toEntitys(dto.getHole()));
 		level.setInterrupter(interrupterMapper.toEntitys(dto.getInterrupter()));
 		level.setMine(mineMapper.toEntitys(dto.getMine()));

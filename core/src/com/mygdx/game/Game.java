@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -97,17 +98,16 @@ public class Game {
 	/********************
 	 * SHADER
 	 *******************/
-	// String vertexShader;
-	// String fragmentShader;
-	// ShaderProgram shaderProgram;
+	String vertexShader;
+	String fragmentShader;
+	ShaderProgram shaderProgram;
 	float deltaTime;
 
 	public Game(final MultiBombermanGame mbGame) {
-		// this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
-		// this.fragmentShader =
-		// Gdx.files.internal("shader/fragment.glsl").readString();
-		//
-		// this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
+		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
+		this.fragmentShader = Gdx.files.internal("shader/fragment.glsl").readString();
+
+		this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
 
 		this.lightCountdown = 50;
 		this.mbGame = mbGame;
@@ -255,7 +255,7 @@ public class Game {
 	}
 
 	public void step() {
-		world.step(1 / (float)Constante.FPS, 6, 2);
+		world.step(1 / (float) Constante.FPS, 6, 2);
 	}
 
 	private void drawBackground() {
@@ -355,8 +355,8 @@ public class Game {
 			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
 				shapeRenderer.setColor(new Color(b.getLight(), b.getLight(), b.getLight(), 0f));
 				BombeLight light = b.getOffesetShadow();
-				shapeRenderer.circle((float) (b.getPixelX() + light.getX()), (float) b.getPixelY() + (float) light.getY(),
-						(float) light.getRadius());
+				shapeRenderer.circle((float) (b.getPixelX() + light.getX()),
+						(float) b.getPixelY() + (float) light.getY(), (float) light.getRadius());
 			});
 		}
 		shapeRenderer.end();
@@ -391,11 +391,12 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
 
-		// mbGame.getBatch().setShader(shaderProgram);
-		// float delta = Gdx.graphics.getDeltaTime();
-		// deltaTime += delta;
-		// Gdx.app.log("delta ", "" + deltaTime % 1f);
-		// shaderProgram.setUniformf("time", deltaTime % 40f);
+		if (this.level.isLevelUnderWater()) {
+			mbGame.getBatch().setShader(shaderProgram);
+			float delta = Gdx.graphics.getDeltaTime();
+			deltaTime += delta;
+			shaderProgram.setUniformf("time", deltaTime % 40f);
+		}
 
 		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);

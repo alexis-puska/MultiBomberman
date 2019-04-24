@@ -28,6 +28,8 @@ public class LevelDTO implements Serializable {
 	private float shadow;
 	private Integer[] bonus;
 	private boolean fillWithBrick;
+	private boolean footInWater;
+	private boolean levelUnderWater;
 	private DefaultTextureDTO defaultBackground;
 	private DefaultTextureDTO defaultWall;
 	private SpriteEnum defaultBrickAnimation;
@@ -59,6 +61,8 @@ public class LevelDTO implements Serializable {
 			this.bonus[i] = original.bonus[i];
 		}
 		this.fillWithBrick = original.isFillWithBrick();
+		this.footInWater = original.isFootInWater();
+		this.levelUnderWater = original.isLevelUnderWater();
 		this.defaultBackground = new DefaultTextureDTO(original.defaultBackground);
 		this.defaultWall = new DefaultTextureDTO(original.defaultWall);
 		this.defaultBrickAnimation = original.defaultBrickAnimation;
@@ -148,6 +152,22 @@ public class LevelDTO implements Serializable {
 
 	public void setFillWithBrick(boolean fillWithBrick) {
 		this.fillWithBrick = fillWithBrick;
+	}
+
+	public boolean isFootInWater() {
+		return footInWater;
+	}
+
+	public void setFootInWater(boolean footInWater) {
+		this.footInWater = footInWater;
+	}
+
+	public boolean isLevelUnderWater() {
+		return levelUnderWater;
+	}
+
+	public void setLevelUnderWater(boolean levelUnderWater) {
+		this.levelUnderWater = levelUnderWater;
 	}
 
 	public DefaultTextureDTO getDefaultBackground() {
