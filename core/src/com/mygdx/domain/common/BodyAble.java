@@ -42,12 +42,12 @@ public abstract class BodyAble {
 		return this.body.getPosition().y;
 	}
 
-	public int getX() {
-		return (int) (body.getPosition().x * 18f);
+	public float getPixelX() {
+		return (body.getPosition().x * Constante.GRID_PIXELS_SIZE_X);
 	}
 
-	public int getY() {
-		return (int) (body.getPosition().y * 16f);
+	public float getPixelY() {
+		return (body.getPosition().y * Constante.GRID_PIXELS_SIZE_Y);
 	}
 
 	public int getGridIndex() {
@@ -57,5 +57,4 @@ public abstract class BodyAble {
 		}
 		return -1;
 	}
-
 }

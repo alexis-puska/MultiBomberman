@@ -37,6 +37,8 @@ public class Level {
 	private float shadow;
 	private Integer[] bonus;
 	private boolean fillWithBrick;
+	private boolean footInWater;
+	private boolean levelUnderWater;
 	private DefaultTexture defaultBackground;
 	private DefaultTexture defaultWall;
 	private SpriteEnum defaultBrickAnimation;

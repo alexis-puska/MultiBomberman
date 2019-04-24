@@ -12,8 +12,8 @@ public class DesktopLauncher {
 		config.title = "MultiBomberman";
 		config.width = Constante.SCREEN_SIZE_X;
 		config.height = Constante.SCREEN_SIZE_Y;
-		config.foregroundFPS = 25;
-		config.backgroundFPS = 25;
+		config.foregroundFPS = Constante.FPS;
+		config.backgroundFPS = Constante.FPS;
 		config.vSyncEnabled = false;
 		config.fullscreen = false;
 		config.resizable = true;

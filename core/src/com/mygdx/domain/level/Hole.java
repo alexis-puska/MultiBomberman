@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
@@ -87,11 +88,11 @@ public class Hole extends BodyAble implements Initiable {
 	@Override
 	public void drawIt() {
 		if (walkCounter > 0 && walkCounter < WALL_COUNTER) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 0), this.x * 18f,
-					this.y * 16f);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 0), this.x * Constante.GRID_PIXELS_SIZE_X,
+					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else if (walkCounter >= 3) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 1), this.x * 18f,
-					this.y * 16f);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 1), this.x * Constante.GRID_PIXELS_SIZE_X,
+					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
 }

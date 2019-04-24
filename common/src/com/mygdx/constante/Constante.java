@@ -8,6 +8,7 @@ public class Constante {
 	public static final boolean DEBUG = true;
 	public static final int LIBGDX_LOG_LEVEL = Application.LOG_INFO;
 
+	public static final int FPS = 25;
 	// NETWORK DEFAULT VALUE
 	public static final String NETWORK_APPLICATION_UPNP_NAME = "Multi Bomberman";
 	public static final boolean NETWORK_USE_UPNP = true;
@@ -32,6 +33,8 @@ public class Constante {
 
 	public static final int GRID_SIZE_X = 35;
 	public static final int GRID_SIZE_Y = 21;
+	public static final float GRID_PIXELS_SIZE_X = 18f;
+	public static final float GRID_PIXELS_SIZE_Y = 16f;
 	public static final int BURN_BRICK_COUNTDOWN = 3;
 
 	// GAME PARAM DEFAULT VALUE
@@ -65,6 +68,7 @@ public class Constante {
 	public static final int FASTE_BOMBE_TIME = 40;
 	public static final int SLOW_BOMBE_TIME = 150;
 	public static final int MALUS_TIME = 250;
+	
 
 	private Constante() {
 		// empty private constructor

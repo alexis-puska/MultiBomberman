@@ -127,6 +127,10 @@ public class EditorLauncher extends JFrame {
 	private JSpinner strenghtSpinner;
 	private JLabel fillWithBrickLabel;
 	private JCheckBox fillWithBrickCheckbox;
+	private JLabel footInWaterLabel;
+	private JCheckBox footInWaterCheckbox;
+	private JLabel levelUnderWaterLabel;
+	private JCheckBox levelUnderWaterCheckbox;
 	private JLabel defaultBackgroundLabel;
 	private JButton defaultBackGround;
 	private JLabel defaultWallLabel;
@@ -397,6 +401,8 @@ public class EditorLauncher extends JFrame {
 		bombeLabel.setLabelFor(levelGroupNameFrLabel);
 		strenghtLabel.setLabelFor(strenghtSpinner);
 		fillWithBrickLabel.setLabelFor(fillWithBrickCheckbox);
+		footInWaterLabel.setLabelFor(footInWaterCheckbox);
+		levelUnderWaterLabel.setLabelFor(levelUnderWaterCheckbox);
 		defaultBackgroundLabel.setLabelFor(defaultBackGround);
 		defaultWallLabel.setLabelFor(defaultWall);
 		defaultBrickAnimationLabel.setLabelFor(defaultBrickAnimationComboBox);
@@ -421,6 +427,11 @@ public class EditorLauncher extends JFrame {
 		levelGroupPropertiesPanel.add(strenghtSpinner);
 		levelGroupPropertiesPanel.add(fillWithBrickLabel);
 		levelGroupPropertiesPanel.add(fillWithBrickCheckbox);
+		levelGroupPropertiesPanel.add(footInWaterLabel);
+		levelGroupPropertiesPanel.add(footInWaterCheckbox);
+		levelGroupPropertiesPanel.add(levelUnderWaterLabel);
+		levelGroupPropertiesPanel.add(levelUnderWaterCheckbox);
+		
 		levelGroupPropertiesPanel.add(defaultBackgroundLabel);
 		levelGroupPropertiesPanel.add(defaultBackGround);
 		levelGroupPropertiesPanel.add(defaultWallLabel);
@@ -429,7 +440,7 @@ public class EditorLauncher extends JFrame {
 		levelGroupPropertiesPanel.add(defaultBrickAnimationComboBox);
 		levelGroupPropertiesPanel.add(previewIndexLabel);
 		levelGroupPropertiesPanel.add(previewIndexComboBox);
-		SpringUtilities.makeGrid(levelGroupPropertiesPanel, 14, 2, 2, 2, 2, 2);
+		SpringUtilities.makeGrid(levelGroupPropertiesPanel, 16, 2, 2, 2, 2, 2);
 	}
 
 	private void buildBonusPanel() {
@@ -628,6 +639,10 @@ public class EditorLauncher extends JFrame {
 		strenghtSpinner = new JSpinner(strenghtSpinnerModel);
 		fillWithBrickLabel = new JLabel(this.message.getString("editor.label.level.fillBrick"));
 		fillWithBrickCheckbox = new JCheckBox();
+		footInWaterLabel = new JLabel(this.message.getString("editor.label.level.footInWater"));
+		footInWaterCheckbox = new JCheckBox();
+		levelUnderWaterLabel = new JLabel(this.message.getString("editor.label.level.levelUnderWater"));
+		levelUnderWaterCheckbox = new JCheckBox();
 		defaultBackgroundLabel = new JLabel(this.message.getString("editor.label.level.defaultBackgroundTexture"));
 		defaultBackGround = new JButton();
 		defaultWallLabel = new JLabel(this.message.getString("editor.label.level.defaultWallTexture"));
@@ -1094,7 +1109,11 @@ public class EditorLauncher extends JFrame {
 			}
 		});
 		fillWithBrickCheckbox
-				.addItemListener(item -> levelService2.setFillWithBrick(fillWithBrickCheckbox.isSelected()));
+		.addItemListener(item -> levelService2.setFillWithBrick(fillWithBrickCheckbox.isSelected()));
+		footInWaterCheckbox
+		.addItemListener(item -> levelService2.setFootInWater(footInWaterCheckbox.isSelected()));
+		levelUnderWaterCheckbox
+		.addItemListener(item -> levelService2.setLevelUnderWater(levelUnderWaterCheckbox.isSelected()));
 		defaultBackGround.addActionListener(e -> action = ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE);
 		defaultWall.addActionListener(e -> action = ActionEnum.SELECT_DEFAULT_WALL_TEXTURE);
 		defaultBrickAnimationComboBox.addItemListener(event -> {
@@ -1393,6 +1412,8 @@ public class EditorLauncher extends JFrame {
 				.setSelectedItem(BrickBurnEnum.getBrickFromSprite(levelService2.getDefaultBrickAnimation()));
 		strenghtSpinner.setValue(Integer.valueOf(levelService2.getStrenght()));
 		fillWithBrickCheckbox.setSelected(levelService2.isFillWithBrick());
+		footInWaterCheckbox.setSelected(levelService2.isFootInWater());
+		levelUnderWaterCheckbox.setSelected(levelService2.isLevelUnderWater());
 		levelGroupPropertiesPanelBorder.setTitle("LevelGroup : " + levelService2.getLevelGroupPosition() + ", level : "
 				+ levelService2.getLevelPosition());
 		levelGroupPropertiesPanel.repaint();

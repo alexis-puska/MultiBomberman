@@ -41,7 +41,7 @@ public class Bonus extends BodyAble implements LevelElement {
 		this.type = type;
 		this.state = state;
 		this.stateTime = 0f;
-		this.animation = new Animation<>((1f / 25f) * 4f,
+		this.animation = new Animation<>((1f / (float)Constante.FPS) * 4f,
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.BONUS_BURN));
 		if (state == BonusStateEnum.REVEALED) {
 			this.level.getOccupedWallBrickBonus()[x][y] = this;
@@ -53,10 +53,11 @@ public class Bonus extends BodyAble implements LevelElement {
 	public void drawIt() {
 		if (this.state == BonusStateEnum.BURN) {
 			this.stateTime += Gdx.graphics.getDeltaTime();
-			mbGame.getBatch().draw(animation.getKeyFrame(stateTime, false), this.x * 18f - 6, this.y * 16f);
+			mbGame.getBatch().draw(animation.getKeyFrame(stateTime, false), this.x * Constante.GRID_PIXELS_SIZE_X - 6,
+					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else if (this.state == BonusStateEnum.REVEALED) {
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, this.type.getIndex()),
-					this.x * 18f, this.y * 16f);
+					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
 

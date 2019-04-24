@@ -39,6 +39,7 @@ import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.LouisColorEnum;
 import com.mygdx.enumeration.LouisSpriteEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 import com.mygdx.game.ia.Brain;
 import com.mygdx.main.MultiBombermanGame;
@@ -75,6 +76,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	// state
 	private PlayerStateEnum state;
+	private PlayerStateEnum previousState;
 	private BombeTypeEnum bombeType;
 
 	// bonus
@@ -95,6 +97,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private Map<CharacterSpriteEnum, Animation<TextureRegion>> animations;
 	private Map<LouisSpriteEnum, Animation<TextureRegion>> animationsLouis;
+	private Animation<TextureRegion> footInWaterAnimation;
 	private float animationTime;
 	private boolean canPassWall;
 	private int wallTimeout;
@@ -109,6 +112,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.previousDirection = PovDirection.south;
 		this.direction = PovDirection.center;
 		this.state = PlayerStateEnum.ON_LOUIS;
+		this.previousState = PlayerStateEnum.NORMAL;
 		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
@@ -136,6 +140,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
 					SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
 		}
+		footInWaterAnimation = new Animation<TextureRegion>((1f / 12),
+				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.UNDERWATER));
 		this.createBody();
 		if (this.type == PlayerTypeEnum.CPU) {
 			this.brain = new Brain(this);
@@ -213,6 +219,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
 	}
 
+	public void exitTrolley(Trolley trolley) {
+		// TODO
+		this.changeState(this.previousState);
+		this.trolley = null;
+	}
+
 	/************************************************************************************************************
 	 * -------------------------------------------- COMMONS
 	 * ----------------------------------------------------
@@ -235,13 +247,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 			break;
 		case INSIDE_TROLLEY:
+			this.body.setTransform(this.trolley.getX() + 0.5f, this.trolley.getY() + 0.5f, 0f);
 			break;
 		case CARRY_BOMBE:
 		case ON_LOUIS:
 		case NORMAL:
 			if (insideFire > 0 && invincibleTime <= 0) {
 				if (state == PlayerStateEnum.ON_LOUIS) {
-					this.state = PlayerStateEnum.NORMAL;
+					this.changeState(PlayerStateEnum.NORMAL);
 					this.invincibleTime = Constante.INVINCIBLE_TIME;
 				} else if (state == PlayerStateEnum.NORMAL) {
 					this.direction = PovDirection.center;
@@ -300,7 +313,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case TELEPORT:
 			if (destinationTeleporter != null && teleportCountDown == 0) {
 				this.body.setTransform(destinationTeleporter.getX() + 0.5f, destinationTeleporter.getY() + 0.5f, 0f);
-				this.state = PlayerStateEnum.NORMAL;
+				this.changeState(this.previousState);
 			} else {
 				teleportCountDown--;
 				this.body.setLinearVelocity(0f, 0f);
@@ -315,8 +328,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		if (this.body != null && this.state != PlayerStateEnum.DEAD && this.state != PlayerStateEnum.BURNING
-				&& this.state != PlayerStateEnum.CRYING) {
+		if (this.body != null && this.state != PlayerStateEnum.INSIDE_TROLLEY && this.state != PlayerStateEnum.DEAD
+				&& this.state != PlayerStateEnum.BURNING && this.state != PlayerStateEnum.CRYING) {
 			if (this.body.getPosition().x > (float) Constante.GRID_SIZE_X) {
 				this.body.setTransform(this.body.getPosition().x - (float) Constante.GRID_SIZE_X,
 						this.body.getPosition().y, 0f);
@@ -397,7 +410,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			if (!destination.isEmpty()) {
 				int idx = ThreadLocalRandom.current().nextInt(0, destination.size());
 				this.destinationTeleporter = destination.get(idx);
-				this.state = PlayerStateEnum.TELEPORT;
+				this.changeState(PlayerStateEnum.TELEPORT);
 				this.teleportCountDown = 6;
 				tel.animate(true);
 				this.destinationTeleporter.animate(false);
@@ -414,6 +427,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private void changeState(PlayerStateEnum newState) {
 		this.animationTime = 0;
+		this.previousState = this.state;
 		this.state = newState;
 	}
 
@@ -741,13 +755,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.walkSpeed -= Constante.ADD_WALK_SPEED;
 			break;
 		case WALL:
-			System.out.println("j'ai pris un bonus WALL");
 			for (int i = 0; i < this.body.getFixtureList().size; i++) {
 				Filter f = new Filter();
 				f.categoryBits = CollisionConstante.CATEGORY_PLAYER;
 				f.maskBits = CollisionConstante.GROUP_PLAYER_MOVE_PASS_WALL;
 				this.body.getFixtureList().get(i).setFilterData(f);
-				System.out.println("collision desactivée");
 			}
 			this.canPassWall = true;
 			this.wallTimeout = 250;
@@ -833,25 +845,29 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
+		if (this.level.isFootInWater()) {
+			mbGame.getBatch().draw(footInWaterAnimation.getKeyFrame(animationTime, true), getPixelX() - 9f,
+					getPixelY() - 5f);
+		}
 	}
 
 	private void drawVictoryOnLouis() {
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_DOWN).getKeyFrame(0, false),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+				getPixelX() - 15f, getPixelY() - 5f);
 		mbGame.getBatch()
 				.draw(animationsLouis.get(LouisSpriteEnum.VICTORY)
-						.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
-						(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+						.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true), getPixelX() - 15,
+						getPixelY() - 5f);
 	}
 
 	private void drawVictory() {
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.VICTORY).getKeyFrame(animationTime, false),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+				getPixelX() - 15, getPixelY() - 5f);
 	}
 
 	private void drawCrying() {
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ANGRY).getKeyFrame(animationTime, false),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+				getPixelX() - 15f, getPixelY() - 5f);
 		if (animations.get(CharacterSpriteEnum.ANGRY).isAnimationFinished(animationTime)) {
 			changeState(PlayerStateEnum.NORMAL);
 		}
@@ -859,7 +875,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private void drawBurning() {
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.BURN).getKeyFrame(animationTime, false),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+				getPixelX() - 15f, getPixelY() - 5f);
 		if (animations.get(CharacterSpriteEnum.BURN).isAnimationFinished(animationTime)) {
 			changeState(PlayerStateEnum.DEAD);
 		}
@@ -900,11 +916,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		mbGame.getBatch().draw(
 				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+				getPixelX() - 15f, getPixelY() - 5f);
 	}
 
 	private void drawInsideTrolley() {
-		// TODO Auto-generated method stub
+		//TODO
+		//PovDirection direction = this.trolley.getDirection();
 
 	}
 
@@ -943,7 +960,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		mbGame.getBatch().draw(
 				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+				getPixelX() - 15f, getPixelY() - 5f);
 	}
 
 	private void drawStateNormal() {
@@ -981,7 +998,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		mbGame.getBatch().draw(
 				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
-				(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+				getPixelX() - 15f, getPixelY() - 5f);
 	}
 
 	private void drawStateOnLouis() {
@@ -1027,19 +1044,19 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		}
 		if (this.direction == PovDirection.south || this.previousDirection == PovDirection.south) {
-			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), (body.getPosition().x * 18f) - 15,
-					(body.getPosition().y * 16f) - 5f);
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), getPixelX() - 15f,
+					getPixelY() - 5f);
 			mbGame.getBatch()
 					.draw(animationsLouis.get(drawSpriteLouis)
 							.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
-							(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
+							getPixelX() - 15f, getPixelY() - 5f);
 		} else {
 			mbGame.getBatch()
 					.draw(animationsLouis.get(drawSpriteLouis)
 							.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
-							(body.getPosition().x * 18f) - 15, (body.getPosition().y * 16f) - 5f);
-			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), (body.getPosition().x * 18f) - 15,
-					(body.getPosition().y * 16f) - 5f);
+							getPixelX() - 15f, getPixelY() - 5f);
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), getPixelX() - 15f,
+					getPixelY() - 5f);
 		}
 	}
 

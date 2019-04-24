@@ -159,7 +159,7 @@ public class Rail extends Drawable {
 	@Override
 	public void drawIt() {
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.RAIL, this.type.getTextureIndex()),
-				this.x * 18f, this.y * 16f);
+				this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 	}
 
 	public void switchRail() {

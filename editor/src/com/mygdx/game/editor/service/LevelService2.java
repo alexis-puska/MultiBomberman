@@ -683,6 +683,32 @@ public class LevelService2 {
 		}
 		return false;
 	}
+	
+	public void setFootInWater(boolean selected) {
+		if (currentLevel != null) {
+			currentLevel.setFootInWater(selected);
+		}
+	}
+
+	public boolean isFootInWater() {
+		if (currentLevel != null) {
+			return currentLevel.isFootInWater();
+		}
+		return false;
+	}
+	
+	public void setLevelUnderWater(boolean selected) {
+		if (currentLevel != null) {
+			currentLevel.setLevelUnderWater(selected);
+		}
+	}
+
+	public boolean isLevelUnderWater() {
+		if (currentLevel != null) {
+			return currentLevel.isLevelUnderWater();
+		}
+		return false;
+	}
 
 	public void setDefaultBackgroungTexture(int index) {
 		if (currentLevel != null) {

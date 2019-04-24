@@ -54,7 +54,7 @@ public class Brick extends BodyAble implements LevelElement {
 	public void drawIt() {
 		if (this.state == BrickStateEnum.BURN || this.state == BrickStateEnum.CREATED) {
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.indexAnimation),
-					this.x * 18f, this.y * 16f);
+					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
 

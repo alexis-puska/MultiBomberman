@@ -26,11 +26,13 @@ import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.utils.GridUtils;
+import com.mygdx.utils.ReboundUtils;
 
 public class Bombe extends BodyAble {
 	private static final float BORDER_MAX = 0.45f;
 	private static final float BORDER_MIN = 0.3f;
 	private float stateTime;
+	private float reboundTime;
 	private Animation<TextureRegion> animation;
 	private int strenght;
 	private BombeTypeEnum type;
@@ -57,7 +59,8 @@ public class Bombe extends BodyAble {
 		this.direction = PovDirection.center;
 		this.walkSpeed = Constante.WALK_SPEED;
 		this.stateTime = 0f;
-		this.animation = new Animation<>((1f / 25f) * 4f,
+		this.reboundTime = 0f;
+		this.animation = new Animation<>((1f / (float) Constante.FPS) * 4f,
 				SpriteService.getInstance().getSpriteForAnimation(type.getSpriteEnum()));
 		createBody();
 	}
@@ -101,15 +104,19 @@ public class Bombe extends BodyAble {
 	@Override
 	public void drawIt() {
 		this.stateTime += Gdx.graphics.getDeltaTime();
-		mbGame.getBatch().draw(animation.getKeyFrame(stateTime, true), (float) ((body.getPosition().x - 0.5f) * 18f),
-				(float) ((body.getPosition().y - 0.5f) * 16f));
+		this.reboundTime += Gdx.graphics.getDeltaTime() * (float) Constante.FPS;
+		Gdx.app.log("", "state time : " + this.stateTime);
+		mbGame.getBatch().draw(animation.getKeyFrame(stateTime, true),
+				(float) ((body.getPosition().x - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
+				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y)
+						+ ReboundUtils.calcReboundOffset(this.reboundTime));
 	}
 
 	public BombeLight getOffesetShadow() {
 		return this.type.getOffsetLight()
-				.get(Double.valueOf(Math
+				.get(Integer.valueOf(Double.valueOf(Math
 						.floor((stateTime % this.animation.getAnimationDuration()) / this.animation.getFrameDuration()))
-						.intValue());
+						.intValue()));
 	}
 
 	public boolean isCreateLight() {
