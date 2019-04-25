@@ -117,7 +117,6 @@ public class SoundService {
 	 *******************/
 	public void playSound(SoundEnum soundEnum) {
 		switch (soundEnum) {
-
 		case BOUNCE:
 			soundBouncd.play();
 			break;
@@ -169,6 +168,120 @@ public class SoundService {
 		case BIP:
 		default:
 			soundBip.play();
+		}
+	}
+
+	public long loopSound(SoundEnum soundEnum) {
+		long id = 0;
+		switch (soundEnum) {
+		case BOUNCE:
+			id = soundBouncd.loop();
+			break;
+		case BURN:
+			id = soundBurn.loop();
+			break;
+		case CANCEL:
+			id = soundCancel.loop();
+			break;
+		case END:
+			id = soundEnd.loop();
+			break;
+		case FIRE:
+			id = soundFire.loop();
+			break;
+		case HOLE1:
+			id = soundHole1.loop();
+			break;
+		case HOLE2:
+			id = soundHole2.loop();
+			break;
+		case HOLE3:
+			id = soundHole3.loop();
+			break;
+		case KICK:
+			id = soundKick.loop();
+			break;
+		case LOUIS:
+			id = soundLouis.loop();
+			break;
+		case MINE:
+			id = soundMine.loop();
+			break;
+		case TELEPORTER_CLOSE:
+			id = soundTeleporterClose.loop();
+			break;
+		case TELEPORTER_OPEN:
+			id = soundTeleporterOpen.loop();
+			break;
+		case VALIDE:
+			id = soundValide.loop();
+			break;
+		case AZIZ_LIGHT_EN:
+			id = soundAzizLightEn.loop();
+			break;
+		case AZIZ_LIGHT_FR:
+			id = soundAzizLightFr.loop();
+			break;
+		case BIP:
+		default:
+			id = soundBip.loop();
+		}
+		return id;
+	}
+
+	public void stopSound(SoundEnum soundEnum, long id) {
+		switch (soundEnum) {
+		case BOUNCE:
+			soundBouncd.stop(id);
+			break;
+		case BURN:
+			soundBurn.stop(id);
+			break;
+		case CANCEL:
+			soundCancel.stop(id);
+			break;
+		case END:
+			soundEnd.stop(id);
+			break;
+		case FIRE:
+			soundFire.stop(id);
+			break;
+		case HOLE1:
+			soundHole1.stop(id);
+			break;
+		case HOLE2:
+			soundHole2.stop(id);
+			break;
+		case HOLE3:
+			soundHole3.stop(id);
+			break;
+		case KICK:
+			soundKick.stop(id);
+			break;
+		case LOUIS:
+			soundLouis.stop(id);
+			break;
+		case MINE:
+			soundMine.stop(id);
+			break;
+		case TELEPORTER_CLOSE:
+			soundTeleporterClose.stop(id);
+			break;
+		case TELEPORTER_OPEN:
+			soundTeleporterOpen.stop(id);
+			break;
+		case VALIDE:
+			soundValide.stop(id);
+			break;
+		case AZIZ_LIGHT_EN:
+			soundAzizLightEn.stop(id);
+			break;
+		case AZIZ_LIGHT_FR:
+			soundAzizLightFr.stop(id);
+			break;
+		case BIP:
+		default:
+			soundBip.stop(id);
 		}
 	}
 }

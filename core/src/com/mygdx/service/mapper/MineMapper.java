@@ -8,7 +8,6 @@ import com.mygdx.dto.level.common.PositionableDTO;
 
 public class MineMapper {
 
-	
 	public Mine toEntity(PositionableDTO dto) {
 		Mine customTexture = new Mine();
 		customTexture.setX(dto.getX());
@@ -26,6 +25,5 @@ public class MineMapper {
 		}
 		return list;
 	}
-	
-	
+
 }

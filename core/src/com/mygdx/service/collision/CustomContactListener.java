@@ -15,6 +15,7 @@ import com.mygdx.domain.game.Brick;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
+import com.mygdx.domain.level.Mine;
 import com.mygdx.domain.level.Teleporter;
 import com.mygdx.domain.level.Trolley;
 import com.mygdx.domain.level.Wall;
@@ -32,6 +33,7 @@ public class CustomContactListener implements ContactListener {
 		beginContactPlayerHole(contact);
 		beginContactPlayerTeleporter(contact);
 		beginContactPlayerFire(contact);
+		beginContactPlayerMine(contact);
 		beginContactPlayerBombe(contact);
 		beginContactPlayerHitboxBombe(contact);
 		beginContactPlayerHitboxBonus(contact);
@@ -39,7 +41,7 @@ public class CustomContactListener implements ContactListener {
 		beginContactBombes(contact);
 		beginContactBombeWall(contact);
 		beginContactBombeBrick(contact);
-		
+
 		beginContactBombeTrolley(contact);
 		beginContactPlayerTrolley(contact);
 		beginContactBrickTrolleyHitBox(contact);
@@ -94,6 +96,20 @@ public class CustomContactListener implements ContactListener {
 			contact.setEnabled(false);
 			Player p = (Player) contact.getFixtureA().getUserData();
 			p.insideFire(true);
+		}
+	}
+
+	private void beginContactPlayerMine(Contact contact) {
+		if (contact.getFixtureA().getUserData().getClass() == Mine.class
+				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
+			contact.setEnabled(false);
+			Mine m = (Mine) contact.getFixtureA().getUserData();
+			m.start();
+		} else if (contact.getFixtureB().getUserData().getClass() == Mine.class
+				&& contact.getFixtureA().getUserData().getClass() == Player.class) {
+			contact.setEnabled(false);
+			Mine m = (Mine) contact.getFixtureB().getUserData();
+			m.start();
 		}
 	}
 
@@ -189,7 +205,7 @@ public class CustomContactListener implements ContactListener {
 			if (t.isMoving()) {
 				p.crush();
 			} else {
-				
+
 			}
 		}
 	}

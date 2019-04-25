@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.MassData;
@@ -85,7 +84,6 @@ public class Bombe extends BodyAble {
 		vertices[7] = new Vector2(-BORDER_MIN, BORDER_MAX);
 		diamondBody.set(vertices);
 
-		
 		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 		body = world.createBody(groundBodyDef);
 		body.setFixedRotation(false);
