@@ -111,7 +111,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.color = color;
 		this.previousDirection = PovDirection.south;
 		this.direction = PovDirection.center;
-		this.state = PlayerStateEnum.ON_LOUIS;
+		this.state = PlayerStateEnum.NORMAL;
 		this.previousState = PlayerStateEnum.NORMAL;
 		this.game = game;
 		this.world = world;
@@ -120,7 +120,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.bombeStrenght = bombeStrenght;
 		this.nbBombe = nbBombe;
 		this.walkSpeed = Constante.WALK_SPEED;
-		this.bombeType = BombeTypeEnum.BOMBE_RUBBER;
+		this.bombeType = BombeTypeEnum.BOMBE;
 		this.canPutLineOfBombe = false;
 		this.canKickBombe = true;
 		this.insideBombe = false;
@@ -774,7 +774,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private void takeDeathBonus() {
 		this.cancelLastMalus();
 		this.deathBonus = DeathBonusEnum.random();
-		this.deathBonus = DeathBonusEnum.REVERSE_MOVE;
 		switch (this.deathBonus) {
 		case CONSTIPATION:
 		case DIAREE:
