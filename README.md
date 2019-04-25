@@ -68,10 +68,10 @@ After this step "In The Well" is installed, compile, and integrated in emulation
 |Teleporter|||X|
 |Switch|||X|
 |Mine|X||
-|Submarine animation|X||
-|Water player animation|X||
-|Player in trolley |X||
-|Trolley move |X||
+|Submarine animation|||X
+|Water player animation|||X
+|Player in trolley ||X|
+|Trolley move ||X|
 |Player carry bombe (bonus)|X||
 |Player throw bombe (bonus)|X||
 |Network protocol |X||

@@ -120,9 +120,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.bombeStrenght = bombeStrenght;
 		this.nbBombe = nbBombe;
 		this.walkSpeed = Constante.WALK_SPEED;
-		this.bombeType = BombeTypeEnum.BOMBE_MAX;
+		this.bombeType = BombeTypeEnum.BOMBE_RUBBER;
 		this.canPutLineOfBombe = false;
-		this.canKickBombe = false;
+		this.canKickBombe = true;
 		this.insideBombe = false;
 		this.canRaiseBombe = false;
 		this.canPassWall = false;
@@ -175,7 +175,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_PLAYER;
-		filter.maskBits = CollisionConstante.GROUP_PLAYER_MOVE;
+		filter.maskBits = CollisionConstante.GROUP_PLAYER_BODY;
 		fixture.setFilterData(filter);
 		diamondBody.dispose();
 		collisionBody = world.createBody(bodyDef);
@@ -210,6 +210,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	 * ------------------------------------------------
 	 ************************************************************************************************************/
 	public void crush() {
+		this.previousDirection = PovDirection.center;
+		this.direction = PovDirection.center;
 		this.changeState(PlayerStateEnum.BURNING);
 	}
 
@@ -358,13 +360,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 		}
 		if (this.wallTimeout <= 0 && canPassWall && !isInsideBrick()) {
-			System.out.println("désactivation bonus WALL");
+			System.out.println("dï¿½sactivation bonus WALL");
 			for (int i = 0; i < this.body.getFixtureList().size; i++) {
 				Filter f = new Filter();
 				f.categoryBits = CollisionConstante.CATEGORY_PLAYER;
-				f.maskBits = CollisionConstante.GROUP_PLAYER_MOVE;
+				f.maskBits = CollisionConstante.GROUP_PLAYER_BODY;
 				this.body.getFixtureList().get(i).setFilterData(f);
-				System.out.println("collision reactivée");
+				System.out.println("collision reactivï¿½e");
 			}
 			canPassWall = false;
 		} else {
@@ -758,7 +760,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			for (int i = 0; i < this.body.getFixtureList().size; i++) {
 				Filter f = new Filter();
 				f.categoryBits = CollisionConstante.CATEGORY_PLAYER;
-				f.maskBits = CollisionConstante.GROUP_PLAYER_MOVE_PASS_WALL;
+				f.maskBits = CollisionConstante.GROUP_PLAYER_BODY_PASS_WALL;
 				this.body.getFixtureList().get(i).setFilterData(f);
 			}
 			this.canPassWall = true;
@@ -845,7 +847,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
-		if (this.level.isFootInWater()) {
+		if (this.level != null && this.level.isFootInWater() && this.body != null) {
 			mbGame.getBatch().draw(footInWaterAnimation.getKeyFrame(animationTime, true), getPixelX() - 9f,
 					getPixelY() - 5f);
 		}
@@ -920,8 +922,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawInsideTrolley() {
-		//TODO
-		//PovDirection direction = this.trolley.getDirection();
+		// TODO
+		// PovDirection direction = this.trolley.getDirection();
 
 	}
 

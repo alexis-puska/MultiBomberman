@@ -43,6 +43,7 @@ public class Bombe extends BodyAble {
 	private float walkSpeed;
 	protected int x;
 	protected int y;
+	private boolean explodeInNextUpdate;
 
 	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
 			Player player, int countDown) {
@@ -60,6 +61,7 @@ public class Bombe extends BodyAble {
 		this.walkSpeed = Constante.WALK_SPEED;
 		this.stateTime = 0f;
 		this.reboundTime = 0f;
+		this.explodeInNextUpdate = false;
 		this.animation = new Animation<>((1f / (float) Constante.FPS) * 4f,
 				SpriteService.getInstance().getSpriteForAnimation(type.getSpriteEnum()));
 		createBody();
@@ -83,13 +85,12 @@ public class Bombe extends BodyAble {
 		vertices[7] = new Vector2(-BORDER_MIN, BORDER_MAX);
 		diamondBody.set(vertices);
 
-		CircleShape groundBox = new CircleShape();
-		groundBox.setRadius(0.5f);
+		
 		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 		body = world.createBody(groundBodyDef);
 		body.setFixedRotation(false);
 		MassData data = new MassData();
-		data.mass = 100000f;
+		data.mass = 10f;
 		body.setMassData(data);
 		body.setUserData(this);
 		Fixture fixture = body.createFixture(diamondBody, 0.0f);
@@ -97,7 +98,7 @@ public class Bombe extends BodyAble {
 		fixture.setUserData(this);
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_BOMBE;
-		filter.maskBits = CollisionConstante.GROUP_BOMBE_HITBOX;
+		filter.maskBits = CollisionConstante.GROUP_BOMBE;
 		fixture.setFilterData(filter);
 	}
 
@@ -105,7 +106,6 @@ public class Bombe extends BodyAble {
 	public void drawIt() {
 		this.stateTime += Gdx.graphics.getDeltaTime();
 		this.reboundTime += Gdx.graphics.getDeltaTime() * (float) Constante.FPS;
-		Gdx.app.log("", "state time : " + this.stateTime);
 		mbGame.getBatch().draw(animation.getKeyFrame(stateTime, true),
 				(float) ((body.getPosition().x - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
 				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y)
@@ -180,7 +180,7 @@ public class Bombe extends BodyAble {
 					0f);
 		}
 
-		if (countDown <= 0 && !isExploded()) {
+		if (explodeInNextUpdate || (countDown <= 0 && !isExploded())) {
 			explode();
 		}
 	}
@@ -336,5 +336,10 @@ public class Bombe extends BodyAble {
 	public void hurtBombe() {
 		hurtSomethingOnNorthOrSouth();
 		hurtSomethingOnEastOrWest();
+	}
+
+	public void hurtTrolleyInMove() {
+		direction = PovDirection.center;
+		explodeInNextUpdate = true;
 	}
 }

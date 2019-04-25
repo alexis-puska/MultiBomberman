@@ -1,5 +1,6 @@
 package com.mygdx.service.collision;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -38,7 +39,10 @@ public class CustomContactListener implements ContactListener {
 		beginContactBombes(contact);
 		beginContactBombeWall(contact);
 		beginContactBombeBrick(contact);
-		beginContactPlayerHitboxTrolley(contact);
+		
+		beginContactBombeTrolley(contact);
+		beginContactPlayerTrolley(contact);
+		beginContactBrickTrolleyHitBox(contact);
 	}
 
 	private void beginContactPlayerInterrupter(Contact contact) {
@@ -115,6 +119,7 @@ public class CustomContactListener implements ContactListener {
 			Bombe b = (Bombe) contact.getFixtureA().getUserData();
 			Vector2 pp = p.getPosition();
 			Vector2 bp = b.getPosition();
+			Gdx.app.log("CustomContactListener", "Contact beetween player and Bombe");
 			if (distance(pp, bp, DETECT)) {
 				contact.setEnabled(false);
 			} else if (p.isCanKickBombe()) {
@@ -126,6 +131,7 @@ public class CustomContactListener implements ContactListener {
 			Bombe b = (Bombe) contact.getFixtureB().getUserData();
 			Vector2 pp = p.getPosition();
 			Vector2 bp = b.getPosition();
+			Gdx.app.log("CustomContactListener", "Contact beetween player and Bombe");
 			if (distance(pp, bp, DETECT)) {
 				contact.setEnabled(false);
 			} else if (p.isCanKickBombe()) {
@@ -160,17 +166,17 @@ public class CustomContactListener implements ContactListener {
 		}
 	}
 
-	private void beginContactPlayerHitboxTrolley(Contact contact) {
+	private void beginContactPlayerTrolley(Contact contact) {
 		Player p = null;
 		Trolley t = null;
-		if (contact.getFixtureA().getUserData().getClass() == Bonus.class
+		if (contact.getFixtureA().getUserData().getClass() == Trolley.class
 				&& contact.getFixtureB().getUserData().getClass() == Player.class
 				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY
 				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER_HITBOX) {
 			contact.setEnabled(false);
 			p = (Player) contact.getFixtureB().getUserData();
 			t = (Trolley) contact.getFixtureA().getUserData();
-		} else if (contact.getFixtureB().getUserData().getClass() == Bonus.class
+		} else if (contact.getFixtureB().getUserData().getClass() == Trolley.class
 				&& contact.getFixtureA().getUserData().getClass() == Player.class
 				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY
 				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER_HITBOX) {
@@ -179,14 +185,12 @@ public class CustomContactListener implements ContactListener {
 			t = (Trolley) contact.getFixtureB().getUserData();
 		}
 		if (t != null && p != null) {
+			System.out.println("Contact beetween player hitbox and trolley body");
 			if (t.isMoving()) {
 				p.crush();
 			} else {
-				p.enterInTrolley(t);
+				
 			}
-			// Notify player to enter the trolley.
-			// start the trolley move
-			// if trolley in move, just crush the player
 		}
 	}
 
@@ -243,6 +247,54 @@ public class CustomContactListener implements ContactListener {
 			Bombe b = (Bombe) contact.getFixtureB().getUserData();
 			Brick w = (Brick) contact.getFixtureA().getUserData();
 			b.hurtWallOrBrick(w.getBodyX(), w.getBodyY());
+		}
+	}
+
+	private void beginContactBombeTrolley(Contact contact) {
+		if ((contact.getFixtureA().getUserData().getClass() == Bombe.class
+				&& contact.getFixtureB().getUserData().getClass() == Trolley.class)) {
+			Bombe b = (Bombe) contact.getFixtureA().getUserData();
+			Trolley t = (Trolley) contact.getFixtureB().getUserData();
+			contact.setEnabled(false);
+			if (t.isMoving()) {
+				b.hurtTrolleyInMove();
+			} else {
+				System.out.println("trolley touche une bombe");
+				b.hurtWallOrBrick(t.getBodyX(), t.getBodyY());
+			}
+		} else if ((contact.getFixtureA().getUserData().getClass() == Trolley.class
+				&& contact.getFixtureB().getUserData().getClass() == Bombe.class)) {
+			Bombe b = (Bombe) contact.getFixtureB().getUserData();
+			Trolley t = (Trolley) contact.getFixtureA().getUserData();
+			contact.setEnabled(false);
+			if (t.isMoving()) {
+				b.hurtTrolleyInMove();
+			} else {
+				System.out.println("trolley touche une bombe");
+				b.hurtWallOrBrick(t.getBodyX(), t.getBodyY());
+			}
+		}
+	}
+
+	private void beginContactBrickTrolleyHitBox(Contact contact) {
+		if ((contact.getFixtureA().getUserData().getClass() == Brick.class
+				&& contact.getFixtureB().getUserData().getClass() == Trolley.class)
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_BRICKS
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY) {
+			Brick b = (Brick) contact.getFixtureA().getUserData();
+			Trolley t = (Trolley) contact.getFixtureB().getUserData();
+			if (t.isMoving()) {
+				b.action();
+			}
+		} else if ((contact.getFixtureA().getUserData().getClass() == Trolley.class
+				&& contact.getFixtureB().getUserData().getClass() == Brick.class
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_BRICKS)) {
+			Brick b = (Brick) contact.getFixtureB().getUserData();
+			Trolley t = (Trolley) contact.getFixtureA().getUserData();
+			if (t.isMoving()) {
+				b.action();
+			}
 		}
 	}
 
