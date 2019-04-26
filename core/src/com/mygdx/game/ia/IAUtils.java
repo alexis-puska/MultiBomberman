@@ -5,7 +5,7 @@ import com.mygdx.constante.Constante;
 public class IAUtils {
 
 	public static void main(String[] args) {
-		System.out.println(getLeftPos(0));
+		
 	}
 
 	public static int getLeftPos(int pos) {

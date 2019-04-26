@@ -67,7 +67,7 @@ After this step "In The Well" is installed, compile, and integrated in emulation
 |Bricks|||X|
 |Teleporter|||X|
 |Switch|||X|
-|Mine|X||
+|Mine|||X
 |Submarine animation|||X
 |Water player animation|||X
 |Player in trolley ||X|

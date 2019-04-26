@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.Drawable;
@@ -174,93 +175,168 @@ public class Rail extends Drawable {
 	}
 
 	public PovDirection getNextDirection(Rail previous) {
-		// si le rail en paramètre = null, le personnage rentre dans le wagon, retour
-		// de la direction à prendre.
-		if (previous == null) {
-			if (this.getType() == RailEnum.START_LEFT) {
+		switch (this.type) {
+		case START_LEFT:
+			if (previous == null) {
 				return PovDirection.east;
-			} else if (this.getType() == RailEnum.START_RIGHT) {
-				return PovDirection.west;
+			} else {
+				return PovDirection.center;
 			}
-			return PovDirection.center;
-		}
-		// convertion rail en position précédente
-		int val = 0b0000000000000000;
-		if (previous.getY() == this.y
-				&& (previous.getX() == this.x - 1 || (previous.getX() == Constante.GRID_SIZE_X && this.x == 0))) {
-			val += 0b0000000000000001;
-		} else if (previous.getX() == this.x
-				&& (previous.getY() == this.y + 1 || (previous.getY() == 0 && this.y == Constante.GRID_SIZE_Y))) {
-			val += 0b0000000000000010;
-		} else if (previous.getY() == this.y
-				&& (previous.getX() == this.x + 1 || (previous.getX() == 0 && this.x == Constante.GRID_SIZE_X))) {
-			val += 0b0000000000000100;
-		} else if (previous.getX() == this.x
-				&& (previous.getY() == this.y - 1 || (previous.getY() == Constante.GRID_SIZE_Y && this.y == 0))) {
-			val += 0b0000000000001000;
-		}
-		// si connecté à 2 rail, on retourne la direction du rail non précédent.
-		if (possibility.size() == 2) {
-			if ((this.type.getDirection() & 0b0000000000000001) > 0 && (0b0000000000000001 != val)) {
+		case START_RIGHT:
+			if (previous == null) {
 				return PovDirection.west;
-			} else if ((this.type.getDirection() & 0b0000000000000010) > 0 && (0b0000000000000010 != val)) {
-				return PovDirection.north;
-			} else if ((this.type.getDirection() & 0b0000000000000100) > 0 && (0b0000000000000100 != val)) {
+			} else {
+				return PovDirection.center;
+			}
+		case HORIZONTAL:
+			if (previous.equals(left)) {
 				return PovDirection.east;
-			} else if ((this.type.getDirection() & 0b0000000000001000) > 0 && (0b0000000000001000 != val)) {
-				return PovDirection.south;
-			}
-			// si possibilité = 1, on est sur une voie de garage
-		} else if (possibility.size() == 1) {
-			return PovDirection.center;
-		} else {
-			// sinon on arrive sur un aiguillage, si la direction fait partie de la positoin
-			// de l'aiguillage, on retourne la position actuelle de l'aiguille
-			List<PovDirection> dirs = new ArrayList<>();
-			int dir = this.type.getDirection() - val;
-			if (dir != this.type.getDirection()) {
-				switch (dir) {
-				case 0b0000000000000001:
-					return PovDirection.west;
-				case 0b0000000000000010:
-					return PovDirection.north;
-				case 0b0000000000000100:
+			} else if (previous.equals(right)) {
+				return PovDirection.west;
+			} else {
+				Gdx.app.log("erreur", "rail HORIZONTAL");
+				if (ThreadLocalRandom.current().nextInt(2) == 0) {
 					return PovDirection.east;
-				default:
-				case 0b0000000000001000:
-					return PovDirection.south;
+				} else {
+					return PovDirection.west;
 				}
 			}
-			// sinon tirage aléatoire de la position de l'aiguille.
-			int choice = this.nearest - val;
-			if ((choice & 0b0000000000000001) > 0) {
-				dirs.add(PovDirection.west);
+		case VERTICAL:
+			if (previous.equals(up)) {
+				return PovDirection.south;
+			} else if (previous.equals(down)) {
+				return PovDirection.north;
+			} else {
+				Gdx.app.log("erreur", "rail VERTICAL");
+				if (ThreadLocalRandom.current().nextInt(2) == 0) {
+					return PovDirection.south;
+				} else {
+					return PovDirection.north;
+				}
 			}
-			if ((choice & 0b0000000000000010) > 0) {
-				dirs.add(PovDirection.north);
+		case DOWN_TO_RIGHT:
+			if (previous.equals(right)) {
+				return PovDirection.south;
+			} else if (previous.equals(down)) {
+				return PovDirection.east;
+			} else {
+				Gdx.app.log("erreur", "rail DOWN_TO_RIGHT");
+				if (ThreadLocalRandom.current().nextInt(2) == 0) {
+					return PovDirection.south;
+				} else {
+					return PovDirection.east;
+				}
 			}
-			if ((choice & 0b0000000000000100) > 0) {
-				dirs.add(PovDirection.east);
+		case LEFT_TO_DOWN:
+			if (previous.equals(left)) {
+				return PovDirection.south;
+			} else if (previous.equals(down)) {
+				return PovDirection.west;
+			} else {
+				Gdx.app.log("erreur", "rail LEFT_TO_DOWN");
+				if (ThreadLocalRandom.current().nextInt(2) == 0) {
+					return PovDirection.south;
+				} else {
+					return PovDirection.west;
+				}
 			}
-			if ((choice & 0b0000000000001000) > 0) {
-				dirs.add(PovDirection.south);
+		case LEFT_TO_UP:
+			if (previous.equals(up)) {
+				return PovDirection.west;
+			} else if (previous.equals(left)) {
+				return PovDirection.north;
+			} else {
+				Gdx.app.log("erreur", "rail LEFT_TO_UP");
+				if (ThreadLocalRandom.current().nextInt(2) == 0) {
+					return PovDirection.west;
+				} else {
+					return PovDirection.north;
+				}
 			}
-			int p = ThreadLocalRandom.current().nextInt(0, dirs.size());
-			return dirs.get(p);
+		case UP_TO_RIGHT:
+			if (previous.equals(up)) {
+				return PovDirection.east;
+			} else if (previous.equals(right)) {
+				return PovDirection.north;
+			} else {
+				Gdx.app.log("erreur", "rail UP_TO_RIGHT");
+				if (ThreadLocalRandom.current().nextInt(2) == 0) {
+					return PovDirection.east;
+				} else {
+					return PovDirection.north;
+				}
+			}
+		default:
 		}
 		return PovDirection.center;
 	}
 
-	public Rail getRail(PovDirection dir) {
-		if (dir == PovDirection.west) {
-			return left;
-		} else if (dir == PovDirection.north) {
-			return up;
-		} else if (dir == PovDirection.east) {
-			return right;
-		} else if (dir == PovDirection.south) {
-			return down;
-		}
-		return null;
+	public int getIndex() {
+		return this.x + (this.y * Constante.GRID_SIZE_X);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (canSwitch ? 1231 : 1237);
+		result = prime * result + ((down == null) ? 0 : down.hashCode());
+		result = prime * result + ((left == null) ? 0 : left.hashCode());
+		result = prime * result + nearest;
+		result = prime * result + ((possibility == null) ? 0 : possibility.hashCode());
+		result = prime * result + ((right == null) ? 0 : right.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((up == null) ? 0 : up.hashCode());
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Rail other = (Rail) obj;
+		if (canSwitch != other.canSwitch)
+			return false;
+		if (down == null) {
+			if (other.down != null)
+				return false;
+		} else if (!down.equals(other.down))
+			return false;
+		if (left == null) {
+			if (other.left != null)
+				return false;
+		} else if (!left.equals(other.left))
+			return false;
+		if (nearest != other.nearest)
+			return false;
+		if (possibility == null) {
+			if (other.possibility != null)
+				return false;
+		} else if (!possibility.equals(other.possibility))
+			return false;
+		if (right == null) {
+			if (other.right != null)
+				return false;
+		} else if (!right.equals(other.right))
+			return false;
+		if (type != other.type)
+			return false;
+		if (up == null) {
+			if (other.up != null)
+				return false;
+		} else if (!up.equals(other.up))
+			return false;
+		if (x != other.x)
+			return false;
+		if (y != other.y)
+			return false;
+		return true;
+	}
+
 }

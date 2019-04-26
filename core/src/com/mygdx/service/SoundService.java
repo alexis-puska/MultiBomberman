@@ -15,6 +15,7 @@ public class SoundService {
 
 	private static final String CLASS_NAME = "SoundService.class";
 	private static final float MUSIQUE_VOLUME = 0.1f;
+	private static final float MINE_VOLUME = 0.1f;
 
 	private static SoundService instance = new SoundService();
 
@@ -205,7 +206,7 @@ public class SoundService {
 			id = soundLouis.loop();
 			break;
 		case MINE:
-			id = soundMine.loop();
+			id = soundMine.loop(MINE_VOLUME);
 			break;
 		case TELEPORTER_CLOSE:
 			id = soundTeleporterClose.loop();

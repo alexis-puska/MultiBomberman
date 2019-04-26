@@ -117,7 +117,6 @@ public class MultiBombermanGame extends Game {
 	@Override
 	public void resize(int width, int height) {
 		this.viewport.update(width, height, true);
-		Gdx.app.log(LOG_NAME, "RESIZE");
 		try {
 			Thread.sleep(500);
 			Controllers.clearListeners();

@@ -32,7 +32,6 @@ import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.StartPlayer;
 import com.mygdx.domain.level.Teleporter;
-import com.mygdx.domain.level.Trolley;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
@@ -59,6 +58,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private final CharacterColorEnum color;
 	private PovDirection direction;
 	private PovDirection previousDirection;
+	private PovDirection trolleyDirection;
 	private Body collisionBody;
 	private Brain brain;
 
@@ -72,7 +72,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private boolean insideBombe;
 	private int insideFire;
-	private Trolley trolley;
 
 	// state
 	private PlayerStateEnum state;
@@ -130,6 +129,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.insideFire = 0;
 		this.shipSpeed = Constante.DEFAULT_SHIP_SPEED;
 		this.louisColor = LouisColorEnum.random();
+		this.trolleyDirection = PovDirection.east;
 		this.animations = new EnumMap<>(CharacterSpriteEnum.class);
 		for (CharacterSpriteEnum e : CharacterSpriteEnum.values()) {
 			this.animations.put(e, new Animation<TextureRegion>((1f / 5f),
@@ -215,16 +215,23 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.changeState(PlayerStateEnum.BURNING);
 	}
 
-	public void enterInTrolley(Trolley trolley) {
-		// TODO
-		this.trolley = trolley;
+	public void enterInTrolley() {
+		this.previousDirection = this.direction;
+		this.direction = PovDirection.center;
 		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
 	}
 
-	public void exitTrolley(Trolley trolley) {
-		// TODO
-		this.changeState(this.previousState);
-		this.trolley = null;
+	public void exitTrolley() {
+		this.state = this.previousState;
+	}
+
+	public void trolleyMovePlayer(float x, float y, PovDirection trolleyDirection) {
+		this.body.setTransform(x, y, 0f);
+		this.trolleyDirection = trolleyDirection;
+	}
+	
+	public boolean isInsideTrolley() {
+		return this.state == PlayerStateEnum.INSIDE_TROLLEY;
 	}
 
 	/************************************************************************************************************
@@ -249,7 +256,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 			break;
 		case INSIDE_TROLLEY:
-			this.body.setTransform(this.trolley.getX() + 0.5f, this.trolley.getY() + 0.5f, 0f);
 			break;
 		case CARRY_BOMBE:
 		case ON_LOUIS:
@@ -360,13 +366,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 		}
 		if (this.wallTimeout <= 0 && canPassWall && !isInsideBrick()) {
-			System.out.println("d�sactivation bonus WALL");
 			for (int i = 0; i < this.body.getFixtureList().size; i++) {
 				Filter f = new Filter();
 				f.categoryBits = CollisionConstante.CATEGORY_PLAYER;
 				f.maskBits = CollisionConstante.GROUP_PLAYER_BODY;
 				this.body.getFixtureList().get(i).setFilterData(f);
-				System.out.println("collision reactiv�e");
 			}
 			canPassWall = false;
 		} else {
@@ -700,7 +704,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	 * -----------------------------------------------------------------------------
 	 *******************************************************************************/
 	public void takeBonus(BonusTypeEnum type) {
-		Gdx.app.log(CLASS_NAME, "take bonus : " + type.name());
 		switch (type) {
 		case BOMBE:
 			this.nbBombe++;
@@ -921,9 +924,44 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawInsideTrolley() {
-		// TODO
-		// PovDirection direction = this.trolley.getDirection();
-
+		switch (this.trolleyDirection) {
+		case center:
+			break;
+		case east:
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
+					this.character, 0), getPixelX() - 15f, getPixelY() - 9f);
+			break;
+		case north:
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
+					this.character, 5), getPixelX() - 15f, getPixelY() - 9f);
+			break;
+		case northEast:
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
+					this.character, 7), getPixelX() - 15f, getPixelY() - 9f);
+			break;
+		case northWest:
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
+					this.character, 6), getPixelX() - 15f, getPixelY() - 9f);
+			break;
+		case south:
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
+					this.character, 1), getPixelX() - 15f, getPixelY() - 9f);
+			break;
+		case southEast:
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
+					this.character, 2), getPixelX() - 15f, getPixelY() - 9f);
+			break;
+		case southWest:
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
+					this.character, 3), getPixelX() - 15f, getPixelY() - 9f);
+			break;
+		case west:
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
+					this.character, 4), getPixelX() - 15f, getPixelY() - 9f);
+			break;
+		default:
+			break;
+		}
 	}
 
 	private void drawCarryBombe() {
@@ -1117,5 +1155,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		return 0;
 	}
+
+	
 
 }

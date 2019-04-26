@@ -68,7 +68,7 @@ public class Constante {
 	public static final int FASTE_BOMBE_TIME = 40;
 	public static final int SLOW_BOMBE_TIME = 150;
 	public static final int MALUS_TIME = 250;
-	
+	public static final float TROLLEY_SPEED = 10f;
 
 	private Constante() {
 		// empty private constructor
