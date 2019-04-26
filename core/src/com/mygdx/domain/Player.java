@@ -38,11 +38,13 @@ import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.LouisColorEnum;
 import com.mygdx.enumeration.LouisSpriteEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 import com.mygdx.game.ia.Brain;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
 import com.mygdx.utils.GridUtils;
@@ -213,6 +215,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.previousDirection = PovDirection.center;
 		this.direction = PovDirection.center;
 		this.changeState(PlayerStateEnum.BURNING);
+		SoundService.getInstance().playSound(SoundEnum.BURN);
 	}
 
 	public void enterInTrolley() {
@@ -227,9 +230,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public void trolleyMovePlayer(float x, float y, PovDirection trolleyDirection) {
 		this.body.setTransform(x, y, 0f);
+		this.collisionBody.setTransform(x, y, 0f);
 		this.trolleyDirection = trolleyDirection;
 	}
-	
+
 	public boolean isInsideTrolley() {
 		return this.state == PlayerStateEnum.INSIDE_TROLLEY;
 	}
@@ -267,6 +271,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				} else if (state == PlayerStateEnum.NORMAL) {
 					this.direction = PovDirection.center;
 					this.previousDirection = PovDirection.center;
+					SoundService.getInstance().playSound(SoundEnum.BURN);
 					changeState(PlayerStateEnum.BURNING);
 				}
 			}
@@ -1155,7 +1160,5 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		return 0;
 	}
-
-	
 
 }

@@ -106,6 +106,7 @@ public class Mine extends BodyAble implements Initiable {
 			this.time += Gdx.graphics.getDeltaTime();
 			if (time >= expiration) {
 				generateFire();
+				SoundService.getInstance().playSound(SoundEnum.FIRE);
 				SoundService.getInstance().stopSound(SoundEnum.MINE, id);
 				this.activate = false;
 				this.time = 0f;

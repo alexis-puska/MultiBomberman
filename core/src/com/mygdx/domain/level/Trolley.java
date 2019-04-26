@@ -16,8 +16,10 @@ import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +41,7 @@ public class Trolley extends BodyAble implements Initiable {
 	private PovDirection moveDirection;
 	private PovDirection drawDirection;
 	private boolean collideWithOtherTrolley;
+	private long soundId;
 
 	private Rail currentRail;
 	private Rail previousRail;
@@ -76,6 +79,12 @@ public class Trolley extends BodyAble implements Initiable {
 	}
 
 	@Override
+	public void dispose() {
+		super.dispose();
+		SoundService.getInstance().stopSound(SoundEnum.TROLLEY, this.soundId);
+	}
+
+	@Override
 	public void init(World world, MultiBombermanGame mbGame, Level level) {
 		this.mbGame = mbGame;
 		this.world = world;
@@ -87,10 +96,15 @@ public class Trolley extends BodyAble implements Initiable {
 		this.player = null;
 		createBody();
 		this.currentRail = this.getCurrentRailUnderTrolley();
-		this.drawDirection = this.currentRail.getNextDirection(null);
-		this.moveDirection = this.drawDirection;
+		if (this.currentRail != null) {
+			this.drawDirection = this.currentRail.getNextDirection(null);
+			this.moveDirection = this.drawDirection;
+		} else {
+			this.drawDirection = PovDirection.east;
+		}
 	}
 
+	@Override
 	public void update() {
 		if (collideWithOtherTrolley) {
 			this.dispose();
@@ -123,7 +137,7 @@ public class Trolley extends BodyAble implements Initiable {
 				break;
 			}
 			Rail rail = this.getCurrentRailUnderTrolley();
-			if (!rail.equals(currentRail)) {
+			if (rail != null && !rail.equals(currentRail)) {
 				this.moveDirection = rail.getNextDirection(currentRail);
 				if (this.moveDirection == PovDirection.center) {
 					this.playerEjectFromTrolley();
@@ -138,7 +152,7 @@ public class Trolley extends BodyAble implements Initiable {
 		} else {
 			this.body.setLinearVelocity(0f, 0f);
 		}
-		
+
 	}
 
 	@Override
@@ -184,6 +198,7 @@ public class Trolley extends BodyAble implements Initiable {
 			this.player = player;
 			this.player.enterInTrolley();
 			this.move = true;
+			this.soundId = SoundService.getInstance().loopSound(SoundEnum.TROLLEY);
 		}
 	}
 
@@ -191,6 +206,7 @@ public class Trolley extends BodyAble implements Initiable {
 		this.move = false;
 		this.player.exitTrolley();
 		this.player = null;
+		SoundService.getInstance().stopSound(SoundEnum.TROLLEY, this.soundId);
 	}
 
 	public void trolleyCollision() {

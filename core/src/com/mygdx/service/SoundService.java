@@ -15,7 +15,7 @@ public class SoundService {
 
 	private static final String CLASS_NAME = "SoundService.class";
 	private static final float MUSIQUE_VOLUME = 0.1f;
-	private static final float MINE_VOLUME = 0.1f;
+	private static final float MINE_VOLUME = 0.3f;
 
 	private static SoundService instance = new SoundService();
 
@@ -42,6 +42,7 @@ public class SoundService {
 	private Sound soundMine;
 	private Sound soundTeleporterClose;
 	private Sound soundTeleporterOpen;
+	private Sound soundTrolley;
 	private Sound soundValide;
 	private Sound soundAzizLightFr;
 	private Sound soundAzizLightEn;
@@ -71,6 +72,7 @@ public class SoundService {
 		soundMine = Gdx.audio.newSound(Gdx.files.internal("sound/sound_mine.wav"));
 		soundTeleporterClose = Gdx.audio.newSound(Gdx.files.internal("sound/sound_teleporter_close.wav"));
 		soundTeleporterOpen = Gdx.audio.newSound(Gdx.files.internal("sound/sound_teleporter_open.wav"));
+		soundTrolley = Gdx.audio.newSound(Gdx.files.internal("sound/sound_trolley.wav"));
 		soundValide = Gdx.audio.newSound(Gdx.files.internal("sound/sound_valide.wav"));
 		soundAzizLightFr = Gdx.audio.newSound(Gdx.files.internal("sound/sound_aziz_light_fr.wav"));
 		soundAzizLightEn = Gdx.audio.newSound(Gdx.files.internal("sound/sound_aziz_light_en.wav"));
@@ -157,6 +159,9 @@ public class SoundService {
 		case TELEPORTER_OPEN:
 			soundTeleporterOpen.play();
 			break;
+		case TROLLEY:
+			soundTrolley.play();
+			break;
 		case VALIDE:
 			soundValide.play();
 			break;
@@ -214,6 +219,9 @@ public class SoundService {
 		case TELEPORTER_OPEN:
 			id = soundTeleporterOpen.loop();
 			break;
+		case TROLLEY:
+			id = soundTrolley.loop();
+			break;
 		case VALIDE:
 			id = soundValide.loop();
 			break;
@@ -270,6 +278,9 @@ public class SoundService {
 			break;
 		case TELEPORTER_OPEN:
 			soundTeleporterOpen.stop(id);
+			break;
+		case TROLLEY:
+			soundTrolley.stop(id);
 			break;
 		case VALIDE:
 			soundValide.stop(id);
