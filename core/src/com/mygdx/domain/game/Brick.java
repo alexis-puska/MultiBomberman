@@ -1,5 +1,8 @@
 package com.mygdx.domain.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -27,33 +30,42 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Brick extends BodyAble implements LevelElement {
 
+	private static final float ANIMATION_TIME = 0.16f;
 	protected int x;
 	protected int y;
 	private SpriteEnum animation;
 
 	private BrickStateEnum state;
-	private int countdown;
-	private int indexAnimation;
-
+	private float animationTime;
 	private SpriteEnum defaultAnimation;
-	private int defaultTexture;
 
-	public Brick(final World world, final MultiBombermanGame mbGame, final Level level, SpriteEnum animation, int i,
-			int j) {
-		this.x = i;
-		this.y = j;
+	private Animation<TextureRegion> burnAnimation;
+
+	public Brick(final World world, final MultiBombermanGame mbGame, final Level level, SpriteEnum animation, int x,
+			int y) {
+		this.x = x;
+		this.y = y;
 		this.mbGame = mbGame;
 		this.world = world;
 		this.level = level;
 		this.animation = animation;
 		this.state = BrickStateEnum.CREATED;
+		TextureRegion[] sprite = SpriteService.getInstance().getSpriteForAnimation(animation);
+		TextureRegion[] spriteAnimation = new TextureRegion[sprite.length - 1];
+		for (int i = 1; i < sprite.length; i++) {
+			spriteAnimation[i - 1] = sprite[i];
+		}
+		burnAnimation = new Animation<>(ANIMATION_TIME, spriteAnimation);
 		createBody();
 	}
 
 	@Override
 	public void drawIt() {
-		if (this.state == BrickStateEnum.BURN || this.state == BrickStateEnum.CREATED) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.indexAnimation),
+		if (this.state == BrickStateEnum.CREATED) {
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, 0),
+					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
+		} else if (this.state == BrickStateEnum.BURN) {
+			mbGame.getBatch().draw(burnAnimation.getKeyFrame(animationTime, false),
 					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
@@ -75,27 +87,20 @@ public class Brick extends BodyAble implements LevelElement {
 
 	@Override
 	public void action() {
-		if (state != BrickStateEnum.BURN) {
+		if (state == BrickStateEnum.CREATED) {
 			this.state = BrickStateEnum.BURN;
-			this.countdown = Constante.BURN_BRICK_COUNTDOWN;
-			this.indexAnimation++;
 		}
 	}
 
 	@Override
 	public void update() {
 		if (this.state == BrickStateEnum.BURN) {
-			this.countdown--;
-			if (this.countdown < 0) {
-				this.countdown = Constante.BURN_BRICK_COUNTDOWN;
-				indexAnimation++;
-				if (this.indexAnimation >= SpriteService.getInstance().getAnimationSize(this.animation) - 1) {
-					this.state = BrickStateEnum.BURNED;
-					this.level.getOccupedWallBrickBonus()[this.getX()][this.getY()] = null;
-					this.level.getBonuss().stream().filter(b -> b.x == this.x && b.y == this.y)
-							.forEach(Bonus::revealBonus);
-					dispose();
-				}
+			animationTime += Gdx.graphics.getDeltaTime();
+			if (burnAnimation.isAnimationFinished(animationTime)) {
+				this.state = BrickStateEnum.BURNED;
+				this.level.getOccupedWallBrickBonus()[this.getX()][this.getY()] = null;
+				this.level.getBonuss().stream().filter(b -> b.x == this.x && b.y == this.y).forEach(Bonus::revealBonus);
+				dispose();
 			}
 		}
 	}

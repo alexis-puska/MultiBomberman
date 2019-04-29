@@ -65,6 +65,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private Brain brain;
 
 	// player start
+	private int idx;
 	private StartPlayer startPlayer;
 
 	private float walkSpeed;
@@ -105,7 +106,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
 			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght,
-			int nbBombe) {
+			int nbBombe, int idx) {
+		this.idx = idx;
 		this.startPlayer = startPlayer;
 		this.type = type;
 		this.character = character;

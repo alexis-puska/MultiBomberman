@@ -189,7 +189,7 @@ public class PlayerService {
 			if (idx < startPlayer.size()) {
 				Player p = new Player(game, world, mbGame, level, def.getValue().getPlayerType(),
 						def.getValue().getCharacter(), def.getValue().getColor(), startPlayer.get(idx),
-						Context.getStrength(), Context.getBombe());
+						Context.getStrength(), Context.getBombe(), idx);
 				players.add(p);
 				controlEventListeners.put(def.getKey(), p);
 				idx++;

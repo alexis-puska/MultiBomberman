@@ -35,13 +35,11 @@ import com.mygdx.domain.level.Rail;
 import com.mygdx.domain.level.Teleporter;
 import com.mygdx.domain.level.Trolley;
 import com.mygdx.domain.level.Wall;
-import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
-import com.mygdx.service.ScoreService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
@@ -96,7 +94,7 @@ public class Game {
 
 	private Level level;
 
-	private int lightCountdown;
+	private float lightCountdown;
 
 	/********************
 	 * SHADER
@@ -109,10 +107,8 @@ public class Game {
 	public Game(final MultiBombermanGame mbGame) {
 		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
 		this.fragmentShader = Gdx.files.internal("shader/fragment.glsl").readString();
-
 		this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
-
-		this.lightCountdown = 50;
+		this.lightCountdown = Constante.LIGHT_COUNTDOWN;
 		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
@@ -129,7 +125,6 @@ public class Game {
 		this.gameCamera = new OrthographicCamera(Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
 		this.gameCamera.position.set(Constante.GAME_SCREEN_SIZE_X / 2f, Constante.GAME_SCREEN_SIZE_Y / 2f, 0);
 		this.gameCamera.update();
-
 		this.backgroundLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y, false);
 		this.blocsLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
@@ -142,20 +137,18 @@ public class Game {
 				false);
 		this.shadowLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
 				false);
-
 		this.backgroundLayerTexture = backgroundLayer.getColorBufferTexture();
 		this.blocsLayerTexture = blocsLayer.getColorBufferTexture();
 		this.bricksLayerTexture = bricksLayer.getColorBufferTexture();
 		this.playerLayerTexture = playerLayer.getColorBufferTexture();
 		this.frontLayerTexture = frontLayer.getColorBufferTexture();
 		this.shadowLayerTexture = shadowLayer.getColorBufferTexture();
-
-		backgroundLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		blocsLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		bricksLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		playerLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		frontLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		shadowLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.backgroundLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.blocsLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.bricksLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.playerLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.frontLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.shadowLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
 		/********************
 		 * --- PHYSICS ---
@@ -180,17 +173,18 @@ public class Game {
 				this.level.getStartPlayer());
 
 		if (this.level.getShadow() > 0f) {
-			if (Context.getLocale() == LocaleEnum.ENGLISH) {
+			switch (Context.getLocale()) {
+			case ENGLISH:
 				SoundService.getInstance().playSound(SoundEnum.AZIZ_LIGHT_EN);
-			} else {
+				break;
+			case FRENCH:
+			default:
 				SoundService.getInstance().playSound(SoundEnum.AZIZ_LIGHT_FR);
+				break;
 			}
 		} else {
 			SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		}
-		
-
-		ScoreService scores = new ScoreService(mbGame, players);
 	}
 
 	/******************************
@@ -255,8 +249,8 @@ public class Game {
 			debugCamera.update();
 			debugRenderer.render(world, debugCamera.combined);
 		}
-		if (lightCountdown > 0) {
-			lightCountdown--;
+		if (lightCountdown >= 0f) {
+			lightCountdown -= Gdx.graphics.getDeltaTime();
 		}
 	}
 
@@ -290,7 +284,6 @@ public class Game {
 		backgroundLayer.end();
 		backgroundLayerTextureRegion = new TextureRegion(backgroundLayerTexture);
 		backgroundLayerTextureRegion.flip(false, true);
-
 	}
 
 	private void drawWall() {
@@ -343,13 +336,11 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, this.level.getShadow());
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		Gdx.gl.glColorMask(false, false, false, true);
 		shapeRenderer.setProjectionMatrix(gameCamera.combined);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
-
-		if (lightCountdown == 0) {
+		if (lightCountdown <= 0) {
 			Collections.sort(players);
 			players.stream().forEach(p -> {
 				if (!p.isDead()) {
@@ -358,16 +349,18 @@ public class Game {
 			});
 			level.getFires().stream().filter(f -> !f.isOff())
 					.forEach(f -> shapeRenderer.circle(f.getPixelX(), f.getPixelY(), 24));
+			level.getBonuss().stream().filter(b -> b.isBurning())
+					.forEach(f -> shapeRenderer.circle(f.getPixelX(), f.getPixelY(), 24));
 			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
 				shapeRenderer.setColor(new Color(b.getLight(), b.getLight(), b.getLight(), 0f));
 				BombeLight light = b.getOffesetShadow();
 				shapeRenderer.circle((float) (b.getPixelX() + light.getX()),
-						(float) b.getPixelY() + (float) b.getReboundOffset() + (float) light.getY(), (float) light.getRadius());
+						(float) b.getPixelY() + (float) b.getReboundOffset() + (float) light.getY(),
+						(float) light.getRadius());
 			});
 		}
 		shapeRenderer.end();
 		Gdx.gl.glColorMask(true, true, true, true);
-
 		mbGame.getBatch().end();
 		shadowLayerTextureRegion = new TextureRegion(shadowLayerTexture);
 		shadowLayerTextureRegion.flip(false, true);
@@ -393,19 +386,15 @@ public class Game {
 	}
 
 	private void merge() {
-
 		mbGame.getBatch().begin();
-
 		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
-
 		if (this.level.isLevelUnderWater()) {
 			mbGame.getBatch().setShader(shaderProgram);
 			float delta = Gdx.graphics.getDeltaTime();
 			deltaTime += delta;
 			shaderProgram.setUniformf("time", deltaTime % 40f);
 		}
-
 		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
@@ -418,10 +407,8 @@ public class Game {
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-
 		mbGame.getBatch().setShader(null);
 		mbGame.getBatch().end();
-
 	}
 
 	public MultiBombermanGame getMultiBombermanGame() {
