@@ -93,8 +93,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	// animation part
 	private LouisColorEnum louisColor;
 
-	private int invincibleTime;
-	private int malusTime;
+	private float invincibleTime;
+	private float malusTime;
 	private DeathBonusEnum deathBonus;
 
 	private Map<CharacterSpriteEnum, Animation<TextureRegion>> animations;
@@ -102,11 +102,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private Animation<TextureRegion> footInWaterAnimation;
 	private float animationTime;
 	private boolean canPassWall;
-	private int wallTimeout;
+	private float wallTimeout;
+	private Bombe lastBombeTouched;
 
 	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
-			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght,
-			int nbBombe, int idx) {
+			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe,
+			int idx) {
 		this.idx = idx;
 		this.startPlayer = startPlayer;
 		this.type = type;
@@ -266,7 +267,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case CARRY_BOMBE:
 		case ON_LOUIS:
 		case NORMAL:
-			if (insideFire > 0 && invincibleTime <= 0) {
+			if (insideFire > 0 && invincibleTime <= 0f) {
 				if (state == PlayerStateEnum.ON_LOUIS) {
 					this.changeState(PlayerStateEnum.NORMAL);
 					this.invincibleTime = Constante.INVINCIBLE_TIME;
@@ -363,16 +364,16 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 			this.collisionBody.setTransform(this.body.getPosition(), this.body.getAngle());
 		}
-		if (this.invincibleTime > 0) {
-			this.invincibleTime--;
+		if (this.invincibleTime > 0f) {
+			this.invincibleTime -= Gdx.graphics.getDeltaTime();
 		}
-		if (this.malusTime > 0) {
-			this.malusTime--;
-			if (this.malusTime == 0) {
+		if (this.malusTime > 0f) {
+			this.malusTime -= Gdx.graphics.getDeltaTime();
+			if (this.malusTime <= 0f) {
 				this.cancelLastMalus();
 			}
 		}
-		if (this.wallTimeout <= 0 && canPassWall && !isInsideBrick()) {
+		if (this.wallTimeout <= 0f && canPassWall && !isInsideBrick()) {
 			for (int i = 0; i < this.body.getFixtureList().size; i++) {
 				Filter f = new Filter();
 				f.categoryBits = CollisionConstante.CATEGORY_PLAYER;
@@ -381,7 +382,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 			canPassWall = false;
 		} else {
-			wallTimeout--;
+			wallTimeout -= Gdx.graphics.getDeltaTime();
 		}
 
 		if (this.deathBonus == DeathBonusEnum.DIAREE && this.state != PlayerStateEnum.BURNING
@@ -437,6 +438,18 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				&& this.state != PlayerStateEnum.TELEPORT) {
 			this.destinationTeleporter = null;
 		}
+	}
+
+	public void touchBombe(Bombe b) {
+		Gdx.app.log("PLAYER", "touch bombe : " + b.toString());
+		lastBombeTouched = b;
+	}
+
+	public void untouchBombe(Bombe b) {
+		if (lastBombeTouched.equals(b)) {
+			lastBombeTouched = null;
+		}
+		Gdx.app.log("PLAYER", "untouch bombe : " + b.toString());
 	}
 
 	private void changeState(PlayerStateEnum newState) {
@@ -576,7 +589,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressY() {
-		// unused method
+		if (canRaiseBombe && lastBombeTouched != null) {
+			this.changeState(PlayerStateEnum.CARRY_BOMBE);
+		}
 	}
 
 	/******************************************************
@@ -671,7 +686,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				&& this.level.getOccupedWallBrickBonus()[x][y] != null) {
 			return false;
 		} else {
-			int bombeTime = 75;
+			float bombeTime = Constante.NORMAL_BOMBE_TIME;
 			if (this.deathBonus != null) {
 				switch (this.deathBonus) {
 				case DIAREE:
@@ -754,9 +769,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		case GLOVE:
 			this.canRaiseBombe = true;
+			this.canKickBombe = false;
 			break;
 		case KICK:
-			canKickBombe = true;
+			this.canRaiseBombe = false;
+			this.canKickBombe = true;
 			break;
 		case ROLLER:
 			this.walkSpeed += Constante.ADD_WALK_SPEED;

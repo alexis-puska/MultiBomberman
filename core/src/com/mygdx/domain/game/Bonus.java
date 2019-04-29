@@ -27,7 +27,6 @@ public class Bonus extends BodyAble implements LevelElement {
 	protected int y;
 	private BonusTypeEnum type;
 	private BonusStateEnum state;
-	private int countdown;
 	private float stateTime;
 	private Animation<TextureRegion> animation;
 
@@ -41,7 +40,7 @@ public class Bonus extends BodyAble implements LevelElement {
 		this.type = type;
 		this.state = state;
 		this.stateTime = 0f;
-		this.animation = new Animation<>((1f / (float)Constante.FPS) * 4f,
+		this.animation = new Animation<>((1f / (float) Constante.FPS) * 4f,
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.BONUS_BURN));
 		if (state == BonusStateEnum.REVEALED) {
 			this.level.getOccupedWallBrickBonus()[x][y] = this;
@@ -82,7 +81,6 @@ public class Bonus extends BodyAble implements LevelElement {
 	public void action() {
 		if (state == BonusStateEnum.REVEALED) {
 			this.state = BonusStateEnum.BURN;
-			this.countdown = Constante.BURN_BRICK_COUNTDOWN;
 		}
 	}
 
@@ -92,15 +90,11 @@ public class Bonus extends BodyAble implements LevelElement {
 			this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
 			dispose();
 		} else if (this.state == BonusStateEnum.BURN) {
-			this.countdown--;
-			if (this.countdown < 0) {
-				this.countdown = Constante.BURN_BRICK_COUNTDOWN;
-
-				if (this.stateTime >= animation.getAnimationDuration()) {
-					this.state = BonusStateEnum.BURNED;
-					this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
-					dispose();
-				}
+			// TODO
+			if (this.stateTime >= animation.getAnimationDuration()) {
+				this.state = BonusStateEnum.BURNED;
+				this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
+				dispose();
 			}
 		}
 	}

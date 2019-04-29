@@ -35,7 +35,6 @@ public class Constante {
 	public static final int GRID_SIZE_Y = 21;
 	public static final float GRID_PIXELS_SIZE_X = 18f;
 	public static final float GRID_PIXELS_SIZE_Y = 16f;
-	public static final int BURN_BRICK_COUNTDOWN = 3;
 
 	// GAME PARAM DEFAULT VALUE
 	public static final int DEFAULT_LOCAL_PLAYER = 1;
@@ -64,10 +63,11 @@ public class Constante {
 	public static final float DEFAULT_SHIP_SPEED = 0.8f;
 	public static final float SHIP_SPEED_STEP = 0.5f;
 
-	public static final int INVINCIBLE_TIME = 50;
-	public static final int FASTE_BOMBE_TIME = 40;
-	public static final int SLOW_BOMBE_TIME = 150;
-	public static final int MALUS_TIME = 250;
+	public static final float INVINCIBLE_TIME = 5f;
+	public static final float FASTE_BOMBE_TIME = 1.5f;
+	public static final float SLOW_BOMBE_TIME = 6f;
+	public static final float NORMAL_BOMBE_TIME = 3f;
+	public static final float MALUS_TIME = 10f;
 	public static final float TROLLEY_SPEED = 10f;
 	public static final float LIGHT_COUNTDOWN = 2.0f;
 

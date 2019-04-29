@@ -29,7 +29,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Brick extends BodyAble implements LevelElement {
-
 	private static final float ANIMATION_TIME = 0.16f;
 	protected int x;
 	protected int y;

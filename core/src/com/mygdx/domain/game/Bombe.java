@@ -16,6 +16,7 @@ import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.domain.enumeration.BombeStateEnum;
 import com.mygdx.domain.enumeration.BombeTypeEnum;
 import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.level.Level;
@@ -30,38 +31,38 @@ import com.mygdx.utils.ReboundUtils;
 public class Bombe extends BodyAble {
 	private static final float BORDER_MAX = 0.45f;
 	private static final float BORDER_MIN = 0.3f;
-	private float stateTime;
+	private BombeStateEnum state;
+	private float animationTime;
 	private float reboundTime;
-	private float reboundOffest;
+	private float offsetZ;
 	private Animation<TextureRegion> animation;
 	private int strenght;
 	private BombeTypeEnum type;
 	private Player player;
-	private int countDown;
-	private boolean exploded;
+	private float timeToExplode;
 	private PovDirection direction;
 	private float walkSpeed;
 	protected int x;
 	protected int y;
-	private boolean explodeInNextUpdate;
+	private float count;
 
 	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
-			Player player, int countDown) {
+			Player player, float timeToExplode) {
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
 		this.strenght = strenght;
-		this.exploded = false;
 		this.x = x;
 		this.y = y;
 		this.type = type;
 		this.player = player;
-		this.countDown = countDown;
+		this.timeToExplode = timeToExplode;
 		this.direction = PovDirection.center;
 		this.walkSpeed = Constante.WALK_SPEED;
-		this.stateTime = 0f;
+		this.animationTime = 0f;
+		this.count = 0f;
+		this.state = BombeStateEnum.CREATED;
 		this.reboundTime = 0f;
-		this.explodeInNextUpdate = false;
 		this.animation = new Animation<>(0.16f,
 				SpriteService.getInstance().getSpriteForAnimation(type.getSpriteEnum()));
 		createBody();
@@ -72,7 +73,6 @@ public class Bombe extends BodyAble {
 		BodyDef groundBodyDef = new BodyDef();
 		groundBodyDef.active = true;
 		groundBodyDef.type = BodyType.DynamicBody;
-
 		PolygonShape diamondBody = new PolygonShape();
 		Vector2[] vertices = new Vector2[8];
 		vertices[0] = new Vector2(BORDER_MIN, BORDER_MAX);
@@ -84,7 +84,6 @@ public class Bombe extends BodyAble {
 		vertices[6] = new Vector2(-BORDER_MAX, BORDER_MIN);
 		vertices[7] = new Vector2(-BORDER_MIN, BORDER_MAX);
 		diamondBody.set(vertices);
-
 		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
 		body = world.createBody(groundBodyDef);
 		body.setFixedRotation(false);
@@ -103,23 +102,27 @@ public class Bombe extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		this.stateTime += Gdx.graphics.getDeltaTime();
-		this.reboundTime += Gdx.graphics.getDeltaTime() * (float) Constante.FPS;
-		this.reboundOffest = ReboundUtils.calcReboundOffset(this.reboundTime);
-		mbGame.getBatch().draw(animation.getKeyFrame(stateTime, true),
+		this.animationTime += Gdx.graphics.getDeltaTime();
+		if (this.state == BombeStateEnum.FLY) {
+			this.reboundTime += Gdx.graphics.getDeltaTime() * (float) Constante.FPS;
+			this.offsetZ = ReboundUtils.calcReboundOffset(this.reboundTime);
+		} else if (state == BombeStateEnum.CARRIED) {
+			this.offsetZ = 20f;
+		}
+		mbGame.getBatch().draw(animation.getKeyFrame(animationTime, true),
 				(float) ((body.getPosition().x - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
-				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y) + reboundOffest);
+				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y) + offsetZ);
 	}
 
 	public BombeLight getOffesetShadow() {
 		return this.type.getOffsetLight()
-				.get(Integer.valueOf(Double.valueOf(Math
-						.floor((stateTime % this.animation.getAnimationDuration()) / this.animation.getFrameDuration()))
+				.get(Integer.valueOf(Double.valueOf(Math.floor(
+						(animationTime % this.animation.getAnimationDuration()) / this.animation.getFrameDuration()))
 						.intValue()));
 	}
 
 	public float getReboundOffset() {
-		return this.reboundOffest;
+		return this.offsetZ;
 	}
 
 	public boolean isCreateLight() {
@@ -136,7 +139,9 @@ public class Bombe extends BodyAble {
 		case BOMBE:
 		case BOMBE_MAX:
 		case BOMBE_RUBBER:
-			countDown--;
+			if (state != BombeStateEnum.FLY) {
+				this.count += Gdx.graphics.getDeltaTime();
+			}
 			break;
 		case BOMBE_P:
 		default:
@@ -182,14 +187,22 @@ public class Bombe extends BodyAble {
 			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y + (float) Constante.GRID_SIZE_Y,
 					0f);
 		}
+		if (state == BombeStateEnum.FLY
+				&& this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()] == null) {
+			this.state = BombeStateEnum.CREATED;
+			this.direction = PovDirection.center;
+			this.body.setLinearVelocity(0f, 0f);
+			this.body.setTransform((float) Math.floor(this.getBodyX()) + 0.5f,
+					(float) Math.floor(this.getBodyY() + 0.5f), 0f);
+		}
 
-		if (explodeInNextUpdate || (countDown <= 0 && !isExploded())) {
+		if (state == BombeStateEnum.EXPLODE || this.count > this.timeToExplode) {
 			explode();
 		}
 	}
 
 	public void inFire() {
-		countDown = 0;
+		this.state = BombeStateEnum.EXPLODE;
 	}
 
 	public void explode() {
@@ -202,7 +215,7 @@ public class Bombe extends BodyAble {
 		generateFireDown(posX, posY);
 		generateFireLeft(posX, posY);
 		generateFireUp(posX, posY);
-		exploded = true;
+		this.state = BombeStateEnum.EXPLODED;
 		SoundService.getInstance().playSound(SoundEnum.FIRE);
 		this.dispose();
 		this.player.bombeExploded();
@@ -272,7 +285,7 @@ public class Bombe extends BodyAble {
 	}
 
 	public boolean isExploded() {
-		return exploded;
+		return this.state == BombeStateEnum.EXPLODED;
 	}
 
 	/*****************************************
@@ -343,7 +356,21 @@ public class Bombe extends BodyAble {
 
 	public void hurtTrolleyInMove() {
 		direction = PovDirection.center;
-		explodeInNextUpdate = true;
+		this.state = BombeStateEnum.EXPLODE;
+	}
+
+	public void gotCarried() {
+		this.state = BombeStateEnum.CARRIED;
+	}
+
+	public void playerCarryThatBombe(float x, float y) {
+		this.body.setTransform(x, y, 0f);
+	}
+
+	public void iBelieveICanFly() {
+		this.reboundTime = 0f;
+		this.offsetZ = 0f;
+		this.state = BombeStateEnum.FLY;
 	}
 
 }
