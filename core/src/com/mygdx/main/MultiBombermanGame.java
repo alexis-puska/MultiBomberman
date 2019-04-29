@@ -21,6 +21,7 @@ import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.service.Context;
 import com.mygdx.service.LevelService;
 import com.mygdx.service.PlayerService;
+import com.mygdx.service.ScoreService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControllerAdapter;

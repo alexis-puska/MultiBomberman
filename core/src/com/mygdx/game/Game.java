@@ -41,6 +41,7 @@ import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.ScoreService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
@@ -187,6 +188,9 @@ public class Game {
 		} else {
 			SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		}
+		
+
+		ScoreService scores = new ScoreService(mbGame, players);
 	}
 
 	/******************************
@@ -358,7 +362,7 @@ public class Game {
 				shapeRenderer.setColor(new Color(b.getLight(), b.getLight(), b.getLight(), 0f));
 				BombeLight light = b.getOffesetShadow();
 				shapeRenderer.circle((float) (b.getPixelX() + light.getX()),
-						(float) b.getPixelY() + (float) light.getY(), (float) light.getRadius());
+						(float) b.getPixelY() + (float) b.getReboundOffset() + (float) light.getY(), (float) light.getRadius());
 			});
 		}
 		shapeRenderer.end();

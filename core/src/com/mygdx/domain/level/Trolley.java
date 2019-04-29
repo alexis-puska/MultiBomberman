@@ -54,7 +54,7 @@ public class Trolley extends BodyAble implements Initiable {
 		this.body = world.createBody(bodyDef);
 		this.body.setFixedRotation(false);
 		MassData data = new MassData();
-		data.mass = 10000f;
+		data.mass = 10000000f;
 		this.body.setMassData(data);
 		this.body.setUserData(this);
 		PolygonShape diamondBody = new PolygonShape();

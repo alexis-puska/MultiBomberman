@@ -32,6 +32,7 @@ public class Bombe extends BodyAble {
 	private static final float BORDER_MIN = 0.3f;
 	private float stateTime;
 	private float reboundTime;
+	private float reboundOffest;
 	private Animation<TextureRegion> animation;
 	private int strenght;
 	private BombeTypeEnum type;
@@ -88,7 +89,7 @@ public class Bombe extends BodyAble {
 		body = world.createBody(groundBodyDef);
 		body.setFixedRotation(false);
 		MassData data = new MassData();
-		data.mass = 10f;
+		data.mass = 10000f;
 		body.setMassData(data);
 		body.setUserData(this);
 		Fixture fixture = body.createFixture(diamondBody, 0.0f);
@@ -104,10 +105,11 @@ public class Bombe extends BodyAble {
 	public void drawIt() {
 		this.stateTime += Gdx.graphics.getDeltaTime();
 		this.reboundTime += Gdx.graphics.getDeltaTime() * (float) Constante.FPS;
+		this.reboundOffest =  ReboundUtils.calcReboundOffset(this.reboundTime);
 		mbGame.getBatch().draw(animation.getKeyFrame(stateTime, true),
 				(float) ((body.getPosition().x - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
 				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y)
-						+ ReboundUtils.calcReboundOffset(this.reboundTime));
+						+reboundOffest);
 	}
 
 	public BombeLight getOffesetShadow() {
@@ -115,6 +117,10 @@ public class Bombe extends BodyAble {
 				.get(Integer.valueOf(Double.valueOf(Math
 						.floor((stateTime % this.animation.getAnimationDuration()) / this.animation.getFrameDuration()))
 						.intValue()));
+	}
+	
+	public float getReboundOffset() {
+		return this.reboundOffest;
 	}
 
 	public boolean isCreateLight() {
@@ -340,4 +346,5 @@ public class Bombe extends BodyAble {
 		direction = PovDirection.center;
 		explodeInNextUpdate = true;
 	}
+
 }

@@ -383,7 +383,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 
 		if (this.deathBonus == DeathBonusEnum.DIAREE && this.state != PlayerStateEnum.BURNING
-				&& this.state != PlayerStateEnum.DEAD && this.nbBombe > 0 && !this.insideBombe && body != null) {
+				&& this.state != PlayerStateEnum.INSIDE_TROLLEY && this.state != PlayerStateEnum.DEAD
+				&& this.nbBombe > 0 && !this.insideBombe && body != null) {
 			putBombe((int) (this.body.getPosition().x), (int) (this.body.getPosition().y));
 		}
 	}
