@@ -192,7 +192,8 @@ public class Bombe extends BodyAble {
 					0f);
 		}
 		if (state == BombeStateEnum.FLY && reboundTime >= 0.5f
-				&& this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()] == null && lastPlayerTouched == null) {
+				&& this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()] == null
+				&& lastPlayerTouched == null) {
 			this.state = BombeStateEnum.CREATED;
 			this.direction = PovDirection.center;
 			this.body.setLinearVelocity(0f, 0f);
@@ -217,6 +218,9 @@ public class Bombe extends BodyAble {
 	}
 
 	public void explode() {
+		if (this.type == BombeTypeEnum.BOMBE_P && this.state == BombeStateEnum.FLY) {
+			return;
+		}
 		int posX = (int) body.getPosition().x;
 		int posY = (int) body.getPosition().y;
 		if (this.level.getOccupedWallBrickBonus()[posX][posY] == null) {

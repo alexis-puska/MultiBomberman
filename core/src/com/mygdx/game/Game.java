@@ -1,7 +1,10 @@
 package com.mygdx.game;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -90,19 +93,26 @@ public class Game {
 	private Box2DDebugRenderer debugRenderer;
 	private OrthographicCamera debugCamera;
 
+	/********************
+	 * --- GAME ---
+	 *******************/
 	private List<Player> players;
-
 	private Level level;
-
 	private float lightCountdown;
 
+	/**********************
+	 * --- SCORE / TIME ---
+	 **********************/
+	private float gameCountDown;
+	private ShapeRenderer scoreShapeRenderer;
+
 	/********************
-	 * SHADER
+	 * --- SHADER ---
 	 *******************/
-	String vertexShader;
-	String fragmentShader;
-	ShaderProgram shaderProgram;
-	float deltaTime;
+	private String vertexShader;
+	private String fragmentShader;
+	private ShaderProgram shaderProgram;
+	private float deltaTime;
 
 	public Game(final MultiBombermanGame mbGame) {
 		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
@@ -112,6 +122,7 @@ public class Game {
 		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
+		this.scoreShapeRenderer = new ShapeRenderer();
 		SoundService.getInstance().playMusic(MusicEnum.BATTLE);
 
 		/********************
@@ -185,6 +196,8 @@ public class Game {
 		} else {
 			SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		}
+
+		gameCountDown = Context.getTime().getTime() * 60f;
 	}
 
 	/******************************
@@ -205,6 +218,7 @@ public class Game {
 		mbGame.getBatch().setShader(null);
 		SoundService.getInstance().playMusic(MusicEnum.MENU);
 		this.shapeRenderer.dispose();
+		this.scoreShapeRenderer.dispose();
 		this.font.dispose();
 		this.backgroundLayer.dispose();
 		this.blocsLayer.dispose();
@@ -235,8 +249,6 @@ public class Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.gameCamera.update();
 		this.mbGame.getScreenCamera().update();
-		this.level.update();
-		this.players.stream().forEach(Player::update);
 		drawBackground();
 		drawWall();
 		drawBricks();
@@ -244,6 +256,7 @@ public class Game {
 		drawFront();
 		drawShadow();
 		merge();
+		drawScore();
 		this.level.cleanUp();
 		if (Constante.DEBUG) {
 			debugCamera.update();
@@ -255,6 +268,9 @@ public class Game {
 	}
 
 	public void step() {
+		this.level.update();
+		this.players.stream().forEach(Player::update);
+		this.gameCountDown -= Gdx.graphics.getDeltaTime();
 		world.step(1 / (float) Constante.FPS, 6, 2);
 	}
 
@@ -395,17 +411,17 @@ public class Game {
 			deltaTime += delta;
 			shaderProgram.setUniformf("time", deltaTime % 40f);
 		}
-		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(playerLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(playerLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(frontLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(frontLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
-		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 5, Constante.GAME_SCREEN_SIZE_X,
+		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
 				Constante.GAME_SCREEN_SIZE_Y);
 		mbGame.getBatch().setShader(null);
 		mbGame.getBatch().end();
@@ -418,5 +434,44 @@ public class Game {
 	public boolean isSuddentDeathTime() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	private void drawScore() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(0, 0, 0, 0.6f);
+		for (int i = 0; i < 8; i++) {
+			shapeRenderer.rect(3f + ((float) i * 36f), 339f, 33f, 18f);
+		}
+		for (int i = 0; i < 8; i++) {
+			shapeRenderer.rect(352f + ((float) i * 36f), 339f, 33f, 18f);
+		}
+
+		shapeRenderer.rect(291, 339, 58, 18);
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		mbGame.getBatch().begin();
+
+		Map<Integer, Player> pls = new HashMap<>();
+		players.stream().forEach(p -> pls.put(p.getIndex(), p));
+		pls.entrySet().stream().forEach(e -> {
+			float x = ((float) e.getKey() * 36f) + 3f;
+			if (e.getKey() >= 8) {
+				x += 58f;
+			}
+			if (e.getValue().isDead()) {
+				mbGame.getBatch().draw(e.getValue().getMiniatureCry(), x, 340f, 18f, 16f);
+			} else {
+				mbGame.getBatch().draw(e.getValue().getMiniatureHappy(), x, 340f, 18f, 16f);
+			}
+
+			layout.setText(font, "0");
+			font.draw(mbGame.getBatch(), layout, x + 21f, 352);
+		});
+		DecimalFormat df = new DecimalFormat("#.#");
+		layout.setText(font, "" + df.format(this.gameCountDown));
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2.0f) - (layout.width / 2.0f), 352);
+		mbGame.getBatch().end();
 	}
 }

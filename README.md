@@ -70,15 +70,15 @@ After this step "In The Well" is installed, compile, and integrated in emulation
 |Mine|||X
 |Submarine animation|||X
 |Water player animation|||X
-|Player in trolley ||X|
-|Trolley move ||X|
-|Player carry bombe (bonus)|X||
-|Player throw bombe (bonus)|X||
-|Network protocol |X||
-|Client viewer |X||
+|Player in trolley |||X
+|Trolley move |||X
+|Player carry bombe (bonus)|||X
+|Player throw bombe (bonus)|||X
 |BAD Bomber|X||
 |Count down end game|X||
 |Display score|X||
+|Network protocol |X||
+|Client viewer |X||
 |IA LVL1 |X||
 |IA LVL2 |X||
 |IA LVL3 |X||

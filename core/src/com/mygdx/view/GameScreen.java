@@ -63,8 +63,8 @@ public class GameScreen implements Screen, MenuListener {
 			this.game.render();
 			drawPause();
 		} else {
-			this.game.render();
 			this.game.step();
+			this.game.render();
 		}
 	}
 

@@ -242,6 +242,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return this.state == PlayerStateEnum.INSIDE_TROLLEY;
 	}
 
+	public int getIndex() {
+		return this.idx;
+	}
+
 	/************************************************************************************************************
 	 * -------------------------------------------- COMMONS
 	 * ----------------------------------------------------
@@ -256,6 +260,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case BURNING:
 			break;
 		case CRYING:
+			if(insideFire > 0 && invincibleTime <=0f) {
+				SoundService.getInstance().playSound(SoundEnum.BURN);
+				this.changeState(PlayerStateEnum.BURNING);
+			}
 			break;
 		case DEAD:
 			this.dispose();
@@ -270,6 +278,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case NORMAL:
 			if (insideFire > 0 && invincibleTime <= 0f) {
 				if (state == PlayerStateEnum.ON_LOUIS) {
+					SoundService.getInstance().playSound(SoundEnum.BURN);
 					this.changeState(PlayerStateEnum.NORMAL);
 					this.invincibleTime = Constante.INVINCIBLE_TIME;
 				} else if (state == PlayerStateEnum.NORMAL) {
@@ -780,6 +789,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 			this.louisColor = LouisColorEnum.random();
 			this.changeState(PlayerStateEnum.ON_LOUIS);
+			SoundService.getInstance().playSound(SoundEnum.LOUIS);
 			break;
 		case FIRE:
 			this.bombeStrenght++;
@@ -916,7 +926,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawVictory() {
-		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.VICTORY).getKeyFrame(animationTime, false),
+		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.VICTORY).getKeyFrame(animationTime, true),
 				getPixelX() - 15, getPixelY() - 5f);
 	}
 
@@ -1152,6 +1162,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), getPixelX() - 15f,
 					getPixelY() - 5f);
 		}
+	}
+
+	public TextureRegion getMiniatureHappy() {
+		return SpriteService.getInstance().getSprite(CharacterSpriteEnum.SCORE_HAPPY, this.color, this.character, 0);
+	}
+
+	public TextureRegion getMiniatureCry() {
+		return SpriteService.getInstance().getSprite(CharacterSpriteEnum.SCORE_CRY, this.color, this.character, 0);
 	}
 
 	/******************************************************

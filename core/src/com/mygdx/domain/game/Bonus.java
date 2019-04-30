@@ -88,6 +88,7 @@ public class Bonus extends BodyAble implements LevelElement {
 	public void update() {
 		if (this.state == BonusStateEnum.TAKED) {
 			this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
+			this.state = BonusStateEnum.DISPOSED;
 			dispose();
 		} else if (this.state == BonusStateEnum.BURN) {
 			// TODO
@@ -106,6 +107,7 @@ public class Bonus extends BodyAble implements LevelElement {
 	}
 
 	public BonusTypeEnum playerTakeBonus() {
+		Gdx.app.log("BONUS", "TAKE");
 		if (this.state == BonusStateEnum.REVEALED) {
 			this.state = BonusStateEnum.TAKED;
 			return this.type;
@@ -125,11 +127,11 @@ public class Bonus extends BodyAble implements LevelElement {
 		return this.state == BonusStateEnum.BURNED;
 	}
 
-	public boolean isTaked() {
-		return this.state == BonusStateEnum.TAKED;
-	}
-
 	public boolean isBurning() {
 		return this.state == BonusStateEnum.BURN;
+	}
+
+	public boolean idDisposed() {
+		return this.state == BonusStateEnum.DISPOSED;
 	}
 }

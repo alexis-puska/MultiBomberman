@@ -206,7 +206,7 @@ public class Level {
 		bricks.removeIf(b -> b.getState() == BrickStateEnum.BURNED);
 		fires.removeIf(Fire::isOff);
 		trolley.stream().forEach(Trolley::isDestroyed);
-		bonuss.removeIf(b -> b.isBurned() || b.isTaked());
+		bonuss.removeIf(b -> b.isBurned() || b.idDisposed());
 	}
 
 	public void dispose() {
