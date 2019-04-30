@@ -104,6 +104,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private boolean canPassWall;
 	private float wallTimeout;
 	private Bombe lastBombeTouched;
+	private Bombe raisedBombe;
 
 	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
 			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe,
@@ -126,7 +127,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.walkSpeed = Constante.WALK_SPEED;
 		this.bombeType = BombeTypeEnum.BOMBE;
 		this.canPutLineOfBombe = false;
-		this.canKickBombe = true;
+		this.canKickBombe = false;
 		this.insideBombe = false;
 		this.canRaiseBombe = false;
 		this.canPassWall = false;
@@ -276,6 +277,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 					this.previousDirection = PovDirection.center;
 					SoundService.getInstance().playSound(SoundEnum.BURN);
 					changeState(PlayerStateEnum.BURNING);
+				} else if (state == PlayerStateEnum.CARRY_BOMBE) {
+					this.raisedBombe.explode();
+					this.direction = PovDirection.center;
+					this.previousDirection = PovDirection.center;
+					SoundService.getInstance().playSound(SoundEnum.BURN);
+					changeState(PlayerStateEnum.BURNING);
 				}
 			}
 			switch (this.direction) {
@@ -363,6 +370,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 						this.body.getPosition().y + (float) Constante.GRID_SIZE_Y, 0f);
 			}
 			this.collisionBody.setTransform(this.body.getPosition(), this.body.getAngle());
+			if (this.raisedBombe != null && this.body != null) {
+				this.raisedBombe.playerCarryThatBombe(this.getBodyX(), this.getBodyY());
+			}
 		}
 		if (this.invincibleTime > 0f) {
 			this.invincibleTime -= Gdx.graphics.getDeltaTime();
@@ -446,7 +456,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void untouchBombe(Bombe b) {
-		if (lastBombeTouched.equals(b)) {
+		if (lastBombeTouched != null && lastBombeTouched.equals(b)) {
 			lastBombeTouched = null;
 		}
 		Gdx.app.log("PLAYER", "untouch bombe : " + b.toString());
@@ -456,6 +466,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.animationTime = 0;
 		this.previousState = this.state;
 		this.state = newState;
+	}
+
+	public void flyBombeHurtMyHead() {
+		this.changeState(PlayerStateEnum.CRYING);
 	}
 
 	public Map<Integer, Short> getLevelDefinition() {
@@ -589,8 +603,20 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	@Override
 	public void pressY() {
-		if (canRaiseBombe && lastBombeTouched != null) {
+		if (canRaiseBombe && lastBombeTouched != null && this.state != PlayerStateEnum.CARRY_BOMBE
+				&& this.state != PlayerStateEnum.BURNING && this.state != PlayerStateEnum.CRYING
+				&& this.state != PlayerStateEnum.DEAD && this.state != PlayerStateEnum.INSIDE_TROLLEY
+				&& this.state != PlayerStateEnum.ON_LOUIS && this.state != PlayerStateEnum.TELEPORT
+				&& this.state != PlayerStateEnum.VICTORY && this.state != PlayerStateEnum.VICTORY_ON_LOUIS) {
 			this.changeState(PlayerStateEnum.CARRY_BOMBE);
+			this.raisedBombe = lastBombeTouched;
+			this.raisedBombe.gotCarried();
+		} else if (this.state == PlayerStateEnum.CARRY_BOMBE) {
+			this.animationTime = 0f;
+			this.state = PlayerStateEnum.THROW_BOMBE;
+			this.raisedBombe
+					.iBelieveICanFly(this.direction == PovDirection.center ? this.previousDirection : this.direction);
+			this.raisedBombe = null;
 		}
 	}
 
@@ -895,9 +921,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawCrying() {
-		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ANGRY).getKeyFrame(animationTime, false),
+		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ANGRY).getKeyFrame(animationTime, true),
 				getPixelX() - 15f, getPixelY() - 5f);
-		if (animations.get(CharacterSpriteEnum.ANGRY).isAnimationFinished(animationTime)) {
+		if (animationTime > Constante.CRYING_TIME) {
 			changeState(PlayerStateEnum.NORMAL);
 		}
 	}
@@ -946,6 +972,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		mbGame.getBatch().draw(
 				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
 				getPixelX() - 15f, getPixelY() - 5f);
+		if (animations.get(drawSprite).isAnimationFinished(animationTime)) {
+			changeState(
+					this.previousState == PlayerStateEnum.THROW_BOMBE ? PlayerStateEnum.NORMAL : this.previousState);
+		}
 	}
 
 	private void drawInsideTrolley() {

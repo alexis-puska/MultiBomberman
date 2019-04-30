@@ -140,6 +140,7 @@ public class CustomContactListener implements ContactListener {
 				b.kick(p.getDirection());
 			}
 			p.touchBombe(b);
+			b.touchPlayer(p);
 		} else if (contact.getFixtureB().getUserData().getClass() == Bombe.class
 				&& contact.getFixtureA().getUserData().getClass() == Player.class
 				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_BOMBE
@@ -154,6 +155,7 @@ public class CustomContactListener implements ContactListener {
 				b.kick(p.getDirection());
 			}
 			p.touchBombe(b);
+			b.touchPlayer(p);
 		}
 	}
 
@@ -217,6 +219,10 @@ public class CustomContactListener implements ContactListener {
 				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER_HITBOX) {
 			contact.setEnabled(false);
 			Player p = (Player) contact.getFixtureB().getUserData();
+			Bombe b = (Bombe) contact.getFixtureA().getUserData();
+			if (b.isFly()) {
+				p.flyBombeHurtMyHead();
+			}
 			p.insideBombe(true);
 		} else if (contact.getFixtureB().getUserData().getClass() == Bombe.class
 				&& contact.getFixtureA().getUserData().getClass() == Player.class
@@ -224,6 +230,10 @@ public class CustomContactListener implements ContactListener {
 				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER_HITBOX) {
 			contact.setEnabled(false);
 			Player p = (Player) contact.getFixtureA().getUserData();
+			Bombe b = (Bombe) contact.getFixtureB().getUserData();
+			if (b.isFly()) {
+				p.flyBombeHurtMyHead();
+			}
 			p.insideBombe(true);
 		}
 	}
@@ -403,6 +413,7 @@ public class CustomContactListener implements ContactListener {
 			Player p = (Player) contact.getFixtureB().getUserData();
 			Bombe b = (Bombe) contact.getFixtureA().getUserData();
 			p.untouchBombe(b);
+			b.untouchPlayer(p);
 		} else if (contact.getFixtureB().getUserData().getClass() == Bombe.class
 				&& contact.getFixtureA().getUserData().getClass() == Player.class
 				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_BOMBE
@@ -411,6 +422,7 @@ public class CustomContactListener implements ContactListener {
 			Player p = (Player) contact.getFixtureA().getUserData();
 			Bombe b = (Bombe) contact.getFixtureB().getUserData();
 			p.untouchBombe(b);
+			b.untouchPlayer(p);
 		}
 	}
 
@@ -442,7 +454,7 @@ public class CustomContactListener implements ContactListener {
 		if (player != null && bombe != null) {
 			Vector2 pp = player.getPosition();
 			Vector2 bp = bombe.getPosition();
-			if (distance(pp, bp, DETECT)) {
+			if (distance(pp, bp, DETECT) || (bombe.isFly() && bombe.getReboundOffset() <= 0.5f)) {
 				contact.setEnabled(false);
 			}
 		}

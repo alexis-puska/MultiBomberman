@@ -45,6 +45,7 @@ public class Bombe extends BodyAble {
 	protected int x;
 	protected int y;
 	private float count;
+	private Player lastPlayerTouched;
 
 	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
 			Player player, float timeToExplode) {
@@ -102,13 +103,6 @@ public class Bombe extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		this.animationTime += Gdx.graphics.getDeltaTime();
-		if (this.state == BombeStateEnum.FLY) {
-			this.reboundTime += Gdx.graphics.getDeltaTime() * (float) Constante.FPS;
-			this.offsetZ = ReboundUtils.calcReboundOffset(this.reboundTime);
-		} else if (state == BombeStateEnum.CARRIED) {
-			this.offsetZ = 20f;
-		}
 		mbGame.getBatch().draw(animation.getKeyFrame(animationTime, true),
 				(float) ((body.getPosition().x - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
 				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y) + offsetZ);
@@ -146,6 +140,16 @@ public class Bombe extends BodyAble {
 		case BOMBE_P:
 		default:
 			break;
+		}
+
+		this.animationTime += Gdx.graphics.getDeltaTime();
+		if (this.state == BombeStateEnum.FLY) {
+			this.reboundTime += Gdx.graphics.getDeltaTime();
+			this.offsetZ = ReboundUtils.calcReboundOffset(this.reboundTime * (float) Constante.FPS);
+		} else if (state == BombeStateEnum.CARRIED) {
+			this.offsetZ = 20f;
+		} else {
+			offsetZ = 0f;
 		}
 
 		switch (direction) {
@@ -187,13 +191,20 @@ public class Bombe extends BodyAble {
 			this.body.setTransform(this.body.getPosition().x, this.body.getPosition().y + (float) Constante.GRID_SIZE_Y,
 					0f);
 		}
-		if (state == BombeStateEnum.FLY
-				&& this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()] == null) {
+		if (state == BombeStateEnum.FLY && reboundTime >= 0.5f
+				&& this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()] == null && lastPlayerTouched == null) {
 			this.state = BombeStateEnum.CREATED;
 			this.direction = PovDirection.center;
 			this.body.setLinearVelocity(0f, 0f);
 			this.body.setTransform((float) Math.floor(this.getBodyX()) + 0.5f,
-					(float) Math.floor(this.getBodyY() + 0.5f), 0f);
+					(float) Math.floor(this.getBodyY()) + 0.5f, 0f);
+			for (int i = 0; i < this.body.getFixtureList().size; i++) {
+				Filter f = new Filter();
+				f.categoryBits = CollisionConstante.CATEGORY_BOMBE;
+				f.maskBits = CollisionConstante.GROUP_BOMBE;
+				this.body.getFixtureList().get(i).setFilterData(f);
+				Gdx.app.log("BOMBE", "filter set with reactivate collision " + reboundTime);
+			}
 		}
 
 		if (state == BombeStateEnum.EXPLODE || this.count > this.timeToExplode) {
@@ -361,16 +372,47 @@ public class Bombe extends BodyAble {
 
 	public void gotCarried() {
 		this.state = BombeStateEnum.CARRIED;
+		this.reboundTime = 0f;
+		this.offsetZ = 20f;
 	}
 
 	public void playerCarryThatBombe(float x, float y) {
 		this.body.setTransform(x, y, 0f);
 	}
 
-	public void iBelieveICanFly() {
-		this.reboundTime = 0f;
-		this.offsetZ = 0f;
-		this.state = BombeStateEnum.FLY;
+	public void iBelieveICanFly(PovDirection direction) {
+		Gdx.app.log("BOMBE", "i believe i can fly");
+		if (this.state == BombeStateEnum.CARRIED) {
+			this.reboundTime = 0f;
+			this.offsetZ = 0f;
+			this.state = BombeStateEnum.FLY;
+			this.direction = direction;
+			for (int i = 0; i < this.body.getFixtureList().size; i++) {
+				Filter f = new Filter();
+				f.categoryBits = CollisionConstante.CATEGORY_BOMBE;
+				f.maskBits = CollisionConstante.GROUP_BOMBE - CollisionConstante.CATEGORY_WALL
+						- CollisionConstante.CATEGORY_BRICKS - CollisionConstante.CATEGORY_BOMBE
+						- CollisionConstante.CATEGORY_PLAYER;
+				this.body.getFixtureList().get(i).setFilterData(f);
+				Gdx.app.log("BOMBE", "filter set with deactivate collision");
+			}
+		}
+	}
+
+	public boolean isFly() {
+		return this.state == BombeStateEnum.FLY;
+	}
+
+	public void touchPlayer(Player p) {
+		Gdx.app.log("Bombe", "touch player : " + p.toString());
+		lastPlayerTouched = p;
+	}
+
+	public void untouchPlayer(Player p) {
+		if (lastPlayerTouched != null && lastPlayerTouched.equals(p)) {
+			lastPlayerTouched = null;
+		}
+		Gdx.app.log("Bombe", "untouch player : " + p.toString());
 	}
 
 }
