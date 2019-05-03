@@ -12,6 +12,6 @@ public enum PlayerStateEnum {
 	VICTORY,
 	VICTORY_ON_LOUIS,
 	CRYING,
-	DEAD;
+	DEAD, BAD_BOMBER;
 		
 }

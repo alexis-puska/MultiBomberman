@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -271,9 +272,38 @@ public class Game {
 		this.level.update();
 		this.players.stream().forEach(Player::update);
 		this.gameCountDown -= Gdx.graphics.getDeltaTime();
+		List<Player> alivePlayers = this.players.stream().filter(p -> !p.isDead() || p.isBadBomber())
+				.collect(Collectors.toList());
+		if (alivePlayers.isEmpty()) {
+			// DRAW GAME
+		} else if (alivePlayers.size() == 1) {
+			alivePlayers.stream().forEach(Player::winTheGame);
+			// LAST PLAYER ALIVE
+		} else if (alivePlayers.size() > 1 && this.gameCountDown <= 0.0f) {
+			this.players.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(Player::winTheGame);
+			// TIME OUT !
+		}
+		if (isSuddentDeathTime()) {
+
+		}
 		world.step(1 / (float) Constante.FPS, 6, 2);
 	}
 
+	public MultiBombermanGame getMultiBombermanGame() {
+		return this.mbGame;
+	}
+
+	public void doSuddenDeathThings() {
+		// TODO calc if generate crushing player wall !
+	}
+
+	public boolean isSuddentDeathTime() {
+		return gameCountDown <= 50.0f;
+	}
+
+	/***********************************************************************
+	 * --- DRAW PART ---
+	 ***********************************************************************/
 	private void drawBackground() {
 		backgroundLayer.begin();
 		mbGame.getBatch().begin();
@@ -427,15 +457,6 @@ public class Game {
 		mbGame.getBatch().end();
 	}
 
-	public MultiBombermanGame getMultiBombermanGame() {
-		return this.mbGame;
-	}
-
-	public boolean isSuddentDeathTime() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	private void drawScore() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
@@ -447,12 +468,10 @@ public class Game {
 		for (int i = 0; i < 8; i++) {
 			shapeRenderer.rect(352f + ((float) i * 36f), 339f, 33f, 18f);
 		}
-
 		shapeRenderer.rect(291, 339, 58, 18);
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
-
 		Map<Integer, Player> pls = new HashMap<>();
 		players.stream().forEach(p -> pls.put(p.getIndex(), p));
 		pls.entrySet().stream().forEach(e -> {
@@ -465,9 +484,8 @@ public class Game {
 			} else {
 				mbGame.getBatch().draw(e.getValue().getMiniatureHappy(), x, 340f, 18f, 16f);
 			}
-
-			layout.setText(font, "0");
-			font.draw(mbGame.getBatch(), layout, x + 21f, 352);
+			layout.setText(font, Integer.toString(e.getValue().getScore()));
+			font.draw(mbGame.getBatch(), layout, x + 19f, 352);
 		});
 		DecimalFormat df = new DecimalFormat("#.#");
 		layout.setText(font, "" + df.format(this.gameCountDown));

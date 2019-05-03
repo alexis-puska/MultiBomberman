@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.enumeration.GameScreenEnum;
 import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.MessageService;
@@ -27,10 +28,10 @@ public class GameScreen implements Screen, MenuListener {
 	private ShapeRenderer shapeRenderer;
 
 	private Game game;
-	private boolean pause;
+	private GameScreenEnum state;
 
 	public GameScreen(final MultiBombermanGame mbGame) {
-		this.pause = false;
+		this.state = GameScreenEnum.GAME;
 		this.mbGame = mbGame;
 		this.mbGame.getPlayerService().setMenuListener(this);
 		this.layout = new GlyphLayout();
@@ -59,16 +60,38 @@ public class GameScreen implements Screen, MenuListener {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		mbGame.getScreenCamera().update();
-		if (pause) {
-			this.game.render();
-			drawPause();
-		} else {
+		switch(this.state) {
+		case GAME:
 			this.game.step();
 			this.game.render();
+			break;
+		case MENU:
+			this.game.render();
+			this.drawMenu();
+			break;
+		case PAUSE:
+			this.game.render();
+			this.drawPause();
+			break;
+		default:
 		}
 	}
 
 	private void drawPause() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(0, 0, 0, 0.5f);
+		shapeRenderer.rect(0, 0, 640, 360);
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		mbGame.getBatch().begin();
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen"));
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
+		mbGame.getBatch().end();
+	}
+	
+	private void drawMenu() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Filled);
@@ -114,18 +137,34 @@ public class GameScreen implements Screen, MenuListener {
 	 **************************************************/
 	@Override
 	public void pressStart() {
-		if (this.pause) {
-			this.pause = false;
-		} else {
-			this.pause = true;
+		switch(this.state) {
+		case GAME:
+			this.state = GameScreenEnum.PAUSE;
+			break;
+		case MENU:
+			this.state = GameScreenEnum.GAME;
+			break;
+		case PAUSE:
+			this.state = GameScreenEnum.GAME;
+			break;
 		}
 	}
 
 	@Override
 	public void pressSelect() {
-		this.game.dispose();
-		mbGame.getScreen().dispose();
-		mbGame.setScreen(new LevelScreen(mbGame));
+		switch(this.state) {
+		case GAME:
+			this.state = GameScreenEnum.MENU;
+			break;
+		case MENU:
+			this.game.dispose();
+			mbGame.getScreen().dispose();
+			mbGame.setScreen(new LevelScreen(mbGame));
+			break;
+		case PAUSE:
+			this.state = GameScreenEnum.GAME;
+			break;
+		}
 	}
 
 	@Override

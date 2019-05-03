@@ -64,6 +64,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private Body collisionBody;
 	private Brain brain;
 
+	private int score;
+
 	// player start
 	private int idx;
 	private StartPlayer startPlayer;
@@ -72,6 +74,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private float shipSpeed;
 	private int bombeStrenght;
 	private int nbBombe;
+	private int levelBombeStrenght;
+	private int levelNbBombe;
 
 	private boolean insideBombe;
 	private int insideFire;
@@ -110,6 +114,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe,
 			int idx) {
 		this.idx = idx;
+		this.score = 0;
 		this.startPlayer = startPlayer;
 		this.type = type;
 		this.character = character;
@@ -123,7 +128,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.mbGame = mbGame;
 		this.level = level;
 		this.bombeStrenght = bombeStrenght;
+		this.levelBombeStrenght = bombeStrenght;
 		this.nbBombe = nbBombe;
+		this.levelNbBombe = nbBombe;
 		this.walkSpeed = Constante.WALK_SPEED;
 		this.bombeType = BombeTypeEnum.BOMBE;
 		this.canPutLineOfBombe = false;
@@ -152,6 +159,26 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (this.type == PlayerTypeEnum.CPU) {
 			this.brain = new Brain(this);
 		}
+	}
+
+	public void reset() {
+		this.previousDirection = PovDirection.south;
+		this.direction = PovDirection.center;
+		this.state = PlayerStateEnum.NORMAL;
+		this.previousState = PlayerStateEnum.NORMAL;
+		this.bombeStrenght = levelBombeStrenght;
+		this.nbBombe = levelNbBombe;
+		this.walkSpeed = Constante.WALK_SPEED;
+		this.bombeType = BombeTypeEnum.BOMBE;
+		this.canPutLineOfBombe = false;
+		this.canKickBombe = false;
+		this.insideBombe = false;
+		this.canRaiseBombe = false;
+		this.canPassWall = false;
+		this.wallTimeout = 0;
+		this.insideFire = 0;
+		this.shipSpeed = Constante.DEFAULT_SHIP_SPEED;
+		this.trolleyDirection = PovDirection.east;
 	}
 
 	@Override
@@ -242,10 +269,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return this.state == PlayerStateEnum.INSIDE_TROLLEY;
 	}
 
-	public int getIndex() {
-		return this.idx;
-	}
-
 	/************************************************************************************************************
 	 * -------------------------------------------- COMMONS
 	 * ----------------------------------------------------
@@ -260,7 +283,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case BURNING:
 			break;
 		case CRYING:
-			if(insideFire > 0 && invincibleTime <=0f) {
+			if (insideFire > 0 && invincibleTime <= 0f) {
 				SoundService.getInstance().playSound(SoundEnum.BURN);
 				this.changeState(PlayerStateEnum.BURNING);
 			}
@@ -411,6 +434,23 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	public int getIndex() {
+		return this.idx;
+	}
+
+	public void winTheGame() {
+		if (this.state == PlayerStateEnum.ON_LOUIS) {
+			this.state = PlayerStateEnum.VICTORY_ON_LOUIS;
+		} else {
+			this.state = PlayerStateEnum.VICTORY;
+		}
+		this.score++;
+	}
+
+	public int getScore() {
+		return this.score;
+	}
+
 	public PovDirection getDirection() {
 		return this.direction;
 	}
@@ -491,6 +531,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public boolean isDead() {
 		return this.state == PlayerStateEnum.DEAD;
+	}
+
+	public boolean isBadBomber() {
+		return this.state == PlayerStateEnum.BAD_BOMBER;
 	}
 
 	/************************************************************************************************************
