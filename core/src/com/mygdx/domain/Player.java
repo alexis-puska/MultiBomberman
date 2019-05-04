@@ -61,6 +61,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private PovDirection direction;
 	private PovDirection previousDirection;
 	private PovDirection trolleyDirection;
+	private PovDirection spaceShipDrawDirection;
 	private Body collisionBody;
 	private Body spaceShipBody;
 	private Brain brain;
@@ -77,7 +78,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private int nbBombe;
 	private int levelBombeStrenght;
 	private int levelNbBombe;
-	private int nbBombeBeforeBadBomber;
 
 	private boolean insideBombe;
 	private int insideFire;
@@ -112,6 +112,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private float wallTimeout;
 	private Bombe lastBombeTouched;
 	private Bombe raisedBombe;
+	private int nbBombeSpaceShip = 1;
 
 	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
 			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe,
@@ -235,10 +236,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	public void createSpaceShipBody(float x, float y) {
 		Gdx.app.log("PLAYER", "Je créer mon vaisseay : " + x + ", " + y);
 		float calcY;
+		float calcX;
 		if (y <= ((float) Constante.GRID_SIZE_Y) / 2f) {
-			calcY = 0f - Constante.BAD_BOMBER_WALL_WIDTH;
+			calcY = 0.5f - Constante.BAD_BOMBER_WALL_WIDTH;
 		} else {
-			calcY = (float) Constante.GRID_SIZE_Y + Constante.BAD_BOMBER_WALL_WIDTH;
+			calcY = ((float) Constante.GRID_SIZE_Y - 0.5f) + Constante.BAD_BOMBER_WALL_WIDTH;
 		}
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -319,7 +321,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.world.destroyBody(this.collisionBody);
 			this.collisionBody = null;
 		}
-		this.nbBombeBeforeBadBomber = this.nbBombe;
+		this.nbBombe = 1;
 		this.changeState(PlayerStateEnum.BAD_BOMBER);
 	}
 
@@ -330,7 +332,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.spaceShipBody = null;
 		}
 		this.createBodyWithPosition(playerKilled.getBodyX(), playerKilled.getBodyY());
-		this.nbBombe = this.nbBombeBeforeBadBomber;
 		this.changeState(PlayerStateEnum.NORMAL);
 	}
 
@@ -473,6 +474,19 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			default:
 				break;
 			}
+			if (this.spaceShipBody.getPosition().x < Constante.BAD_BOMBER_WALL_OFFSET) {
+				this.spaceShipDrawDirection = PovDirection.east;
+			} else if (this.spaceShipBody.getPosition().x > (float) Constante.GRID_SIZE_X
+					- Constante.BAD_BOMBER_WALL_OFFSET) {
+				this.spaceShipDrawDirection = PovDirection.west;
+			} else if (this.spaceShipBody.getPosition().y > (float) Constante.GRID_SIZE_Y
+					- Constante.BAD_BOMBER_WALL_OFFSET) {
+				this.spaceShipDrawDirection = PovDirection.south;
+			} else if (this.spaceShipBody.getPosition().y < Constante.BAD_BOMBER_WALL_OFFSET) {
+				this.spaceShipDrawDirection = PovDirection.north;
+			} else {
+				this.spaceShipDrawDirection = PovDirection.east;
+			}
 			break;
 		default:
 			break;
@@ -563,6 +577,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public void bombeExploded() {
 		this.nbBombe++;
+		this.nbBombeSpaceShip++;
+		if(this.nbBombeSpaceShip > 1) {
+			this.nbBombeSpaceShip = 1;
+		}
 	}
 
 	public boolean isInsideBrick() {
@@ -724,11 +742,16 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (this.state != PlayerStateEnum.BURNING && this.state != PlayerStateEnum.DEAD
 				&& this.state != PlayerStateEnum.BAD_BOMBER && this.nbBombe > 0 && !insideBombe) {
 			putBombe((int) (body.getPosition().x), (int) (body.getPosition().y));
-		} else if (this.state == PlayerStateEnum.BAD_BOMBER) {
+		} else if (this.state == PlayerStateEnum.BAD_BOMBER
+				&& ((this.spaceShipBody.getPosition().x >= 1.0f
+						&& this.spaceShipBody.getPosition().x <= (float) Constante.GRID_SIZE_X - 1.0f)
+						|| (this.spaceShipBody.getPosition().y >= 1.0f
+								&& this.spaceShipBody.getPosition().y <= (float) Constante.GRID_SIZE_Y - 1.0f))
+				&& this.nbBombeSpaceShip > 0) {
 			Bombe b = new Bombe(this.level, this.world, this.mbGame, 2, (int) this.getShipX(), (int) this.getShipY(),
-					BombeTypeEnum.BOMBE, this, Constante.DEFAULT_BOMBE, PovDirection.east);
+					BombeTypeEnum.BOMBE, this, Constante.DEFAULT_BOMBE, spaceShipDrawDirection);
 			this.level.getBombes().add(b);
-			this.nbBombe--;
+			this.nbBombeSpaceShip --;
 		}
 	}
 
@@ -1090,12 +1113,43 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawBadBomber() {
-		// TODO
+		switch (spaceShipDrawDirection) {
+		case center:
+			break;
+		case east:
+			mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_RIGHT).getKeyFrame(0, false),
+					getShipPixelX() - 15f, getShipPixelY() - 20f);
+			break;
+		case north:
+			mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_UP).getKeyFrame(0, false),
+					getShipPixelX() - 15f, getShipPixelY() - 20f);
+			break;
+		case northEast:
+			break;
+		case northWest:
+			break;
+		case south:
+			mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_DOWN).getKeyFrame(0, false),
+					getShipPixelX() - 15f, getShipPixelY() - 20f);
+			break;
+		case southEast:
+			break;
+		case southWest:
+			break;
+		case west:
+			mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_LEFT).getKeyFrame(0, false),
+					getShipPixelX() - 15f, getShipPixelY() - 20f);
+			break;
+		default:
+			break;
+		}
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.SPACESHIP, 0), getShipPixelX() - 15f,
+				getShipPixelY() - 20f);
 	}
 
 	private void drawVictoryOnLouis() {
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_DOWN).getKeyFrame(0, false),
-				getPixelX() - 15f, getPixelY() - 5f);
+				getPixelX() - 15f, getPixelY() - 15f);
 		mbGame.getBatch()
 				.draw(animationsLouis.get(LouisSpriteEnum.VICTORY)
 						.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true), getPixelX() - 15,

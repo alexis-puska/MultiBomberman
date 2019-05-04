@@ -37,6 +37,8 @@ public class Constante {
 	public static final float GRID_PIXELS_SIZE_Y = 16f;
 	public static final float BAD_BOMBER_WALL_WIDTH = 0.05f;
 	public static final float BAD_BOMBER_WALL_MULT = 4f;
+	public static final float BAD_BOMBER_WALL_ZOOM = 0.75f;
+	public static final float BAD_BOMBER_WALL_OFFSET = BAD_BOMBER_WALL_ZOOM / 2f;
 
 	// GAME PARAM DEFAULT VALUE
 	public static final int DEFAULT_LOCAL_PLAYER = 1;

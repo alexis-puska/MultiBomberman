@@ -137,8 +137,8 @@ public class Level {
 	private void initBadBomberWall(World world) {
 		final float width = Constante.BAD_BOMBER_WALL_WIDTH;
 		final float mult = Constante.BAD_BOMBER_WALL_MULT;
-		final float sizeX = (float) Constante.GRID_SIZE_X;
-		final float sizeY = (float) Constante.GRID_SIZE_Y;
+		final float sizeX = (float) Constante.GRID_SIZE_X - Constante.BAD_BOMBER_WALL_ZOOM;
+		final float sizeY = (float) Constante.GRID_SIZE_Y - Constante.BAD_BOMBER_WALL_ZOOM;
 		this.badBomberWall = new ArrayList<>();
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_RAIL_SPACESHIP;
@@ -147,7 +147,8 @@ public class Level {
 		BodyDef groundBodyDef = new BodyDef();
 		PolygonShape groundBox = new PolygonShape();
 		groundBox.setAsBox(sizeX / 2f, sizeY / 2f);
-		groundBodyDef.position.set(new Vector2(sizeX / 2f, sizeY / 2f));
+		groundBodyDef.position.set(new Vector2((sizeX / 2f) + Constante.BAD_BOMBER_WALL_OFFSET,
+				(sizeY / 2f) + Constante.BAD_BOMBER_WALL_OFFSET));
 		Body body = world.createBody(groundBodyDef);
 		body.setUserData(this);
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
@@ -158,7 +159,8 @@ public class Level {
 		BodyDef groundBodyDefNorth = new BodyDef();
 		PolygonShape groundBoxNorth = new PolygonShape();
 		groundBoxNorth.setAsBox((sizeX / 2f) + ((mult + 1) * width), width);
-		groundBodyDefNorth.position.set(new Vector2(sizeX / 2f, sizeY + (mult * width)));
+		groundBodyDefNorth.position.set(new Vector2((sizeX / 2f) + Constante.BAD_BOMBER_WALL_OFFSET,
+				(sizeY + (mult * width)) + Constante.BAD_BOMBER_WALL_OFFSET));
 		Body bodyNorth = world.createBody(groundBodyDefNorth);
 		bodyNorth.setUserData(this);
 		Fixture fixtureNorth = bodyNorth.createFixture(groundBoxNorth, 0.0f);
@@ -169,7 +171,8 @@ public class Level {
 		BodyDef groundBodyDefWest = new BodyDef();
 		PolygonShape groundBoxWest = new PolygonShape();
 		groundBoxWest.setAsBox(width, (sizeY / 2f) + ((mult - 1) * width));
-		groundBodyDefWest.position.set(0f - (mult * width), sizeY / 2f);
+		groundBodyDefWest.position.set(Constante.BAD_BOMBER_WALL_OFFSET - (mult * width),
+				(sizeY / 2f) + Constante.BAD_BOMBER_WALL_OFFSET);
 		Body bodyWest = world.createBody(groundBodyDefWest);
 		bodyWest.setUserData(this);
 		Fixture fixtureWest = bodyWest.createFixture(groundBoxWest, 0.0f);
@@ -180,7 +183,8 @@ public class Level {
 		BodyDef groundBodyDefEast = new BodyDef();
 		PolygonShape groundBoxEast = new PolygonShape();
 		groundBoxEast.setAsBox(width, (sizeY / 2f) + ((mult - 1) * width));
-		groundBodyDefEast.position.set(new Vector2(sizeX + (mult * width), sizeY / 2f));
+		groundBodyDefEast.position.set(new Vector2((sizeX + (mult * width)) + Constante.BAD_BOMBER_WALL_OFFSET,
+				(sizeY / 2f) + Constante.BAD_BOMBER_WALL_OFFSET));
 		Body bodyEast = world.createBody(groundBodyDefEast);
 		bodyEast.setUserData(this);
 		Fixture fixtureEast = bodyEast.createFixture(groundBoxEast, 0.0f);
@@ -191,7 +195,8 @@ public class Level {
 		BodyDef groundBodyDefSouth = new BodyDef();
 		PolygonShape groundBoxSouth = new PolygonShape();
 		groundBoxSouth.setAsBox((sizeX / 2f) + ((mult + 1) * width), width);
-		groundBodyDefSouth.position.set(new Vector2(sizeX / 2f, 0f - (mult * width)));
+		groundBodyDefSouth.position.set(new Vector2((sizeX / 2f) + Constante.BAD_BOMBER_WALL_OFFSET,
+				Constante.BAD_BOMBER_WALL_OFFSET - (mult * width)));
 		Body bodySouth = world.createBody(groundBodyDefSouth);
 		bodySouth.setUserData(this);
 		Fixture fixtureSouth = bodySouth.createFixture(groundBoxSouth, 0.0f);
