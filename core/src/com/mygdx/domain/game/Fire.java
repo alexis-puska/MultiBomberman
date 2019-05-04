@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.Player;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.level.Level;
@@ -21,15 +22,17 @@ import com.mygdx.service.SpriteService;
 public class Fire extends BodyAble {
 	protected int x;
 	protected int y;
+	private Player player;
 	private FireEnum fireEnum;
 	private boolean off;
 	private Animation<TextureRegion> animation;
 	private float time;
 
-	public Fire(World world, MultiBombermanGame mbGame, Level level, int x, int y, FireEnum fireEnum) {
+	public Fire(World world, MultiBombermanGame mbGame, Level level, Player player, int x, int y, FireEnum fireEnum) {
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
+		this.player = player;
 		this.x = x;
 		this.y = y;
 		this.fireEnum = fireEnum;
@@ -104,5 +107,9 @@ public class Fire extends BodyAble {
 
 	public boolean isOff() {
 		return off;
+	}
+	
+	public Player getPlayerGenerateThisFire() {
+		return this.player;
 	}
 }

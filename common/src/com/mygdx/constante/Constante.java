@@ -35,6 +35,8 @@ public class Constante {
 	public static final int GRID_SIZE_Y = 21;
 	public static final float GRID_PIXELS_SIZE_X = 18f;
 	public static final float GRID_PIXELS_SIZE_Y = 16f;
+	public static final float BAD_BOMBER_WALL_WIDTH = 0.05f;
+	public static final float BAD_BOMBER_WALL_MULT = 4f;
 
 	// GAME PARAM DEFAULT VALUE
 	public static final int DEFAULT_LOCAL_PLAYER = 1;
@@ -60,8 +62,8 @@ public class Constante {
 	public static final float SLOW_WALK_SPEED = 1f;
 	public static final float FAST_WALK_SPEED = 15f;
 
-	public static final float DEFAULT_SHIP_SPEED = 0.8f;
-	public static final float SHIP_SPEED_STEP = 0.5f;
+	public static final float DEFAULT_SHIP_SPEED = 3.0f;
+	public static final float SHIP_SPEED_STEP = 3.0f;
 
 	public static final float INVINCIBLE_TIME = 5f;
 	public static final float FASTE_BOMBE_TIME = 1.5f;

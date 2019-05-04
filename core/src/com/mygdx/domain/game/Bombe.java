@@ -66,11 +66,47 @@ public class Bombe extends BodyAble {
 		this.reboundTime = 0f;
 		this.animation = new Animation<>(0.16f,
 				SpriteService.getInstance().getSpriteForAnimation(type.getSpriteEnum()));
-		createBody();
+		Filter filter = new Filter();
+		filter.categoryBits = CollisionConstante.CATEGORY_BOMBE;
+		filter.maskBits = CollisionConstante.GROUP_BOMBE;
+		createBody(filter);
+	}
+
+	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
+			Player player, float timeToExplode, PovDirection direction) {
+		this.world = world;
+		this.mbGame = mbGame;
+		this.level = level;
+		this.strenght = strenght;
+		this.x = x;
+		this.y = y;
+		this.type = type;
+		this.player = player;
+		this.timeToExplode = timeToExplode;
+		this.direction = PovDirection.center;
+		this.walkSpeed = Constante.WALK_SPEED;
+		this.animationTime = 0f;
+		this.count = 0f;
+		this.state = BombeStateEnum.CARRIED;
+		this.reboundTime = 0f;
+		this.direction = direction;
+		this.animation = new Animation<>(0.16f,
+				SpriteService.getInstance().getSpriteForAnimation(type.getSpriteEnum()));
+		Filter f = new Filter();
+		f.categoryBits = CollisionConstante.CATEGORY_BOMBE;
+		f.maskBits = CollisionConstante.GROUP_BOMBE - CollisionConstante.CATEGORY_WALL
+				- CollisionConstante.CATEGORY_BRICKS - CollisionConstante.CATEGORY_BOMBE
+				- CollisionConstante.CATEGORY_PLAYER;
+		createBody(f);
+		iBelieveICanFly(direction);
 	}
 
 	@Override
 	protected void createBody() {
+		// OVERRIDED FOR BOMBE ! BAD BOMBER
+	}
+
+	protected void createBody(Filter filter) {
 		BodyDef groundBodyDef = new BodyDef();
 		groundBodyDef.active = true;
 		groundBodyDef.type = BodyType.DynamicBody;
@@ -95,9 +131,6 @@ public class Bombe extends BodyAble {
 		Fixture fixture = body.createFixture(diamondBody, 0.0f);
 		fixture.setFriction(0f);
 		fixture.setUserData(this);
-		Filter filter = new Filter();
-		filter.categoryBits = CollisionConstante.CATEGORY_BOMBE;
-		filter.maskBits = CollisionConstante.GROUP_BOMBE;
 		fixture.setFilterData(filter);
 	}
 
@@ -224,7 +257,8 @@ public class Bombe extends BodyAble {
 		int posX = (int) body.getPosition().x;
 		int posY = (int) body.getPosition().y;
 		if (this.level.getOccupedWallBrickBonus()[posX][posY] == null) {
-			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, posX, posY, FireEnum.FIRE_CENTER));
+			this.level.getFires()
+					.add(new Fire(this.world, this.mbGame, this.level, this.player, posX, posY, FireEnum.FIRE_CENTER));
 		}
 		generateFireRight(posX, posY);
 		generateFireDown(posX, posY);
@@ -294,7 +328,8 @@ public class Bombe extends BodyAble {
 				return !this.level.getOccupedWallBrickBonus()[calcX][calcY].getClass().equals(Bonus.class);
 			}
 		} else {
-			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, calcX, calcY, fireEnum));
+			this.level.getFires()
+					.add(new Fire(this.world, this.mbGame, this.level, this.player, calcX, calcY, fireEnum));
 		}
 		return false;
 	}

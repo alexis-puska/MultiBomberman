@@ -272,7 +272,7 @@ public class Game {
 		this.level.update();
 		this.players.stream().forEach(Player::update);
 		this.gameCountDown -= Gdx.graphics.getDeltaTime();
-		List<Player> alivePlayers = this.players.stream().filter(p -> !p.isDead() || p.isBadBomber())
+		List<Player> alivePlayers = this.players.stream().filter(p -> !p.isDead() && !p.isBadBomber())
 				.collect(Collectors.toList());
 		if (alivePlayers.isEmpty()) {
 			// DRAW GAME
@@ -280,7 +280,7 @@ public class Game {
 			alivePlayers.stream().forEach(Player::winTheGame);
 			// LAST PLAYER ALIVE
 		} else if (alivePlayers.size() > 1 && this.gameCountDown <= 0.0f) {
-			this.players.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(Player::winTheGame);
+			alivePlayers.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(Player::winTheGame);
 			// TIME OUT !
 		}
 		if (isSuddentDeathTime()) {
@@ -390,7 +390,11 @@ public class Game {
 			Collections.sort(players);
 			players.stream().forEach(p -> {
 				if (!p.isDead()) {
-					shapeRenderer.circle(p.getPixelX(), p.getPixelY(), 24);
+					if (p.isBadBomber()) {
+						shapeRenderer.circle(p.getShipPixelX(), p.getShipPixelY(), 24);
+					} else {
+						shapeRenderer.circle(p.getPixelX(), p.getPixelY(), 24);
+					}
 				}
 			});
 			level.getFires().stream().filter(f -> !f.isOff())

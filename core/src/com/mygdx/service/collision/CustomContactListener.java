@@ -88,12 +88,16 @@ public class CustomContactListener implements ContactListener {
 				&& contact.getFixtureB().getUserData().getClass() == Player.class) {
 			contact.setEnabled(false);
 			Player p = (Player) contact.getFixtureB().getUserData();
+			Fire f = (Fire) contact.getFixtureA().getUserData();
 			p.insideFire(true);
+			p.setLastFireFrom(f.getPlayerGenerateThisFire());
 		} else if (contact.getFixtureB().getUserData().getClass() == Fire.class
 				&& contact.getFixtureA().getUserData().getClass() == Player.class) {
 			contact.setEnabled(false);
 			Player p = (Player) contact.getFixtureA().getUserData();
+			Fire f = (Fire) contact.getFixtureB().getUserData();
 			p.insideFire(true);
+			p.setLastFireFrom(f.getPlayerGenerateThisFire());
 		}
 	}
 

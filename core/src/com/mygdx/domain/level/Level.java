@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
@@ -60,8 +66,8 @@ public class Level {
 	private List<Bombe> bombes;
 	private List<Fire> fires;
 	private List<Bonus> bonuss;
-
 	private Map<Integer, Short> state;
+	private List<Body> badBomberWall;
 
 	private MultiBombermanGame mbGame;
 	private World world;
@@ -110,6 +116,7 @@ public class Level {
 			initBricks(game, world, reservedStartPlayer);
 		}
 		initBonus(game, world);
+		initBadBomberWall(world);
 	}
 
 	private void initBonus(Game game, World world) {
@@ -125,6 +132,77 @@ public class Level {
 				}
 			}
 		}
+	}
+
+	private void initBadBomberWall(World world) {
+		final float width = Constante.BAD_BOMBER_WALL_WIDTH;
+		final float mult = Constante.BAD_BOMBER_WALL_MULT;
+		final float sizeX = (float) Constante.GRID_SIZE_X;
+		final float sizeY = (float) Constante.GRID_SIZE_Y;
+		this.badBomberWall = new ArrayList<>();
+		Filter filter = new Filter();
+		filter.categoryBits = CollisionConstante.CATEGORY_RAIL_SPACESHIP;
+		filter.maskBits = CollisionConstante.GROUP_RAIL_SPACESIP;
+		// center
+		BodyDef groundBodyDef = new BodyDef();
+		PolygonShape groundBox = new PolygonShape();
+		groundBox.setAsBox(sizeX / 2f, sizeY / 2f);
+		groundBodyDef.position.set(new Vector2(sizeX / 2f, sizeY / 2f));
+		Body body = world.createBody(groundBodyDef);
+		body.setUserData(this);
+		Fixture fixture = body.createFixture(groundBox, 0.0f);
+		fixture.setFriction(0f);
+		fixture.setUserData(this);
+		fixture.setFilterData(filter);
+		// north
+		BodyDef groundBodyDefNorth = new BodyDef();
+		PolygonShape groundBoxNorth = new PolygonShape();
+		groundBoxNorth.setAsBox((sizeX / 2f) + ((mult + 1) * width), width);
+		groundBodyDefNorth.position.set(new Vector2(sizeX / 2f, sizeY + (mult * width)));
+		Body bodyNorth = world.createBody(groundBodyDefNorth);
+		bodyNorth.setUserData(this);
+		Fixture fixtureNorth = bodyNorth.createFixture(groundBoxNorth, 0.0f);
+		fixtureNorth.setFriction(0f);
+		fixtureNorth.setUserData(this);
+		fixtureNorth.setFilterData(filter);
+		// west
+		BodyDef groundBodyDefWest = new BodyDef();
+		PolygonShape groundBoxWest = new PolygonShape();
+		groundBoxWest.setAsBox(width, (sizeY / 2f) + ((mult - 1) * width));
+		groundBodyDefWest.position.set(0f - (mult * width), sizeY / 2f);
+		Body bodyWest = world.createBody(groundBodyDefWest);
+		bodyWest.setUserData(this);
+		Fixture fixtureWest = bodyWest.createFixture(groundBoxWest, 0.0f);
+		fixtureWest.setFriction(0f);
+		fixtureWest.setUserData(this);
+		fixtureWest.setFilterData(filter);
+		// east
+		BodyDef groundBodyDefEast = new BodyDef();
+		PolygonShape groundBoxEast = new PolygonShape();
+		groundBoxEast.setAsBox(width, (sizeY / 2f) + ((mult - 1) * width));
+		groundBodyDefEast.position.set(new Vector2(sizeX + (mult * width), sizeY / 2f));
+		Body bodyEast = world.createBody(groundBodyDefEast);
+		bodyEast.setUserData(this);
+		Fixture fixtureEast = bodyEast.createFixture(groundBoxEast, 0.0f);
+		fixtureEast.setFriction(0f);
+		fixtureEast.setUserData(this);
+		fixtureEast.setFilterData(filter);
+		// south
+		BodyDef groundBodyDefSouth = new BodyDef();
+		PolygonShape groundBoxSouth = new PolygonShape();
+		groundBoxSouth.setAsBox((sizeX / 2f) + ((mult + 1) * width), width);
+		groundBodyDefSouth.position.set(new Vector2(sizeX / 2f, 0f - (mult * width)));
+		Body bodySouth = world.createBody(groundBodyDefSouth);
+		bodySouth.setUserData(this);
+		Fixture fixtureSouth = bodySouth.createFixture(groundBoxSouth, 0.0f);
+		fixtureSouth.setFriction(0f);
+		fixtureSouth.setUserData(this);
+		fixtureSouth.setFilterData(filter);
+		badBomberWall.add(body);
+		badBomberWall.add(bodyNorth);
+		badBomberWall.add(bodyWest);
+		badBomberWall.add(bodyEast);
+		badBomberWall.add(bodySouth);
 	}
 
 	public void randomBonus() {
@@ -224,5 +302,8 @@ public class Level {
 		bricks.stream().forEach(Brick::dispose);
 		bombes.stream().forEach(Bombe::dispose);
 		fires.stream().forEach(Fire::dispose);
+		badBomberWall.stream().forEach(w -> {
+			this.world.destroyBody(w);
+		});
 	}
 }

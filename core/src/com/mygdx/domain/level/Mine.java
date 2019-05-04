@@ -238,7 +238,7 @@ public class Mine extends BodyAble implements Initiable {
 				return true;
 			}
 		} else {
-			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, calcX, calcY, fireEnum));
+			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, null, calcX, calcY, fireEnum));
 		}
 		return false;
 	}
