@@ -496,4 +496,16 @@ public class Game {
 		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2.0f) - (layout.width / 2.0f), 352);
 		mbGame.getBatch().end();
 	}
+
+	public void drawPlayerNumber() {
+		this.players.stream().forEach(p -> {
+			layout.setText(font, Integer.toString(p.getIndex()));
+			if (p.isBadBomber()) {
+				font.draw(mbGame.getBatch(), layout, p.getShipPixelX(), p.getShipPixelY());
+			} else if (!p.isDead()) {
+				font.draw(mbGame.getBatch(), layout, p.getPixelX(), p.getPixelY());
+
+			}
+		});
+	}
 }

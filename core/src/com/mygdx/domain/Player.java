@@ -234,7 +234,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void createSpaceShipBody(float x, float y) {
-		Gdx.app.log("PLAYER", "Je créer mon vaisseay : " + x + ", " + y);
 		float calcY;
 		float calcX;
 		if (y <= ((float) Constante.GRID_SIZE_Y) / 2f) {
@@ -308,7 +307,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	 * ------------------------------------------------
 	 ************************************************************************************************************/
 	public void playerToBadBomber() {
-		Gdx.app.log("PLAYER", "Je me transform en bad bomber");
 		if (this.lastFireFrom != null && this.lastFireFrom.isBadBomber()) {
 			this.lastFireFrom.youBurnMeBadBomber(this);
 		}
@@ -321,18 +319,28 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.world.destroyBody(this.collisionBody);
 			this.collisionBody = null;
 		}
-		this.nbBombe = 1;
+		this.nbBombeSpaceShip = 1;
 		this.changeState(PlayerStateEnum.BAD_BOMBER);
+		if (!lastFireFrom.equals(this) && lastFireFrom != null) {
+			lastFireFrom = null;
+		}
 	}
 
 	public void badBomberToPlayer(Player playerKilled) {
-		Gdx.app.log("PLAYER", "Je sors de mon vaisseau et reviens en jeux");
-		if (this.spaceShipBody != null) {
-			this.world.destroyBody(spaceShipBody);
-			this.spaceShipBody = null;
+		if (lastFireFrom == this && lastFireFrom.equals(playerKilled.getLastFireFrom())) {
+			this.lastFireFrom = null;
+		} else {
+			if (this.spaceShipBody != null) {
+				this.world.destroyBody(spaceShipBody);
+				this.spaceShipBody = null;
+			}
+			this.createBodyWithPosition(playerKilled.getBodyX(), playerKilled.getBodyY());
+			this.changeState(PlayerStateEnum.NORMAL);
 		}
-		this.createBodyWithPosition(playerKilled.getBodyX(), playerKilled.getBodyY());
-		this.changeState(PlayerStateEnum.NORMAL);
+	}
+
+	private Object getLastFireFrom() {
+		return lastFireFrom;
 	}
 
 	private void youBurnMeBadBomber(Player playerKilled) {
@@ -576,10 +584,14 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void bombeExploded() {
-		this.nbBombe++;
-		this.nbBombeSpaceShip++;
-		if(this.nbBombeSpaceShip > 1) {
-			this.nbBombeSpaceShip = 1;
+		if (this.state != PlayerStateEnum.BAD_BOMBER) {
+			this.nbBombe++;
+		} else {
+			this.nbBombeSpaceShip++;
+			if (this.nbBombeSpaceShip > 1) {
+				this.nbBombeSpaceShip = 1;
+				this.nbBombe++;
+			}
 		}
 	}
 
@@ -632,7 +644,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void touchBombe(Bombe b) {
-		Gdx.app.log("PLAYER", "touch bombe : " + b.toString());
 		lastBombeTouched = b;
 	}
 
@@ -640,7 +651,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (lastBombeTouched != null && lastBombeTouched.equals(b)) {
 			lastBombeTouched = null;
 		}
-		Gdx.app.log("PLAYER", "untouch bombe : " + b.toString());
 	}
 
 	private void changeState(PlayerStateEnum newState) {
@@ -751,7 +761,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			Bombe b = new Bombe(this.level, this.world, this.mbGame, 2, (int) this.getShipX(), (int) this.getShipY(),
 					BombeTypeEnum.BOMBE, this, Constante.DEFAULT_BOMBE, spaceShipDrawDirection);
 			this.level.getBombes().add(b);
-			this.nbBombeSpaceShip --;
+			this.nbBombeSpaceShip--;
 		}
 	}
 
@@ -1173,9 +1183,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.BURN).getKeyFrame(animationTime, false),
 				getPixelX() - 15f, getPixelY() - 5f);
 		if (animations.get(CharacterSpriteEnum.BURN).isAnimationFinished(animationTime)) {
-
-			Gdx.app.log("Player", "badbomber");
-
 			if (Context.isBadBomber() && !this.game.isSuddentDeathTime()) {
 				this.playerToBadBomber();
 			} else {
