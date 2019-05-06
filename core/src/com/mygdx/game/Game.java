@@ -320,7 +320,6 @@ public class Game {
 				p.winTheGame();
 			});
 			this.state = GameStepEnum.SCORE;
-			
 			SoundService.getInstance().playSound(SoundEnum.END);
 		} else if (alivePlayers.size() > 1 && this.gameCountDown <= 0.0f) {
 			alivePlayers.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(p -> {

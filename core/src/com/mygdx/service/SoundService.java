@@ -14,8 +14,9 @@ import com.mygdx.enumeration.SoundEnum;
 public class SoundService {
 
 	private static final String CLASS_NAME = "SoundService.class";
-	private static final float MUSIQUE_VOLUME = 0.1f;
+	private static final float MUSIQUE_VOLUME = 0.2f;
 	private static final float MINE_VOLUME = 0.3f;
+	private static final float VALIDE_BIP_VOLUME = 0.1f;
 
 	private static SoundService instance = new SoundService();
 
@@ -165,7 +166,7 @@ public class SoundService {
 			soundTrolley.play();
 			break;
 		case VALIDE:
-			soundValide.play();
+			soundValide.play(VALIDE_BIP_VOLUME);
 			break;
 		case AZIZ_LIGHT_EN:
 			soundAzizLightEn.play();
@@ -178,7 +179,7 @@ public class SoundService {
 			break;
 		case BIP:
 		default:
-			soundBip.play();
+			soundBip.play(VALIDE_BIP_VOLUME);
 		}
 	}
 
