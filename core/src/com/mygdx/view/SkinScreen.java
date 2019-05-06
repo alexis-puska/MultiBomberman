@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.GameModeEnum;
+import com.mygdx.enumeration.PlayerTypeEnum;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
@@ -67,11 +68,13 @@ public class SkinScreen implements Screen, MenuListener {
 				int pos = i + j * 4;
 				layout.setText(font, MessageService.getInstance().getMessage("game.menu.player") + pos + " : ");
 				font.draw(mbGame.getBatch(), layout, START_X + (i * COL_SIZE), START_Y - (j * ROW_SIZE));
-				mbGame.getBatch()
-						.draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN,
-								mbGame.getPlayerService().getPlayerColor(pos),
-								mbGame.getPlayerService().getPlayerCharacter(pos), 0), START_X + (i * COL_SIZE) + 60,
-								START_Y - (j * ROW_SIZE) - 10);
+				if (mbGame.getPlayerService().getPlayerType(pos) != PlayerTypeEnum.NONE) {
+					mbGame.getBatch()
+							.draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN,
+									mbGame.getPlayerService().getPlayerColor(pos),
+									mbGame.getPlayerService().getPlayerCharacter(pos), 0),
+									START_X + (i * COL_SIZE) + 60, START_Y - (j * ROW_SIZE) - 10);
+				}
 			}
 		}
 		mbGame.getBatch().end();
@@ -141,27 +144,27 @@ public class SkinScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressA() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressUp() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressDown() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressLeft() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressRight() {
-		//unused method
+		// unused method
 	}
 
 	@Override
@@ -171,25 +174,25 @@ public class SkinScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressX() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressY() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressL() {
-		//unused method
-		
+		// unused method
+
 	}
 
 	@Override
 	public void pressR() {
-		//unused method
-		
+		// unused method
+
 	}
 }

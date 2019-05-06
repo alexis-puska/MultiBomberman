@@ -138,6 +138,7 @@ public class GameScreen implements Screen, MenuListener {
 	 **************************************************/
 	@Override
 	public void pressStart() {
+		
 		switch(this.state) {
 		case GAME:
 			this.state = GameScreenEnum.PAUSE;

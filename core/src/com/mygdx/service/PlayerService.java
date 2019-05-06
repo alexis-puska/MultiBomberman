@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
@@ -66,7 +67,7 @@ public class PlayerService {
 
 	public PlayerService(MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
-		definitions = new HashMap<>();
+		definitions = new TreeMap<>();
 		definitions.put(0, new PlayerDefinition(0, PlayerTypeEnum.HUMAN));
 		for (int i = 1; i < 16; i++) {
 			definitions.put(i, new PlayerDefinition(i, PlayerTypeEnum.CPU));
@@ -187,11 +188,13 @@ public class PlayerService {
 							+ def.getValue().getPlayerType().toString() + ",  "
 							+ def.getValue().getCharacter().toString() + ",  " + def.getValue().getColor().toString());
 			if (idx < startPlayer.size()) {
-				Player p = new Player(game, world, mbGame, level, def.getValue().getPlayerType(),
-						def.getValue().getCharacter(), def.getValue().getColor(), startPlayer.get(idx),
-						Context.getStrength(), Context.getBombe(), idx);
-				players.add(p);
-				controlEventListeners.put(def.getKey(), p);
+				if (def.getValue().getPlayerType() != PlayerTypeEnum.NONE) {
+					Player p = new Player(game, world, mbGame, level, def.getValue().getPlayerType(),
+							def.getValue().getCharacter(), def.getValue().getColor(), startPlayer.get(idx),
+							Context.getStrength(), Context.getBombe(), idx);
+					players.add(p);
+					controlEventListeners.put(def.getKey(), p);
+				}
 				idx++;
 			}
 		}

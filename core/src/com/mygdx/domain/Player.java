@@ -269,6 +269,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.level = null;
 	}
 
+	public PlayerTypeEnum getType() {
+		return this.type;
+	}
+
 	/************************************************************************************************************
 	 * -------------------------------------------- TROLLEY PART
 	 * ------------------------------------------------
@@ -319,15 +323,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		this.nbBombeSpaceShip = 1;
 		this.changeState(PlayerStateEnum.BAD_BOMBER);
-		if (!lastFireFrom.equals(this) && lastFireFrom != null) {
-			lastFireFrom = null;
-		}
 	}
 
 	public void badBomberToPlayer(Player playerKilled) {
-		if (lastFireFrom == this && lastFireFrom.equals(playerKilled.getLastFireFrom())) {
-			this.lastFireFrom = null;
-		} else {
+		if (lastFireFrom == null) {
 			if (this.spaceShipBody != null) {
 				this.world.destroyBody(spaceShipBody);
 				this.spaceShipBody = null;
@@ -337,8 +336,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
-	private Object getLastFireFrom() {
-		return lastFireFrom;
+	public void endBadBomberTime() {
+		this.changeState(PlayerStateEnum.DEAD);
 	}
 
 	private void youBurnMeBadBomber(Player playerKilled) {
@@ -757,6 +756,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 					BombeTypeEnum.BOMBE, this, Constante.DEFAULT_BOMBE, spaceShipDrawDirection);
 			this.level.getBombes().add(b);
 			this.nbBombeSpaceShip--;
+			if (lastFireFrom != null) {
+				lastFireFrom = null;
+			}
 		}
 	}
 

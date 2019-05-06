@@ -26,6 +26,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
+import com.mygdx.domain.enumeration.GameStepEnum;
 import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.game.BombeLight;
 import com.mygdx.domain.game.Bonus;
@@ -98,6 +99,7 @@ public class Game {
 	 * --- GAME ---
 	 *******************/
 	private List<Player> players;
+	private Map<Integer, Integer> score;
 	private Level level;
 	private float lightCountdown;
 
@@ -115,6 +117,8 @@ public class Game {
 	private ShaderProgram shaderProgram;
 	private float deltaTime;
 
+	private GameStepEnum state;
+
 	public Game(final MultiBombermanGame mbGame) {
 		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
 		this.fragmentShader = Gdx.files.internal("shader/fragment.glsl").readString();
@@ -124,6 +128,8 @@ public class Game {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.scoreShapeRenderer = new ShapeRenderer();
+		this.state = GameStepEnum.GAME;
+		this.score = new HashMap<>();
 		SoundService.getInstance().playMusic(MusicEnum.BATTLE);
 
 		/********************
@@ -174,7 +180,10 @@ public class Game {
 		this.debugCamera.update();
 		this.world = new World(new Vector2(0, 0), false);
 		this.world.setContactListener(new CustomContactListener());
+		initLevel();
+	}
 
+	private void initLevel() {
 		/********************
 		 * --- INIT LEVEL ---
 		 ********************/
@@ -183,7 +192,9 @@ public class Game {
 		this.level.init(this, world);
 		this.players = this.mbGame.getPlayerService().generatePlayer(this, this.world, this.level,
 				this.level.getStartPlayer());
-
+		this.players.stream().forEach(p -> {
+			this.score.put(p.getIndex(), 0);
+		});
 		if (this.level.getShadow() > 0f) {
 			switch (Context.getLocale()) {
 			case ENGLISH:
@@ -197,8 +208,11 @@ public class Game {
 		} else {
 			SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		}
-
 		gameCountDown = Context.getTime().getTime() * 60f;
+	}
+
+	public void resetGame() {
+
 	}
 
 	/******************************
@@ -272,25 +286,41 @@ public class Game {
 		this.level.update();
 		this.players.stream().forEach(Player::update);
 		this.gameCountDown -= Gdx.graphics.getDeltaTime();
+		if (this.gameCountDown <= 0.0f) {
+			this.gameCountDown = 0.0f;
+		}
+
 		List<Player> alivePlayers = this.players.stream().filter(p -> !p.isDead() && !p.isBadBomber())
 				.collect(Collectors.toList());
 		if (alivePlayers.isEmpty()) {
-			// DRAW GAME
+			this.state = GameStepEnum.DRAW_GAME;
 		} else if (alivePlayers.size() == 1) {
-			alivePlayers.stream().forEach(Player::winTheGame);
-			// LAST PLAYER ALIVE
+			alivePlayers.stream().forEach(p -> {
+				this.score.put(p.getIndex(), this.score.get(p.getIndex() + 1));
+				p.winTheGame();
+			});
+			this.state = GameStepEnum.SCORE;
 		} else if (alivePlayers.size() > 1 && this.gameCountDown <= 0.0f) {
-			alivePlayers.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(Player::winTheGame);
-			// TIME OUT !
+			alivePlayers.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(p -> {
+				this.score.put(p.getIndex(), this.score.get(p.getIndex() + 1));
+				p.winTheGame();
+			});
+			this.state = GameStepEnum.SCORE;
 		}
 		if (isSuddentDeathTime()) {
-			// TODO make suddendeath things
+			players.stream().filter(Player::isBadBomber).forEach(Player::endBadBomberTime);
 		}
-		world.step(1 / (float) Constante.FPS, 6, 2);
+		if (this.state == GameStepEnum.GAME) {
+			world.step(1 / (float) Constante.FPS, 6, 2);
+		}
 	}
 
 	public MultiBombermanGame getMultiBombermanGame() {
 		return this.mbGame;
+	}
+
+	public GameStepEnum getState() {
+		return this.state;
 	}
 
 	public void doSuddenDeathThings() {
@@ -466,6 +496,9 @@ public class Game {
 		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(0, 0, 0, 0.6f);
+		Map<Integer, Player> pls = new HashMap<>();
+		players.stream().forEach(p -> pls.put(p.getIndex(), p));
+
 		for (int i = 0; i < 8; i++) {
 			shapeRenderer.rect(3f + ((float) i * 36f), 339f, 33f, 18f);
 		}
@@ -476,8 +509,6 @@ public class Game {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
-		Map<Integer, Player> pls = new HashMap<>();
-		players.stream().forEach(p -> pls.put(p.getIndex(), p));
 		pls.entrySet().stream().forEach(e -> {
 			float x = ((float) e.getKey() * 36f) + 3f;
 			if (e.getKey() >= 8) {
@@ -491,6 +522,17 @@ public class Game {
 			layout.setText(font, Integer.toString(e.getValue().getScore()));
 			font.draw(mbGame.getBatch(), layout, x + 19f, 352);
 		});
+		layout.setText(font, "XXX");
+		for (int i = 0; i < 8; i++) {
+			if (!pls.containsKey(i)) {
+				font.draw(mbGame.getBatch(), layout, 8f + ((float) i * 36f), 352f);
+			}
+		}
+		for (int i = 0; i < 8; i++) {
+			if (!pls.containsKey(i + 8)) {
+				font.draw(mbGame.getBatch(), layout, 360f + ((float) i * 36f), 352f);
+			}
+		}
 		DecimalFormat df = new DecimalFormat("#.#");
 		layout.setText(font, "" + df.format(this.gameCountDown));
 		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2.0f) - (layout.width / 2.0f), 352);
@@ -504,7 +546,6 @@ public class Game {
 				font.draw(mbGame.getBatch(), layout, p.getShipPixelX(), p.getShipPixelY());
 			} else if (!p.isDead()) {
 				font.draw(mbGame.getBatch(), layout, p.getPixelX(), p.getPixelY());
-
 			}
 		});
 	}

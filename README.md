@@ -74,9 +74,10 @@ After this step "In The Well" is installed, compile, and integrated in emulation
 |Trolley move |||X
 |Player carry bombe (bonus)|||X
 |Player throw bombe (bonus)|||X
-|BAD Bomber|X||
-|Count down end game|X||
-|Display score|X||
+|BAD Bomber|||X
+|Display score|||X
+|Count down end game||X|
+|Restart Game after time||X|
 |Network protocol |X||
 |Client viewer |X||
 |IA LVL1 |X||
