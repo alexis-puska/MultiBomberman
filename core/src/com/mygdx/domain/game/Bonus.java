@@ -104,7 +104,6 @@ public class Bonus extends BodyAble implements LevelElement {
 	}
 
 	public BonusTypeEnum playerTakeBonus() {
-		Gdx.app.log("BONUS", "TAKE");
 		if (this.state == BonusStateEnum.REVEALED) {
 			this.state = BonusStateEnum.TAKED;
 			return this.type;

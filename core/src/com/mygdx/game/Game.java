@@ -280,38 +280,55 @@ public class Game {
 		if (lightCountdown >= 0f) {
 			lightCountdown -= Gdx.graphics.getDeltaTime();
 		}
+		if (this.state == GameStepEnum.DRAW_GAME) {
+
+		} else if (this.state == GameStepEnum.SCORE) {
+
+		}
 	}
 
 	public void step() {
 		this.level.update();
 		this.players.stream().forEach(Player::update);
-		this.gameCountDown -= Gdx.graphics.getDeltaTime();
-		if (this.gameCountDown <= 0.0f) {
-			this.gameCountDown = 0.0f;
-		}
 
+		if (this.state == GameStepEnum.GAME) {
+			this.gameCountDown -= Gdx.graphics.getDeltaTime();
+			if (this.gameCountDown <= 0.0f) {
+				this.gameCountDown = 0.0f;
+			}
+			checkEndOfGame();
+			if (isSuddentDeathTime()) {
+				players.stream().filter(Player::isBadBomber).forEach(Player::endBadBomberTime);
+			}
+			world.step(1 / (float) Constante.FPS, 6, 2);
+		} else if (this.state == GameStepEnum.DRAW_GAME) {
+			drawDrawGameOVerlay();
+		} else if (this.state == GameStepEnum.SCORE) {
+			drawScoreOverlay();
+		}
+	}
+
+	private void checkEndOfGame() {
 		List<Player> alivePlayers = this.players.stream().filter(p -> !p.isDead() && !p.isBadBomber())
 				.collect(Collectors.toList());
 		if (alivePlayers.isEmpty()) {
 			this.state = GameStepEnum.DRAW_GAME;
+			SoundService.getInstance().playSound(SoundEnum.DRAW);
 		} else if (alivePlayers.size() == 1) {
 			alivePlayers.stream().forEach(p -> {
 				this.score.put(p.getIndex(), this.score.get(p.getIndex() + 1));
 				p.winTheGame();
 			});
 			this.state = GameStepEnum.SCORE;
+			
+			SoundService.getInstance().playSound(SoundEnum.END);
 		} else if (alivePlayers.size() > 1 && this.gameCountDown <= 0.0f) {
 			alivePlayers.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(p -> {
 				this.score.put(p.getIndex(), this.score.get(p.getIndex() + 1));
 				p.winTheGame();
 			});
 			this.state = GameStepEnum.SCORE;
-		}
-		if (isSuddentDeathTime()) {
-			players.stream().filter(Player::isBadBomber).forEach(Player::endBadBomberTime);
-		}
-		if (this.state == GameStepEnum.GAME) {
-			world.step(1 / (float) Constante.FPS, 6, 2);
+			SoundService.getInstance().playSound(SoundEnum.END);
 		}
 	}
 
@@ -324,7 +341,7 @@ public class Game {
 	}
 
 	public void doSuddenDeathThings() {
-		// TODO calc if generate crushing player wall !
+
 	}
 
 	public boolean isSuddentDeathTime() {
@@ -548,5 +565,15 @@ public class Game {
 				font.draw(mbGame.getBatch(), layout, p.getPixelX(), p.getPixelY());
 			}
 		});
+	}
+
+	private void drawScoreOverlay() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void drawDrawGameOVerlay() {
+		// TODO Auto-generated method stub
+
 	}
 }

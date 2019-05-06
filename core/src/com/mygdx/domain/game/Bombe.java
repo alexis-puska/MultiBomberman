@@ -440,7 +440,6 @@ public class Bombe extends BodyAble {
 	}
 
 	public void touchPlayer(Player p) {
-		Gdx.app.log("Bombe", "touch player : " + p.toString());
 		lastPlayerTouched = p;
 	}
 
@@ -448,7 +447,5 @@ public class Bombe extends BodyAble {
 		if (lastPlayerTouched != null && lastPlayerTouched.equals(p)) {
 			lastPlayerTouched = null;
 		}
-		Gdx.app.log("Bombe", "untouch player : " + p.toString());
 	}
-
 }

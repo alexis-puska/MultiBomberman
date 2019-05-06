@@ -46,6 +46,7 @@ public class SoundService {
 	private Sound soundValide;
 	private Sound soundAzizLightFr;
 	private Sound soundAzizLightEn;
+	private Sound soundDrawGame;
 	private MusicEnum lastMusicPlayed;
 
 	public SoundService() {
@@ -76,6 +77,7 @@ public class SoundService {
 		soundValide = Gdx.audio.newSound(Gdx.files.internal("sound/sound_valide.wav"));
 		soundAzizLightFr = Gdx.audio.newSound(Gdx.files.internal("sound/sound_aziz_light_fr.wav"));
 		soundAzizLightEn = Gdx.audio.newSound(Gdx.files.internal("sound/sound_aziz_light_en.wav"));
+		soundDrawGame = Gdx.audio.newSound(Gdx.files.internal("sound/sound_draw.wav"));
 	}
 
 	public static SoundService getInstance() {
@@ -171,6 +173,9 @@ public class SoundService {
 		case AZIZ_LIGHT_FR:
 			soundAzizLightFr.play();
 			break;
+		case DRAW:
+			soundDrawGame.play();
+			break;
 		case BIP:
 		default:
 			soundBip.play();
@@ -231,6 +236,9 @@ public class SoundService {
 		case AZIZ_LIGHT_FR:
 			id = soundAzizLightFr.loop();
 			break;
+		case DRAW:
+			id = soundDrawGame.loop();
+			break;
 		case BIP:
 		default:
 			id = soundBip.loop();
@@ -290,6 +298,9 @@ public class SoundService {
 			break;
 		case AZIZ_LIGHT_FR:
 			soundAzizLightFr.stop(id);
+			break;
+		case DRAW:
+			soundDrawGame.stop(id);
 			break;
 		case BIP:
 		default:

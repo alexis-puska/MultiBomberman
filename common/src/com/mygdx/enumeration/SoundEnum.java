@@ -18,5 +18,6 @@ public enum SoundEnum {
 	TROLLEY,
 	VALIDE, 
 	AZIZ_LIGHT_EN,
-	AZIZ_LIGHT_FR;
+	AZIZ_LIGHT_FR,
+	DRAW;
 }
