@@ -60,7 +60,7 @@ public class GameScreen implements Screen, MenuListener {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		mbGame.getScreenCamera().update();
-		switch(this.state) {
+		switch (this.state) {
 		case GAME:
 			this.game.step();
 			this.game.render();
@@ -91,7 +91,7 @@ public class GameScreen implements Screen, MenuListener {
 		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
 		mbGame.getBatch().end();
 	}
-	
+
 	private void drawMenu() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
@@ -138,24 +138,27 @@ public class GameScreen implements Screen, MenuListener {
 	 **************************************************/
 	@Override
 	public void pressStart() {
-		
-		switch(this.state) {
-		case GAME:
-			this.state = GameScreenEnum.PAUSE;
-			break;
-		case MENU:
-			this.state = GameScreenEnum.GAME;
-			break;
-		case PAUSE:
-			this.state = GameScreenEnum.GAME;
-			break;
-		default:
+		if (game.isScore() || game.isDraw()) {
+			game.restart();
+		} else {
+			switch (this.state) {
+			case GAME:
+				this.state = GameScreenEnum.PAUSE;
+				break;
+			case MENU:
+				this.state = GameScreenEnum.GAME;
+				break;
+			case PAUSE:
+				this.state = GameScreenEnum.GAME;
+				break;
+			default:
+			}
 		}
 	}
 
 	@Override
 	public void pressSelect() {
-		switch(this.state) {
+		switch (this.state) {
 		case GAME:
 			this.state = GameScreenEnum.MENU;
 			break;

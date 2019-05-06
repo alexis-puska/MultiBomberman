@@ -45,6 +45,7 @@ import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
@@ -211,8 +212,26 @@ public class Game {
 		gameCountDown = Context.getTime().getTime() * 60f;
 	}
 
-	public void resetGame() {
-
+	public void restart() {
+		Gdx.app.log("aaa", "restart");
+		LevelMapper levelMapper = new LevelMapper();
+		this.level = levelMapper.toEntity(Context.getLevel());
+		this.level.init(this, world);
+		this.players = this.mbGame.getPlayerService().generatePlayer(this, this.world, this.level,
+				this.level.getStartPlayer());
+		if (this.level.getShadow() > 0f) {
+			switch (Context.getLocale()) {
+			case ENGLISH:
+				SoundService.getInstance().playSound(SoundEnum.AZIZ_LIGHT_EN);
+				break;
+			case FRENCH:
+			default:
+				SoundService.getInstance().playSound(SoundEnum.AZIZ_LIGHT_FR);
+				break;
+			}
+		}
+		this.state = GameStepEnum.GAME;
+		gameCountDown = Context.getTime().getTime() * 60f;
 	}
 
 	/******************************
@@ -281,9 +300,9 @@ public class Game {
 			lightCountdown -= Gdx.graphics.getDeltaTime();
 		}
 		if (this.state == GameStepEnum.DRAW_GAME) {
-
+			drawDrawGameOVerlay();
 		} else if (this.state == GameStepEnum.SCORE) {
-
+			drawScoreOverlay();
 		}
 	}
 
@@ -299,12 +318,9 @@ public class Game {
 			checkEndOfGame();
 			if (isSuddentDeathTime()) {
 				players.stream().filter(Player::isBadBomber).forEach(Player::endBadBomberTime);
+				doSuddenDeathThings();
 			}
 			world.step(1 / (float) Constante.FPS, 6, 2);
-		} else if (this.state == GameStepEnum.DRAW_GAME) {
-			drawDrawGameOVerlay();
-		} else if (this.state == GameStepEnum.SCORE) {
-			drawScoreOverlay();
 		}
 	}
 
@@ -316,14 +332,14 @@ public class Game {
 			SoundService.getInstance().playSound(SoundEnum.DRAW);
 		} else if (alivePlayers.size() == 1) {
 			alivePlayers.stream().forEach(p -> {
-				this.score.put(p.getIndex(), this.score.get(p.getIndex() + 1));
+				this.score.put(p.getIndex(), this.score.get(p.getIndex()) + 1);
 				p.winTheGame();
 			});
 			this.state = GameStepEnum.SCORE;
 			SoundService.getInstance().playSound(SoundEnum.END);
 		} else if (alivePlayers.size() > 1 && this.gameCountDown <= 0.0f) {
 			alivePlayers.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(p -> {
-				this.score.put(p.getIndex(), this.score.get(p.getIndex() + 1));
+				this.score.put(p.getIndex(), this.score.get(p.getIndex()) + 1);
 				p.winTheGame();
 			});
 			this.state = GameStepEnum.SCORE;
@@ -335,12 +351,87 @@ public class Game {
 		return this.mbGame;
 	}
 
-	public GameStepEnum getState() {
-		return this.state;
+	public boolean isScore() {
+		return this.state == GameStepEnum.SCORE;
 	}
 
-	public void doSuddenDeathThings() {
+	public boolean isDraw() {
+		return this.state == GameStepEnum.DRAW_GAME;
+	}
 
+	private int suddenDeathBlock;
+
+	public void doSuddenDeathThings() {
+		float suddentDeathTime = 50f - gameCountDown;
+		float generateEachTime = 50f / (float) (Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y);
+		Gdx.app.log("SUDDEN", "must generated : " + Math.round(suddentDeathTime / generateEachTime));
+
+		
+		
+		
+		//
+//		if (nbTickForGame % 4 == 0) {
+//			//add animation of falling wall
+//			if (tab[suddenDeathX + suddenDeathY * sizeX] < wallElement) {
+//				SuddenDeathAnimation * suddenDeathAnimation = new SuddenDeathAnimation(suddenDeathX, suddenDeathY, tab, grid);
+//				suddenDeathAnimations.push_back(suddenDeathAnimation);
+//				suddenDeathAnimation = NULL;
+//			}
+//
+//			switch (suddenDeathDirection) {
+//				case suddenDeathRight:
+//					if (suddenDeathX < suddenDeathMaxX) {
+//						suddenDeathX++;
+//					} else {
+//						suddenDeathMinY++;
+//						suddenDeathY++;
+//						suddenDeathDirection = suddenDeathDown;
+//					}
+//					break;
+//
+//				case suddenDeathDown:
+//					if (suddenDeathY < suddenDeathMaxY) {
+//						suddenDeathY++;
+//					} else {
+//						suddenDeathMaxX--;
+//						suddenDeathX--;
+//						suddenDeathDirection = suddenDeathLeft;
+//					}
+//					break;
+//
+//				case suddenDeathLeft:
+//					if (suddenDeathX > suddenDeathMinX) {
+//						suddenDeathX--;
+//					} else {
+//						suddenDeathMaxY--;
+//						suddenDeathY--;
+//						suddenDeathDirection = suddenDeathUp;
+//					}
+//					break;
+//
+//				case suddenDeathUp:
+//					if (suddenDeathY > suddenDeathMinY) {
+//						suddenDeathY--;
+//					} else {
+//						suddenDeathMinX++;
+//						suddenDeathX++;
+//						suddenDeathDirection = suddenDeathRight;
+//					}
+//					break;
+//
+//			}
+//
+//		}
+//
+////		purge old animation
+//		for (unsigned int i = 0; i < suddenDeathAnimations.size(); i++) {
+//			if (suddenDeathAnimations[i]->canBeDeleted()) {
+//				delete suddenDeathAnimations[i];
+//				suddenDeathAnimations.erase(suddenDeathAnimations.begin() + i);
+//			}
+//			suddenDeathAnimations[i]->tick(playerBombeExplode);
+//		}
+		
 	}
 
 	public boolean isSuddentDeathTime() {
@@ -535,7 +626,7 @@ public class Game {
 			} else {
 				mbGame.getBatch().draw(e.getValue().getMiniatureHappy(), x, 340f, 18f, 16f);
 			}
-			layout.setText(font, Integer.toString(e.getValue().getScore()));
+			layout.setText(font, Integer.toString(this.score.get(e.getKey())));
 			font.draw(mbGame.getBatch(), layout, x + 19f, 352);
 		});
 		layout.setText(font, "XXX");
@@ -567,12 +658,30 @@ public class Game {
 	}
 
 	private void drawScoreOverlay() {
-		// TODO Auto-generated method stub
-
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(0, 0, 0, 0.5f);
+		shapeRenderer.rect(0, 0, 640, 360);
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		mbGame.getBatch().begin();
+		layout.setText(font, MessageService.getInstance().getMessage("game.game.end"));
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
+		mbGame.getBatch().end();
 	}
 
 	private void drawDrawGameOVerlay() {
-		// TODO Auto-generated method stub
-
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(0, 0, 0, 0.5f);
+		shapeRenderer.rect(0, 0, 640, 360);
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		mbGame.getBatch().begin();
+		layout.setText(font, MessageService.getInstance().getMessage("game.game.draw"));
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
+		mbGame.getBatch().end();
 	}
 }

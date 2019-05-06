@@ -56,9 +56,6 @@ sudo reboot
 After this step "In The Well" is installed, compile, and integrated in emulation station on retropie distribution. If an update of code is made, you can just launch the "Update" line in emulation station, "Generate pi" and launch the game with "Enter In The Well" :) Enjoy !
 
 
-
-
-
 |TO DO |WAIT|IN PROGRESS|DONE|
 |-------|-|-|-|
 |Player move|||X|
@@ -76,8 +73,9 @@ After this step "In The Well" is installed, compile, and integrated in emulation
 |Player throw bombe (bonus)|||X
 |BAD Bomber|||X
 |Display score|||X
-|Count down end game||X|
-|Restart Game after time||X|
+|Count down end game|||X
+|Restart Game after time|||X
+|Sudden death|||X
 |Network protocol |X||
 |Client viewer |X||
 |IA LVL1 |X||
@@ -85,6 +83,3 @@ After this step "In The Well" is installed, compile, and integrated in emulation
 |IA LVL3 |X||
 |IA LVL4 |X||
 |IA LVL5 |X||
-|Sound animation||X|
-
-
