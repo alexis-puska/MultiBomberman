@@ -90,13 +90,10 @@ public class Bonus extends BodyAble implements LevelElement {
 			this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
 			this.state = BonusStateEnum.DISPOSED;
 			dispose();
-		} else if (this.state == BonusStateEnum.BURN) {
-			// TODO
-			if (this.stateTime >= animation.getAnimationDuration()) {
-				this.state = BonusStateEnum.BURNED;
-				this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
-				dispose();
-			}
+		} else if (this.state == BonusStateEnum.BURN && this.stateTime >= animation.getAnimationDuration()) {
+			this.state = BonusStateEnum.BURNED;
+			this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
+			dispose();
 		}
 	}
 

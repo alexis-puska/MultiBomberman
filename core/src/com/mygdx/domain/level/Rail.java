@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.Drawable;
@@ -61,17 +60,17 @@ public class Rail extends Drawable {
 				this.left = r;
 				nearest += 0b0000000000000001;
 			} else if (r.getX() == this.x && (r.getY() == this.y + 1)
-					|| ((r.getY() == Constante.GRID_SIZE_Y && this.y == 0))) {
+					|| (r.getY() == Constante.GRID_SIZE_Y && this.y == 0)) {
 				// UP
 				this.up = r;
 				nearest += 0b0000000000000010;
 			} else if (r.getY() == this.y && (r.getX() == this.x + 1)
-					|| ((r.getX() == 0 && this.x == Constante.GRID_SIZE_X))) {
+					|| (r.getX() == 0 && this.x == Constante.GRID_SIZE_X)) {
 				// RIGHT
 				this.right = r;
 				nearest += 0b0000000000000100;
 			} else if (r.getX() == this.x && (r.getY() == this.y - 1)
-					|| ((r.getY() == 0 && this.y == Constante.GRID_SIZE_Y))) {
+					|| (r.getY() == 0 && this.y == Constante.GRID_SIZE_Y)) {
 				// DOWN
 				this.down = r;
 				nearest += 0b0000000000001000;
@@ -194,7 +193,6 @@ public class Rail extends Drawable {
 			} else if (previous.equals(right)) {
 				return PovDirection.west;
 			} else {
-				Gdx.app.log("erreur", "rail HORIZONTAL");
 				if (ThreadLocalRandom.current().nextInt(2) == 0) {
 					return PovDirection.east;
 				} else {
@@ -207,7 +205,6 @@ public class Rail extends Drawable {
 			} else if (previous.equals(down)) {
 				return PovDirection.north;
 			} else {
-				Gdx.app.log("erreur", "rail VERTICAL");
 				if (ThreadLocalRandom.current().nextInt(2) == 0) {
 					return PovDirection.south;
 				} else {
@@ -220,7 +217,6 @@ public class Rail extends Drawable {
 			} else if (previous.equals(down)) {
 				return PovDirection.east;
 			} else {
-				Gdx.app.log("erreur", "rail DOWN_TO_RIGHT");
 				if (ThreadLocalRandom.current().nextInt(2) == 0) {
 					return PovDirection.south;
 				} else {
@@ -233,7 +229,6 @@ public class Rail extends Drawable {
 			} else if (previous.equals(down)) {
 				return PovDirection.west;
 			} else {
-				Gdx.app.log("erreur", "rail LEFT_TO_DOWN");
 				if (ThreadLocalRandom.current().nextInt(2) == 0) {
 					return PovDirection.south;
 				} else {
@@ -246,7 +241,6 @@ public class Rail extends Drawable {
 			} else if (previous.equals(left)) {
 				return PovDirection.north;
 			} else {
-				Gdx.app.log("erreur", "rail LEFT_TO_UP");
 				if (ThreadLocalRandom.current().nextInt(2) == 0) {
 					return PovDirection.west;
 				} else {
@@ -259,7 +253,6 @@ public class Rail extends Drawable {
 			} else if (previous.equals(right)) {
 				return PovDirection.north;
 			} else {
-				Gdx.app.log("erreur", "rail UP_TO_RIGHT");
 				if (ThreadLocalRandom.current().nextInt(2) == 0) {
 					return PovDirection.east;
 				} else {
@@ -306,37 +299,44 @@ public class Rail extends Drawable {
 		if (down == null) {
 			if (other.down != null)
 				return false;
-		} else if (!down.equals(other.down))
+		} else if (!down.equals(other.down)) {
 			return false;
+		}
 		if (left == null) {
 			if (other.left != null)
 				return false;
-		} else if (!left.equals(other.left))
+		} else if (!left.equals(other.left)) {
 			return false;
+		}
 		if (nearest != other.nearest)
 			return false;
 		if (possibility == null) {
 			if (other.possibility != null)
 				return false;
-		} else if (!possibility.equals(other.possibility))
+		} else if (!possibility.equals(other.possibility)) {
 			return false;
+		}
 		if (right == null) {
-			if (other.right != null)
+			if (other.right != null) {
 				return false;
-		} else if (!right.equals(other.right))
+			}
+		} else if (!right.equals(other.right)) {
 			return false;
-		if (type != other.type)
+		}
+		if (type != other.type) {
 			return false;
+		}
 		if (up == null) {
-			if (other.up != null)
+			if (other.up != null) {
 				return false;
-		} else if (!up.equals(other.up))
+			}
+		} else if (!up.equals(other.up)) {
 			return false;
-		if (x != other.x)
+		}
+		if (x != other.x) {
 			return false;
-		if (y != other.y)
-			return false;
-		return true;
+		}
+		return y != other.y;
 	}
 
 }

@@ -157,7 +157,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
 					SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
 		}
-		footInWaterAnimation = new Animation<TextureRegion>((1f / 12),
+		footInWaterAnimation = new Animation<>((1f / 12),
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.UNDERWATER));
 		this.createBody();
 		if (this.type == PlayerTypeEnum.CPU) {
@@ -235,7 +235,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public void createSpaceShipBody(float x, float y) {
 		float calcY;
-		float calcX;
 		if (y <= ((float) Constante.GRID_SIZE_Y) / 2f) {
 			calcY = 0.5f - Constante.BAD_BOMBER_WALL_WIDTH;
 		} else {
@@ -246,7 +245,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		bodyDef.position.set(x, calcY);
 		CircleShape circle = new CircleShape();
 		circle.setRadius(0.05f);
-		// circle.setPosition(new Vector2(x, calcY));
 		this.spaceShipBody = world.createBody(bodyDef);
 		this.spaceShipBody.setUserData(this);
 		Fixture fixture = spaceShipBody.createFixture(circle, 0.0f);
@@ -368,9 +366,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		case DEAD:
 			this.dispose();
-			if (Context.isBadBomber() && game.isSuddentDeathTime()) {
-
-			}
 			break;
 		case INSIDE_TROLLEY:
 			break;
@@ -626,8 +621,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 							&& this.level.getOccupedWallBrickBonus()[t.getX()][t.getY()] == null))
 					.collect(Collectors.toList());
 			if (!destination.isEmpty()) {
-				int idx = ThreadLocalRandom.current().nextInt(0, destination.size());
-				this.destinationTeleporter = destination.get(idx);
+				int i = ThreadLocalRandom.current().nextInt(0, destination.size());
+				this.destinationTeleporter = destination.get(i);
 				this.changeState(PlayerStateEnum.TELEPORT);
 				this.teleportCountDown = 6;
 				tel.animate(true);

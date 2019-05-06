@@ -37,9 +37,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Mine extends BodyAble implements Initiable {
 
-	private final static float EXPIRATION = 6f;
-	private final static float FRAME_DURATION = 1f / 8f;
-	private final static int FIRE_LENGTH = Constante.GRID_SIZE_X;
+	private static final float EXPIRATIONT_TIME = 6f;
+	private static final float FRAME_DURATION = 1f / 8f;
+	private static final int FIRE_LENGTH = Constante.GRID_SIZE_X;
 
 	protected int x;
 	protected int y;
@@ -116,18 +116,15 @@ public class Mine extends BodyAble implements Initiable {
 	}
 
 	private void generateFire() {
-		switch (type) {
-		case BEND:
+		if (type == MineTypeEnum.BEND) {
 			generateBendFire();
-			break;
-		case STRAIGHT:
+		} else if (type == MineTypeEnum.STRAIGHT) {
 			generateStraightFire();
-			break;
 		}
 	}
 
 	private void generateStraightFire() {
-		if ((time - EXPIRATION) <= FRAME_DURATION * 2) {
+		if ((time - EXPIRATIONT_TIME) <= FRAME_DURATION * 2) {
 			generateFireDown(x, y);
 			generateFireUp(x, y);
 		} else {
@@ -137,13 +134,13 @@ public class Mine extends BodyAble implements Initiable {
 	}
 
 	private void generateBendFire() {
-		if ((time - EXPIRATION) <= FRAME_DURATION * 2) {
+		if ((time - EXPIRATIONT_TIME) <= FRAME_DURATION * 2) {
 			generateFireRight(x, y);
 			generateFireUp(x, y);
-		} else if ((time - EXPIRATION) <= FRAME_DURATION * 4) {
+		} else if ((time - EXPIRATIONT_TIME) <= FRAME_DURATION * 4) {
 			generateFireRight(x, y);
 			generateFireDown(x, y);
-		} else if ((time - EXPIRATION) <= FRAME_DURATION * 6) {
+		} else if ((time - EXPIRATIONT_TIME) <= FRAME_DURATION * 6) {
 			generateFireDown(x, y);
 			generateFireLeft(x, y);
 		} else {
@@ -157,7 +154,7 @@ public class Mine extends BodyAble implements Initiable {
 			this.type = MineTypeEnum.random();
 			int offset = ThreadLocalRandom.current().nextInt(0, (int) (FRAME_DURATION * 1000));
 			this.time = ((float) offset / 100f);
-			this.expiration = EXPIRATION + this.time;
+			this.expiration = EXPIRATIONT_TIME + this.time;
 			this.activate = true;
 			this.id = SoundService.getInstance().loopSound(SoundEnum.MINE);
 		}

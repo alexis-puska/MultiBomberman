@@ -284,7 +284,7 @@ public class Game {
 			// TIME OUT !
 		}
 		if (isSuddentDeathTime()) {
-
+			// TODO make suddendeath things
 		}
 		world.step(1 / (float) Constante.FPS, 6, 2);
 	}
@@ -399,7 +399,7 @@ public class Game {
 			});
 			level.getFires().stream().filter(f -> !f.isOff())
 					.forEach(f -> shapeRenderer.circle(f.getPixelX(), f.getPixelY(), 24));
-			level.getBonuss().stream().filter(b -> b.isBurning())
+			level.getBonuss().stream().filter(Bonus::isBurning)
 					.forEach(f -> shapeRenderer.circle(f.getPixelX(), f.getPixelY(), 24));
 			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
 				shapeRenderer.setColor(new Color(b.getLight(), b.getLight(), b.getLight(), 0f));

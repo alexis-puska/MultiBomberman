@@ -237,7 +237,6 @@ public class Bombe extends BodyAble {
 				f.categoryBits = CollisionConstante.CATEGORY_BOMBE;
 				f.maskBits = CollisionConstante.GROUP_BOMBE;
 				this.body.getFixtureList().get(i).setFilterData(f);
-				Gdx.app.log("BOMBE", "filter set with reactivate collision " + reboundTime);
 			}
 		}
 
@@ -420,7 +419,6 @@ public class Bombe extends BodyAble {
 	}
 
 	public void iBelieveICanFly(PovDirection direction) {
-		Gdx.app.log("BOMBE", "i believe i can fly");
 		if (this.state == BombeStateEnum.CARRIED) {
 			this.reboundTime = 0f;
 			this.offsetZ = 0f;
@@ -433,7 +431,6 @@ public class Bombe extends BodyAble {
 						- CollisionConstante.CATEGORY_BRICKS - CollisionConstante.CATEGORY_BOMBE
 						- CollisionConstante.CATEGORY_PLAYER;
 				this.body.getFixtureList().get(i).setFilterData(f);
-				Gdx.app.log("BOMBE", "filter set with deactivate collision");
 			}
 		}
 	}

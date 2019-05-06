@@ -30,14 +30,14 @@ public class Wall extends BodyAble implements LevelElement, Initiable {
 	private boolean customSkin;
 	private SpriteEnum animation;
 	private int index;
-	private boolean init = false;
+	private boolean initialised = false;
 
 	private SpriteEnum defaultAnimation;
 	private int defaultTexture;
 
 	@Override
 	public void init(World world, MultiBombermanGame mbGame, Level level) {
-		this.init = true;
+		this.initialised = true;
 		this.world = world;
 		this.level = level;
 		this.mbGame = mbGame;
@@ -46,16 +46,20 @@ public class Wall extends BodyAble implements LevelElement, Initiable {
 		createBody();
 	}
 
+	public boolean isInitialised() {
+		return this.initialised;
+	}
+
 	@Override
 	public void drawIt() {
 		if (draw) {
 			if (customSkin) {
-				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.index), this.x * Constante.GRID_PIXELS_SIZE_X,
-						this.y * Constante.GRID_PIXELS_SIZE_Y);
+				mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.animation, this.index),
+						this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 			} else {
 				mbGame.getBatch().draw(
-						SpriteService.getInstance().getSprite(this.defaultAnimation, this.defaultTexture), this.x * Constante.GRID_PIXELS_SIZE_X,
-						this.y * Constante.GRID_PIXELS_SIZE_Y);
+						SpriteService.getInstance().getSprite(this.defaultAnimation, this.defaultTexture),
+						this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 			}
 		}
 	}

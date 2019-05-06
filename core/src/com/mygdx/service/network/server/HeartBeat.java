@@ -15,7 +15,7 @@ import com.mygdx.service.Context;
 
 public class HeartBeat extends Thread {
 
-	private static final String LOG_NAME = "MultiBombermanGame.class";
+	private static final String LOG_NAME = "HeartBeat.class";
 
 	private boolean status;
 
@@ -57,22 +57,22 @@ public class HeartBeat extends Thread {
 					HeartBeatResponse response = mapper.readValue(httpResponse.getResultAsString(),
 							HeartBeatResponse.class);
 					if (response.getStatus() == HeartBeatStatusEnum.KO) {
-						Gdx.app.error("HeartBeat", "STATUS NOT UPDATED");
+						Gdx.app.error(LOG_NAME, "STATUS NOT UPDATED");
 					}
 				} catch (IOException e) {
-					Gdx.app.error("HeartBeat", "IOException");
+					Gdx.app.error(LOG_NAME, "IOException");
 				}
 			}
 
 			@Override
 			public void failed(Throwable t) {
-				Gdx.app.error("HeartBeat", "error on hearthbeat - stop hearthbeat");
+				Gdx.app.error(LOG_NAME, "error on hearthbeat - stop hearthbeat");
 				status = false;
 			}
 
 			@Override
 			public void cancelled() {
-				Gdx.app.log("HeartBeat", "cancelled");
+				Gdx.app.log(LOG_NAME, "cancelled");
 			}
 		});
 	}

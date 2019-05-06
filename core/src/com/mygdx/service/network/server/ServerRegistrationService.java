@@ -12,6 +12,8 @@ import com.mygdx.service.Context;
 
 public class ServerRegistrationService {
 
+	private static final String CANCELLED = "cancelled";
+	private static final String RESPONSE = "response: ";
 	private static final String CLASS_NAME = "ServerRegistrationService.class";
 	private HeartBeatService hearthbeatService;
 	private boolean registered;
@@ -27,7 +29,7 @@ public class ServerRegistrationService {
 		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				Gdx.app.log(CLASS_NAME, "response: " + httpResponse.getResultAsString());
+				Gdx.app.log(CLASS_NAME, RESPONSE + httpResponse.getResultAsString());
 			}
 
 			@Override
@@ -37,7 +39,7 @@ public class ServerRegistrationService {
 
 			@Override
 			public void cancelled() {
-				Gdx.app.log(CLASS_NAME, "cancelled");
+				Gdx.app.log(CLASS_NAME, CANCELLED);
 			}
 		});
 	}
@@ -62,7 +64,7 @@ public class ServerRegistrationService {
 		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				Gdx.app.log(CLASS_NAME, "response: " + httpResponse.getResultAsString());
+				Gdx.app.log(CLASS_NAME, RESPONSE + httpResponse.getResultAsString());
 				hearthbeatService.start();
 				registered = true;
 			}
@@ -74,7 +76,7 @@ public class ServerRegistrationService {
 
 			@Override
 			public void cancelled() {
-				Gdx.app.log(CLASS_NAME, "cancelled");
+				Gdx.app.log(CLASS_NAME, CANCELLED);
 			}
 		});
 	}
@@ -88,7 +90,7 @@ public class ServerRegistrationService {
 			Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
 				@Override
 				public void handleHttpResponse(HttpResponse httpResponse) {
-					Gdx.app.log(CLASS_NAME, "response: " + httpResponse.getResultAsString());
+					Gdx.app.log(CLASS_NAME, RESPONSE + httpResponse.getResultAsString());
 				}
 
 				@Override
@@ -98,7 +100,7 @@ public class ServerRegistrationService {
 
 				@Override
 				public void cancelled() {
-					Gdx.app.log(CLASS_NAME, "cancelled");
+					Gdx.app.log(CLASS_NAME, CANCELLED);
 				}
 			});
 		}

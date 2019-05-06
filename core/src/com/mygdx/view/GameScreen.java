@@ -148,6 +148,7 @@ public class GameScreen implements Screen, MenuListener {
 		case PAUSE:
 			this.state = GameScreenEnum.GAME;
 			break;
+		default:
 		}
 	}
 
@@ -165,6 +166,7 @@ public class GameScreen implements Screen, MenuListener {
 		case PAUSE:
 			this.state = GameScreenEnum.GAME;
 			break;
+		default:
 		}
 	}
 

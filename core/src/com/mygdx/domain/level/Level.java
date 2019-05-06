@@ -115,11 +115,11 @@ public class Level {
 		if (fillWithBrick) {
 			initBricks(game, world, reservedStartPlayer);
 		}
-		initBonus(game, world);
+		initBonus(world);
 		initBadBomberWall(world);
 	}
 
-	private void initBonus(Game game, World world) {
+	private void initBonus(World world) {
 		if (isFillWithBrick()) {
 			for (int i = 0; i < bonus.length; i++) {
 				for (int j = 0; j < bonus[i]; j++) {
@@ -252,7 +252,7 @@ public class Level {
 		mine.stream().forEach(Mine::update);
 		teleporter.stream().forEach(Teleporter::update);
 		trolley.stream().forEach(Trolley::update);
-		wall.stream().filter(w -> !w.isInit()).forEach(w -> {
+		wall.stream().filter(w -> !w.isInitialised()).forEach(w -> {
 			w.init(this.world, mbGame, this);
 			occupedWallBrickBonus[w.getX()][w.getY()] = w;
 		});
@@ -260,7 +260,7 @@ public class Level {
 	}
 
 	private void buildState() {
-		this.state = new HashMap<Integer, Short>();
+		this.state = new HashMap<>();
 		hole.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_HOLE));
 		interrupter.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_BUTTONS));
 		mine.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_MINE));
@@ -307,8 +307,6 @@ public class Level {
 		bricks.stream().forEach(Brick::dispose);
 		bombes.stream().forEach(Bombe::dispose);
 		fires.stream().forEach(Fire::dispose);
-		badBomberWall.stream().forEach(w -> {
-			this.world.destroyBody(w);
-		});
+		badBomberWall.stream().forEach(w -> this.world.destroyBody(w));
 	}
 }

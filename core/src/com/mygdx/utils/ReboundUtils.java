@@ -1,7 +1,11 @@
 package com.mygdx.utils;
 
 public class ReboundUtils {
-	
+
+	private ReboundUtils() {
+		// unused
+	}
+
 	public static float calcReboundOffset(float deltaTime) {
 		if (deltaTime < 47f) {
 			return (float) Math.abs(Math.exp(-0.05 * (double) deltaTime) * 80 * Math.sin(0.2d * (double) deltaTime));
@@ -9,5 +13,5 @@ public class ReboundUtils {
 			return (float) Math.abs(10 * Math.sin(0.2 * (double) deltaTime));
 		}
 	}
-	
+
 }
