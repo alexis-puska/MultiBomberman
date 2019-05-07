@@ -69,12 +69,13 @@ public class Constante {
 
 	public static final float INVINCIBLE_TIME = 5f;
 	public static final float FASTE_BOMBE_TIME = 1.5f;
-	public static final float SLOW_BOMBE_TIME = 8f;
-	public static final float NORMAL_BOMBE_TIME = 4f;
+	public static final float SLOW_BOMBE_TIME = 6f;
+	public static final float NORMAL_BOMBE_TIME = 3f;
 	public static final float MALUS_TIME = 10f;
 	public static final float TROLLEY_SPEED = 10f;
 	public static final float LIGHT_COUNTDOWN = 2.0f;
 	public static final float CRYING_TIME = 2.0f;
+	public static final float SUDDEN_DEATH_TIME = 50f;
 
 	private Constante() {
 		// empty private constructor

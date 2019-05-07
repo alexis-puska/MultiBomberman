@@ -18,6 +18,7 @@ import com.mygdx.constante.Constante;
 import com.mygdx.domain.enumeration.BonusStateEnum;
 import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.domain.enumeration.BrickStateEnum;
+import com.mygdx.domain.enumeration.SuddenDeathDirection;
 import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.game.Bonus;
 import com.mygdx.domain.game.Brick;
@@ -72,6 +73,19 @@ public class Level {
 	private MultiBombermanGame mbGame;
 	private World world;
 
+	/**********************
+	 * --- SUDDEN DEATH ---
+	 **********************/
+	private int suddenDeathBlock;
+	private SuddenDeathDirection suddenDeathDirection;
+	private int sudden_death_min_x;
+	private int sudden_death_max_x;
+	private int sudden_death_min_y;
+	private int sudden_death_max_y;
+	private int suddenDeathX;
+	private int suddenDeathY;
+	private List<SuddenDeathWall> suddenDeathWall;
+
 	public void init(Game game, World world) {
 		this.mbGame = game.getMultiBombermanGame();
 		this.world = world;
@@ -117,6 +131,7 @@ public class Level {
 		}
 		initBonus(world);
 		initBadBomberWall(world);
+		initSuddenDeath();
 	}
 
 	private void initBonus(World world) {
@@ -210,6 +225,18 @@ public class Level {
 		badBomberWall.add(bodySouth);
 	}
 
+	private void initSuddenDeath() {
+		this.suddenDeathBlock = 0;
+		this.suddenDeathDirection = SuddenDeathDirection.RIGHT;
+		this.sudden_death_min_x = 0;
+		this.sudden_death_max_x = Constante.GRID_SIZE_X - 1;
+		this.sudden_death_min_y = 0;
+		this.sudden_death_max_y = Constante.GRID_SIZE_Y - 1;
+		this.suddenDeathX = 0;
+		this.suddenDeathY = Constante.GRID_SIZE_Y - 1;
+		this.suddenDeathWall = new ArrayList<>();
+	}
+
 	public void randomBonus() {
 		if (!isFillWithBrick()) {
 			for (int i = 0; i < bonus.length; i++) {
@@ -256,6 +283,7 @@ public class Level {
 			w.init(this.world, mbGame, this);
 			occupedWallBrickBonus[w.getX()][w.getY()] = w;
 		});
+		suddenDeathWall.stream().forEach(SuddenDeathWall::update);
 		this.buildState();
 	}
 
@@ -308,5 +336,59 @@ public class Level {
 		bombes.stream().forEach(Bombe::dispose);
 		fires.stream().forEach(Fire::dispose);
 		badBomberWall.stream().forEach(w -> this.world.destroyBody(w));
+		suddenDeathWall.stream().forEach(SuddenDeathWall::dispose);
+	}
+
+	public void doSuddenDeathThings(float gameCountDown) {
+		float suddenDeathTime = Constante.SUDDEN_DEATH_TIME - gameCountDown;
+		float generateEachTime = Constante.SUDDEN_DEATH_TIME / (float) (Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y);
+		int mustGenerated = Math.round(suddenDeathTime / generateEachTime);
+		while (mustGenerated > suddenDeathBlock) {
+			if (this.getOccupedWallBrickBonus()[suddenDeathX][suddenDeathY] == null
+					|| (this.getOccupedWallBrickBonus()[suddenDeathX][suddenDeathY] != null
+							&& !(this.getOccupedWallBrickBonus()[suddenDeathX][suddenDeathY] instanceof Wall))) {
+				suddenDeathWall.add(new SuddenDeathWall(world, mbGame, this, suddenDeathX, suddenDeathY,
+						this.getDefaultWall().getAnimation(), this.getDefaultWall().getIndex()));
+			}
+			switch (suddenDeathDirection) {
+			case RIGHT:
+				if (suddenDeathX < sudden_death_max_x) {
+					suddenDeathX++;
+				} else {
+					sudden_death_max_y--;
+					suddenDeathY--;
+					suddenDeathDirection = SuddenDeathDirection.DOWN;
+				}
+				break;
+			case DOWN:
+				if (suddenDeathY > sudden_death_min_y) {
+					suddenDeathY--;
+				} else {
+					sudden_death_max_x--;
+					suddenDeathX--;
+					suddenDeathDirection = SuddenDeathDirection.LEFT;
+				}
+				break;
+			case LEFT:
+				if (suddenDeathX > sudden_death_min_x) {
+					suddenDeathX--;
+				} else {
+					sudden_death_min_y++;
+					suddenDeathY++;
+					suddenDeathDirection = SuddenDeathDirection.UP;
+				}
+				break;
+			case UP:
+				if (suddenDeathY < sudden_death_max_y) {
+					suddenDeathY++;
+				} else {
+					sudden_death_min_x++;
+					suddenDeathX++;
+					suddenDeathDirection = SuddenDeathDirection.RIGHT;
+				}
+				break;
+			}
+			suddenDeathBlock++;
+		}
 	}
 }

@@ -37,6 +37,7 @@ import com.mygdx.domain.level.Interrupter;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.Mine;
 import com.mygdx.domain.level.Rail;
+import com.mygdx.domain.level.SuddenDeathWall;
 import com.mygdx.domain.level.Teleporter;
 import com.mygdx.domain.level.Trolley;
 import com.mygdx.domain.level.Wall;
@@ -118,6 +119,9 @@ public class Game {
 	private ShaderProgram shaderProgram;
 	private float deltaTime;
 
+	/********************
+	 * --- STATE ---
+	 ********************/
 	private GameStepEnum state;
 
 	public Game(final MultiBombermanGame mbGame) {
@@ -185,9 +189,6 @@ public class Game {
 	}
 
 	private void initLevel() {
-		/********************
-		 * --- INIT LEVEL ---
-		 ********************/
 		LevelMapper levelMapper = new LevelMapper();
 		this.level = levelMapper.toEntity(Context.getLevel());
 		this.level.init(this, world);
@@ -209,7 +210,7 @@ public class Game {
 		} else {
 			SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		}
-		gameCountDown = Context.getTime().getTime() * 60f;
+		this.gameCountDown = Context.getTime().getTime() * 60f;
 	}
 
 	public void restart() {
@@ -231,7 +232,7 @@ public class Game {
 			}
 		}
 		this.state = GameStepEnum.GAME;
-		gameCountDown = Context.getTime().getTime() * 60f;
+		this.gameCountDown = Context.getTime().getTime() * 60f;
 	}
 
 	/******************************
@@ -316,9 +317,9 @@ public class Game {
 				this.gameCountDown = 0.0f;
 			}
 			checkEndOfGame();
-			if (isSuddentDeathTime()) {
+			if (isSuddentDeathTime() && Context.isSuddenDeath()) {
 				players.stream().filter(Player::isBadBomber).forEach(Player::endBadBomberTime);
-				doSuddenDeathThings();
+				this.level.doSuddenDeathThings(gameCountDown);
 			}
 			world.step(1 / (float) Constante.FPS, 6, 2);
 		}
@@ -332,11 +333,16 @@ public class Game {
 			SoundService.getInstance().playSound(SoundEnum.DRAW);
 		} else if (alivePlayers.size() == 1) {
 			alivePlayers.stream().forEach(p -> {
-				this.score.put(p.getIndex(), this.score.get(p.getIndex()) + 1);
-				p.winTheGame();
+				if (p.isBurning()) {
+					this.state = GameStepEnum.DRAW_GAME;
+					SoundService.getInstance().playSound(SoundEnum.DRAW);
+				} else {
+					this.score.put(p.getIndex(), this.score.get(p.getIndex()) + 1);
+					p.winTheGame();
+					this.state = GameStepEnum.SCORE;
+					SoundService.getInstance().playSound(SoundEnum.END);
+				}
 			});
-			this.state = GameStepEnum.SCORE;
-			SoundService.getInstance().playSound(SoundEnum.END);
 		} else if (alivePlayers.size() > 1 && this.gameCountDown <= 0.0f) {
 			alivePlayers.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(p -> {
 				this.score.put(p.getIndex(), this.score.get(p.getIndex()) + 1);
@@ -357,81 +363,6 @@ public class Game {
 
 	public boolean isDraw() {
 		return this.state == GameStepEnum.DRAW_GAME;
-	}
-
-	private int suddenDeathBlock;
-
-	public void doSuddenDeathThings() {
-		float suddentDeathTime = 50f - gameCountDown;
-		float generateEachTime = 50f / (float) (Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y);
-		Gdx.app.log("SUDDEN", "must generated : " + Math.round(suddentDeathTime / generateEachTime));
-
-		
-		
-		
-		//
-//		if (nbTickForGame % 4 == 0) {
-//			//add animation of falling wall
-//			if (tab[suddenDeathX + suddenDeathY * sizeX] < wallElement) {
-//				SuddenDeathAnimation * suddenDeathAnimation = new SuddenDeathAnimation(suddenDeathX, suddenDeathY, tab, grid);
-//				suddenDeathAnimations.push_back(suddenDeathAnimation);
-//				suddenDeathAnimation = NULL;
-//			}
-//
-//			switch (suddenDeathDirection) {
-//				case suddenDeathRight:
-//					if (suddenDeathX < suddenDeathMaxX) {
-//						suddenDeathX++;
-//					} else {
-//						suddenDeathMinY++;
-//						suddenDeathY++;
-//						suddenDeathDirection = suddenDeathDown;
-//					}
-//					break;
-//
-//				case suddenDeathDown:
-//					if (suddenDeathY < suddenDeathMaxY) {
-//						suddenDeathY++;
-//					} else {
-//						suddenDeathMaxX--;
-//						suddenDeathX--;
-//						suddenDeathDirection = suddenDeathLeft;
-//					}
-//					break;
-//
-//				case suddenDeathLeft:
-//					if (suddenDeathX > suddenDeathMinX) {
-//						suddenDeathX--;
-//					} else {
-//						suddenDeathMaxY--;
-//						suddenDeathY--;
-//						suddenDeathDirection = suddenDeathUp;
-//					}
-//					break;
-//
-//				case suddenDeathUp:
-//					if (suddenDeathY > suddenDeathMinY) {
-//						suddenDeathY--;
-//					} else {
-//						suddenDeathMinX++;
-//						suddenDeathX++;
-//						suddenDeathDirection = suddenDeathRight;
-//					}
-//					break;
-//
-//			}
-//
-//		}
-//
-////		purge old animation
-//		for (unsigned int i = 0; i < suddenDeathAnimations.size(); i++) {
-//			if (suddenDeathAnimations[i]->canBeDeleted()) {
-//				delete suddenDeathAnimations[i];
-//				suddenDeathAnimations.erase(suddenDeathAnimations.begin() + i);
-//			}
-//			suddenDeathAnimations[i]->tick(playerBombeExplode);
-//		}
-		
 	}
 
 	public boolean isSuddentDeathTime() {
@@ -476,6 +407,7 @@ public class Game {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.level.getWall().stream().forEach(Wall::drawIt);
+		level.getSuddenDeathWall().stream().filter(sdw -> sdw.hasBody()).forEach(SuddenDeathWall::drawIt);
 		mbGame.getBatch().end();
 		blocsLayerTextureRegion = new TextureRegion(blocsLayerTexture);
 		blocsLayerTextureRegion.flip(false, true);
@@ -566,6 +498,7 @@ public class Game {
 		level.getBombes().stream().filter(b -> !b.isExploded()).forEach(Bombe::drawIt);
 		level.getBonuss().stream().filter(b -> b.isRevealed() || b.isBurning()).forEach(Bonus::drawIt);
 		players.stream().forEach(Player::drawIt);
+		level.getSuddenDeathWall().stream().filter(sdw -> !sdw.hasBody()).forEach(SuddenDeathWall::drawIt);
 		mbGame.getBatch().end();
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);
 		playerLayerTextureRegion.flip(false, true);

@@ -103,4 +103,11 @@ public class Brick extends BodyAble implements LevelElement {
 			}
 		}
 	}
+
+	@Override
+	public void immediateAction() {
+		this.state = BrickStateEnum.BURNED;
+		this.level.getOccupedWallBrickBonus()[this.getX()][this.getY()] = null;
+		dispose();
+	}
 }

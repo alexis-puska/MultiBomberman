@@ -130,4 +130,11 @@ public class Bonus extends BodyAble implements LevelElement {
 	public boolean idDisposed() {
 		return this.state == BonusStateEnum.DISPOSED;
 	}
+
+	@Override
+	public void immediateAction() {
+		this.state = BonusStateEnum.BURNED;
+		this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
+		dispose();
+	}
 }

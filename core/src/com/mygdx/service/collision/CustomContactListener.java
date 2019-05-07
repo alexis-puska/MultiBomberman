@@ -15,6 +15,7 @@ import com.mygdx.domain.game.Fire;
 import com.mygdx.domain.level.Hole;
 import com.mygdx.domain.level.Interrupter;
 import com.mygdx.domain.level.Mine;
+import com.mygdx.domain.level.SuddenDeathWall;
 import com.mygdx.domain.level.Teleporter;
 import com.mygdx.domain.level.Trolley;
 import com.mygdx.domain.level.Wall;
@@ -35,6 +36,7 @@ public class CustomContactListener implements ContactListener {
 		beginContactPlayerMine(contact);
 		beginContactPlayerBombe(contact);
 		beginContactPlayerHitboxBombe(contact);
+		beginContactPlayerSuddenDeathWall(contact);
 		beginContactPlayerHitboxBonus(contact);
 		beginContactBombeFire(contact);
 		beginContactBombes(contact);
@@ -239,6 +241,22 @@ public class CustomContactListener implements ContactListener {
 				p.flyBombeHurtMyHead();
 			}
 			p.insideBombe(true);
+		}
+	}
+
+	private void beginContactPlayerSuddenDeathWall(Contact contact) {
+		if (contact.getFixtureA().getUserData().getClass() == SuddenDeathWall.class
+				&& contact.getFixtureB().getUserData().getClass() == Player.class
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_SUDDEN_DEATH_WALL
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER) {
+			Player p = (Player) contact.getFixtureB().getUserData();
+			p.crush();
+		} else if (contact.getFixtureB().getUserData().getClass() == SuddenDeathWall.class
+				&& contact.getFixtureA().getUserData().getClass() == Player.class
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_SUDDEN_DEATH_WALL
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_PLAYER) {
+			Player p = (Player) contact.getFixtureA().getUserData();
+			p.crush();
 		}
 	}
 

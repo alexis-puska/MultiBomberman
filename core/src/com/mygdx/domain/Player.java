@@ -672,6 +672,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return this.state == PlayerStateEnum.DEAD;
 	}
 
+	public boolean isBurning() {
+		return this.state == PlayerStateEnum.BURNING;
+	}
+
 	public boolean isBadBomber() {
 		return this.state == PlayerStateEnum.BAD_BOMBER;
 	}

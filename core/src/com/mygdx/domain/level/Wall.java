@@ -83,4 +83,9 @@ public class Wall extends BodyAble implements LevelElement, Initiable {
 	public void action() {
 		// do nothing on wall
 	}
+
+	@Override
+	public void immediateAction() {
+		// do nothing on wall
+	}
 }

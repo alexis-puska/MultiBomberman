@@ -36,7 +36,7 @@ public class Fire extends BodyAble {
 		this.x = x;
 		this.y = y;
 		this.fireEnum = fireEnum;
-		this.animation = new Animation<>(1f / 6.25f,
+		this.animation = new Animation<>(1f / 10f,
 				SpriteService.getInstance().getSpriteForAnimation(fireEnum.getSpriteEnum()));
 		this.time = 0.0f;
 		this.createBody();
