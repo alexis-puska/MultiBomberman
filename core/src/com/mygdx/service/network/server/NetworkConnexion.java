@@ -105,6 +105,8 @@ public class NetworkConnexion extends Thread {
 						}
 					}
 
+					Gdx.app.log("receive", received);
+					
 					// Réception event controller / keyboard
 					if (received.startsWith("event:")) {
 						String[] part = received.split(":");
