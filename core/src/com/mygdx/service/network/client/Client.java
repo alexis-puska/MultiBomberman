@@ -49,22 +49,31 @@ public class Client extends Thread {
 					// request uuid by server
 					if (line.startsWith("hello")) {
 						outputStream.write(("uuid:" + Context.getUuid() + "\n").getBytes());
-					}
-					if (line.startsWith("nbp")) {
+					} else if (line.startsWith("nbp")) {
 						outputStream.write(("nbp:" + Context.getLocalPlayer() + "\n").getBytes());
-					}
-					if (line.startsWith("event")) {
+					} else if (line.startsWith("event")) {
 						this.canSendEvent = true;
-					}
-					if (line.startsWith("welcome_back")) {
+					} else if (line.startsWith("welcome_back")) {
 						this.canSendEvent = true;
-					}
-					if (line.startsWith("error")) {
+					} else if (line.startsWith("error")) {
 						this.networkService.setLastClientError(line);
 						Gdx.app.error(CLASS_NAME, line);
-					}
-					if (line.startsWith("draw") && viewScreen != null) {
-						viewScreen.receive(line);
+					} else if (line.startsWith("draw:") && viewScreen != null) {
+						viewScreen.receiveGame(line);
+					} else if (line.startsWith("sound:")) {
+						viewScreen.receiveSound(line);
+					} else if (line.startsWith("music:")) {
+						viewScreen.receiveMusique(line);
+					} else if (line.startsWith("levelScreen:")) {
+						viewScreen.receiveLevelScreen(line);
+					} else if (line.startsWith("rulesScreen:")) {
+						viewScreen.receiveRuleScreen(line);
+					} else if (line.startsWith("skinsScreen:")) {
+						viewScreen.receiveSkinScreen(line);
+					} else if (line.startsWith("levelDefinition:")) {
+						viewScreen.receiveLevelDef(line);
+					} else {
+						Gdx.app.log("Client", "recu et non reconnu : " + line);
 					}
 				}
 			} catch (IOException e) {
@@ -101,8 +110,7 @@ public class Client extends Thread {
 	/**
 	 * Send button event to server
 	 * 
-	 * @param buffer
-	 *            value of button pressed by an controller
+	 * @param buffer value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
 		if (status && canSendEvent) {

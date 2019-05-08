@@ -27,6 +27,7 @@ import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.input_processor.ControlEventListener;
 import com.mygdx.service.input_processor.MenuListener;
+import com.mygdx.service.network.dto.SkinScreenDTO;
 import com.mygdx.service.network.server.NetworkConnexion;
 import com.mygdx.view.ClientViewScreen;
 import com.mygdx.view.GameScreen;
@@ -39,25 +40,19 @@ import com.mygdx.view.SkinScreen;
 public class PlayerService {
 
 	private static final String CLASS_NAME = "PlayerService.class";
-
 	private final MultiBombermanGame mbGame;
-
 	private Map<Integer, PlayerDefinition> definitions;
 	private Map<Integer, ControlEventListener> controlEventListeners;
-
 	// map pour rediriger l'evenement d'un controller distant vers la definition ou
 	// un joueur
 	private Map<String, Map<Integer, Integer>> networkController;
-
 	// map pour rediriger l'evenement d'nu controller local vers la definition ou un
 	// joueur
 	private Map<Controller, Integer> localController;
-
 	private Map<Controller, Integer> controllerToIndex;
-
 	private int firstHumanIdx;
-
 	private MenuListener menuListener;
+	private ObjectMapper objectMapper;
 
 	public MenuListener getMenuListener() {
 		return menuListener;
@@ -74,6 +69,7 @@ public class PlayerService {
 		for (int i = 1; i < 16; i++) {
 			definitions.put(i, new PlayerDefinition(i, PlayerTypeEnum.CPU));
 		}
+		this.objectMapper = new ObjectMapper();
 	}
 
 	public int getNbHumanPlayerFromDefinition() {
@@ -671,12 +667,12 @@ public class PlayerService {
 	 * 
 	 ******************************************************/
 	public void definitionChange() {
+		SkinScreenDTO dto = new SkinScreenDTO();
+		dto.setDefinitions(this.definitions);
 		try {
-			Gdx.app.log("PLAYER SERVICE", "definitions : " + new ObjectMapper().writeValueAsString(this.definitions));
+			this.mbGame.getNetworkService().sendToClient("skinsScreen:" + this.objectMapper.writeValueAsString(dto));
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Gdx.app.error(CLASS_NAME, "error send definitions to client");
 		}
-		// mbGame.getNetworkService();
 	}
 }

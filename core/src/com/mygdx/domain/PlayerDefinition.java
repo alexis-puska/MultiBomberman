@@ -5,10 +5,12 @@ import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PlayerDefinition {
 	private int position;
 	private CharacterColorEnum color;

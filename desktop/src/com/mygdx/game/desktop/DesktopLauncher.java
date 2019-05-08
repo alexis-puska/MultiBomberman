@@ -1,5 +1,7 @@
 package com.mygdx.game.desktop;
 
+import java.util.Base64;
+
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -22,6 +24,15 @@ public class DesktopLauncher {
 		config.addIcon("icon_128.png", FileType.Internal);
 		config.addIcon("icon_32.png", FileType.Internal);
 		config.addIcon("icon_16.png", FileType.Internal);
+		long s = System.currentTimeMillis();
+		String originalInput = "aaaaaaaaaaaa";
+		String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
+		long e = System.currentTimeMillis();
+		System.out.println("time : " + (e - s));
+		System.out.println("original : " + originalInput);
+		System.out.println("size " + originalInput.getBytes().length);
+		System.out.println("encoded : " + encodedString);
+
 		new LwjglApplication(new MultiBombermanGame(), config);
 	}
 }

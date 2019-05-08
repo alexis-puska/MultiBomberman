@@ -106,7 +106,7 @@ public class NetworkConnexion extends Thread {
 					}
 
 					Gdx.app.log("receive", received);
-					
+
 					// Réception event controller / keyboard
 					if (received.startsWith("event:")) {
 						String[] part = received.split(":");
@@ -195,6 +195,7 @@ public class NetworkConnexion extends Thread {
 	public void send(byte[] value) {
 		try {
 			out.write(value);
+			Gdx.app.log("networkConnexion", value.toString());
 		} catch (IOException e) {
 			Gdx.app.error("CLASS_NAME", "IOException : " + e.getMessage());
 		}
