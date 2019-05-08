@@ -64,9 +64,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		default:
 			break;
 		}
-		mbGame.getBatch().begin();
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
-		mbGame.getBatch().end();
+
 	}
 
 	@Override
@@ -233,18 +231,30 @@ public class ClientViewScreen implements Screen, MenuListener {
 	 **********************************************/
 
 	private void drawSkinScreen() {
-		// TODO Auto-generated method stub
+		Gdx.app.log(CLASS_NAME, "drawSkinScreen");
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
+		mbGame.getBatch().end();
 	}
 
 	private void drawRuleScreen() {
-		// TODO Auto-generated method stub
+		Gdx.app.log(CLASS_NAME, "drawRuleScreen");
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
+		mbGame.getBatch().end();
 	}
 
 	private void drawLevelScreen() {
-		// TODO Auto-generated method stub
+		Gdx.app.log(CLASS_NAME, "drawLevelScreen");
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
+		mbGame.getBatch().end();
 	}
 
 	private void drawGameScreen() {
-		// TODO Auto-generated method stub
+		Gdx.app.log(CLASS_NAME, "drawGameScreen");
+		mbGame.getBatch().begin();
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
+		mbGame.getBatch().end();
 	}
 }
