@@ -13,6 +13,8 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.PlayerDefinition;
 import com.mygdx.domain.level.Level;
@@ -245,6 +247,7 @@ public class PlayerService {
 				default:
 					break;
 				}
+				this.definitionChange();
 			}
 		} else {
 			Gdx.app.debug(CLASS_NAME, " Map NULL");
@@ -362,6 +365,7 @@ public class PlayerService {
 			default:
 				break;
 			}
+			this.definitionChange();
 		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class
 				&& this.controllerToIndex.containsKey(controller)) {
 			// Expedition evenement à distance
@@ -548,6 +552,7 @@ public class PlayerService {
 			default:
 				break;
 			}
+			this.definitionChange();
 		} else if (mbGame.getScreen().getClass() == GameScreen.class && firstHumanIdx != -1
 				&& controlEventListeners.get(firstHumanIdx) != null) {
 			controlEventListeners.get(firstHumanIdx).move(direction);
@@ -660,5 +665,18 @@ public class PlayerService {
 		} else if (mbGame.getScreen().getClass() == ClientViewScreen.class && firstHumanIdx != -1) {
 			mbGame.getNetworkService().sendReleaseR(0);
 		}
+	}
+
+	/******************************************************
+	 * 
+	 ******************************************************/
+	public void definitionChange() {
+		try {
+			Gdx.app.log("PLAYER SERVICE", "definitions : " + new ObjectMapper().writeValueAsString(this.definitions));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// mbGame.getNetworkService();
 	}
 }

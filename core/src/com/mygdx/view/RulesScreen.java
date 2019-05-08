@@ -42,6 +42,7 @@ public class RulesScreen implements Screen, MenuListener {
 		this.mbGame.getPlayerService().setMenuListener(this);
 		this.cursorPosition = 0;
 		initFont();
+		rulesChange();
 	}
 
 	@Override
@@ -171,6 +172,7 @@ public class RulesScreen implements Screen, MenuListener {
 		if (cursorPosition < 0) {
 			cursorPosition = 0;
 		}
+		rulesChange();
 	}
 
 	@Override
@@ -180,6 +182,7 @@ public class RulesScreen implements Screen, MenuListener {
 		if (cursorPosition > 3) {
 			cursorPosition = 3;
 		}
+		rulesChange();
 	}
 
 	@Override
@@ -222,6 +225,7 @@ public class RulesScreen implements Screen, MenuListener {
 			Context.decTime();
 			break;
 		}
+		rulesChange();
 	}
 
 	@Override
@@ -242,6 +246,7 @@ public class RulesScreen implements Screen, MenuListener {
 			Context.incTime();
 			break;
 		}
+		rulesChange();
 	}
 
 	@Override
@@ -256,4 +261,7 @@ public class RulesScreen implements Screen, MenuListener {
 
 	}
 
+	public void rulesChange() {
+		Gdx.app.log("RULE SCREEN", "change to send to client");
+	}
 }

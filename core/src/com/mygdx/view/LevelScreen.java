@@ -47,6 +47,7 @@ public class LevelScreen implements Screen, MenuListener {
 		this.mbGame.getPlayerService().setMenuListener(this);
 		cursorPosition = 0;
 		initFont();
+		levelChange();
 	}
 
 	@Override
@@ -260,6 +261,7 @@ public class LevelScreen implements Screen, MenuListener {
 		if (cursorPosition < 0) {
 			cursorPosition = 0;
 		}
+		levelChange();
 	}
 
 	@Override
@@ -291,6 +293,7 @@ public class LevelScreen implements Screen, MenuListener {
 
 			break;
 		}
+		levelChange();
 	}
 
 	@Override
@@ -322,6 +325,7 @@ public class LevelScreen implements Screen, MenuListener {
 		default:
 			break;
 		}
+		levelChange();
 	}
 
 	@Override
@@ -356,6 +360,7 @@ public class LevelScreen implements Screen, MenuListener {
 		if (cursorPosition > 18) {
 			cursorPosition = 18;
 		}
+		levelChange();
 	}
 
 	@Override
@@ -422,6 +427,7 @@ public class LevelScreen implements Screen, MenuListener {
 		default:
 			break;
 		}
+		levelChange();
 	}
 
 	@Override
@@ -488,6 +494,7 @@ public class LevelScreen implements Screen, MenuListener {
 		default:
 			break;
 		}
+		levelChange();
 	}
 
 	@Override
@@ -547,6 +554,7 @@ public class LevelScreen implements Screen, MenuListener {
 		default:
 			break;
 		}
+		levelChange();
 	}
 
 	@Override
@@ -606,6 +614,7 @@ public class LevelScreen implements Screen, MenuListener {
 		default:
 			break;
 		}
+		levelChange();
 	}
 
 	@Override
@@ -616,5 +625,9 @@ public class LevelScreen implements Screen, MenuListener {
 	@Override
 	public void pressR() {
 		// unused method
+	}
+
+	public void levelChange() {
+		Gdx.app.log("LEVEL SCREEN", "change to send to client");
 	}
 }

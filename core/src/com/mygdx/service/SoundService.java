@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SoundEnum;
+import com.mygdx.service.network.server.Server;
 
 /**
  * Play musique or a sound in game.
@@ -50,6 +51,11 @@ public class SoundService {
 	private Sound soundDrawGame;
 	private MusicEnum lastMusicPlayed;
 
+	/*********************
+	 * --- NETWORK ---
+	 *********************/
+	private Server server;
+
 	public SoundService() {
 		Gdx.app.debug(CLASS_NAME, "Init");
 		/*******************
@@ -86,6 +92,17 @@ public class SoundService {
 	}
 
 	/*******************
+	 * --- NETWORK ---
+	 ******************/
+	public void setServer(Server server) {
+		this.server = server;
+	}
+
+	public void clearServer() {
+		this.server = null;
+	}
+
+	/*******************
 	 * --- musique ---
 	 *******************/
 	public void stopMusic() {
@@ -93,6 +110,10 @@ public class SoundService {
 			musicBattle.stop();
 		} else if (musicMenu.isPlaying()) {
 			musicMenu.stop();
+		}
+		if (this.server != null) {
+			// TODO send stop musique instruction
+			Gdx.app.log("SOUND SERVICE", "stop musique instruction");
 		}
 	}
 
@@ -112,10 +133,18 @@ public class SoundService {
 			break;
 		}
 		lastMusicPlayed = musicEnum;
+		if (this.server != null) {
+			// TODO send play musique instruction
+			Gdx.app.log("SOUND SERVICE", "play musique instruction");
+		}
 	}
 
 	public void playLastMusic() {
 		playMusic(lastMusicPlayed);
+		if (this.server != null) {
+			// TODO send play musique instruction
+			Gdx.app.log("SOUND SERVICE", "play musique instruction");
+		}
 	}
 
 	/*******************
@@ -181,6 +210,10 @@ public class SoundService {
 		default:
 			soundBip.play(VALIDE_BIP_VOLUME);
 		}
+		if (this.server != null) {
+			// TODO send play sound instruction
+			Gdx.app.log("SOUND SERVICE", "play sound instruction");
+		}
 	}
 
 	public long loopSound(SoundEnum soundEnum) {
@@ -244,6 +277,10 @@ public class SoundService {
 		default:
 			id = soundBip.loop();
 		}
+		if (this.server != null) {
+			// TODO send loop sound instruction
+			Gdx.app.log("SOUND SERVICE", "loop sound instruction");
+		}
 		return id;
 	}
 
@@ -306,6 +343,10 @@ public class SoundService {
 		case BIP:
 		default:
 			soundBip.stop(id);
+		}
+		if (this.server != null) {
+			// TODO send stop sound instruction
+			Gdx.app.log("SOUND SERVICE", "stop sound instruction");
 		}
 	}
 }

@@ -43,6 +43,7 @@ public class SkinScreen implements Screen, MenuListener {
 			mbGame.getNetworkService().sendToClient("draw:test");
 		}
 		initFont();
+		this.mbGame.getPlayerService().definitionChange();
 	}
 
 	@Override

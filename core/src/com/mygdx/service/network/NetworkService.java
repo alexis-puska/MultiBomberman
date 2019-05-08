@@ -17,6 +17,7 @@ import com.mygdx.constante.Constante;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.network.client.Client;
 import com.mygdx.service.network.server.Server;
 import com.mygdx.service.network.server.ServerRegistrationService;
@@ -64,6 +65,7 @@ public class NetworkService {
 			Gdx.app.error(CLASS_NAME, "Serveur KO");
 			return false;
 		}
+		SoundService.getInstance().setServer(server);
 		return true;
 	}
 
@@ -73,6 +75,7 @@ public class NetworkService {
 		}
 		serverRegistrationService.unregister();
 		server.kill();
+		SoundService.getInstance().clearServer();
 	}
 
 	public void sendToClient(String value) {
