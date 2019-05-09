@@ -81,7 +81,9 @@ public class Trolley extends BodyAble implements Initiable {
 	@Override
 	public void dispose() {
 		super.dispose();
-		SoundService.getInstance().stopSound(SoundEnum.TROLLEY, this.soundId);
+		if(this.soundId != 0l) {
+			SoundService.getInstance().stopSound(SoundEnum.TROLLEY, this.soundId);
+		}
 	}
 
 	@Override

@@ -1,8 +1,14 @@
 package com.mygdx.service;
 
+import java.nio.ByteBuffer;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.mygdx.domain.enumeration.SoundCommandEnum;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.service.network.server.Server;
@@ -19,7 +25,10 @@ public class SoundService {
 	private static final float MINE_VOLUME = 0.3f;
 	private static final float VALIDE_BIP_VOLUME = 0.1f;
 
+	public static final String PREFIX = "sound:";
+
 	private static SoundService instance = new SoundService();
+	private Map<Long, Long> networkLoopSoundId;
 
 	/*******************
 	 * --- musique ---
@@ -49,7 +58,6 @@ public class SoundService {
 	private Sound soundAzizLightFr;
 	private Sound soundAzizLightEn;
 	private Sound soundDrawGame;
-	private MusicEnum lastMusicPlayed;
 
 	/*********************
 	 * --- NETWORK ---
@@ -85,6 +93,7 @@ public class SoundService {
 		soundAzizLightFr = Gdx.audio.newSound(Gdx.files.internal("sound/sound_aziz_light_fr.wav"));
 		soundAzizLightEn = Gdx.audio.newSound(Gdx.files.internal("sound/sound_aziz_light_en.wav"));
 		soundDrawGame = Gdx.audio.newSound(Gdx.files.internal("sound/sound_draw.wav"));
+		networkLoopSoundId = new HashMap<>();
 	}
 
 	public static SoundService getInstance() {
@@ -112,8 +121,7 @@ public class SoundService {
 			musicMenu.stop();
 		}
 		if (this.server != null) {
-			// TODO send stop musique instruction
-			Gdx.app.log("SOUND SERVICE", "stop musique instruction");
+			createStopMusiqueCommand();
 		}
 	}
 
@@ -132,18 +140,8 @@ public class SoundService {
 			musicMenu.setLooping(true);
 			break;
 		}
-		lastMusicPlayed = musicEnum;
 		if (this.server != null) {
-			// TODO send play musique instruction
-			Gdx.app.log("SOUND SERVICE", "play musique instruction");
-		}
-	}
-
-	public void playLastMusic() {
-		playMusic(lastMusicPlayed);
-		if (this.server != null) {
-			// TODO send play musique instruction
-			Gdx.app.log("SOUND SERVICE", "play musique instruction");
+			createPlayMusiqueCommand(musicEnum);
 		}
 	}
 
@@ -211,8 +209,7 @@ public class SoundService {
 			soundBip.play(VALIDE_BIP_VOLUME);
 		}
 		if (this.server != null) {
-			// TODO send play sound instruction
-			Gdx.app.log("SOUND SERVICE", "play sound instruction");
+			createPlaySoundCommand(soundEnum);
 		}
 	}
 
@@ -278,8 +275,7 @@ public class SoundService {
 			id = soundBip.loop();
 		}
 		if (this.server != null) {
-			// TODO send loop sound instruction
-			Gdx.app.log("SOUND SERVICE", "loop sound instruction");
+			createLoopSoundCommand(soundEnum, id);
 		}
 		return id;
 	}
@@ -345,8 +341,98 @@ public class SoundService {
 			soundBip.stop(id);
 		}
 		if (this.server != null) {
-			// TODO send stop sound instruction
-			Gdx.app.log("SOUND SERVICE", "stop sound instruction");
+			createStopSoundCommand(soundEnum, id);
+		}
+	}
+
+	private void createPlayMusiqueCommand(MusicEnum music) {
+		ByteBuffer b = ByteBuffer.allocate(2);
+		b.put((byte) SoundCommandEnum.PLAY_MUSIC.ordinal());
+		b.put((byte) music.ordinal());
+		concatAndSend(b);
+	}
+
+	private void createStopMusiqueCommand() {
+		ByteBuffer b = ByteBuffer.allocate(1);
+		b.put((byte) SoundCommandEnum.STOP_MUSIC.ordinal());
+		concatAndSend(b);
+	}
+
+	private void createPlaySoundCommand(SoundEnum sound) {
+		ByteBuffer b = ByteBuffer.allocate(2);
+		b.put((byte) SoundCommandEnum.PLAY_SOUND.ordinal());
+		b.put((byte) sound.ordinal());
+		concatAndSend(b);
+	}
+
+	private void createLoopSoundCommand(SoundEnum sound, long id) {
+		ByteBuffer b = ByteBuffer.allocate(10);
+		b.put((byte) SoundCommandEnum.LOOP_SOUND.ordinal());
+		b.put((byte) sound.ordinal());
+		b.putLong(id);
+		concatAndSend(b);
+	}
+
+	private void createStopSoundCommand(SoundEnum sound, long id) {
+		ByteBuffer b = ByteBuffer.allocate(10);
+		b.put((byte) SoundCommandEnum.STOP_SOUND.ordinal());
+		b.put((byte) sound.ordinal());
+		b.putLong(id);
+		concatAndSend(b);
+	}
+
+	private void concatAndSend(ByteBuffer buffer) {
+		String cmd = PREFIX + Base64.getEncoder().encodeToString(buffer.array()) + "\n";
+		this.server.send(cmd.getBytes());
+	}
+
+	public void decodeSoundCommand(String line) {
+		String command = line.substring(line.indexOf(":") + 1);
+		ByteBuffer b = ByteBuffer.wrap(Base64.getDecoder().decode(command.getBytes()));
+		byte com = b.get();
+		byte sound;
+		byte music;
+		long id;
+		long localId;
+		if ((int) com < SoundCommandEnum.values().length) {
+			switch (SoundCommandEnum.values()[com]) {
+			case LOOP_SOUND:
+				sound = b.get();
+				id = b.getLong();
+				if (SoundEnum.values().length > (int) sound) {
+					localId = this.loopSound(SoundEnum.values()[sound]);
+					this.networkLoopSoundId.put(id, localId);
+				}
+				break;
+			case PLAY_MUSIC:
+				music = b.get();
+				if (MusicEnum.values().length > (int) music) {
+					this.playMusic(MusicEnum.values()[music]);
+				}
+				break;
+			case PLAY_SOUND:
+				sound = b.get();
+				if (SoundEnum.values().length > (int) sound) {
+					this.playSound(SoundEnum.values()[sound]);
+				}
+				break;
+			case STOP_MUSIC:
+				this.stopMusic();
+				break;
+			case STOP_SOUND:
+				sound = b.get();
+				id = b.getLong();
+				if (SoundEnum.values().length > (int) sound && networkLoopSoundId.containsKey(id)) {
+					localId = this.networkLoopSoundId.get(id);
+					this.stopSound(SoundEnum.values()[sound], localId);
+					this.networkLoopSoundId.remove(id);
+					Gdx.app.log("SOUND_SERVICE", "network sound size : " + this.networkLoopSoundId.size());
+				}
+				break;
+			default:
+				break;
+
+			}
 		}
 	}
 }

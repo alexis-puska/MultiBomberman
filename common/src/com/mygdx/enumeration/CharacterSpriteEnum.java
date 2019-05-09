@@ -23,5 +23,5 @@ public enum CharacterSpriteEnum {
 	BURN,
 	INSIDE_TROLLEY,
 	SCORE_HAPPY,
-	SCORE_CRY
+	SCORE_CRY;
 }

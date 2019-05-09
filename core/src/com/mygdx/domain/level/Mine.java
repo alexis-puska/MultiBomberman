@@ -80,7 +80,9 @@ public class Mine extends BodyAble implements Initiable {
 
 	@Override
 	public void dispose() {
-		SoundService.getInstance().stopSound(SoundEnum.MINE, id);
+		if (this.id != 0l) {
+			SoundService.getInstance().stopSound(SoundEnum.MINE, id);
+		}
 		super.dispose();
 	}
 

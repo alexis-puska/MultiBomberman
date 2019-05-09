@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.net.Socket;
 import com.mygdx.service.Context;
+import com.mygdx.service.SoundService;
 import com.mygdx.service.network.NetworkService;
 import com.mygdx.view.ClientViewScreen;
 
@@ -61,10 +62,8 @@ public class Client extends Thread {
 						Gdx.app.error(CLASS_NAME, line);
 					} else if (line.startsWith("game:") && viewScreen != null) {
 						viewScreen.receiveGame(line);
-					} else if (line.startsWith("sound:") && viewScreen != null) {
+					} else if (line.startsWith(SoundService.PREFIX) && viewScreen != null) {
 						viewScreen.receiveSound(line);
-					} else if (line.startsWith("music:") && viewScreen != null) {
-						viewScreen.receiveMusique(line);
 					} else if (line.startsWith("levelScreen:") && viewScreen != null) {
 						viewScreen.receiveLevelScreen(line);
 					} else if (line.startsWith("waitScreen:") && viewScreen != null) {
@@ -109,7 +108,8 @@ public class Client extends Thread {
 	/**
 	 * Send button event to server
 	 * 
-	 * @param buffer value of button pressed by an controller
+	 * @param buffer
+	 *            value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
 		if (status && canSendEvent) {

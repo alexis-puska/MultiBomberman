@@ -286,13 +286,8 @@ public class ClientViewScreen implements Screen, MenuListener {
 	}
 
 	public void receiveSound(String line) {
-		Gdx.app.log(CLASS_NAME, "receiveSound");
-
-	}
-
-	public void receiveMusique(String line) {
-		Gdx.app.log(CLASS_NAME, "receiveMusique");
-
+		Gdx.app.log("CLASS_NAME", "receive sound : " + line);
+		SoundService.getInstance().decodeSoundCommand(line);
 	}
 
 	/**********************************************
