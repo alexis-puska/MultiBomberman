@@ -198,7 +198,6 @@ public class NetworkConnexion extends Thread {
 	public void send(byte[] value) {
 		try {
 			out.write(value);
-			Gdx.app.log("networkConnexion", value.toString());
 		} catch (IOException e) {
 			Gdx.app.error("CLASS_NAME", "IOException : " + e.getMessage());
 		}
