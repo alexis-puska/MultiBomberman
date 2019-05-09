@@ -12,13 +12,13 @@ import lombok.Setter;
 public class LevelScreenDTO implements Serializable {
 
 	private static final long serialVersionUID = -890858808687751648L;
-	public int bombe;
-	public int strenght;
-	public String group;
-	public String name;
-	public String description;
-	public int indexPreview;
-	public int[] bonus;
+	private int bombe;
+	private int strenght;
+	private String group;
+	private String name;
+	private String description;
+	private int indexPreview;
+	private int[] bonus;
 
 	public LevelScreenDTO() {
 		this.bonus = new int[Constante.MAX_BONUS];

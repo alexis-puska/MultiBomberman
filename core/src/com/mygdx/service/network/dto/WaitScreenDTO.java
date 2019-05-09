@@ -12,6 +12,6 @@ import lombok.Setter;
 public class WaitScreenDTO implements Serializable {
 
 	private static final long serialVersionUID = 2627356807347045805L;
-	public int nbHumainPlayer;
-	public int nbClient;
+	private int nbHumainPlayer;
+	private int nbClient;
 }

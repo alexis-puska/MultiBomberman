@@ -15,8 +15,8 @@ public class RuleScreenDTO implements Serializable {
 
 	private static final long serialVersionUID = -890858808687751648L;
 
-	public boolean suddenDeath;
-	public boolean badBomber;
-	public TimeEnum time;
-	public int iaLevel;
+	private boolean suddenDeath;
+	private boolean badBomber;
+	private TimeEnum time;
+	private int iaLevel;
 }
