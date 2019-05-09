@@ -387,7 +387,7 @@ public class SoundService {
 	}
 
 	public void decodeSoundCommand(String line) {
-		String command = line.substring(line.indexOf(":") + 1);
+		String command = line.substring(line.indexOf(':') + 1);
 		ByteBuffer b = ByteBuffer.wrap(Base64.getDecoder().decode(command.getBytes()));
 		byte com = b.get();
 		byte sound;

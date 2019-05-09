@@ -78,10 +78,10 @@ public class Level {
 	 **********************/
 	private int suddenDeathBlock;
 	private SuddenDeathDirection suddenDeathDirection;
-	private int sudden_death_min_x;
-	private int sudden_death_max_x;
-	private int sudden_death_min_y;
-	private int sudden_death_max_y;
+	private int suddenDeathMinX;
+	private int suddenDeathMaxX;
+	private int suddenDeathMinY;
+	private int suddenDeathMaxY;
 	private int suddenDeathX;
 	private int suddenDeathY;
 	private List<SuddenDeathWall> suddenDeathWall;
@@ -228,10 +228,10 @@ public class Level {
 	private void initSuddenDeath() {
 		this.suddenDeathBlock = 0;
 		this.suddenDeathDirection = SuddenDeathDirection.RIGHT;
-		this.sudden_death_min_x = 0;
-		this.sudden_death_max_x = Constante.GRID_SIZE_X - 1;
-		this.sudden_death_min_y = 0;
-		this.sudden_death_max_y = Constante.GRID_SIZE_Y - 1;
+		this.suddenDeathMinX = 0;
+		this.suddenDeathMaxX = Constante.GRID_SIZE_X - 1;
+		this.suddenDeathMinY = 0;
+		this.suddenDeathMaxY = Constante.GRID_SIZE_Y - 1;
 		this.suddenDeathX = 0;
 		this.suddenDeathY = Constante.GRID_SIZE_Y - 1;
 		this.suddenDeathWall = new ArrayList<>();
@@ -352,37 +352,38 @@ public class Level {
 			}
 			switch (suddenDeathDirection) {
 			case RIGHT:
-				if (suddenDeathX < sudden_death_max_x) {
+				if (suddenDeathX < suddenDeathMaxX) {
 					suddenDeathX++;
 				} else {
-					sudden_death_max_y--;
+					suddenDeathMaxY--;
 					suddenDeathY--;
 					suddenDeathDirection = SuddenDeathDirection.DOWN;
 				}
 				break;
 			case DOWN:
-				if (suddenDeathY > sudden_death_min_y) {
+				if (suddenDeathY > suddenDeathMinY) {
 					suddenDeathY--;
 				} else {
-					sudden_death_max_x--;
+					suddenDeathMaxX--;
 					suddenDeathX--;
 					suddenDeathDirection = SuddenDeathDirection.LEFT;
 				}
 				break;
 			case LEFT:
-				if (suddenDeathX > sudden_death_min_x) {
+				if (suddenDeathX > suddenDeathMinX) {
 					suddenDeathX--;
 				} else {
-					sudden_death_min_y++;
+					suddenDeathMinY++;
 					suddenDeathY++;
 					suddenDeathDirection = SuddenDeathDirection.UP;
 				}
 				break;
 			case UP:
-				if (suddenDeathY < sudden_death_max_y) {
+			default:
+				if (suddenDeathY < suddenDeathMaxY) {
 					suddenDeathY++;
 				} else {
-					sudden_death_min_x++;
+					suddenDeathMinX++;
 					suddenDeathX++;
 					suddenDeathDirection = SuddenDeathDirection.RIGHT;
 				}

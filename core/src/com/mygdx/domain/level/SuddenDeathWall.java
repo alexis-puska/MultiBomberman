@@ -58,7 +58,6 @@ public class SuddenDeathWall extends BodyAble {
 		PolygonShape groundBox = new PolygonShape();
 		groundBox.setAsBox(0.5f, 0.5f);
 		groundBodyDef.position.set(new Vector2((float) this.x + 0.5f, (float) this.y + 0.5f));
-		// groundBodyDef.type = BodyType.DynamicBody;
 		this.body = world.createBody(groundBodyDef);
 		Fixture fixture = body.createFixture(groundBox, 0.0f);
 		fixture.setFriction(0f);

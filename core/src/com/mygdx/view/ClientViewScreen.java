@@ -34,6 +34,9 @@ import com.mygdx.service.network.enumeration.LastRequestEnum;
 public class ClientViewScreen implements Screen, MenuListener {
 
 	private static final String CLASS_NAME = "ClientViewScreen.class";
+	private static final String JSON_PARSE_EXCEPTION = "JsonParseException : ";
+	private static final String JSON_MAPPING_EXCEPTION = "JsonMappingException : ";
+	private static final String IO_EXCEPTION = "IOException : ";
 	private static final int SKIN_START_X = 70;
 	private static final int SKIN_START_Y = 170;
 	private static final int SKIN_COL_SIZE = 140;
@@ -108,8 +111,8 @@ public class ClientViewScreen implements Screen, MenuListener {
 			drawSkinScreen();
 			break;
 		case WAIT_SCREEN:
-			drawWaitScreen();
 		default:
+			drawWaitScreen();
 			break;
 		}
 
@@ -214,69 +217,69 @@ public class ClientViewScreen implements Screen, MenuListener {
 	public void receiveWaitScreen(String line) {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveWaitScreen");
-			waitScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(":") + 1), WaitScreenDTO.class);
+			waitScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), WaitScreenDTO.class);
 			last = LastRequestEnum.WAIT_SCREEN;
 		} catch (JsonParseException e) {
-			Gdx.app.error(CLASS_NAME, "JsonParseException");
+			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
-			Gdx.app.error(CLASS_NAME, "JsonMappingException");
+			Gdx.app.error(CLASS_NAME, JSON_MAPPING_EXCEPTION + e.getMessage());
 		} catch (IOException e) {
-			Gdx.app.error(CLASS_NAME, "IOException");
+			Gdx.app.error(CLASS_NAME, IO_EXCEPTION + e.getMessage());
 		}
 	}
 
 	public void receiveSkinScreen(String line) {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveSkinScreen");
-			skinScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(":") + 1), SkinScreenDTO.class);
+			skinScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), SkinScreenDTO.class);
 			last = LastRequestEnum.SKIN_SCREEN;
 		} catch (JsonParseException e) {
-			Gdx.app.error(CLASS_NAME, "JsonParseException");
+			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
-			Gdx.app.error(CLASS_NAME, "JsonMappingException");
+			Gdx.app.error(CLASS_NAME, JSON_MAPPING_EXCEPTION + e.getMessage());
 		} catch (IOException e) {
-			Gdx.app.error(CLASS_NAME, "IOException");
+			Gdx.app.error(CLASS_NAME, IO_EXCEPTION + e.getMessage());
 		}
 	}
 
 	public void receiveRuleScreen(String line) {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveRuleScreen");
-			ruleScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(":") + 1), RuleScreenDTO.class);
+			ruleScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), RuleScreenDTO.class);
 			last = LastRequestEnum.RULE_SCREEN;
 		} catch (JsonParseException e) {
-			Gdx.app.error(CLASS_NAME, "JsonParseException");
+			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
-			Gdx.app.error(CLASS_NAME, "JsonMappingException");
+			Gdx.app.error(CLASS_NAME, JSON_MAPPING_EXCEPTION + e.getMessage());
 		} catch (IOException e) {
-			Gdx.app.error(CLASS_NAME, "IOException");
+			Gdx.app.error(CLASS_NAME, IO_EXCEPTION + e.getMessage());
 		}
 	}
 
 	public void receiveLevelScreen(String line) {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveLevelScreen");
-			levelScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(":") + 1), LevelScreenDTO.class);
+			levelScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), LevelScreenDTO.class);
 			last = LastRequestEnum.LEVEL_SCREEN;
 		} catch (JsonParseException e) {
-			Gdx.app.error(CLASS_NAME, "JsonParseException");
+			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
-			Gdx.app.error(CLASS_NAME, "JsonMappingException");
+			Gdx.app.error(CLASS_NAME, JSON_MAPPING_EXCEPTION + e.getMessage());
 		} catch (IOException e) {
-			Gdx.app.error(CLASS_NAME, "IOException");
+			Gdx.app.error(CLASS_NAME, IO_EXCEPTION + e.getMessage());
 		}
 	}
 
 	public void receiveLevelDef(String line) {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveLevelDef");
-			levelDTO = this.objectMapper.readValue(line.substring(line.indexOf(":") + 1), LevelDTO.class);
+			levelDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), LevelDTO.class);
 		} catch (JsonParseException e) {
-			Gdx.app.error(CLASS_NAME, "JsonParseException");
+			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
-			Gdx.app.error(CLASS_NAME, "JsonMappingException");
+			Gdx.app.error(CLASS_NAME, JSON_MAPPING_EXCEPTION + e.getMessage());
 		} catch (IOException e) {
-			Gdx.app.error(CLASS_NAME, "IOException");
+			Gdx.app.error(CLASS_NAME, IO_EXCEPTION + e.getMessage());
 		}
 	}
 

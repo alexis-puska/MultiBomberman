@@ -4,6 +4,10 @@ import com.mygdx.constante.Constante;
 
 public class IAUtils {
 
+	private IAUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	public static int getLeftPos(int pos) {
 		int r = pos - 1;
 		if (pos % 35 == 0) {

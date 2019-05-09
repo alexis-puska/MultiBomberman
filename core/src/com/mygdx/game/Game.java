@@ -194,9 +194,7 @@ public class Game {
 		this.level.init(this, world);
 		this.players = this.mbGame.getPlayerService().generatePlayer(this, this.world, this.level,
 				this.level.getStartPlayer());
-		this.players.stream().forEach(p -> {
-			this.score.put(p.getIndex(), 0);
-		});
+		this.players.stream().forEach(p -> this.score.put(p.getIndex(), 0));
 		if (this.level.getShadow() > 0f) {
 			switch (Context.getLocale()) {
 			case ENGLISH:
@@ -407,7 +405,7 @@ public class Game {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.level.getWall().stream().forEach(Wall::drawIt);
-		level.getSuddenDeathWall().stream().filter(sdw -> sdw.hasBody()).forEach(SuddenDeathWall::drawIt);
+		level.getSuddenDeathWall().stream().filter(SuddenDeathWall::hasBody).forEach(SuddenDeathWall::drawIt);
 		mbGame.getBatch().end();
 		blocsLayerTextureRegion = new TextureRegion(blocsLayerTexture);
 		blocsLayerTextureRegion.flip(false, true);
