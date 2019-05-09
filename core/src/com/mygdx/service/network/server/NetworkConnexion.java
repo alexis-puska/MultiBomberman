@@ -98,6 +98,9 @@ public class NetworkConnexion extends Thread {
 						if (server.getPlayer() + player <= Context.getExternalPlayer() + Context.getLocalPlayer()) {
 							server.valideConnexion(this);
 							out.write("event\n".getBytes());
+							if (server.isAcceptNewConnexion()) {
+								server.notifyNewConnexion();
+							}
 						} else {
 							out.write("errorTooManyPlayer\n".getBytes());
 							socket.dispose();

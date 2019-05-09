@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
 import com.mygdx.enumeration.SoundEnum;
@@ -19,9 +21,11 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
+import com.mygdx.service.network.dto.RuleScreenDTO;
 
 public class RulesScreen implements Screen, MenuListener {
 
+	private static final String CLASS_NAME = "RulesScreen.class";
 	private static final int COLUMN_START_X = 200;
 	private static final int COLUMN_SPACE = 200;
 	private static final int ROW_START_Y = 120;
@@ -33,6 +37,7 @@ public class RulesScreen implements Screen, MenuListener {
 	private final ShapeRenderer shapeRenderer;
 	private int cursorPosition;
 	private BitmapFont font;
+	private ObjectMapper objectMapper;
 
 	public RulesScreen(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
@@ -41,6 +46,7 @@ public class RulesScreen implements Screen, MenuListener {
 		this.shapeRenderer = new ShapeRenderer();
 		this.mbGame.getPlayerService().setMenuListener(this);
 		this.cursorPosition = 0;
+		this.objectMapper = new ObjectMapper();
 		initFont();
 		rulesChange();
 	}
@@ -262,6 +268,15 @@ public class RulesScreen implements Screen, MenuListener {
 	}
 
 	public void rulesChange() {
-		Gdx.app.log("RULE SCREEN", "change to send to client");
+		RuleScreenDTO dto = new RuleScreenDTO();
+		dto.setBadBomber(Context.isBadBomber());
+		dto.setSuddenDeath(Context.isSuddenDeath());
+		dto.setTime(Context.getTime());
+		dto.setIaLevel(Context.getIaLevel());
+		try {
+			this.mbGame.getNetworkService().sendToClient("rulesScreen:" + this.objectMapper.writeValueAsString(dto));
+		} catch (JsonProcessingException e) {
+			Gdx.app.error(CLASS_NAME, "error send definitions to client");
+		}
 	}
 }

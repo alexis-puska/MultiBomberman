@@ -195,9 +195,10 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	public void pressStart() {
 		SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		mbGame.getPlayerService().initControllerMap();
-		if (mbGame.getNetworkService().connectToServer(Context.getPort(), Context.getIp())) {
+		ClientViewScreen cvs = new ClientViewScreen(mbGame);
+		if (mbGame.getNetworkService().connectToServer(Context.getPort(), Context.getIp(), cvs)) {
 			mbGame.getScreen().dispose();
-			mbGame.setScreen(new ClientViewScreen(mbGame));
+			mbGame.setScreen(cvs);
 		}
 	}
 

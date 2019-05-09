@@ -39,9 +39,6 @@ public class SkinScreen implements Screen, MenuListener {
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.mbGame.getPlayerService().setMenuListener(this);
-		if (Context.getGameMode() == GameModeEnum.SERVER) {
-			mbGame.getNetworkService().sendToClient("draw:test");
-		}
 		initFont();
 		this.mbGame.getPlayerService().definitionChange();
 	}
@@ -137,6 +134,7 @@ public class SkinScreen implements Screen, MenuListener {
 			mbGame.getScreen().dispose();
 			mbGame.setScreen(new PlayerTypeScreen(mbGame));
 		} else if (Context.getGameMode() == GameModeEnum.SERVER) {
+			mbGame.getNetworkService().getServer().notifyNewConnexion();
 			mbGame.getScreen().dispose();
 			mbGame.getNetworkService().acceptConnexion(true);
 			mbGame.setScreen(new WaitConnexionScreen(mbGame));

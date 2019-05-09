@@ -25,9 +25,10 @@ public class Client extends Thread {
 
 	private boolean canSendEvent;
 
-	public Client(Socket socket, NetworkService networkService) {
+	public Client(Socket socket, NetworkService networkService, ClientViewScreen clientViewScreen) {
 		this.socket = socket;
 		this.networkService = networkService;
+		this.viewScreen = clientViewScreen;
 		this.status = true;
 		this.canSendEvent = false;
 		outputStream = socket.getOutputStream();
@@ -58,7 +59,7 @@ public class Client extends Thread {
 					} else if (line.startsWith("error")) {
 						this.networkService.setLastClientError(line);
 						Gdx.app.error(CLASS_NAME, line);
-					} else if (line.startsWith("draw:") && viewScreen != null) {
+					} else if (line.startsWith("game:") && viewScreen != null) {
 						viewScreen.receiveGame(line);
 					} else if (line.startsWith("sound:")) {
 						viewScreen.receiveSound(line);
@@ -66,6 +67,8 @@ public class Client extends Thread {
 						viewScreen.receiveMusique(line);
 					} else if (line.startsWith("levelScreen:")) {
 						viewScreen.receiveLevelScreen(line);
+					} else if (line.startsWith("waitScreen:") && viewScreen != null) {
+						viewScreen.receiveWaitScreen(line);
 					} else if (line.startsWith("rulesScreen:")) {
 						viewScreen.receiveRuleScreen(line);
 					} else if (line.startsWith("skinsScreen:")) {
@@ -101,10 +104,6 @@ public class Client extends Thread {
 
 	public String getErrorCodeReceive() {
 		return errorCodeReceive;
-	}
-
-	public void setViewScreen(ClientViewScreen viewScreen) {
-		this.viewScreen = viewScreen;
 	}
 
 	/**

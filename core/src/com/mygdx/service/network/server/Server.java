@@ -12,9 +12,12 @@ import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
+import com.mygdx.service.network.dto.WaitScreenDTO;
 
 public class Server extends Thread {
 
@@ -27,10 +30,12 @@ public class Server extends Thread {
 	private boolean status;
 	private boolean acceptNewConnexion;
 	private int player;
+	private ObjectMapper objectMapper;
 
 	public Server(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
 		this.acceptNewConnexion = true;
+		this.objectMapper = new ObjectMapper();
 	}
 
 	@Override
@@ -120,15 +125,34 @@ public class Server extends Thread {
 	}
 
 	public void updateConnexion() {
-		player = mbGame.getPlayerService().getNbHumanPlayerFromDefinition();		
+		int tmp = mbGame.getPlayerService().getNbHumanPlayerFromDefinition();
 		List<String> del = new ArrayList<>();
 		for (Entry<String, NetworkConnexion> valide : connexionsValide.entrySet()) {
 			if (!valide.getValue().isStatus()) {
 				del.add(valide.getKey());
 			} else {
-				player += valide.getValue().getPlayer();
+				tmp += valide.getValue().getPlayer();
 			}
 		}
+		if (tmp != player) {
+			notifyNewConnexion(tmp);
+		}
+		player = tmp;
 		del.parallelStream().forEach(d -> connexionsValide.remove(d));
+	}
+
+	public void notifyNewConnexion() {
+		this.notifyNewConnexion(player);
+	}
+
+	private void notifyNewConnexion(int nbPlayer) {
+		WaitScreenDTO dto = new WaitScreenDTO();
+		dto.setNbHumainPlayer(nbPlayer);
+		dto.setNbClient(this.connexionsValide.size());
+		try {
+			this.mbGame.getNetworkService().sendToClient("waitScreen:" + this.objectMapper.writeValueAsString(dto));
+		} catch (JsonProcessingException e) {
+			Gdx.app.error(CLASS_NAME, "error send nb human and connexion size to client");
+		}
 	}
 }

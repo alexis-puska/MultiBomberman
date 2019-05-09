@@ -79,7 +79,9 @@ public class NetworkService {
 	}
 
 	public void sendToClient(String value) {
-		server.send((value + "\n").getBytes());
+		if (server != null) {
+			server.send((value + "\n").getBytes());
+		}
 	}
 
 	/***********************************
@@ -154,7 +156,7 @@ public class NetworkService {
 	/***********************************
 	 * ----- client part -----
 	 ***********************************/
-	public boolean connectToServer(int port, String ip) {
+	public boolean connectToServer(int port, String ip, ClientViewScreen cvs) {
 		this.resetLastClientError();
 		SocketHints socketHints = new SocketHints();
 		socketHints.connectTimeout = 1000;
@@ -162,7 +164,7 @@ public class NetworkService {
 			Socket clientSocket = Gdx.net.newClientSocket(Protocol.TCP, ip, port, socketHints);
 			if (clientSocket.isConnected()) {
 				Gdx.app.debug(CLASS_NAME, "connected !");
-				this.client = new Client(clientSocket, this);
+				this.client = new Client(clientSocket, this, cvs);
 				this.client.start();
 				return true;
 			}
@@ -176,10 +178,6 @@ public class NetworkService {
 
 	public void disconnectFromServer() {
 		this.client.kill();
-	}
-
-	public void setClientViewScreen(ClientViewScreen viewScreen) {
-		this.client.setViewScreen(viewScreen);
 	}
 
 	public void sendDirection(Integer integer, PovDirection direction) {
@@ -260,5 +258,4 @@ public class NetworkService {
 			this.client.send((EVENT + integer + ":RR\n").getBytes());
 		}
 	}
-
 }

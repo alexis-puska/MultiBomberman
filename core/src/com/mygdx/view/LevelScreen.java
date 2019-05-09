@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
 import com.mygdx.enumeration.SoundEnum;
@@ -19,9 +21,11 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
+import com.mygdx.service.network.dto.LevelScreenDTO;
 
 public class LevelScreen implements Screen, MenuListener {
 
+	private static final String CLASS_NAME = "LevelScreen.class";
 	private static final int LEVEL_PREVIEW_X = 60;
 	private static final int LEVEL_PREVIEW_Y = 75;
 	private static final int START_GRID_X = 260;
@@ -38,6 +42,7 @@ public class LevelScreen implements Screen, MenuListener {
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
 	private int cursorPosition;
+	private ObjectMapper objectMapper;
 
 	public LevelScreen(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
@@ -46,6 +51,7 @@ public class LevelScreen implements Screen, MenuListener {
 		this.shapeRenderer = new ShapeRenderer();
 		this.mbGame.getPlayerService().setMenuListener(this);
 		cursorPosition = 0;
+		this.objectMapper = new ObjectMapper();
 		initFont();
 		levelChange();
 	}
@@ -217,6 +223,7 @@ public class LevelScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressStart() {
+		sendLevelDefinitions();
 		mbGame.getScreen().dispose();
 		mbGame.setScreen(new GameScreen(mbGame));
 	}
@@ -628,6 +635,29 @@ public class LevelScreen implements Screen, MenuListener {
 	}
 
 	public void levelChange() {
-		Gdx.app.log("LEVEL SCREEN", "change to send to client");
+		LevelScreenDTO dto = new LevelScreenDTO();
+		dto.setBombe(Context.getBombe());
+		dto.setStrenght(Context.getStrength());
+		dto.setGroup(mbGame.getLevelService().getLevelGroupName());
+		dto.setName(mbGame.getLevelService().getLevelName());
+		dto.setDescription(mbGame.getLevelService().getLevelDescription());
+		dto.setIndexPreview(Context.getLevel().getIndexPreview());
+		for (int i = 0; i < Constante.MAX_BONUS; i++) {
+			dto.setBonus(i, Context.getBonus(i));
+		}
+		try {
+			this.mbGame.getNetworkService().sendToClient("levelScreen:" + this.objectMapper.writeValueAsString(dto));
+		} catch (JsonProcessingException e) {
+			Gdx.app.error(CLASS_NAME, "error send definitions to client");
+		}
+	}
+
+	public void sendLevelDefinitions() {
+		try {
+			this.mbGame.getNetworkService()
+					.sendToClient("levelDefinition:" + this.objectMapper.writeValueAsString(Context.getLevel()));
+		} catch (JsonProcessingException e) {
+			Gdx.app.error(CLASS_NAME, "error send definitions to client");
+		}
 	}
 }

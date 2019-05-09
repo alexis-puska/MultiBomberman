@@ -1,9 +1,8 @@
 package com.mygdx.service.network.dto;
 
 import java.io.Serializable;
-import java.util.Map;
 
-import com.mygdx.domain.PlayerDefinition;
+import com.mygdx.constante.Constante;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +12,20 @@ import lombok.Setter;
 public class LevelScreenDTO implements Serializable {
 
 	private static final long serialVersionUID = -890858808687751648L;
-	private Map<Integer, PlayerDefinition> definitions;
+	public int bombe;
+	public int strenght;
+	public String group;
+	public String name;
+	public String description;
+	public int indexPreview;
+	public int[] bonus;
+
+	public LevelScreenDTO() {
+		this.bonus = new int[Constante.MAX_BONUS];
+	}
+
+	public void setBonus(int idx, int val) {
+		this.bonus[idx] = val;
+	}
 
 }
