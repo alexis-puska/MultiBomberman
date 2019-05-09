@@ -61,19 +61,19 @@ public class Client extends Thread {
 						Gdx.app.error(CLASS_NAME, line);
 					} else if (line.startsWith("game:") && viewScreen != null) {
 						viewScreen.receiveGame(line);
-					} else if (line.startsWith("sound:")) {
+					} else if (line.startsWith("sound:") && viewScreen != null) {
 						viewScreen.receiveSound(line);
-					} else if (line.startsWith("music:")) {
+					} else if (line.startsWith("music:") && viewScreen != null) {
 						viewScreen.receiveMusique(line);
-					} else if (line.startsWith("levelScreen:")) {
+					} else if (line.startsWith("levelScreen:") && viewScreen != null) {
 						viewScreen.receiveLevelScreen(line);
 					} else if (line.startsWith("waitScreen:") && viewScreen != null) {
 						viewScreen.receiveWaitScreen(line);
-					} else if (line.startsWith("rulesScreen:")) {
+					} else if (line.startsWith("rulesScreen:") && viewScreen != null) {
 						viewScreen.receiveRuleScreen(line);
-					} else if (line.startsWith("skinsScreen:")) {
+					} else if (line.startsWith("skinsScreen:") && viewScreen != null) {
 						viewScreen.receiveSkinScreen(line);
-					} else if (line.startsWith("levelDefinition:")) {
+					} else if (line.startsWith("levelDefinition:") && viewScreen != null) {
 						viewScreen.receiveLevelDef(line);
 					} else {
 						Gdx.app.log("Client", "recu et non reconnu : " + line);
