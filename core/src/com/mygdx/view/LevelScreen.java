@@ -650,8 +650,7 @@ public class LevelScreen implements Screen, MenuListener {
 			dto.setBonus(i, Context.getBonus(i));
 		}
 		try {
-			String request = 
-					NetworkRequestEnum.LEVEL_SCREEN.name() + ":" + this.objectMapper.writeValueAsString(dto);
+			String request = NetworkRequestEnum.LEVEL_SCREEN.name() + ":" + this.objectMapper.writeValueAsString(dto);
 			ServerContext.setLevelScreenRequestBuffer(request);
 			this.mbGame.getNetworkService().sendToClient(request);
 		} catch (JsonProcessingException e) {
@@ -661,10 +660,10 @@ public class LevelScreen implements Screen, MenuListener {
 
 	public void sendLevelDefinitions() {
 		try {
-			String request = "levelDefinition:" + this.objectMapper.writeValueAsString(Context.getLevel());
+			String request = NetworkRequestEnum.LEVEL_DEFINITION.name() + ":"
+					+ this.objectMapper.writeValueAsString(Context.getLevel());
 			ServerContext.setLevelDefinitionBuffer(request);
-			this.mbGame.getNetworkService()
-					.sendToClient(request);
+			this.mbGame.getNetworkService().sendToClient(request);
 		} catch (JsonProcessingException e) {
 			Gdx.app.error(CLASS_NAME, "error send definitions to client");
 		}

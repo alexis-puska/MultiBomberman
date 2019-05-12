@@ -29,6 +29,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
+import com.mygdx.domain.enumeration.GameScreenEnum;
 import com.mygdx.domain.enumeration.GameStepEnum;
 import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.game.BombeLight;
@@ -62,6 +63,7 @@ import com.mygdx.service.network.dto.SpriteGridDTO;
 import com.mygdx.service.network.dto.SpritePixelDTO;
 import com.mygdx.service.network.dto.TimeDTO;
 import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
+import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 
 public class Game {
 
@@ -290,11 +292,6 @@ public class Game {
 		this.debugRenderer.dispose();
 	}
 
-	/**
-	 * Render function
-	 * 
-	 * @param delta
-	 */
 	public void render() {
 		// clear screen
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
@@ -386,6 +383,10 @@ public class Game {
 
 	public boolean isSuddentDeathTime() {
 		return gameCountDown <= 50.0f;
+	}
+	
+	public List<Player> getPlayers(){
+		return this.players;
 	}
 
 	/***********************************************************************
@@ -523,7 +524,6 @@ public class Game {
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);
 		playerLayerTextureRegion.flip(false, true);
 		playerLayer.end();
-		doNetworkStuff();
 	}
 
 	private void merge() {
@@ -658,7 +658,7 @@ public class Game {
 		return sbf.toString();
 	}
 
-	public void doNetworkStuff() {
+	public void doNetworkStuff(GameScreenEnum step) {
 		ByteBuffer bb = ByteBuffer.allocate(512000);
 		players.stream().forEach(p -> {
 			PlayerPixelDTO ppd = new PlayerPixelDTO(p);
@@ -671,21 +671,19 @@ public class Game {
 		int lengthToCopy = bb.position();
 		bb.position(0);
 		bb.get(e, 0, lengthToCopy);
-
 		String encoded = Base64.getEncoder().encodeToString(e);
-		System.out.println(encoded);
+		//System.out.println(encoded);
+		String cmd = NetworkRequestEnum.GAME_SCREEN.name() + ":" + encoded;
+		mbGame.getNetworkService().sendToClient(cmd);
 
 		ByteBuffer bbd = ByteBuffer.wrap(Base64.getDecoder().decode(encoded));
-
 		List<PlayerPixelDTO> ppds = new ArrayList<>();
 		List<SpriteGridDTO> sg = new ArrayList<>();
 		List<SpritePixelDTO> sp = new ArrayList<>();
-
 		List<LightDTO> light = new ArrayList<>();
 		TimeDTO time;
 		boolean pause = false;
 		boolean menu = false;
-
 		while (bbd.position() < bbd.capacity()) {
 			int reqIndex = (int) bbd.get();
 			NetworkGameRequestEnum req = NetworkGameRequestEnum.values()[reqIndex];

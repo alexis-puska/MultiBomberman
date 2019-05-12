@@ -266,6 +266,7 @@ public class Level {
 					bricks.add(b);
 					occupedWallBrickBonus[x][y] = b;
 					occupedByBrick.add(y * Constante.GRID_SIZE_X + x);
+					noWall.remove(new Integer(y * Constante.GRID_SIZE_X + x));
 				}
 			}
 		}

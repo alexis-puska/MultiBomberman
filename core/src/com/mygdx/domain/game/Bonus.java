@@ -1,5 +1,7 @@
 package com.mygdx.domain.game;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -88,8 +90,20 @@ public class Bonus extends BodyAble implements LevelElement {
 	public void update() {
 		if (this.state == BonusStateEnum.TAKED) {
 			this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
-			this.state = BonusStateEnum.DISPOSED;
-			dispose();
+			if (this.type == BonusTypeEnum.DEATH && !this.level.getNoWall().isEmpty()) {
+				int idx = ThreadLocalRandom.current().nextInt(0, this.level.getNoWall().size());
+				int chx = this.level.getNoWall().get(idx);
+				int x = chx % Constante.GRID_SIZE_X;
+				int y = (chx - x) / Constante.GRID_SIZE_X;
+				this.x = x;
+				this.y = y;
+				this.body.setTransform((float) this.x + 0.5f, (float) this.y + 0.5f, 0f);
+				this.level.getNoWall().remove(new Integer(idx));
+				this.state = BonusStateEnum.REVEALED;
+			} else {
+				this.state = BonusStateEnum.DISPOSED;
+				dispose();
+			}
 		} else if (this.state == BonusStateEnum.BURN && this.stateTime >= animation.getAnimationDuration()) {
 			this.state = BonusStateEnum.BURNED;
 			this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;

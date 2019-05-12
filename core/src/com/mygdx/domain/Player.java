@@ -156,6 +156,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.shipSpeed = Constante.DEFAULT_SHIP_SPEED;
 		this.louisColor = LouisColorEnum.random();
 		this.trolleyDirection = PovDirection.east;
+		this.drawSprite = CharacterSpriteEnum.CARRY_WALK_DOWN;
+		this.drawSpriteLouis = LouisSpriteEnum.WALK_DOWN;
 		this.animations = new EnumMap<>(CharacterSpriteEnum.class);
 		for (CharacterSpriteEnum e : CharacterSpriteEnum.values()) {
 			this.animations.put(e, new Animation<TextureRegion>((1f / 5f),
@@ -368,6 +370,20 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		if (this.type != PlayerTypeEnum.HUMAN && this.type != PlayerTypeEnum.NET && this.brain != null) {
 			this.brain.think();
 		}
+		if (this.deathBonus == DeathBonusEnum.EXCHANGE) {
+			List<Player> availablePlayer = this.game.getPlayers().stream().filter(p -> !p.isDead() && !p.isBadBomber()
+					&& !p.isInsideBrick() && !p.isInsideTrolley() && !p.isBurning() && !p.equals(this))
+					.collect(Collectors.toList());
+			if (!availablePlayer.isEmpty()) {
+				Player playerToSwitch = availablePlayer
+						.get(ThreadLocalRandom.current().nextInt(0, availablePlayer.size()));
+				float switchDestinationX = playerToSwitch.getBodyX();
+				float switchDestinationY = playerToSwitch.getBodyY();
+				playerToSwitch.switchWithPlayer(this.getBodyX(), this.getBodyY());
+				this.body.setTransform(switchDestinationX, switchDestinationY, 0f);
+			}
+			this.deathBonus = null;
+		}
 		switch (this.state) {
 		case BURNING:
 			break;
@@ -556,6 +572,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				&& this.state != PlayerStateEnum.INSIDE_TROLLEY && this.state != PlayerStateEnum.DEAD
 				&& this.nbBombe > 0 && !this.insideBombe && body != null) {
 			putBombe((int) (this.body.getPosition().x), (int) (this.body.getPosition().y));
+		}
+	}
+
+	private void switchWithPlayer(float x, float y) {
+		if (this.body != null) {
+			this.body.setTransform(x, y, 0f);
 		}
 	}
 
@@ -1088,13 +1110,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private void takeDeathBonus() {
 		this.cancelLastMalus();
-		this.deathBonus = DeathBonusEnum.random();
+		this.deathBonus = DeathBonusEnum.EXCHANGE;
 		switch (this.deathBonus) {
 		case CONSTIPATION:
 		case DIAREE:
 			break;
 		case EXCHANGE:
-			this.deathBonus = null;
 			break;
 		case FAST_BOMBE:
 			break;
@@ -1252,6 +1273,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(animationTime, false), getPixelX() - 15f,
 				getPixelY() - 5f);
 		if (animations.get(drawSprite).isAnimationFinished(animationTime)) {
+			this.level.randomBonus();
 			if (Context.isBadBomber() && !this.game.isSuddentDeathTime()) {
 				this.playerToBadBomber();
 			} else {

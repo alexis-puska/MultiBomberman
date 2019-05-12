@@ -98,6 +98,7 @@ public class Brick extends BodyAble implements LevelElement {
 			if (burnAnimation.isAnimationFinished(animationTime)) {
 				this.state = BrickStateEnum.BURNED;
 				this.level.getOccupedWallBrickBonus()[this.getX()][this.getY()] = null;
+				this.level.getNoWall().add(y * Constante.GRID_SIZE_X + x);
 				this.level.getBonuss().stream().filter(b -> b.x == this.x && b.y == this.y).forEach(Bonus::revealBonus);
 				dispose();
 			}
