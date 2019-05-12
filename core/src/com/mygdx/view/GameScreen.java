@@ -11,10 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.enumeration.GameScreenEnum;
+import com.mygdx.enumeration.ServerStateEnum;
 import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.input_processor.MenuListener;
+import com.mygdx.service.network.server.ServerContext;
 
 public class GameScreen implements Screen, MenuListener {
 
@@ -37,6 +39,7 @@ public class GameScreen implements Screen, MenuListener {
 		this.layout = new GlyphLayout();
 		this.game = new Game(mbGame);
 		this.shapeRenderer = new ShapeRenderer();
+		ServerContext.setCurrentServerScreen(ServerStateEnum.GAME_SCREEN);
 		initFont();
 	}
 

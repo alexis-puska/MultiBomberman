@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
+import com.mygdx.enumeration.ServerStateEnum;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
@@ -22,6 +23,8 @@ import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 import com.mygdx.service.network.dto.LevelScreenDTO;
+import com.mygdx.service.network.enumeration.NetworkRequestEnum;
+import com.mygdx.service.network.server.ServerContext;
 
 public class LevelScreen implements Screen, MenuListener {
 
@@ -53,6 +56,7 @@ public class LevelScreen implements Screen, MenuListener {
 		cursorPosition = 0;
 		this.objectMapper = new ObjectMapper();
 		initFont();
+		ServerContext.setCurrentServerScreen(ServerStateEnum.LEVEL_SCREEN);
 		levelChange();
 	}
 
@@ -646,7 +650,10 @@ public class LevelScreen implements Screen, MenuListener {
 			dto.setBonus(i, Context.getBonus(i));
 		}
 		try {
-			this.mbGame.getNetworkService().sendToClient("levelScreen:" + this.objectMapper.writeValueAsString(dto));
+			String request = 
+					NetworkRequestEnum.LEVEL_SCREEN.name() + ":" + this.objectMapper.writeValueAsString(dto);
+			ServerContext.setLevelScreenRequestBuffer(request);
+			this.mbGame.getNetworkService().sendToClient(request);
 		} catch (JsonProcessingException e) {
 			Gdx.app.error(CLASS_NAME, "error send definitions to client");
 		}
@@ -654,8 +661,10 @@ public class LevelScreen implements Screen, MenuListener {
 
 	public void sendLevelDefinitions() {
 		try {
+			String request = "levelDefinition:" + this.objectMapper.writeValueAsString(Context.getLevel());
+			ServerContext.setLevelDefinitionBuffer(request);
 			this.mbGame.getNetworkService()
-					.sendToClient("levelDefinition:" + this.objectMapper.writeValueAsString(Context.getLevel()));
+					.sendToClient(request);
 		} catch (JsonProcessingException e) {
 			Gdx.app.error(CLASS_NAME, "error send definitions to client");
 		}

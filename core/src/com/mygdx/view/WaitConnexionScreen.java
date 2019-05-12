@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.screen.Cursor;
 import com.mygdx.enumeration.GameModeEnum;
+import com.mygdx.enumeration.ServerStateEnum;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
@@ -20,6 +21,7 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
+import com.mygdx.service.network.server.ServerContext;
 
 public class WaitConnexionScreen implements Screen, MenuListener {
 
@@ -36,6 +38,7 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 		this.shapeRenderer = new ShapeRenderer();
 		this.mbGame.getPlayerService().setMenuListener(this);
 		initFont();
+		ServerContext.setCurrentServerScreen(ServerStateEnum.WAIT_SCREEN);
 	}
 
 	@Override

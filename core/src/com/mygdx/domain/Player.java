@@ -47,6 +47,7 @@ import com.mygdx.service.Context;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.ControlEventListener;
+import com.mygdx.service.network.enumeration.NetworkPlayerStateEnum;
 import com.mygdx.utils.GridUtils;
 
 public class Player extends BodyAble implements ControlEventListener, Comparable<Player> {
@@ -114,6 +115,13 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private Bombe raisedBombe;
 	private int nbBombeSpaceShip = 1;
 
+	// network
+	private NetworkPlayerStateEnum networkStateEnum;
+	private CharacterSpriteEnum drawSprite;
+	private LouisSpriteEnum drawSpriteLouis;
+	private int spriteIndex;
+	private int spriteIndexLouis;
+
 	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
 			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe,
 			int idx) {
@@ -126,6 +134,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.previousDirection = PovDirection.south;
 		this.direction = PovDirection.center;
 		this.state = PlayerStateEnum.NORMAL;
+		this.networkStateEnum = NetworkPlayerStateEnum.OTHER;
 		this.previousState = PlayerStateEnum.NORMAL;
 		this.game = game;
 		this.world = world;
@@ -273,6 +282,10 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return this.type;
 	}
 
+	public PlayerStateEnum getState() {
+		return this.state;
+	}
+
 	/************************************************************************************************************
 	 * -------------------------------------------- TROLLEY PART
 	 * ------------------------------------------------
@@ -338,6 +351,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public void endBadBomberTime() {
 		this.changeState(PlayerStateEnum.DEAD);
+		this.networkStateEnum = NetworkPlayerStateEnum.DEAD;
 	}
 
 	private void youBurnMeBadBomber(Player playerKilled) {
@@ -364,6 +378,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			}
 			break;
 		case DEAD:
+			this.networkStateEnum = NetworkPlayerStateEnum.DEAD;
 			this.dispose();
 			break;
 		case INSIDE_TROLLEY:
@@ -577,6 +592,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.insideBombe = value;
 	}
 
+	public void carriedBombeExplode(Bombe bombe) {
+		this.raisedBombe = null;
+		this.changeState(PlayerStateEnum.NORMAL);
+	}
+
 	public void bombeExploded() {
 		if (this.state != PlayerStateEnum.BAD_BOMBER) {
 			this.nbBombe++;
@@ -678,6 +698,33 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public boolean isBadBomber() {
 		return this.state == PlayerStateEnum.BAD_BOMBER;
+	}
+
+	/************************************************************
+	 * --- network ---
+	 ************************************************************/
+	public NetworkPlayerStateEnum getNetworkStateEnum() {
+		return networkStateEnum;
+	}
+
+	public CharacterSpriteEnum getDrawSprite() {
+		return drawSprite;
+	}
+
+	public LouisSpriteEnum getDrawSpriteLouis() {
+		return drawSpriteLouis;
+	}
+
+	public LouisColorEnum getLouisColor() {
+		return this.louisColor;
+	}
+
+	public int getSpriteIndex() {
+		return spriteIndex;
+	}
+
+	public int getSpriteIndexLouis() {
+		return spriteIndexLouis;
 	}
 
 	/************************************************************************************************************
@@ -987,11 +1034,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			break;
 		case EGGS:
 			this.animationsLouis = new EnumMap<>(LouisSpriteEnum.class);
+			this.louisColor = LouisColorEnum.random();
 			for (LouisSpriteEnum e : LouisSpriteEnum.values()) {
 				this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
 						SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
 			}
-			this.louisColor = LouisColorEnum.random();
 			this.changeState(PlayerStateEnum.ON_LOUIS);
 			SoundService.getInstance().playSound(SoundEnum.LOUIS);
 			break;
@@ -1124,32 +1171,38 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawBadBomber() {
+		spriteIndex = 0;
+		this.networkStateEnum = NetworkPlayerStateEnum.BADBOMBER;
 		switch (spaceShipDrawDirection) {
 		case center:
 			break;
 		case east:
-			mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_RIGHT).getKeyFrame(0, false),
-					getShipPixelX() - 15f, getShipPixelY() - 20f);
+			drawSprite = CharacterSpriteEnum.ON_LOUIS_RIGHT;
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(spriteIndex, false), getShipPixelX() - 15f,
+					getShipPixelY() - 20f);
 			break;
 		case north:
-			mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_UP).getKeyFrame(0, false),
-					getShipPixelX() - 15f, getShipPixelY() - 20f);
+			drawSprite = CharacterSpriteEnum.ON_LOUIS_UP;
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(spriteIndex, false), getShipPixelX() - 15f,
+					getShipPixelY() - 20f);
 			break;
 		case northEast:
 			break;
 		case northWest:
 			break;
 		case south:
-			mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_DOWN).getKeyFrame(0, false),
-					getShipPixelX() - 15f, getShipPixelY() - 20f);
+			drawSprite = CharacterSpriteEnum.ON_LOUIS_DOWN;
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(spriteIndex, false), getShipPixelX() - 15f,
+					getShipPixelY() - 20f);
 			break;
 		case southEast:
 			break;
 		case southWest:
 			break;
 		case west:
-			mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_LEFT).getKeyFrame(0, false),
-					getShipPixelX() - 15f, getShipPixelY() - 20f);
+			drawSprite = CharacterSpriteEnum.ON_LOUIS_LEFT;
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(spriteIndex, false), getShipPixelX() - 15f,
+					getShipPixelY() - 20f);
 			break;
 		default:
 			break;
@@ -1159,6 +1212,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawVictoryOnLouis() {
+		this.networkStateEnum = NetworkPlayerStateEnum.LOUIS;
+		this.drawSprite = CharacterSpriteEnum.ON_LOUIS_DOWN;
+		this.spriteIndex = 0;
+		this.drawSpriteLouis = LouisSpriteEnum.VICTORY;
+		this.spriteIndexLouis = animationsLouis.get(LouisSpriteEnum.VICTORY)
+				.getKeyFrameIndex(this.direction == PovDirection.center ? 0 : animationTime);
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_DOWN).getKeyFrame(0, false),
 				getPixelX() - 15f, getPixelY() - 15f);
 		mbGame.getBatch()
@@ -1168,11 +1227,17 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawVictory() {
+		this.networkStateEnum = NetworkPlayerStateEnum.OTHER;
+		this.drawSprite = CharacterSpriteEnum.VICTORY;
+		this.spriteIndex = animations.get(CharacterSpriteEnum.VICTORY).getKeyFrameIndex(animationTime);
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.VICTORY).getKeyFrame(animationTime, true),
 				getPixelX() - 15, getPixelY() - 5f);
 	}
 
 	private void drawCrying() {
+		this.networkStateEnum = NetworkPlayerStateEnum.OTHER;
+		this.drawSprite = CharacterSpriteEnum.ANGRY;
+		this.spriteIndex = animations.get(CharacterSpriteEnum.ANGRY).getKeyFrameIndex(animationTime);
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ANGRY).getKeyFrame(animationTime, true),
 				getPixelX() - 15f, getPixelY() - 5f);
 		if (animationTime > Constante.CRYING_TIME) {
@@ -1181,9 +1246,12 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawBurning() {
-		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.BURN).getKeyFrame(animationTime, false),
-				getPixelX() - 15f, getPixelY() - 5f);
-		if (animations.get(CharacterSpriteEnum.BURN).isAnimationFinished(animationTime)) {
+		this.networkStateEnum = NetworkPlayerStateEnum.OTHER;
+		this.drawSprite = CharacterSpriteEnum.BURN;
+		this.spriteIndex = animations.get(drawSprite).getKeyFrameIndex(animationTime);
+		mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(animationTime, false), getPixelX() - 15f,
+				getPixelY() - 5f);
+		if (animations.get(drawSprite).isAnimationFinished(animationTime)) {
 			if (Context.isBadBomber() && !this.game.isSuddentDeathTime()) {
 				this.playerToBadBomber();
 			} else {
@@ -1193,7 +1261,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawThrowBombe() {
-		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.THROW_BOMBE_DOWN;
+		this.networkStateEnum = NetworkPlayerStateEnum.OTHER;
+		drawSprite = CharacterSpriteEnum.THROW_BOMBE_DOWN;
 		switch (this.direction) {
 		case center:
 			if (previousDirection == PovDirection.west) {
@@ -1225,6 +1294,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
+		this.spriteIndex = animations.get(drawSprite)
+				.getKeyFrameIndex(this.direction == PovDirection.center ? 0 : animationTime);
 		mbGame.getBatch().draw(
 				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
 				getPixelX() - 15f, getPixelY() - 5f);
@@ -1235,40 +1306,52 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawInsideTrolley() {
+		this.drawSprite = CharacterSpriteEnum.INSIDE_TROLLEY;
+		this.networkStateEnum = NetworkPlayerStateEnum.TROLLEY;
+		this.spriteIndex = 0;
+
 		switch (this.trolleyDirection) {
 		case center:
 			break;
 		case east:
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
-					this.character, 0), getPixelX() - 15f, getPixelY() - 9f);
+			this.spriteIndex = 0;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
+					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
 			break;
 		case north:
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
-					this.character, 5), getPixelX() - 15f, getPixelY() - 9f);
+			this.spriteIndex = 5;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
+					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
 			break;
 		case northEast:
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
-					this.character, 7), getPixelX() - 15f, getPixelY() - 9f);
+			this.spriteIndex = 7;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
+					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
 			break;
 		case northWest:
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
-					this.character, 6), getPixelX() - 15f, getPixelY() - 9f);
+			this.spriteIndex = 6;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
+					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
 			break;
 		case south:
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
-					this.character, 1), getPixelX() - 15f, getPixelY() - 9f);
+			this.spriteIndex = 1;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
+					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
 			break;
 		case southEast:
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
-					this.character, 2), getPixelX() - 15f, getPixelY() - 9f);
+			this.spriteIndex = 2;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
+					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
 			break;
 		case southWest:
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
-					this.character, 3), getPixelX() - 15f, getPixelY() - 9f);
+			this.spriteIndex = 3;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
+					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
 			break;
 		case west:
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.INSIDE_TROLLEY, this.color,
-					this.character, 4), getPixelX() - 15f, getPixelY() - 9f);
+			this.spriteIndex = 4;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
+					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
 			break;
 		default:
 			break;
@@ -1276,7 +1359,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	private void drawCarryBombe() {
-		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.CARRY_WALK_DOWN;
+		this.networkStateEnum = NetworkPlayerStateEnum.OTHER;
+		drawSprite = CharacterSpriteEnum.CARRY_WALK_DOWN;
 		switch (this.direction) {
 		case center:
 			if (previousDirection == PovDirection.west) {
@@ -1308,13 +1392,17 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
+
+		this.spriteIndex = animations.get(drawSprite)
+				.getKeyFrameIndex(this.direction == PovDirection.center ? 0 : animationTime);
 		mbGame.getBatch().draw(
 				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
 				getPixelX() - 15f, getPixelY() - 5f);
 	}
 
 	private void drawStateNormal() {
-		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.WALK_DOWN;
+		this.networkStateEnum = NetworkPlayerStateEnum.OTHER;
+		drawSprite = CharacterSpriteEnum.WALK_DOWN;
 		switch (this.direction) {
 		case center:
 			if (previousDirection == PovDirection.west) {
@@ -1346,14 +1434,17 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
+		this.spriteIndex = animations.get(drawSprite)
+				.getKeyFrameIndex(this.direction == PovDirection.center ? 0 : animationTime);
 		mbGame.getBatch().draw(
 				animations.get(drawSprite).getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
 				getPixelX() - 15f, getPixelY() - 5f);
 	}
 
 	private void drawStateOnLouis() {
-		LouisSpriteEnum drawSpriteLouis = LouisSpriteEnum.WALK_DOWN;
-		CharacterSpriteEnum drawSprite = CharacterSpriteEnum.ON_LOUIS_DOWN;
+		drawSpriteLouis = LouisSpriteEnum.WALK_DOWN;
+		drawSprite = CharacterSpriteEnum.ON_LOUIS_DOWN;
+		this.networkStateEnum = NetworkPlayerStateEnum.LOUIS;
 		switch (this.direction) {
 		case center:
 			if (previousDirection == PovDirection.west) {
@@ -1393,8 +1484,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		default:
 			break;
 		}
+		this.spriteIndex = 0;
+		this.spriteIndexLouis = animationsLouis.get(drawSpriteLouis)
+				.getKeyFrameIndex(this.direction == PovDirection.center ? 0 : animationTime);
 		if (this.direction == PovDirection.south || this.previousDirection == PovDirection.south) {
-			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), getPixelX() - 15f,
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(spriteIndex, true), getPixelX() - 15f,
 					getPixelY() - 5f);
 			mbGame.getBatch()
 					.draw(animationsLouis.get(drawSpriteLouis)
@@ -1405,7 +1499,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 					.draw(animationsLouis.get(drawSpriteLouis)
 							.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true),
 							getPixelX() - 15f, getPixelY() - 5f);
-			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(0, true), getPixelX() - 15f,
+			mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(spriteIndex, true), getPixelX() - 15f,
 					getPixelY() - 5f);
 		}
 	}
@@ -1474,5 +1568,4 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 		return 0;
 	}
-
 }

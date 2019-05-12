@@ -65,109 +65,23 @@ public class NetworkConnexion extends Thread {
 				} else {
 					// Reception UUID
 					if (received.startsWith("uuid:")) {
-						try {
-							UUID uuidObject = UUID.fromString(received.substring(5, received.length()));
-							this.uuid = uuidObject.toString();
-							Gdx.app.debug(CLASS_NAME, this.uuid);
-
-							// si accepte encore les connexion, demande nombre de joueur
-							if (server.isAcceptNewConnexion()) {
-								out.write("nbp\n".getBytes());
-							} else {
-								// verification si deja connecté avant
-								if (!server.connexionAlreadyExistBefore(this)) {
-									// si non on expédie l'erreur et on ferme la connexion
-									out.write("errorInGame\n".getBytes());
-									socket.dispose();
-									status = false;
-								} else {
-									// si oui on écoute les evenements et autorise le client é les envoyé
-									out.write("event\n".getBytes());
-								}
-							}
-						} catch (IllegalArgumentException exception) {
-							Gdx.app.error(CLASS_NAME, "uuid check error");
-						}
-						Gdx.app.debug(CLASS_NAME, "uuid check OK");
+						treatReceiveUUID(received);
 					}
 
 					// Réception nombre de joueur
 					if (received.startsWith("nbp:")) {
-						String[] part = received.split(":");
-						player = Integer.parseInt(part[1]);
-						if (server.getPlayer() + player <= Context.getExternalPlayer() + Context.getLocalPlayer()) {
-							server.valideConnexion(this);
-							out.write("event\n".getBytes());
-							if (server.isAcceptNewConnexion()) {
-								server.notifyNewConnexion();
-							}
-						} else {
-							out.write("errorTooManyPlayer\n".getBytes());
-							socket.dispose();
-							status = false;
-						}
+						treatNbPlayerOfClient(received);
 					}
 
 					Gdx.app.log("receive", received);
 
 					// Réception event controller / keyboard
 					if (received.startsWith("event:")) {
-						String[] part = received.split(":");
-						int controllerIndex = Integer.parseInt(part[1]);
-						String button = part[2];
-						switch (NetworkControllerEventEnum.valueOf(button)) {
-						case DOWN:
-							playerService.move(this.uuid, controllerIndex, PovDirection.south);
-							break;
-						case LEFT:
-							playerService.move(this.uuid, controllerIndex, PovDirection.west);
-							break;
-						case RIGHT:
-							playerService.move(this.uuid, controllerIndex, PovDirection.east);
-							break;
-						case SELECT:
-							playerService.pressSelect(this.uuid, controllerIndex);
-							break;
-						case START:
-							playerService.pressStart(this.uuid, controllerIndex);
-							break;
-						case UP:
-							playerService.move(this.uuid, controllerIndex, PovDirection.north);
-							break;
-						case A:
-							playerService.pressA(this.uuid, controllerIndex);
-							break;
-						case B:
-							playerService.pressB(this.uuid, controllerIndex);
-							break;
-						case PL:
-							playerService.pressL(this.uuid, controllerIndex);
-							break;
-						case PR:
-							playerService.pressR(this.uuid, controllerIndex);
-							break;
-						case RL:
-							playerService.releaseL(this.uuid, controllerIndex);
-							break;
-						case RR:
-							playerService.releaseR(this.uuid, controllerIndex);
-							break;
-						case X:
-							playerService.pressX(this.uuid, controllerIndex);
-							break;
-						case Y:
-							playerService.pressY(this.uuid, controllerIndex);
-							break;
-						default:
-							playerService.move(this.uuid, controllerIndex, PovDirection.center);
-							break;
-						}
+						treatReceivedEventController(received);
 					}
 					// déconnexion
 					if (received.equals("end")) {
-						Gdx.app.debug(CLASS_NAME, String.format("Deconnection de : %s", remoteAddress));
-						socket.dispose();
-						status = false;
+						treatDisconnection();
 					}
 				}
 				decode(received);
@@ -177,6 +91,136 @@ public class NetworkConnexion extends Thread {
 		} catch (Exception e) {
 			Gdx.app.error(CLASS_NAME, "Exception : " + e.getMessage());
 		}
+	}
+
+	private void treatReceiveUUID(String received) throws IOException {
+		try {
+			UUID uuidObject = UUID.fromString(received.substring(5, received.length()));
+			this.uuid = uuidObject.toString();
+			Gdx.app.debug(CLASS_NAME, this.uuid);
+
+			// si accepte encore les connexion, demande nombre de joueur
+			if (server.isAcceptNewConnexion()) {
+				out.write("nbp\n".getBytes());
+			} else {
+				// verification si deja connecté avant
+				if (!server.connexionAlreadyExistBefore(this)) {
+					// si non on expédie l'erreur et on ferme la connexion
+					out.write("errorInGame\n".getBytes());
+					socket.dispose();
+					status = false;
+				} else {
+					// si oui on écoute les evenements et autorise le client é les envoyé
+					welcomBackSendRequest();
+				}
+			}
+		} catch (IllegalArgumentException exception) {
+			Gdx.app.error(CLASS_NAME, "uuid check error");
+		}
+		Gdx.app.debug(CLASS_NAME, "uuid check OK");
+	}
+
+	private void treatNbPlayerOfClient(String received) throws IOException {
+		String[] part = received.split(":");
+		player = Integer.parseInt(part[1]);
+		if (server.getPlayer() + player <= Context.getExternalPlayer() + Context.getLocalPlayer()) {
+			server.valideConnexion(this);
+			out.write("event\n".getBytes());
+		} else {
+			out.write("errorTooManyPlayer\n".getBytes());
+			socket.dispose();
+			status = false;
+		}
+	}
+
+	private void treatDisconnection() {
+		Gdx.app.debug(CLASS_NAME, String.format("Deconnection de : %s", remoteAddress));
+		socket.dispose();
+		status = false;
+	}
+
+	private void treatReceivedEventController(String received) {
+		String[] part = received.split(":");
+		int controllerIndex = Integer.parseInt(part[1]);
+		String button = part[2];
+		switch (NetworkControllerEventEnum.valueOf(button)) {
+		case DOWN:
+			playerService.move(this.uuid, controllerIndex, PovDirection.south);
+			break;
+		case LEFT:
+			playerService.move(this.uuid, controllerIndex, PovDirection.west);
+			break;
+		case RIGHT:
+			playerService.move(this.uuid, controllerIndex, PovDirection.east);
+			break;
+		case SELECT:
+			playerService.pressSelect(this.uuid, controllerIndex);
+			break;
+		case START:
+			playerService.pressStart(this.uuid, controllerIndex);
+			break;
+		case UP:
+			playerService.move(this.uuid, controllerIndex, PovDirection.north);
+			break;
+		case A:
+			playerService.pressA(this.uuid, controllerIndex);
+			break;
+		case B:
+			playerService.pressB(this.uuid, controllerIndex);
+			break;
+		case PL:
+			playerService.pressL(this.uuid, controllerIndex);
+			break;
+		case PR:
+			playerService.pressR(this.uuid, controllerIndex);
+			break;
+		case RL:
+			playerService.releaseL(this.uuid, controllerIndex);
+			break;
+		case RR:
+			playerService.releaseR(this.uuid, controllerIndex);
+			break;
+		case X:
+			playerService.pressX(this.uuid, controllerIndex);
+			break;
+		case Y:
+			playerService.pressY(this.uuid, controllerIndex);
+			break;
+		default:
+			playerService.move(this.uuid, controllerIndex, PovDirection.center);
+			break;
+		}
+	}
+
+	private void welcomBackSendRequest() throws IOException {
+		out.write("welcome_back\n".getBytes());
+		// TODO
+		Gdx.app.log("NETWORK_CONNEXION", "WELCOM_BACK");
+		String welcomBackBuffer = "";
+		switch (ServerContext.getCurrentServerScreen()) {
+		case GAME_SCREEN:
+		case LEVEL_SCREEN:
+			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getSkinScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getRuleScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getLevelDefinitionBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getLevelScreenRequestBuffer() + "\n";
+			break;
+		case RULE_SCREEN:
+			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getSkinScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getRuleScreenRequestBuffer() + "\n";
+			break;
+		case SKIN_SCREEN:
+			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getSkinScreenRequestBuffer() + "\n";
+			break;
+		case WAIT_SCREEN:
+			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
+		default:
+			break;
+		}
+		out.write(welcomBackBuffer.getBytes());
 	}
 
 	private void decode(String received) {

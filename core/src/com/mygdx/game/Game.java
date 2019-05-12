@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
+import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +47,7 @@ import com.mygdx.domain.level.Wall;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.enumeration.TimeEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
@@ -51,6 +55,13 @@ import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
 import com.mygdx.service.mapper.LevelMapper;
+import com.mygdx.service.network.dto.LightDTO;
+import com.mygdx.service.network.dto.PlayerPixelDTO;
+import com.mygdx.service.network.dto.ScoreDTO;
+import com.mygdx.service.network.dto.SpriteGridDTO;
+import com.mygdx.service.network.dto.SpritePixelDTO;
+import com.mygdx.service.network.dto.TimeDTO;
+import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 
 public class Game {
 
@@ -208,7 +219,11 @@ public class Game {
 		} else {
 			SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		}
-		this.gameCountDown = Context.getTime().getTime() * 60f;
+		if (Context.getTime() != TimeEnum.INF) {
+			this.gameCountDown = Context.getTime().getTime() * 60f;
+		} else {
+			this.gameCountDown = -1;
+		}
 	}
 
 	public void restart() {
@@ -230,7 +245,11 @@ public class Game {
 			}
 		}
 		this.state = GameStepEnum.GAME;
-		this.gameCountDown = Context.getTime().getTime() * 60f;
+		if (Context.getTime() != TimeEnum.INF) {
+			this.gameCountDown = Context.getTime().getTime() * 60f;
+		} else {
+			this.gameCountDown = -1;
+		}
 	}
 
 	/******************************
@@ -310,9 +329,11 @@ public class Game {
 		this.players.stream().forEach(Player::update);
 
 		if (this.state == GameStepEnum.GAME) {
-			this.gameCountDown -= Gdx.graphics.getDeltaTime();
-			if (this.gameCountDown <= 0.0f) {
-				this.gameCountDown = 0.0f;
+			if (Context.getTime() != TimeEnum.INF) {
+				this.gameCountDown -= Gdx.graphics.getDeltaTime();
+				if (this.gameCountDown <= 0.0f) {
+					this.gameCountDown = 0.0f;
+				}
 			}
 			checkEndOfGame();
 			if (isSuddentDeathTime() && Context.isSuddenDeath()) {
@@ -341,7 +362,7 @@ public class Game {
 					SoundService.getInstance().playSound(SoundEnum.END);
 				}
 			});
-		} else if (alivePlayers.size() > 1 && this.gameCountDown <= 0.0f) {
+		} else if (alivePlayers.size() > 1 && (this.gameCountDown <= 0.0f && Context.getTime() != TimeEnum.INF)) {
 			alivePlayers.stream().filter(p -> !p.isDead() || p.isBadBomber()).forEach(p -> {
 				this.score.put(p.getIndex(), this.score.get(p.getIndex()) + 1);
 				p.winTheGame();
@@ -469,7 +490,7 @@ public class Game {
 			level.getBonuss().stream().filter(Bonus::isBurning)
 					.forEach(f -> shapeRenderer.circle(f.getPixelX(), f.getPixelY(), 24));
 			level.getBombes().stream().filter(f -> !f.isExploded() && f.isCreateLight()).forEach(b -> {
-				shapeRenderer.setColor(new Color(b.getLight(), b.getLight(), b.getLight(), 0f));
+				shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 				BombeLight light = b.getOffesetShadow();
 				shapeRenderer.circle((float) (b.getPixelX() + light.getX()),
 						(float) b.getPixelY() + (float) b.getReboundOffset() + (float) light.getY(),
@@ -485,6 +506,7 @@ public class Game {
 	}
 
 	private void drawPlayer() {
+
 		playerLayer.begin();
 		mbGame.getBatch().begin();
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
@@ -501,6 +523,7 @@ public class Game {
 		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);
 		playerLayerTextureRegion.flip(false, true);
 		playerLayer.end();
+		doNetworkStuff();
 	}
 
 	private void merge() {
@@ -571,8 +594,12 @@ public class Game {
 				font.draw(mbGame.getBatch(), layout, 360f + ((float) i * 36f), 352f);
 			}
 		}
-		DecimalFormat df = new DecimalFormat("#.#");
-		layout.setText(font, "" + df.format(this.gameCountDown));
+		if (Context.getTime() != TimeEnum.INF) {
+			DecimalFormat df = new DecimalFormat("#.#");
+			layout.setText(font, "" + df.format(this.gameCountDown));
+		} else {
+			layout.setText(font, "inf");
+		}
 		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2.0f) - (layout.width / 2.0f), 352);
 		mbGame.getBatch().end();
 	}
@@ -614,5 +641,92 @@ public class Game {
 		layout.setText(font, MessageService.getInstance().getMessage("game.game.draw"));
 		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
 		mbGame.getBatch().end();
+	}
+
+	/*******************************************************************
+	 * --- NETWORK PART ---
+	 *******************************************************************/
+	public String getRequestDrawLevel() {
+		StringBuffer sbf = new StringBuffer();
+		this.level.getSuddenDeathWall().stream().forEach(w -> {
+			if (!w.isTransformedInStrandardWall()) {
+
+			} else {
+
+			}
+		});
+		return sbf.toString();
+	}
+
+	public void doNetworkStuff() {
+		ByteBuffer bb = ByteBuffer.allocate(512000);
+		players.stream().forEach(p -> {
+			PlayerPixelDTO ppd = new PlayerPixelDTO(p);
+			bb.put(ppd.getBuffer());
+		});
+
+		bb.put(new TimeDTO(this.gameCountDown).getBuffer());
+
+		byte[] e = new byte[bb.position()];
+		int lengthToCopy = bb.position();
+		bb.position(0);
+		bb.get(e, 0, lengthToCopy);
+
+		String encoded = Base64.getEncoder().encodeToString(e);
+		System.out.println(encoded);
+
+		ByteBuffer bbd = ByteBuffer.wrap(Base64.getDecoder().decode(encoded));
+
+		List<PlayerPixelDTO> ppds = new ArrayList<>();
+		List<SpriteGridDTO> sg = new ArrayList<>();
+		List<SpritePixelDTO> sp = new ArrayList<>();
+
+		List<LightDTO> light = new ArrayList<>();
+		TimeDTO time;
+		boolean pause = false;
+		boolean menu = false;
+
+		while (bbd.position() < bbd.capacity()) {
+			int reqIndex = (int) bbd.get();
+			NetworkGameRequestEnum req = NetworkGameRequestEnum.values()[reqIndex];
+			switch (req) {
+			case DRAW_GRID:
+				sg.add(new SpriteGridDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_PIXEL:
+				sp.add(new SpritePixelDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_PLAYER:
+				ppds.add(new PlayerPixelDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_PLAYER_ON_LOUIS:
+				ppds.add(new PlayerPixelDTO(readRequest(bbd, req)));
+				break;
+			case LIGHT:
+				light.add(new LightDTO(readRequest(bbd, req)));
+				break;
+			case TIME:
+				time = new TimeDTO(readRequest(bbd, req));
+				break;
+			case MENU:
+				menu = true;
+			case PAUSE:
+				pause = true;
+			case SCORE:
+				new ScoreDTO(readRequest(bbd, req));
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private byte[] readRequest(ByteBuffer bbd, NetworkGameRequestEnum req) {
+		int lengthToCopy;
+		byte[] tmp;
+		tmp = new byte[req.getRequestLenght() - 1];
+		lengthToCopy = req.getRequestLenght() - 1;
+		bbd.get(tmp, 0, lengthToCopy);
+		return tmp;
 	}
 }

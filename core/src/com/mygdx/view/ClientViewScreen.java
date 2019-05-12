@@ -29,7 +29,7 @@ import com.mygdx.service.network.dto.LevelScreenDTO;
 import com.mygdx.service.network.dto.RuleScreenDTO;
 import com.mygdx.service.network.dto.SkinScreenDTO;
 import com.mygdx.service.network.dto.WaitScreenDTO;
-import com.mygdx.service.network.enumeration.LastRequestEnum;
+import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 
 public class ClientViewScreen implements Screen, MenuListener {
 
@@ -66,14 +66,14 @@ public class ClientViewScreen implements Screen, MenuListener {
 	private RuleScreenDTO ruleScreenDTO;
 	private LevelScreenDTO levelScreenDTO;
 	private LevelDTO levelDTO;
-	private LastRequestEnum last;
+	private NetworkRequestEnum last;
 
 	public ClientViewScreen(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
 		this.shapeRenderer = new ShapeRenderer();
 		this.objectMapper = new ObjectMapper();
-		this.last = LastRequestEnum.WAIT_SCREEN;
+		this.last = NetworkRequestEnum.WAIT_SCREEN;
 		this.initFont();
 	}
 
@@ -218,7 +218,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveWaitScreen");
 			waitScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), WaitScreenDTO.class);
-			last = LastRequestEnum.WAIT_SCREEN;
+			last = NetworkRequestEnum.WAIT_SCREEN;
 		} catch (JsonParseException e) {
 			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
@@ -232,7 +232,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveSkinScreen");
 			skinScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), SkinScreenDTO.class);
-			last = LastRequestEnum.SKIN_SCREEN;
+			last = NetworkRequestEnum.SKIN_SCREEN;
 		} catch (JsonParseException e) {
 			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
@@ -246,7 +246,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveRuleScreen");
 			ruleScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), RuleScreenDTO.class);
-			last = LastRequestEnum.RULE_SCREEN;
+			last = NetworkRequestEnum.RULE_SCREEN;
 		} catch (JsonParseException e) {
 			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
@@ -260,7 +260,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		try {
 			Gdx.app.log(CLASS_NAME, "receiveLevelScreen");
 			levelScreenDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), LevelScreenDTO.class);
-			last = LastRequestEnum.LEVEL_SCREEN;
+			last = NetworkRequestEnum.LEVEL_SCREEN;
 		} catch (JsonParseException e) {
 			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
@@ -285,7 +285,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 
 	public void receiveGame(String line) {
 		Gdx.app.log(CLASS_NAME, "receiveGame");
-		last = LastRequestEnum.GAME_SCREEN;
+		last = NetworkRequestEnum.GAME_SCREEN;
 	}
 
 	public void receiveSound(String line) {

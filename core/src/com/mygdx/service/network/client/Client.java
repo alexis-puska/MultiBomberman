@@ -10,6 +10,7 @@ import com.badlogic.gdx.net.Socket;
 import com.mygdx.service.Context;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.network.NetworkService;
+import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 import com.mygdx.view.ClientViewScreen;
 
 public class Client extends Thread {
@@ -64,15 +65,15 @@ public class Client extends Thread {
 						viewScreen.receiveGame(line);
 					} else if (line.startsWith(SoundService.PREFIX) && viewScreen != null) {
 						viewScreen.receiveSound(line);
-					} else if (line.startsWith("levelScreen:") && viewScreen != null) {
+					} else if (line.startsWith(NetworkRequestEnum.LEVEL_SCREEN.name() + ":") && viewScreen != null) {
 						viewScreen.receiveLevelScreen(line);
-					} else if (line.startsWith("waitScreen:") && viewScreen != null) {
+					} else if (line.startsWith(NetworkRequestEnum.WAIT_SCREEN.name() + ":") && viewScreen != null) {
 						viewScreen.receiveWaitScreen(line);
-					} else if (line.startsWith("rulesScreen:") && viewScreen != null) {
+					} else if (line.startsWith(NetworkRequestEnum.RULE_SCREEN.name() + ":") && viewScreen != null) {
 						viewScreen.receiveRuleScreen(line);
-					} else if (line.startsWith("skinsScreen:") && viewScreen != null) {
+					} else if (line.startsWith(NetworkRequestEnum.SKIN_SCREEN.name() + ":") && viewScreen != null) {
 						viewScreen.receiveSkinScreen(line);
-					} else if (line.startsWith("levelDefinition:") && viewScreen != null) {
+					} else if (line.startsWith(NetworkRequestEnum.LEVEL_DEFINITION.name() + ":") && viewScreen != null) {
 						viewScreen.receiveLevelDef(line);
 					} else {
 						Gdx.app.log("Client", "recu et non reconnu : " + line);
@@ -108,8 +109,7 @@ public class Client extends Thread {
 	/**
 	 * Send button event to server
 	 * 
-	 * @param buffer
-	 *            value of button pressed by an controller
+	 * @param buffer value of button pressed by an controller
 	 */
 	public void send(byte[] buffer) {
 		if (status && canSendEvent) {

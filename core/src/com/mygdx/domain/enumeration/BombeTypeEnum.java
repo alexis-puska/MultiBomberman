@@ -8,22 +8,22 @@ import com.mygdx.enumeration.SpriteEnum;
 
 public enum BombeTypeEnum {
 	//@formatter:off
-	BOMBE(SpriteEnum.BOMBE, true, 0f, initBombe()), 
-	BOMBE_P(SpriteEnum.BOMBE_P, true, 0f, initBombeP()),
-	BOMBE_MAX(SpriteEnum.BOMBE_D, true, 0.6f, initBombeD()), 
-	BOMBE_RUBBER(SpriteEnum.BOMBE_E, true, 0f, initBombeRubber());
+	BOMBE(SpriteEnum.BOMBE, true, initBombe()), 
+	BOMBE_P(SpriteEnum.BOMBE_P, true, initBombeP()),
+	BOMBE_MAX(SpriteEnum.BOMBE_D, true, initBombeD()), 
+	BOMBE_RUBBER(SpriteEnum.BOMBE_E, true, initBombeRubber());
 	//@formatter:on
 
 	private SpriteEnum spriteEnum;
 	private boolean createLight;
-	private float light;
+	//private float light;
 	private Map<Integer, BombeLight> offsetLight;
 
-	private BombeTypeEnum(SpriteEnum spriteEnum, boolean createLight, float light,
+	private BombeTypeEnum(SpriteEnum spriteEnum, boolean createLight, //float light,
 			Map<Integer, BombeLight> offsetLight) {
 		this.spriteEnum = spriteEnum;
 		this.createLight = createLight;
-		this.light = light;
+	//	this.light = light;
 		this.offsetLight = offsetLight;
 	}
 
@@ -71,9 +71,9 @@ public enum BombeTypeEnum {
 		return this.createLight;
 	}
 
-	public float getLight() {
-		return this.light;
-	}
+//	public float getLight() {
+//		return this.light;
+//	}
 
 	public Map<Integer, BombeLight> getOffsetLight() {
 		return this.offsetLight;

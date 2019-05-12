@@ -156,9 +156,9 @@ public class Bombe extends BodyAble {
 		return this.type.isCreateLight();
 	}
 
-	public float getLight() {
-		return this.type.getLight();
-	}
+//	public float getLight() {
+//		return this.type.getLight();
+//	}
 
 	@Override
 	public void update() {
@@ -263,6 +263,9 @@ public class Bombe extends BodyAble {
 		generateFireDown(posX, posY);
 		generateFireLeft(posX, posY);
 		generateFireUp(posX, posY);
+		if (this.state == BombeStateEnum.CARRIED) {
+			this.player.carriedBombeExplode(this);
+		}
 		this.state = BombeStateEnum.EXPLODED;
 		SoundService.getInstance().playSound(SoundEnum.FIRE);
 		this.dispose();

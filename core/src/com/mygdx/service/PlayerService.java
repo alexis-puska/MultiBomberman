@@ -28,7 +28,9 @@ import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.input_processor.ControlEventListener;
 import com.mygdx.service.input_processor.MenuListener;
 import com.mygdx.service.network.dto.SkinScreenDTO;
+import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 import com.mygdx.service.network.server.NetworkConnexion;
+import com.mygdx.service.network.server.ServerContext;
 import com.mygdx.view.ClientViewScreen;
 import com.mygdx.view.GameScreen;
 import com.mygdx.view.SkinScreen;
@@ -667,10 +669,12 @@ public class PlayerService {
 	 * 
 	 ******************************************************/
 	public void definitionChange() {
-		SkinScreenDTO dto = new SkinScreenDTO();
-		dto.setDefinitions(this.definitions);
 		try {
-			this.mbGame.getNetworkService().sendToClient("skinsScreen:" + this.objectMapper.writeValueAsString(dto));
+			SkinScreenDTO dto = new SkinScreenDTO();
+			dto.setDefinitions(this.definitions);
+			String request = NetworkRequestEnum.SKIN_SCREEN.name() + ":" + this.objectMapper.writeValueAsString(dto);
+			ServerContext.setSkinScreenRequestBuffer(request);
+			this.mbGame.getNetworkService().sendToClient(request);
 		} catch (JsonProcessingException e) {
 			Gdx.app.error(CLASS_NAME, "error send definitions to client");
 		}

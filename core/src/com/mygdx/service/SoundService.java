@@ -24,6 +24,7 @@ public class SoundService {
 	private static final float MUSIQUE_VOLUME = 0.2f;
 	private static final float MINE_VOLUME = 0.3f;
 	private static final float VALIDE_BIP_VOLUME = 0.1f;
+	private static final float CANCEL_VOLUME = 0.1f;
 
 	public static final String PREFIX = "sound:";
 
@@ -157,7 +158,7 @@ public class SoundService {
 			soundBurn.play();
 			break;
 		case CANCEL:
-			soundCancel.play();
+			soundCancel.play(CANCEL_VOLUME);
 			break;
 		case END:
 			soundEnd.play();

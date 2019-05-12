@@ -1,6 +1,9 @@
 package com.mygdx.enumeration;
 
 public enum ServerStateEnum {
-	IN_GAME,
-	WAIT_PLAYER;
+	WAIT_SCREEN,
+	SKIN_SCREEN,
+	RULE_SCREEN,
+	LEVEL_SCREEN,
+	GAME_SCREEN;
 }

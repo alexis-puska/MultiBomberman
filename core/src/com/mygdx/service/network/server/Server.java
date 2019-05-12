@@ -18,6 +18,7 @@ import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.network.dto.WaitScreenDTO;
+import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 
 public class Server extends Thread {
 
@@ -146,11 +147,13 @@ public class Server extends Thread {
 	}
 
 	private void notifyNewConnexion(int nbPlayer) {
-		WaitScreenDTO dto = new WaitScreenDTO();
-		dto.setNbHumainPlayer(nbPlayer);
-		dto.setNbClient(this.connexionsValide.size());
 		try {
-			this.mbGame.getNetworkService().sendToClient("waitScreen:" + this.objectMapper.writeValueAsString(dto));
+			WaitScreenDTO dto = new WaitScreenDTO();
+			dto.setNbHumainPlayer(nbPlayer);
+			dto.setNbClient(this.connexionsValide.size());
+			String request = NetworkRequestEnum.WAIT_SCREEN.name() + ":" + this.objectMapper.writeValueAsString(dto);
+			ServerContext.setWaitScreenRequestBuffer(request);
+			this.mbGame.getNetworkService().sendToClient(request);
 		} catch (JsonProcessingException e) {
 			Gdx.app.error(CLASS_NAME, "error send nb human and connexion size to client");
 		}
