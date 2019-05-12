@@ -1110,7 +1110,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	private void takeDeathBonus() {
 		this.cancelLastMalus();
-		this.deathBonus = DeathBonusEnum.EXCHANGE;
+		this.deathBonus = DeathBonusEnum.random();
 		switch (this.deathBonus) {
 		case CONSTIPATION:
 		case DIAREE:
