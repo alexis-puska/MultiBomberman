@@ -99,6 +99,7 @@ public class Mine extends BodyAble implements Initiable {
 		this.type = MineTypeEnum.random();
 		this.expiration = 0f;
 		this.activate = false;
+		this.drawSprite = SpriteEnum.MINE;
 		createBody();
 	}
 
@@ -165,16 +166,22 @@ public class Mine extends BodyAble implements Initiable {
 	@Override
 	public void drawIt() {
 		if (!activate) {
+			this.drawSprite = SpriteEnum.MINE;
+			this.drawIndex = 0;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.MINE, 0),
 					(float) this.x * Constante.GRID_PIXELS_SIZE_X, (float) this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else {
 			switch (type) {
 			case BEND:
+				this.drawSprite = SpriteEnum.MINE_C;
+				this.drawIndex = bendAnimation.getKeyFrameIndex(this.time);
 				mbGame.getBatch().draw(bendAnimation.getKeyFrame(this.time, true),
 						(float) this.x * Constante.GRID_PIXELS_SIZE_X, (float) this.y * Constante.GRID_PIXELS_SIZE_Y);
 				break;
 			case STRAIGHT:
 			default:
+				this.drawSprite = SpriteEnum.MINE_D;
+				this.drawIndex = straightAnimation.getKeyFrameIndex(this.time);
 				mbGame.getBatch().draw(straightAnimation.getKeyFrame(this.time, true),
 						(float) this.x * Constante.GRID_PIXELS_SIZE_X, (float) this.y * Constante.GRID_PIXELS_SIZE_Y);
 				break;
@@ -241,18 +248,14 @@ public class Mine extends BodyAble implements Initiable {
 		}
 		return false;
 	}
-	
-
 
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return drawSprite;
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return drawIndex;
 	}
 }

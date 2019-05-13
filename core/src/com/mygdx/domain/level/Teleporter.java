@@ -60,6 +60,7 @@ public class Teleporter extends BodyAble implements Initiable {
 		this.time = 0.0f;
 		this.animation = new Animation<>(1f / 10f,
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.TELEPORTER));
+		this.drawSprite = SpriteEnum.TELEPORTER;
 		createBody();
 	}
 
@@ -89,24 +90,23 @@ public class Teleporter extends BodyAble implements Initiable {
 	@Override
 	public void drawIt() {
 		if (animate) {
-			mbGame.getBatch().draw(animation.getKeyFrame(time, false), this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
-		} else {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TELEPORTER, 0), this.x * Constante.GRID_PIXELS_SIZE_X,
+			this.drawIndex = animation.getKeyFrameIndex(time);
+			mbGame.getBatch().draw(animation.getKeyFrame(time, false), this.x * Constante.GRID_PIXELS_SIZE_X,
 					this.y * Constante.GRID_PIXELS_SIZE_Y);
+		} else {
+			this.drawIndex = 0;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TELEPORTER, 0),
+					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
-	
-
 
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return drawSprite;
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return drawIndex;
 	}
 }

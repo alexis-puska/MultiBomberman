@@ -40,6 +40,8 @@ public class Fire extends BodyAble {
 		this.animation = new Animation<>(1f / 10f,
 				SpriteService.getInstance().getSpriteForAnimation(fireEnum.getSpriteEnum()));
 		this.time = 0.0f;
+		this.drawSprite = fireEnum.getSpriteEnum();
+		this.drawIndex = 0;
 		this.createBody();
 	}
 
@@ -93,6 +95,7 @@ public class Fire extends BodyAble {
 
 	@Override
 	public void drawIt() {
+		this.drawIndex = animation.getKeyFrameIndex(time);
 		mbGame.getBatch().draw(animation.getKeyFrame(time, false), (float) this.x * Constante.GRID_PIXELS_SIZE_X,
 				(float) this.y * Constante.GRID_PIXELS_SIZE_Y);
 	}
@@ -109,22 +112,19 @@ public class Fire extends BodyAble {
 	public boolean isOff() {
 		return off;
 	}
-	
+
 	public Player getPlayerGenerateThisFire() {
 		return this.player;
 	}
-	
-
 
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return drawSprite;
 	}
 
 	@Override
 	public int getDrawIndex() {
 		// TODO Auto-generated method stub
-		return 0;
+		return drawIndex;
 	}
 }

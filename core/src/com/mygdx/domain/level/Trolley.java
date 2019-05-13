@@ -80,10 +80,14 @@ public class Trolley extends BodyAble implements Initiable {
 
 	@Override
 	public void dispose() {
-		super.dispose();
 		if (this.soundId != 0l) {
 			SoundService.getInstance().stopSound(SoundEnum.TROLLEY, this.soundId);
 		}
+		if (body != null) {
+			this.world.destroyBody(body);
+			body = null;
+		}
+		this.level = null;
 	}
 
 	@Override
@@ -99,6 +103,7 @@ public class Trolley extends BodyAble implements Initiable {
 		this.player = null;
 		createBody();
 		this.currentRail = this.getCurrentRailUnderTrolley();
+		this.drawSprite = SpriteEnum.TROLLEY;
 		if (this.currentRail != null) {
 			this.drawDirection = this.currentRail.getNextDirection(null);
 			this.moveDirection = this.drawDirection;
@@ -203,7 +208,7 @@ public class Trolley extends BodyAble implements Initiable {
 	public void playerTakeTrolley(Player player) {
 		if (currentRail != null) {
 			this.player = player;
-			this.player.enterInTrolley();
+			this.player.enterInTrolley(this);
 			this.move = true;
 			this.soundId = SoundService.getInstance().loopSound(SoundEnum.TROLLEY);
 		}

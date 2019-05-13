@@ -44,6 +44,7 @@ public class Bonus extends BodyAble implements LevelElement {
 		this.stateTime = 0f;
 		this.animation = new Animation<>((1f / (float) Constante.FPS) * 4f,
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.BONUS_BURN));
+		this.drawSprite = SpriteEnum.BONUS;
 		if (state == BonusStateEnum.REVEALED) {
 			this.level.getOccupedWallBrickBonus()[x][y] = this;
 			this.createBody();
@@ -54,9 +55,13 @@ public class Bonus extends BodyAble implements LevelElement {
 	public void drawIt() {
 		if (this.state == BonusStateEnum.BURN) {
 			this.stateTime += Gdx.graphics.getDeltaTime();
+			drawSprite = SpriteEnum.BONUS_BURN;
+			drawIndex = animation.getKeyFrameIndex(stateTime);
 			mbGame.getBatch().draw(animation.getKeyFrame(stateTime, false), this.x * Constante.GRID_PIXELS_SIZE_X - 6,
 					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else if (this.state == BonusStateEnum.REVEALED) {
+			drawSprite = SpriteEnum.BONUS;
+			drawIndex = this.type.getIndex();
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, this.type.getIndex()),
 					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
@@ -90,6 +95,7 @@ public class Bonus extends BodyAble implements LevelElement {
 	public void update() {
 		if (this.state == BonusStateEnum.TAKED) {
 			this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
+			this.level.getNoWall().add(this.getGridIndex());
 			if (this.type == BonusTypeEnum.DEATH && !this.level.getNoWall().isEmpty()) {
 				int idx = ThreadLocalRandom.current().nextInt(0, this.level.getNoWall().size());
 				int chx = this.level.getNoWall().get(idx);
@@ -107,6 +113,7 @@ public class Bonus extends BodyAble implements LevelElement {
 		} else if (this.state == BonusStateEnum.BURN && this.stateTime >= animation.getAnimationDuration()) {
 			this.state = BonusStateEnum.BURNED;
 			this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
+			this.level.getNoWall().add(this.getGridIndex());
 			dispose();
 		}
 	}
@@ -149,20 +156,17 @@ public class Bonus extends BodyAble implements LevelElement {
 	public void immediateAction() {
 		this.state = BonusStateEnum.BURNED;
 		this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
+		this.level.getNoWall().add(this.getGridIndex());
 		dispose();
 	}
-	
-
 
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return drawSprite;
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return drawIndex;
 	}
 }

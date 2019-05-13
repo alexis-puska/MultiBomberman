@@ -38,6 +38,7 @@ public class Hole extends BodyAble implements Initiable {
 		this.world = world;
 		this.level = level;
 		this.mbGame = mbGame;
+		this.drawSprite = SpriteEnum.HOLE;
 		this.createBody();
 	}
 
@@ -88,25 +89,27 @@ public class Hole extends BodyAble implements Initiable {
 	@Override
 	public void drawIt() {
 		if (walkCounter > 0 && walkCounter < WALL_COUNTER) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 0), this.x * Constante.GRID_PIXELS_SIZE_X,
-					this.y * Constante.GRID_PIXELS_SIZE_Y);
+			this.drawIndex = 0;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 0),
+					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else if (walkCounter >= 3) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 1), this.x * Constante.GRID_PIXELS_SIZE_X,
-					this.y * Constante.GRID_PIXELS_SIZE_Y);
+			this.drawIndex = 1;
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.HOLE, 1),
+					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
-	
 
+	public boolean isDraw() {
+		return walkCounter > 0;
+	}
 
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return drawSprite;
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return drawIndex;
 	}
 }

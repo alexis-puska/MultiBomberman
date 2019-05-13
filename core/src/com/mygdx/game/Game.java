@@ -61,6 +61,7 @@ import com.mygdx.service.network.dto.PauseDTO;
 import com.mygdx.service.network.dto.PlayerPixelDTO;
 import com.mygdx.service.network.dto.ScoreDTO;
 import com.mygdx.service.network.dto.SpriteGridDTO;
+import com.mygdx.service.network.dto.SpritePixelDTO;
 import com.mygdx.service.network.dto.TimeDTO;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 import com.mygdx.service.network.server.ServerContext;
@@ -231,6 +232,8 @@ public class Game {
 	public void restart() {
 		Gdx.app.log("aaa", "restart");
 		LevelMapper levelMapper = new LevelMapper();
+		this.players.stream().forEach(Player::dispose);
+		this.level.dispose();
 		this.level = levelMapper.toEntity(Context.getLevel());
 		this.level.init(this, world);
 		this.players = this.mbGame.getPlayerService().generatePlayer(this, this.world, this.level,
@@ -654,31 +657,76 @@ public class Game {
 			bb.put(sg.getBuffer());
 		});
 		// INTERRUPTER
+		this.level.getInterrupter().forEach(i -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, i.getDrawSprite(), i.getDrawIndex(), i.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
 		// TELEPORTER
+		this.level.getTeleporter().forEach(t -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, t.getDrawSprite(), t.getDrawIndex(), t.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
 		// HOLE
+		this.level.getHole().forEach(h -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
 
-		// ENCODE BRICK
-		// CREATED BRICK
+		// ENCODE BRICK DISPLAY
 		bb.put(new BrickPositionDTO(this.level).getBuffer());
-		// BURN BRICK
+		// ENCODE BRICK BURN
 		this.level.getBricks().stream().filter(Brick::isBurningOrBurned).forEach(b -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, b.getDrawSprite(), b.getDrawIndex(), b.getGridIndex());
 			bb.put(sg.getBuffer());
 		});
 
 		// SUDDENDEATHWALL BACK
+		this.level.getSuddenDeathWall().stream().filter(s -> s.isTransformedInStrandardWall()).forEach(h -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
 
 		// FIRE
+		this.level.getFires().forEach(h -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
 		// MINE
+		this.level.getMine().forEach(h -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
 		// TROLLEY
+		this.level.getTrolley().stream().forEach(h -> {
+			SpritePixelDTO sg = new SpritePixelDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getBodyX(),
+					h.getBodyY());
+			bb.put(sg.getBuffer());
+		});
+
 		// BOMBE
+		this.level.getBombes().stream().filter(b -> !b.isExploded()).forEach(h -> {
+			SpritePixelDTO sg = new SpritePixelDTO(false, h.getDrawSprite(), h.getDrawIndex(),
+					(float) ((h.getBodyX() - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
+					(float) ((h.getBodyY() - 0.5f) * Constante.GRID_PIXELS_SIZE_Y) + h.getReboundOffset());
+			bb.put(sg.getBuffer());
+		});
+
 		// BONUS
+		this.level.getBonuss().forEach(h -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
 		// PLAYER
 		players.stream().forEach(p -> {
 			PlayerPixelDTO ppd = new PlayerPixelDTO(p);
 			bb.put(ppd.getBuffer());
 		});
 		// SUDDENDEATHWALL FRONT
+		this.level.getSuddenDeathWall().stream().filter(s -> !s.isTransformedInStrandardWall()).forEach(h -> {
+			SpritePixelDTO sg = new SpritePixelDTO(true, h.getDrawSprite(), h.getDrawIndex(),
+					h.getX() * Constante.GRID_PIXELS_SIZE_X, h.getY() * Constante.GRID_PIXELS_SIZE_Y + h.getOffset());
+			bb.put(sg.getBuffer());
+		});
 
 		// ENCODE STATE
 		switch (state) {

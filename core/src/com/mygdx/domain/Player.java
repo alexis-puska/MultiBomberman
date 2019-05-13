@@ -32,6 +32,7 @@ import com.mygdx.domain.game.Bombe;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.StartPlayer;
 import com.mygdx.domain.level.Teleporter;
+import com.mygdx.domain.level.Trolley;
 import com.mygdx.enumeration.CharacterColorEnum;
 import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
@@ -121,6 +122,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	private LouisSpriteEnum drawSpriteLouis;
 	private int spriteIndex;
 	private int spriteIndexLouis;
+	private Trolley trolley;
 
 	public Player(Game game, World world, MultiBombermanGame mbGame, Level level, PlayerTypeEnum type,
 			CharacterEnum character, CharacterColorEnum color, StartPlayer startPlayer, int bombeStrenght, int nbBombe,
@@ -299,7 +301,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		SoundService.getInstance().playSound(SoundEnum.BURN);
 	}
 
-	public void enterInTrolley() {
+	public void enterInTrolley(Trolley trolley) {
+		this.trolley = trolley;
 		this.previousDirection = this.direction;
 		this.direction = PovDirection.center;
 		this.changeState(PlayerStateEnum.INSIDE_TROLLEY);
@@ -1073,7 +1076,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
 						SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
 			}
-			this.changeState(PlayerStateEnum.ON_LOUIS);
+			if (this.networkStateEnum == NetworkPlayerStateEnum.TROLLEY) {
+				this.previousState = PlayerStateEnum.ON_LOUIS;
+			} else {
+				this.changeState(PlayerStateEnum.ON_LOUIS);
+			}
 			SoundService.getInstance().playSound(SoundEnum.LOUIS);
 			break;
 		case FIRE:
@@ -1252,7 +1259,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.spriteIndexLouis = animationsLouis.get(LouisSpriteEnum.VICTORY)
 				.getKeyFrameIndex(this.direction == PovDirection.center ? 0 : animationTime);
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_DOWN).getKeyFrame(0, false),
-				getPixelX() - 15f, getPixelY() - 15f);
+				getPixelX() - 15f, getPixelY() - 5f);
 		mbGame.getBatch()
 				.draw(animationsLouis.get(LouisSpriteEnum.VICTORY)
 						.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true), getPixelX() - 15,
@@ -1343,6 +1350,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.drawSprite = CharacterSpriteEnum.INSIDE_TROLLEY;
 		this.networkStateEnum = NetworkPlayerStateEnum.TROLLEY;
 		this.spriteIndex = 0;
+		float trolleyX = this.trolley.getPixelX();
+		float trolleyY = this.trolley.getPixelY();
 
 		switch (this.trolleyDirection) {
 		case center:
@@ -1350,42 +1359,42 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		case east:
 			this.spriteIndex = 0;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
-					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
+					this.spriteIndex), trolleyX - 15f, trolleyY - 5f);
 			break;
 		case north:
 			this.spriteIndex = 5;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
-					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
+					this.spriteIndex), trolleyX - 15f, trolleyY - 5f);
 			break;
 		case northEast:
 			this.spriteIndex = 7;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
-					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
+					this.spriteIndex), trolleyX - 15f, trolleyY - 5f);
 			break;
 		case northWest:
 			this.spriteIndex = 6;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
-					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
+					this.spriteIndex), trolleyX - 15f, trolleyY - 5f);
 			break;
 		case south:
 			this.spriteIndex = 1;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
-					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
+					this.spriteIndex), trolleyX - 15f, trolleyY - 5f);
 			break;
 		case southEast:
 			this.spriteIndex = 2;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
-					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
+					this.spriteIndex), trolleyX - 15f, trolleyY - 5f);
 			break;
 		case southWest:
 			this.spriteIndex = 3;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
-					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
+					this.spriteIndex), trolleyX - 15f, trolleyY - 5f);
 			break;
 		case west:
 			this.spriteIndex = 4;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(this.drawSprite, this.color, this.character,
-					this.spriteIndex), getPixelX() - 15f, getPixelY() - 9f);
+					this.spriteIndex), trolleyX - 15f, trolleyY - 5f);
 			break;
 		default:
 			break;

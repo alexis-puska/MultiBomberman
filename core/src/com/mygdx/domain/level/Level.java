@@ -104,6 +104,7 @@ public class Level {
 		this.fires = new ArrayList<>();
 		this.bombes = new ArrayList<>();
 		this.bonuss = new ArrayList<>();
+		this.state = new HashMap<>();
 		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
@@ -327,6 +328,7 @@ public class Level {
 				occupedWallBrickBonus[x][y] = null;
 			}
 		}
+
 		hole.stream().forEach(Hole::dispose);
 		interrupter.stream().forEach(Interrupter::dispose);
 		mine.stream().forEach(Mine::dispose);
@@ -337,6 +339,7 @@ public class Level {
 		bombes.stream().forEach(Bombe::dispose);
 		fires.stream().forEach(Fire::dispose);
 		badBomberWall.stream().forEach(w -> this.world.destroyBody(w));
+		bonuss.stream().forEach(Bonus::dispose);
 		suddenDeathWall.stream().forEach(SuddenDeathWall::dispose);
 	}
 

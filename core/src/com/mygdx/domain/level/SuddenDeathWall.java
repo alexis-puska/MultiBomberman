@@ -45,7 +45,7 @@ public class SuddenDeathWall extends BodyAble {
 		}
 	}
 
-	private float getOffset() {
+	public float getOffset() {
 		return (-336.0f * this.time) + 336f;
 	}
 
@@ -106,18 +106,14 @@ public class SuddenDeathWall extends BodyAble {
 		}
 		transformedInStrandardWall = true;
 	}
-	
-
 
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.animation;
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.defaultTexture;
 	}
 }

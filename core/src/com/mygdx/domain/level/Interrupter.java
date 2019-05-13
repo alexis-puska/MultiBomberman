@@ -36,6 +36,7 @@ public class Interrupter extends BodyAble implements Initiable {
 		this.mbGame = mbGame;
 		this.world = world;
 		this.level = level;
+		this.drawSprite = SpriteEnum.TELEPORTER;
 		createBody();
 	}
 
@@ -70,10 +71,13 @@ public class Interrupter extends BodyAble implements Initiable {
 	public void drawIt() {
 		this.drawSprite = SpriteEnum.BUTTON;
 		if (nbPlayer > 0) {
+			this.drawIndex = 1;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 1),
 					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 			this.drawIndex = 1;
 		} else {
+
+			this.drawIndex = 0;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 0),
 					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 			this.drawIndex = 0;
@@ -82,13 +86,11 @@ public class Interrupter extends BodyAble implements Initiable {
 
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return drawSprite;
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return drawIndex;
 	}
 }

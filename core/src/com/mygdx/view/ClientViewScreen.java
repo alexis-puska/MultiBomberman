@@ -87,7 +87,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 	private List<SpriteGridDTO> spriteGridDTOs = new ArrayList<>();
 	private List<SpritePixelDTO> spritePixelDTOs = new ArrayList<>();
 	private List<LightDTO> lightDTOs = new ArrayList<>();
-	private List<ScoreDTO> scoresDTO;
+	private List<ScoreDTO> scoresDTO = new ArrayList<>();
 	private TimeDTO timeDTO;
 	private boolean pause = false;
 	private boolean menu = false;
