@@ -57,6 +57,8 @@ import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
 import com.mygdx.service.mapper.LevelMapper;
 import com.mygdx.service.network.dto.LightDTO;
+import com.mygdx.service.network.dto.MenuDTO;
+import com.mygdx.service.network.dto.PauseDTO;
 import com.mygdx.service.network.dto.PlayerPixelDTO;
 import com.mygdx.service.network.dto.ScoreDTO;
 import com.mygdx.service.network.dto.SpriteGridDTO;
@@ -384,8 +386,8 @@ public class Game {
 	public boolean isSuddentDeathTime() {
 		return gameCountDown <= 50.0f;
 	}
-	
-	public List<Player> getPlayers(){
+
+	public List<Player> getPlayers() {
 		return this.players;
 	}
 
@@ -658,12 +660,33 @@ public class Game {
 		return sbf.toString();
 	}
 
-	public void doNetworkStuff(GameScreenEnum step) {
+	public void doNetworkStuff(GameScreenEnum state) {
 		ByteBuffer bb = ByteBuffer.allocate(512000);
 		players.stream().forEach(p -> {
 			PlayerPixelDTO ppd = new PlayerPixelDTO(p);
 			bb.put(ppd.getBuffer());
 		});
+		this.level.getBricks().stream().forEach(b -> {
+			SpriteGridDTO sg = new SpriteGridDTO(b.getDrawSprite(), b.getDrawIndex(), b.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
+		switch (state) {
+		case MENU:
+			bb.put(new MenuDTO().getBuffer());
+			break;
+		case PAUSE:
+			bb.put(new PauseDTO().getBuffer());
+			break;
+		case GAME:
+		default:
+			break;
+		}
+
+		if (this.state == GameStepEnum.SCORE) {
+			this.score.entrySet().stream().forEach(k -> {
+				bb.put(new ScoreDTO(k.getKey(), k.getValue()).getBuffer());
+			});
+		}
 
 		bb.put(new TimeDTO(this.gameCountDown).getBuffer());
 
@@ -672,7 +695,7 @@ public class Game {
 		bb.position(0);
 		bb.get(e, 0, lengthToCopy);
 		String encoded = Base64.getEncoder().encodeToString(e);
-		//System.out.println(encoded);
+		System.out.println(encoded);
 		String cmd = NetworkRequestEnum.GAME_SCREEN.name() + ":" + encoded;
 		mbGame.getNetworkService().sendToClient(cmd);
 
@@ -708,8 +731,10 @@ public class Game {
 				break;
 			case MENU:
 				menu = true;
+				break;
 			case PAUSE:
 				pause = true;
+				break;
 			case SCORE:
 				new ScoreDTO(readRequest(bbd, req));
 				break;
