@@ -81,13 +81,14 @@ public class Trolley extends BodyAble implements Initiable {
 	@Override
 	public void dispose() {
 		super.dispose();
-		if(this.soundId != 0l) {
+		if (this.soundId != 0l) {
 			SoundService.getInstance().stopSound(SoundEnum.TROLLEY, this.soundId);
 		}
 	}
 
 	@Override
 	public void init(World world, MultiBombermanGame mbGame, Level level) {
+		this.drawSprite = SpriteEnum.TROLLEY;
 		this.mbGame = mbGame;
 		this.world = world;
 		this.level = level;
@@ -164,23 +165,27 @@ public class Trolley extends BodyAble implements Initiable {
 			break;
 		case east:
 		case west:
+			drawIndex = 0;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TROLLEY, 0), getPixelX() - 15f,
-					getPixelY() - 9f);
+					getPixelY() - 5f);
 			break;
 		case north:
 		case south:
+			drawIndex = 1;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TROLLEY, 1), getPixelX() - 15f,
-					getPixelY() - 9f);
+					getPixelY() - 5f);
 			break;
 		case northWest:
 		case southEast:
+			drawIndex = 2;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TROLLEY, 2), getPixelX() - 15f,
-					getPixelY() - 9f);
+					getPixelY() - 5f);
 			break;
 		case northEast:
 		case southWest:
+			drawIndex = 3;
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TROLLEY, 3), getPixelX() - 15f,
-					getPixelY() - 9f);
+					getPixelY() - 5f);
 			break;
 		default:
 			break;
@@ -224,18 +229,14 @@ public class Trolley extends BodyAble implements Initiable {
 		}
 		return null;
 	}
-	
-
 
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return drawSprite;
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return drawIndex;
 	}
 }

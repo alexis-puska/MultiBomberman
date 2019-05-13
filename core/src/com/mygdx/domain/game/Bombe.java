@@ -137,6 +137,7 @@ public class Bombe extends BodyAble {
 
 	@Override
 	public void drawIt() {
+		drawIndex = animation.getKeyFrameIndex(animationTime);
 		mbGame.getBatch().draw(animation.getKeyFrame(animationTime, true),
 				(float) ((body.getPosition().x - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
 				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y) + offsetZ);
@@ -157,18 +158,14 @@ public class Bombe extends BodyAble {
 		return this.type.isCreateLight();
 	}
 
-
-
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return type.getSpriteEnum();
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return drawIndex;
 	}
 
 	@Override

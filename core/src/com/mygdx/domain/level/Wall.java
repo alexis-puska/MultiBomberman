@@ -89,17 +89,13 @@ public class Wall extends BodyAble implements LevelElement, Initiable {
 		// do nothing on wall
 	}
 	
-
-
 	@Override
 	public SpriteEnum getDrawSprite() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 }
