@@ -70,13 +70,13 @@ public class GameScreen implements Screen, MenuListener {
 			this.game.render();
 			break;
 		case MENU:
-			this.game.render();
 			this.game.doNetworkStuff(state);
+			this.game.render();
 			this.drawMenu();
 			break;
 		case PAUSE:
-			this.game.render();
 			this.game.doNetworkStuff(state);
+			this.game.render();
 			this.drawPause();
 			break;
 		default:

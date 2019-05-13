@@ -729,8 +729,20 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		return networkStateEnum;
 	}
 
-	public CharacterSpriteEnum getDrawSprite() {
+	public CharacterSpriteEnum getDrawCharacterSprite() {
 		return drawSprite;
+	}
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// unused Function
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// unused Function
+		return 0;
 	}
 
 	public LouisSpriteEnum getDrawSpriteLouis() {

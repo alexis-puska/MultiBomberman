@@ -22,6 +22,7 @@ import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.Wall;
 import com.mygdx.enumeration.SoundEnum;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
@@ -156,9 +157,19 @@ public class Bombe extends BodyAble {
 		return this.type.isCreateLight();
 	}
 
-//	public float getLight() {
-//		return this.type.getLight();
-//	}
+
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 	@Override
 	public void update() {

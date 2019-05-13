@@ -106,4 +106,18 @@ public class SuddenDeathWall extends BodyAble {
 		}
 		transformedInStrandardWall = true;
 	}
+	
+
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

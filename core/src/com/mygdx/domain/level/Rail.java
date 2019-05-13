@@ -37,7 +37,12 @@ public class Rail extends Drawable {
 	private Rail right;
 	private Rail down;
 
+	private SpriteEnum drawSprite;
+	private int drawIndex;
+
 	public void init(MultiBombermanGame mbGame, final Level level) {
+		this.drawSprite = SpriteEnum.RAIL;
+		this.drawIndex = 0;
 		this.mbGame = mbGame;
 		this.canSwitch = false;
 		this.possibility = new ArrayList<>();
@@ -155,9 +160,18 @@ public class Rail extends Drawable {
 			break;
 		}
 	}
+	
+	public int getIndex() {
+		return this.x + (this.y * Constante.GRID_SIZE_X);
+	}
+
+	public int getGridIndex() {
+		return (y * Constante.GRID_SIZE_X) + x;
+	}
 
 	@Override
 	public void drawIt() {
+		this.drawIndex = this.type.getTextureIndex();
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.RAIL, this.type.getTextureIndex()),
 				this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 	}
@@ -262,10 +276,6 @@ public class Rail extends Drawable {
 		default:
 		}
 		return PovDirection.center;
-	}
-
-	public int getIndex() {
-		return this.x + (this.y * Constante.GRID_SIZE_X);
 	}
 
 	@Override

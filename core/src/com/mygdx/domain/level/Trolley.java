@@ -224,4 +224,18 @@ public class Trolley extends BodyAble implements Initiable {
 		}
 		return null;
 	}
+	
+
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

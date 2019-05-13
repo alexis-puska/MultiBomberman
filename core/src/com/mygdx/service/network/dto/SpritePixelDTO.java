@@ -6,12 +6,14 @@ import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 
 public class SpritePixelDTO {
+	private boolean front;
 	private SpriteEnum sprite;
 	private int index;
 	private float x;
 	private float y;
 
-	public SpritePixelDTO(SpriteEnum sprite, int index, float x, float y) {
+	public SpritePixelDTO(boolean front, SpriteEnum sprite, int index, float x, float y) {
+		this.front = front;
 		this.sprite = sprite;
 		this.index = index;
 		this.x = x;
@@ -28,8 +30,13 @@ public class SpritePixelDTO {
 
 	public byte[] getBuffer() {
 		ByteBuffer bb;
-		bb = ByteBuffer.allocate(NetworkGameRequestEnum.DRAW_PIXEL.getRequestLenght());
-		bb.put((byte) NetworkGameRequestEnum.DRAW_PIXEL.ordinal());
+		if (front) {
+			bb = ByteBuffer.allocate(NetworkGameRequestEnum.DRAW_FRONT_PIXEL.getRequestLenght());
+			bb.put((byte) NetworkGameRequestEnum.DRAW_FRONT_PIXEL.ordinal());
+		} else {
+			bb = ByteBuffer.allocate(NetworkGameRequestEnum.DRAW_PIXEL.getRequestLenght());
+			bb.put((byte) NetworkGameRequestEnum.DRAW_PIXEL.ordinal());
+		}
 		bb.put((byte) sprite.ordinal());
 		bb.put((byte) index);
 		bb.putFloat(x);

@@ -16,6 +16,7 @@ import com.mygdx.domain.Player;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.level.Level;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
@@ -111,5 +112,19 @@ public class Fire extends BodyAble {
 	
 	public Player getPlayerGenerateThisFire() {
 		return this.player;
+	}
+	
+
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

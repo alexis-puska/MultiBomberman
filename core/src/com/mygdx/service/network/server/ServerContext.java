@@ -1,7 +1,6 @@
 package com.mygdx.service.network.server;
 
 import com.mygdx.enumeration.ServerStateEnum;
-import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 
 public class ServerContext {
 
@@ -69,7 +68,12 @@ public class ServerContext {
 		ServerContext.levelDefinitionBuffer = levelDefinitionBuffer;
 	}
 
-	public static void addTime(float time) {
-		NetworkGameRequestEnum.TIME.ordinal();
+	public static String getGameScreenBuffer() {
+		return gameScreenBuffer;
 	}
+
+	public static void setGameScreenBuffer(String gameScreenBuffer) {
+		ServerContext.gameScreenBuffer = gameScreenBuffer;
+	}
+
 }

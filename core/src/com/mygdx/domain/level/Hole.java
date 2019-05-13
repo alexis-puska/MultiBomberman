@@ -95,4 +95,18 @@ public class Hole extends BodyAble implements Initiable {
 					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
+	
+
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -1,6 +1,10 @@
 package com.mygdx.view;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -25,10 +29,18 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
+import com.mygdx.service.network.dto.BrickPositionDTO;
 import com.mygdx.service.network.dto.LevelScreenDTO;
+import com.mygdx.service.network.dto.LightDTO;
+import com.mygdx.service.network.dto.PlayerPixelDTO;
 import com.mygdx.service.network.dto.RuleScreenDTO;
+import com.mygdx.service.network.dto.ScoreDTO;
 import com.mygdx.service.network.dto.SkinScreenDTO;
+import com.mygdx.service.network.dto.SpriteGridDTO;
+import com.mygdx.service.network.dto.SpritePixelDTO;
+import com.mygdx.service.network.dto.TimeDTO;
 import com.mygdx.service.network.dto.WaitScreenDTO;
+import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 
 public class ClientViewScreen implements Screen, MenuListener {
@@ -37,23 +49,23 @@ public class ClientViewScreen implements Screen, MenuListener {
 	private static final String JSON_PARSE_EXCEPTION = "JsonParseException : ";
 	private static final String JSON_MAPPING_EXCEPTION = "JsonMappingException : ";
 	private static final String IO_EXCEPTION = "IOException : ";
-	private static final int SKIN_START_X = 70;
-	private static final int SKIN_START_Y = 170;
-	private static final int SKIN_COL_SIZE = 140;
-	private static final int SKIN_ROW_SIZE = 40;
-	private static final int RULE_COLUMN_START_X = 200;
-	private static final int RULE_COLUMN_SPACE = 200;
-	private static final int RULE_ROW_START_Y = 120;
-	private static final int RULE_ROW_SPACE = 20;
-	private static final int LEVEL_SCREEN_LEVEL_PREVIEW_X = 60;
-	private static final int LEVEL_SCREEN_LEVEL_PREVIEW_Y = 75;
-	private static final int LEVEL_SCREEN_START_GRID_X = 260;
-	private static final int LEVEL_SCREEN_START_GRID_Y = 100;
-	private static final int LEVEL_SCREEN_ROW_GRID_SPACE = 15;
-	private static final int LEVEL_SCREEN_COLUMN_GRID_SPACE = 150;
-	private static final int LEVEL_SCREEN_START_BONUS_X = 260;
-	private static final int LEVEL_SCREEN_START_BONUS_Y = 60;
-	private static final int LEVEL_SCREEN_BONUS_SPACE = 25;
+	private static final float SKIN_START_X = 70f;
+	private static final float SKIN_START_Y = 170f;
+	private static final float SKIN_COL_SIZE = 140f;
+	private static final float SKIN_ROW_SIZE = 40f;
+	private static final float RULE_COLUMN_START_X = 200f;
+	private static final float RULE_COLUMN_SPACE = 200f;
+	private static final float RULE_ROW_START_Y = 120f;
+	private static final float RULE_ROW_SPACE = 20f;
+	private static final float LEVEL_SCREEN_LEVEL_PREVIEW_X = 60f;
+	private static final float LEVEL_SCREEN_LEVEL_PREVIEW_Y = 75f;
+	private static final float LEVEL_SCREEN_START_GRID_X = 260f;
+	private static final float LEVEL_SCREEN_START_GRID_Y = 100f;
+	private static final float LEVEL_SCREEN_ROW_GRID_SPACE = 15f;
+	private static final float LEVEL_SCREEN_COLUMN_GRID_SPACE = 150f;
+	private static final float LEVEL_SCREEN_START_BONUS_X = 260f;
+	private static final float LEVEL_SCREEN_START_BONUS_Y = 60f;
+	private static final float LEVEL_SCREEN_BONUS_SPACE = 25f;
 
 	private final MultiBombermanGame mbGame;
 	private final GlyphLayout layout;
@@ -67,6 +79,18 @@ public class ClientViewScreen implements Screen, MenuListener {
 	private LevelScreenDTO levelScreenDTO;
 	private LevelDTO levelDTO;
 	private NetworkRequestEnum last;
+
+	/******************************************
+	 * --- GAME PART ---
+	 ******************************************/
+	private List<PlayerPixelDTO> playerPixelsDTOs = new ArrayList<>();
+	private List<SpriteGridDTO> spriteGridDTOs = new ArrayList<>();
+	private List<SpritePixelDTO> spritePixelDTOs = new ArrayList<>();
+	private List<LightDTO> lightDTOs = new ArrayList<>();
+	private List<ScoreDTO> scoresDTO;
+	private TimeDTO timeDTO;
+	private boolean pause = false;
+	private boolean menu = false;
 
 	public ClientViewScreen(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
@@ -286,6 +310,52 @@ public class ClientViewScreen implements Screen, MenuListener {
 	public void receiveGame(String line) {
 		Gdx.app.log(CLASS_NAME, "receiveGame");
 		last = NetworkRequestEnum.GAME_SCREEN;
+		ByteBuffer bbd = ByteBuffer.wrap(Base64.getDecoder().decode(line.substring(line.indexOf(':') + 1)));
+		while (bbd.position() < bbd.capacity()) {
+			int reqIndex = (int) bbd.get();
+			NetworkGameRequestEnum req = NetworkGameRequestEnum.values()[reqIndex];
+			switch (req) {
+			case DRAW_GRID:
+				this.spriteGridDTOs.add(new SpriteGridDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_PIXEL:
+				this.spritePixelDTOs.add(new SpritePixelDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_PLAYER:
+			case DRAW_PLAYER_ON_LOUIS:
+				this.playerPixelsDTOs.add(new PlayerPixelDTO(readRequest(bbd, req)));
+				break;
+			case LIGHT:
+				this.lightDTOs.add(new LightDTO(readRequest(bbd, req)));
+				break;
+			case TIME:
+				this.timeDTO = new TimeDTO(readRequest(bbd, req));
+				break;
+			case MENU:
+				menu = true;
+				break;
+			case PAUSE:
+				pause = true;
+				break;
+			case SCORE:
+				this.scoresDTO.add(new ScoreDTO(readRequest(bbd, req)));
+				break;
+			case BRICK_POSITION:
+				new BrickPositionDTO(readRequest(bbd, req));
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private byte[] readRequest(ByteBuffer bbd, NetworkGameRequestEnum req) {
+		int lengthToCopy;
+		byte[] tmp;
+		tmp = new byte[req.getRequestLenght() - 1];
+		lengthToCopy = req.getRequestLenght() - 1;
+		bbd.get(tmp, 0, lengthToCopy);
+		return tmp;
 	}
 
 	public void receiveSound(String line) {
@@ -313,16 +383,16 @@ public class ClientViewScreen implements Screen, MenuListener {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion"));
-		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, ((float) Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		if (waitScreenDTO != null) {
 			layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion.client"));
-			font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 190);
+			font.draw(mbGame.getBatch(), layout, ((float) Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 190);
 			layout.setText(font, MessageService.getInstance().getMessage("game.menu.waitConnexion.human"));
-			font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 150);
+			font.draw(mbGame.getBatch(), layout, ((float) Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 150);
 			layout.setText(font, Integer.toString(this.waitScreenDTO.getNbClient()));
-			font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 170);
+			font.draw(mbGame.getBatch(), layout, ((float) Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 170);
 			layout.setText(font, Integer.toString(this.waitScreenDTO.getNbHumainPlayer()));
-			font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 130);
+			font.draw(mbGame.getBatch(), layout, ((float) Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 130);
 		}
 		mbGame.getBatch().end();
 	}
@@ -343,7 +413,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.skinScreen"));
-		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, ((float) Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				int pos = i + j * 4;
@@ -355,7 +425,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 							.draw(SpriteService.getInstance().getSprite(CharacterSpriteEnum.WALK_DOWN,
 									skinScreenDTO.getDefinitions().get(pos).getColor(),
 									skinScreenDTO.getDefinitions().get(pos).getCharacter(), 0),
-									SKIN_START_X + (i * SKIN_COL_SIZE) + 60, SKIN_START_Y - (j * SKIN_ROW_SIZE) - 10);
+									SKIN_START_X + (i * SKIN_COL_SIZE) + 60, SKIN_START_Y - (j * SKIN_ROW_SIZE) - 10f);
 				}
 			}
 		}
@@ -379,7 +449,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen"));
-		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, ((float) Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.ruleScreen.suddenDeath"));
 		font.draw(mbGame.getBatch(), layout, RULE_COLUMN_START_X, RULE_ROW_START_Y + (RULE_ROW_SPACE * 3));
@@ -424,7 +494,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen"));
-		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
+		font.draw(mbGame.getBatch(), layout, ((float) Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
 
 		layout.setText(font, MessageService.getInstance().getMessage("game.menu.levelScreen.bombe"));
 		font.draw(mbGame.getBatch(), layout, LEVEL_SCREEN_START_GRID_X,
@@ -472,6 +542,10 @@ public class ClientViewScreen implements Screen, MenuListener {
 				LEVEL_SCREEN_LEVEL_PREVIEW_X, LEVEL_SCREEN_LEVEL_PREVIEW_Y);
 		mbGame.getBatch().end();
 	}
+
+	/********************************************************
+	 * --- GAME PART ---
+	 *********************************************************/
 
 	private void drawGameScreen() {
 		mbGame.getBatch().begin();

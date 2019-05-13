@@ -31,6 +31,8 @@ public class Interrupter extends BodyAble implements Initiable {
 
 	@Override
 	public void init(World world, MultiBombermanGame mbGame, Level level) {
+		this.drawSprite = SpriteEnum.BUTTON;
+		this.drawIndex = 0;
 		this.mbGame = mbGame;
 		this.world = world;
 		this.level = level;
@@ -66,12 +68,27 @@ public class Interrupter extends BodyAble implements Initiable {
 
 	@Override
 	public void drawIt() {
+		this.drawSprite = SpriteEnum.BUTTON;
 		if (nbPlayer > 0) {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 1), this.x * Constante.GRID_PIXELS_SIZE_X,
-					this.y * Constante.GRID_PIXELS_SIZE_Y);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 1),
+					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
+			this.drawIndex = 1;
 		} else {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 0), this.x * Constante.GRID_PIXELS_SIZE_X,
-					this.y * Constante.GRID_PIXELS_SIZE_Y);
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BUTTON, 0),
+					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
+			this.drawIndex = 0;
 		}
+	}
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

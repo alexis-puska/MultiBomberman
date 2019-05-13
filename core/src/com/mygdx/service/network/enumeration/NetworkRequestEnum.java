@@ -5,6 +5,7 @@ public enum NetworkRequestEnum {
 	SKIN_SCREEN, 
 	RULE_SCREEN, 
 	LEVEL_SCREEN, 
-	GAME_SCREEN, 
+	GAME_SCREEN,
+	SOUND,
 	LEVEL_DEFINITION;
 }

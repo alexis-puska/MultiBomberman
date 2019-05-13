@@ -11,6 +11,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.mygdx.domain.enumeration.SoundCommandEnum;
 import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.SoundEnum;
+import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 import com.mygdx.service.network.server.Server;
 
 /**
@@ -25,8 +26,6 @@ public class SoundService {
 	private static final float MINE_VOLUME = 0.3f;
 	private static final float VALIDE_BIP_VOLUME = 0.1f;
 	private static final float CANCEL_VOLUME = 0.1f;
-
-	public static final String PREFIX = "sound:";
 
 	private static SoundService instance = new SoundService();
 	private Map<Long, Long> networkLoopSoundId;
@@ -383,7 +382,7 @@ public class SoundService {
 	}
 
 	private void concatAndSend(ByteBuffer buffer) {
-		String cmd = PREFIX + Base64.getEncoder().encodeToString(buffer.array()) + "\n";
+		String cmd = NetworkRequestEnum.SOUND.name() + ":" + Base64.getEncoder().encodeToString(buffer.array()) + "\n";
 		this.server.send(cmd.getBytes());
 	}
 

@@ -151,4 +151,18 @@ public class Bonus extends BodyAble implements LevelElement {
 		this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
 		dispose();
 	}
+	
+
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

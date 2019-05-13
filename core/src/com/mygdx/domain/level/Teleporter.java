@@ -72,6 +72,7 @@ public class Teleporter extends BodyAble implements Initiable {
 		}
 	}
 
+	@Override
 	public void update() {
 		time += Gdx.graphics.getDeltaTime();
 		if (animate) {
@@ -93,5 +94,19 @@ public class Teleporter extends BodyAble implements Initiable {
 			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.TELEPORTER, 0), this.x * Constante.GRID_PIXELS_SIZE_X,
 					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
+	}
+	
+
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

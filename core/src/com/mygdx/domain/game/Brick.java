@@ -40,9 +40,6 @@ public class Brick extends BodyAble implements LevelElement {
 
 	private Animation<TextureRegion> burnAnimation;
 
-	private SpriteEnum drawSprite;
-	private int drawIndex;
-
 	public Brick(final World world, final MultiBombermanGame mbGame, final Level level, SpriteEnum animation, int x,
 			int y) {
 		this.x = x;
@@ -120,6 +117,20 @@ public class Brick extends BodyAble implements LevelElement {
 		this.state = BrickStateEnum.BURNED;
 		this.level.getOccupedWallBrickBonus()[this.getX()][this.getY()] = null;
 		dispose();
+	}
+
+	public boolean isBurningOrBurned() {
+		return this.state == BrickStateEnum.BURN || this.state == BrickStateEnum.BURNED;
+	}
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		return this.drawSprite;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		return this.drawIndex;
 	}
 
 }

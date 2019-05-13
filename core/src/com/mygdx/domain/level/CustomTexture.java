@@ -1,5 +1,6 @@
 package com.mygdx.domain.level;
 
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.Drawable;
 import com.mygdx.enumeration.SpriteEnum;
 
@@ -24,4 +25,10 @@ public class CustomTexture extends Drawable {
 		// make
 
 	}
+
+	@Override
+	public int getGridIndex() {
+		return this.x + (this.y * Constante.GRID_SIZE_X);
+	}
+
 }

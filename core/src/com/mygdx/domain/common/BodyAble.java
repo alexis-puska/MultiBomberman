@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.level.Level;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
 
 public abstract class BodyAble {
@@ -13,6 +14,9 @@ public abstract class BodyAble {
 	protected World world;
 	protected Body body;
 	protected Level level;
+
+	protected SpriteEnum drawSprite;
+	protected int drawIndex;
 
 	public void dispose() {
 		if (body != null) {
@@ -29,6 +33,10 @@ public abstract class BodyAble {
 	}
 
 	public abstract void drawIt();
+
+	public abstract SpriteEnum getDrawSprite();
+
+	public abstract int getDrawIndex();
 
 	public Vector2 getPosition() {
 		return body.getPosition();

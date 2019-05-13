@@ -68,7 +68,7 @@ public class PlayerPixelDTO {
 		default:
 			break;
 		}
-		this.characterSpriteEnum = player.getDrawSprite();
+		this.characterSpriteEnum = player.getDrawCharacterSprite();
 		this.characterSpriteIndex = player.getSpriteIndex();
 		this.louisSpriteEnum = player.getDrawSpriteLouis();
 		this.louisColorEnum = player.getLouisColor();

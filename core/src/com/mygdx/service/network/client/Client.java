@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.net.Socket;
 import com.mygdx.service.Context;
-import com.mygdx.service.SoundService;
 import com.mygdx.service.network.NetworkService;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 import com.mygdx.view.ClientViewScreen;
@@ -61,9 +60,9 @@ public class Client extends Thread {
 					} else if (line.startsWith("error")) {
 						this.networkService.setLastClientError(line);
 						Gdx.app.error(CLASS_NAME, line);
-					} else if (line.startsWith("game:") && viewScreen != null) {
+					} else if (line.startsWith(NetworkRequestEnum.GAME_SCREEN.name() + ":") && viewScreen != null) {
 						viewScreen.receiveGame(line);
-					} else if (line.startsWith(SoundService.PREFIX) && viewScreen != null) {
+					} else if (line.startsWith(NetworkRequestEnum.SOUND.name() + ":") && viewScreen != null) {
 						viewScreen.receiveSound(line);
 					} else if (line.startsWith(NetworkRequestEnum.LEVEL_SCREEN.name() + ":") && viewScreen != null) {
 						viewScreen.receiveLevelScreen(line);
@@ -73,7 +72,8 @@ public class Client extends Thread {
 						viewScreen.receiveRuleScreen(line);
 					} else if (line.startsWith(NetworkRequestEnum.SKIN_SCREEN.name() + ":") && viewScreen != null) {
 						viewScreen.receiveSkinScreen(line);
-					} else if (line.startsWith(NetworkRequestEnum.LEVEL_DEFINITION.name() + ":") && viewScreen != null) {
+					} else if (line.startsWith(NetworkRequestEnum.LEVEL_DEFINITION.name() + ":")
+							&& viewScreen != null) {
 						viewScreen.receiveLevelDef(line);
 					} else {
 						Gdx.app.log("Client", "recu et non reconnu : " + line);

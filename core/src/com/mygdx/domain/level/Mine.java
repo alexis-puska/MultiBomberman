@@ -241,4 +241,18 @@ public class Mine extends BodyAble implements Initiable {
 		}
 		return false;
 	}
+	
+
+
+	@Override
+	public SpriteEnum getDrawSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getDrawIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

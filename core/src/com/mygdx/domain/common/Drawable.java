@@ -11,4 +11,6 @@ public abstract class Drawable {
 	}
 
 	public abstract void drawIt();
+
+	public abstract int getGridIndex();
 }

@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,16 +55,15 @@ import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
 import com.mygdx.service.mapper.LevelMapper;
-import com.mygdx.service.network.dto.LightDTO;
+import com.mygdx.service.network.dto.BrickPositionDTO;
 import com.mygdx.service.network.dto.MenuDTO;
 import com.mygdx.service.network.dto.PauseDTO;
 import com.mygdx.service.network.dto.PlayerPixelDTO;
 import com.mygdx.service.network.dto.ScoreDTO;
 import com.mygdx.service.network.dto.SpriteGridDTO;
-import com.mygdx.service.network.dto.SpritePixelDTO;
 import com.mygdx.service.network.dto.TimeDTO;
-import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
+import com.mygdx.service.network.server.ServerContext;
 
 public class Game {
 
@@ -496,8 +494,7 @@ public class Game {
 				shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 				BombeLight light = b.getOffesetShadow();
 				shapeRenderer.circle((float) (b.getPixelX() + light.getX()),
-						(float) b.getPixelY() + (float) b.getReboundOffset() + (float) light.getY(),
-						(float) light.getRadius());
+						b.getPixelY() + b.getReboundOffset() + (float) light.getY(), (float) light.getRadius());
 			});
 		}
 		shapeRenderer.end();
@@ -648,28 +645,42 @@ public class Game {
 	/*******************************************************************
 	 * --- NETWORK PART ---
 	 *******************************************************************/
-	public String getRequestDrawLevel() {
-		StringBuffer sbf = new StringBuffer();
-		this.level.getSuddenDeathWall().stream().forEach(w -> {
-			if (!w.isTransformedInStrandardWall()) {
-
-			} else {
-
-			}
-		});
-		return sbf.toString();
-	}
-
 	public void doNetworkStuff(GameScreenEnum state) {
 		ByteBuffer bb = ByteBuffer.allocate(512000);
+
+		// RAIL
+		this.level.getRail().stream().forEach(r -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, r.getDrawSprite(), r.getDrawIndex(), r.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
+		// INTERRUPTER
+		// TELEPORTER
+		// HOLE
+
+		// ENCODE BRICK
+		// CREATED BRICK
+		bb.put(new BrickPositionDTO(this.level).getBuffer());
+		// BURN BRICK
+		this.level.getBricks().stream().filter(Brick::isBurningOrBurned).forEach(b -> {
+			SpriteGridDTO sg = new SpriteGridDTO(false, b.getDrawSprite(), b.getDrawIndex(), b.getGridIndex());
+			bb.put(sg.getBuffer());
+		});
+
+		// SUDDENDEATHWALL BACK
+
+		// FIRE
+		// MINE
+		// TROLLEY
+		// BOMBE
+		// BONUS
+		// PLAYER
 		players.stream().forEach(p -> {
 			PlayerPixelDTO ppd = new PlayerPixelDTO(p);
 			bb.put(ppd.getBuffer());
 		});
-		this.level.getBricks().stream().forEach(b -> {
-			SpriteGridDTO sg = new SpriteGridDTO(b.getDrawSprite(), b.getDrawIndex(), b.getGridIndex());
-			bb.put(sg.getBuffer());
-		});
+		// SUDDENDEATHWALL FRONT
+
+		// ENCODE STATE
 		switch (state) {
 		case MENU:
 			bb.put(new MenuDTO().getBuffer());
@@ -682,74 +693,23 @@ public class Game {
 			break;
 		}
 
+		// ENCODE SCORE
 		if (this.state == GameStepEnum.SCORE) {
-			this.score.entrySet().stream().forEach(k -> {
-				bb.put(new ScoreDTO(k.getKey(), k.getValue()).getBuffer());
-			});
+			this.score.entrySet().stream().forEach(k -> bb.put(new ScoreDTO(k.getKey(), k.getValue()).getBuffer()));
 		}
 
+		// ENCODE TIME
 		bb.put(new TimeDTO(this.gameCountDown).getBuffer());
 
+		// ENCODE STRING
 		byte[] e = new byte[bb.position()];
 		int lengthToCopy = bb.position();
 		bb.position(0);
 		bb.get(e, 0, lengthToCopy);
 		String encoded = Base64.getEncoder().encodeToString(e);
-		System.out.println(encoded);
+		Gdx.app.debug("GAME", encoded);
 		String cmd = NetworkRequestEnum.GAME_SCREEN.name() + ":" + encoded;
+		ServerContext.setGameScreenBuffer(cmd);
 		mbGame.getNetworkService().sendToClient(cmd);
-
-		ByteBuffer bbd = ByteBuffer.wrap(Base64.getDecoder().decode(encoded));
-		List<PlayerPixelDTO> ppds = new ArrayList<>();
-		List<SpriteGridDTO> sg = new ArrayList<>();
-		List<SpritePixelDTO> sp = new ArrayList<>();
-		List<LightDTO> light = new ArrayList<>();
-		TimeDTO time;
-		boolean pause = false;
-		boolean menu = false;
-		while (bbd.position() < bbd.capacity()) {
-			int reqIndex = (int) bbd.get();
-			NetworkGameRequestEnum req = NetworkGameRequestEnum.values()[reqIndex];
-			switch (req) {
-			case DRAW_GRID:
-				sg.add(new SpriteGridDTO(readRequest(bbd, req)));
-				break;
-			case DRAW_PIXEL:
-				sp.add(new SpritePixelDTO(readRequest(bbd, req)));
-				break;
-			case DRAW_PLAYER:
-				ppds.add(new PlayerPixelDTO(readRequest(bbd, req)));
-				break;
-			case DRAW_PLAYER_ON_LOUIS:
-				ppds.add(new PlayerPixelDTO(readRequest(bbd, req)));
-				break;
-			case LIGHT:
-				light.add(new LightDTO(readRequest(bbd, req)));
-				break;
-			case TIME:
-				time = new TimeDTO(readRequest(bbd, req));
-				break;
-			case MENU:
-				menu = true;
-				break;
-			case PAUSE:
-				pause = true;
-				break;
-			case SCORE:
-				new ScoreDTO(readRequest(bbd, req));
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	private byte[] readRequest(ByteBuffer bbd, NetworkGameRequestEnum req) {
-		int lengthToCopy;
-		byte[] tmp;
-		tmp = new byte[req.getRequestLenght() - 1];
-		lengthToCopy = req.getRequestLenght() - 1;
-		bbd.get(tmp, 0, lengthToCopy);
-		return tmp;
 	}
 }
