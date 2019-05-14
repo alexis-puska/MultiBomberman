@@ -38,10 +38,6 @@ public class ClientAnimation {
 		}
 	}
 
-	public void update() {
-		this.animationTime += Gdx.graphics.getDeltaTime();
-	}
-
 	public boolean canBeRemove() {
 		return this.animationTime > this.animation.getAnimationDuration();
 	}

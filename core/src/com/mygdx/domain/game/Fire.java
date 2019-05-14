@@ -31,7 +31,8 @@ public class Fire extends BodyAble {
 	private Animation<TextureRegion> animation;
 	private float time;
 
-	public Fire(Game game, World world, MultiBombermanGame mbGame, Level level, Player player, int x, int y, FireEnum fireEnum) {
+	public Fire(Game game, World world, MultiBombermanGame mbGame, Level level, Player player, int x, int y,
+			FireEnum fireEnum) {
 		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
@@ -99,6 +100,7 @@ public class Fire extends BodyAble {
 
 	@Override
 	public void drawIt() {
+		time += Gdx.graphics.getDeltaTime();
 		this.drawIndex = animation.getKeyFrameIndex(time);
 		mbGame.getBatch().draw(animation.getKeyFrame(time, false), (float) this.x * Constante.GRID_PIXELS_SIZE_X,
 				(float) this.y * Constante.GRID_PIXELS_SIZE_Y);
@@ -110,7 +112,6 @@ public class Fire extends BodyAble {
 			this.dispose();
 			off = true;
 		}
-		time += Gdx.graphics.getDeltaTime();
 	}
 
 	public boolean isOff() {
