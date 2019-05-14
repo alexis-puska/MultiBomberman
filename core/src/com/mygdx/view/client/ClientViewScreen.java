@@ -544,7 +544,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 			case BONUS_BURN:
 				decodedIndex = GenericDeltaDTO.getIndex(readRequest(bbd, req));
 				bonusPosition.removeBonus(decodedIndex);
-				animations.add(new ClientAnimation(mbGame, this.levelDTO.getDefaultBrickAnimation(), decodedIndex));
+				animations.add(new ClientAnimation(mbGame, SpriteEnum.BONUS_BURN, decodedIndex));
 				break;
 			case BONUS_POSITION:
 				bonusPosition = new BonusPositionDTO(readRequest(bbd, req));
