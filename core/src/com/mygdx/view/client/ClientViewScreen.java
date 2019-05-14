@@ -528,6 +528,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 			switch (req) {
 			case ADD_WALL:
 				Gdx.app.log("CLIENT", "un mur est ajouté");
+				decodedIndex = GenericDeltaDTO.getIndex(readRequest(bbd, req));
 				// TODO
 				break;
 			case BONUS_BURN:

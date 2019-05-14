@@ -3,6 +3,7 @@ package com.mygdx.enumeration;
 public enum TimeEnum {
 
 	//@formatter:off
+	ONE(1, "game.menu.ruleScreen.time.one"),
 	TWO(2, "game.menu.ruleScreen.time.two"),
 	THREE(3, "game.menu.ruleScreen.time.three"),
 	FOUR(4, "game.menu.ruleScreen.time.four"),
