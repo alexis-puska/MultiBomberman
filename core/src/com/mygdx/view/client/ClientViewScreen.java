@@ -99,6 +99,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 	List<SpriteGridDTO> frontSpriteGridBuf = new ArrayList<>();
 	List<SpritePixelDTO> frontSpritePixelBuf = new ArrayList<>();
 	List<BombePixelDTO> bombePixelBuf = new ArrayList<>();
+	List<Integer> additionalWall = new ArrayList<>();
 	private List<ClientAnimation> animations = new ArrayList<>();
 	private Map<Integer, Integer> scores;
 	private float time;
@@ -308,6 +309,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 	public void receiveLevelDef(String line) {
 		try {
 			levelDTO = this.objectMapper.readValue(line.substring(line.indexOf(':') + 1), LevelDTO.class);
+			additionalWall = new ArrayList<>();
 		} catch (JsonParseException e) {
 			Gdx.app.error(CLASS_NAME, JSON_PARSE_EXCEPTION + e.getMessage());
 		} catch (JsonMappingException e) {
@@ -536,10 +538,12 @@ public class ClientViewScreen implements Screen, MenuListener {
 			int reqIndex = (int) bbd.get();
 			NetworkGameRequestEnum req = NetworkGameRequestEnum.values()[reqIndex];
 			switch (req) {
+			case RESET_ADDITIONAL_WALL:
+				this.additionalWall.clear();
+				break;
 			case ADD_WALL:
-				// TODO
 				decodedIndex = GenericDeltaDTO.getIndex(readRequest(bbd, req));
-				// TODO
+				this.additionalWall.add(decodedIndex);
 				break;
 			case BONUS_BURN:
 				decodedIndex = GenericDeltaDTO.getIndex(readRequest(bbd, req));
@@ -631,6 +635,15 @@ public class ClientViewScreen implements Screen, MenuListener {
 		mbGame.getBatch().begin();
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
 		animations.stream().forEach(ClientAnimation::drawIt);
+		for (int i = 0; i < Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y; i++) {
+			if (this.brickPosition.hasBrick(i)) {
+				int x = i % Constante.GRID_SIZE_X;
+				int y = Math.floorDiv(i, Constante.GRID_SIZE_X);
+				mbGame.getBatch().draw(
+						SpriteService.getInstance().getSprite(this.levelDTO.getDefaultBrickAnimation(), 0),
+						x * Constante.GRID_PIXELS_SIZE_X, (y * Constante.GRID_PIXELS_SIZE_Y));
+			}
+		}
 		mbGame.getBatch().end();
 		if (pause) {
 			drawPause();

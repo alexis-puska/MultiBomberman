@@ -64,8 +64,7 @@ import com.mygdx.service.network.dto.draw.BombePixelDTO;
 import com.mygdx.service.network.dto.draw.PlayerPixelDTO;
 import com.mygdx.service.network.dto.draw.SpriteGridDTO;
 import com.mygdx.service.network.dto.draw.SpritePixelDTO;
-import com.mygdx.service.network.dto.other.MenuDTO;
-import com.mygdx.service.network.dto.other.PauseDTO;
+import com.mygdx.service.network.dto.other.GenericCommandDTO;
 import com.mygdx.service.network.dto.other.ScoreDTO;
 import com.mygdx.service.network.dto.other.TimeDTO;
 import com.mygdx.service.network.dto.sync.BonusPositionDTO;
@@ -151,6 +150,7 @@ public class Game {
 	 * --- NETWORK ---
 	 ********************/
 	private ByteBuffer byteBuffer;
+	private boolean restart;
 
 	public Game(final MultiBombermanGame mbGame) {
 		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
@@ -217,6 +217,7 @@ public class Game {
 	}
 
 	private void initLevel() {
+		this.restart = true;
 		LevelMapper levelMapper = new LevelMapper();
 		this.level = levelMapper.toEntity(Context.getLevel());
 		this.level.init(this, world);
@@ -247,6 +248,7 @@ public class Game {
 
 	public void restart() {
 		Gdx.app.log("aaa", "restart");
+		this.restart = true;
 		LevelMapper levelMapper = new LevelMapper();
 		this.players.stream().forEach(Player::dispose);
 		this.level.dispose();
@@ -670,6 +672,10 @@ public class Game {
 	 * --- NETWORK PART ---
 	 *******************************************************************/
 	public void doNetworkStuff(GameScreenEnum state) {
+		if (restart) {
+			restart = false;
+			byteBuffer.put(GenericCommandDTO.getResetAdditionalWall());
+		}
 
 		// RAIL
 		this.level.getRail().stream().forEach(r -> {
@@ -749,10 +755,10 @@ public class Game {
 		// ENCODE STATE
 		switch (state) {
 		case MENU:
-			byteBuffer.put(new MenuDTO().getBuffer());
+			byteBuffer.put(GenericCommandDTO.getMenu());
 			break;
 		case PAUSE:
-			byteBuffer.put(new PauseDTO().getBuffer());
+			byteBuffer.put(GenericCommandDTO.getPause());
 			break;
 		case GAME:
 		default:

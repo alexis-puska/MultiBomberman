@@ -16,6 +16,7 @@ public enum NetworkGameRequestEnum {
 	SCORE(4), 
 	PAUSE(1), 
 	MENU(1),
+	RESET_ADDITIONAL_WALL(1),
 	BONUS_BURN(3),
 	BONUS_REMOVE(3),
 	BONUS_TAKED(3),
