@@ -9,10 +9,12 @@ import java.util.UUID;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.net.Socket;
+import com.mygdx.enumeration.MusicEnum;
 import com.mygdx.enumeration.NetworkControllerEventEnum;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.PlayerService;
+import com.mygdx.service.SoundService;
 
 public class NetworkConnexion extends Thread {
 
@@ -199,6 +201,8 @@ public class NetworkConnexion extends Thread {
 		String welcomBackBuffer = "";
 		switch (ServerContext.getCurrentServerScreen()) {
 		case GAME_SCREEN:
+			welcomBackBuffer += SoundService.getInstance().createStopMusiqueCommand();
+			welcomBackBuffer += SoundService.getInstance().createPlayMusiqueCommand(MusicEnum.BATTLE);
 		case LEVEL_SCREEN:
 			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
 			welcomBackBuffer += ServerContext.getSkinScreenRequestBuffer() + "\n";

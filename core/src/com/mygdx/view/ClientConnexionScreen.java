@@ -19,6 +19,7 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
+import com.mygdx.view.client.ClientViewScreen;
 
 public class ClientConnexionScreen implements Screen, MenuListener {
 
@@ -369,7 +370,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressA() {
-		//unused method
+		// unused method
 	}
 
 	@Override
@@ -379,22 +380,22 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 
 	@Override
 	public void pressX() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressY() {
-		//unused method
+		// unused method
 	}
 
 	@Override
 	public void pressL() {
-		//unused method
+		// unused method
 
 	}
 
 	@Override
 	public void pressR() {
-		//unused method
+		// unused method
 	}
 }

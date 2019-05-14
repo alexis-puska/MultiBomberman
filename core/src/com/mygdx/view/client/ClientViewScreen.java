@@ -1,10 +1,11 @@
-package com.mygdx.view;
+package com.mygdx.view.client;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -29,19 +30,25 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
-import com.mygdx.service.network.dto.BrickPositionDTO;
-import com.mygdx.service.network.dto.LevelScreenDTO;
-import com.mygdx.service.network.dto.LightDTO;
-import com.mygdx.service.network.dto.PlayerPixelDTO;
-import com.mygdx.service.network.dto.RuleScreenDTO;
-import com.mygdx.service.network.dto.ScoreDTO;
-import com.mygdx.service.network.dto.SkinScreenDTO;
-import com.mygdx.service.network.dto.SpriteGridDTO;
-import com.mygdx.service.network.dto.SpritePixelDTO;
-import com.mygdx.service.network.dto.TimeDTO;
-import com.mygdx.service.network.dto.WaitScreenDTO;
+import com.mygdx.service.network.dto.delta.BonusRevealedDTO;
+import com.mygdx.service.network.dto.delta.FireAppareadDTO;
+import com.mygdx.service.network.dto.delta.GenericDeltaDTO;
+import com.mygdx.service.network.dto.draw.BombePixelDTO;
+import com.mygdx.service.network.dto.draw.PlayerPixelDTO;
+import com.mygdx.service.network.dto.draw.SpriteGridDTO;
+import com.mygdx.service.network.dto.draw.SpritePixelDTO;
+import com.mygdx.service.network.dto.other.ScoreDTO;
+import com.mygdx.service.network.dto.other.TimeDTO;
+import com.mygdx.service.network.dto.screen.LevelScreenDTO;
+import com.mygdx.service.network.dto.screen.RuleScreenDTO;
+import com.mygdx.service.network.dto.screen.SkinScreenDTO;
+import com.mygdx.service.network.dto.screen.WaitScreenDTO;
+import com.mygdx.service.network.dto.sync.BonusPositionDTO;
+import com.mygdx.service.network.dto.sync.BrickPositionDTO;
 import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
+import com.mygdx.view.ClientConnexionScreen;
+import com.mygdx.view.client.animation.ClientAnimation;
 
 public class ClientViewScreen implements Screen, MenuListener {
 
@@ -86,11 +93,16 @@ public class ClientViewScreen implements Screen, MenuListener {
 	private List<PlayerPixelDTO> playerPixelsDTOs = new ArrayList<>();
 	private List<SpriteGridDTO> spriteGridDTOs = new ArrayList<>();
 	private List<SpritePixelDTO> spritePixelDTOs = new ArrayList<>();
-	private List<LightDTO> lightDTOs = new ArrayList<>();
+	private List<SpriteGridDTO> frontSpriteGridDTOs = new ArrayList<>();
+	private List<SpritePixelDTO> frontSpritePixelDTOs = new ArrayList<>();
+	private List<BombePixelDTO> bombePixelDTOs = new ArrayList<>();
 	private List<ScoreDTO> scoresDTO = new ArrayList<>();
+	private List<ClientAnimation> animations = new ArrayList<>();
 	private TimeDTO timeDTO;
 	private boolean pause = false;
 	private boolean menu = false;
+	private BrickPositionDTO brickPosition;
+	private BonusPositionDTO bonusPosition;
 
 	public ClientViewScreen(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
@@ -236,7 +248,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 	}
 
 	/**********************************************
-	 * --- RECEIVE STRING AND DECODE ---
+	 * --- RECEIVE STRING AND DECODE : MENU ---
 	 **********************************************/
 	public void receiveWaitScreen(String line) {
 		try {
@@ -307,64 +319,13 @@ public class ClientViewScreen implements Screen, MenuListener {
 		}
 	}
 
-	public void receiveGame(String line) {
-		Gdx.app.log(CLASS_NAME, "receiveGame");
-		last = NetworkRequestEnum.GAME_SCREEN;
-		ByteBuffer bbd = ByteBuffer.wrap(Base64.getDecoder().decode(line.substring(line.indexOf(':') + 1)));
-		while (bbd.position() < bbd.capacity()) {
-			int reqIndex = (int) bbd.get();
-			NetworkGameRequestEnum req = NetworkGameRequestEnum.values()[reqIndex];
-			switch (req) {
-			case DRAW_GRID:
-				this.spriteGridDTOs.add(new SpriteGridDTO(readRequest(bbd, req)));
-				break;
-			case DRAW_PIXEL:
-				this.spritePixelDTOs.add(new SpritePixelDTO(readRequest(bbd, req)));
-				break;
-			case DRAW_PLAYER:
-			case DRAW_PLAYER_ON_LOUIS:
-				this.playerPixelsDTOs.add(new PlayerPixelDTO(readRequest(bbd, req)));
-				break;
-			case LIGHT:
-				this.lightDTOs.add(new LightDTO(readRequest(bbd, req)));
-				break;
-			case TIME:
-				this.timeDTO = new TimeDTO(readRequest(bbd, req));
-				break;
-			case MENU:
-				menu = true;
-				break;
-			case PAUSE:
-				pause = true;
-				break;
-			case SCORE:
-				this.scoresDTO.add(new ScoreDTO(readRequest(bbd, req)));
-				break;
-			case BRICK_POSITION:
-				new BrickPositionDTO(readRequest(bbd, req));
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	private byte[] readRequest(ByteBuffer bbd, NetworkGameRequestEnum req) {
-		int lengthToCopy;
-		byte[] tmp;
-		tmp = new byte[req.getRequestLenght() - 1];
-		lengthToCopy = req.getRequestLenght() - 1;
-		bbd.get(tmp, 0, lengthToCopy);
-		return tmp;
-	}
-
 	public void receiveSound(String line) {
 		Gdx.app.log("CLASS_NAME", "receive sound : " + line);
 		SoundService.getInstance().decodeSoundCommand(line);
 	}
 
 	/**********************************************
-	 * --- DRAW PART ---
+	 * --- DRAW PART : MENU---
 	 **********************************************/
 
 	public void drawWaitScreen() {
@@ -544,13 +505,136 @@ public class ClientViewScreen implements Screen, MenuListener {
 	}
 
 	/********************************************************
-	 * --- GAME PART ---
+	 * --- RECEIVE STRING AND DECODE : GAME PART ---
+	 *********************************************************/
+	private byte[] readRequest(ByteBuffer bbd, NetworkGameRequestEnum req) {
+		int lengthToCopy;
+		byte[] tmp;
+		tmp = new byte[req.getRequestLenght() - 1];
+		lengthToCopy = req.getRequestLenght() - 1;
+		bbd.get(tmp, 0, lengthToCopy);
+		return tmp;
+	}
+
+	public void receiveGame(String line) {
+//		Gdx.app.log(CLASS_NAME, "receiveGame");
+		int decodedIndex = 0;
+		last = NetworkRequestEnum.GAME_SCREEN;
+
+		ByteBuffer bbd = ByteBuffer.wrap(Base64.getDecoder().decode(line.substring(line.indexOf(':') + 1)));
+		while (bbd.position() < bbd.capacity()) {
+			int reqIndex = (int) bbd.get();
+			NetworkGameRequestEnum req = NetworkGameRequestEnum.values()[reqIndex];
+			switch (req) {
+			case ADD_WALL:
+				Gdx.app.log("CLIENT", "un mur est ajouté");
+				// TODO
+				break;
+			case BONUS_BURN:
+				decodedIndex = GenericDeltaDTO.getIndex(readRequest(bbd, req));
+				bonusPosition.removeBonus(decodedIndex);
+				animations.add(new ClientAnimation(mbGame, this.levelDTO.getDefaultBrickAnimation(), decodedIndex));
+				Gdx.app.log("CLIENT", "Un bonus flambe");
+				break;
+			case BONUS_POSITION:
+				bonusPosition = new BonusPositionDTO(readRequest(bbd, req));
+//				Gdx.app.log("CLIENT", "Bonus position recu");
+				break;
+			case BONUS_REMOVE:
+				bonusPosition.removeBonus(GenericDeltaDTO.getIndex(readRequest(bbd, req)));
+				Gdx.app.log("CLIENT", "Bonus enlever");
+				break;
+			case BONUS_REVEALED:
+				BonusRevealedDTO br = new BonusRevealedDTO(readRequest(bbd, req));
+				bonusPosition.bonusAppeared(br.getGridIndex(), br.getType());
+				Gdx.app.log("CLIENT", "Bonus apparu");
+				break;
+			case BONUS_TAKED:
+				bonusPosition.removeBonus(GenericDeltaDTO.getIndex(readRequest(bbd, req)));
+				Gdx.app.log("CLIENT", "Bonus prit par un joueur");
+				break;
+			case BRICK_BURN:
+				decodedIndex = GenericDeltaDTO.getIndex(readRequest(bbd, req));
+				brickPosition.removeBrick(decodedIndex);
+				animations.add(new ClientAnimation(mbGame, this.levelDTO.getDefaultBrickAnimation(), decodedIndex));
+				Gdx.app.log("CLIENT", "Brick Flambe");
+				break;
+			case BRICK_POSITION:
+//				Gdx.app.log("CLIENT", "Brick position reçu");
+				brickPosition = new BrickPositionDTO(readRequest(bbd, req));
+				break;
+			case BRICK_REMOVE:
+				Gdx.app.log("CLIENT", "Brick enlever");
+				brickPosition.removeBrick(GenericDeltaDTO.getIndex(readRequest(bbd, req)));
+				break;
+			case DRAW_BOMBE:
+				Gdx.app.log("CLIENT", "dessin bombe");
+				this.bombePixelDTOs.add(new BombePixelDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_FRONT_GRID:
+				Gdx.app.log("CLIENT", "dessin element sur grille en premier plan");
+				this.frontSpriteGridDTOs.add(new SpriteGridDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_FRONT_PIXEL:
+				Gdx.app.log("CLIENT", "dessin element pixel en premier plan");
+				this.frontSpritePixelDTOs.add(new SpritePixelDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_GRID:
+				Gdx.app.log("CLIENT", "dessin element sur grille");
+				this.spriteGridDTOs.add(new SpriteGridDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_PIXEL:
+				Gdx.app.log("CLIENT", "dessin element pixel");
+				this.spritePixelDTOs.add(new SpritePixelDTO(readRequest(bbd, req)));
+				break;
+			case DRAW_PLAYER:
+			case DRAW_PLAYER_ON_LOUIS:
+//				Gdx.app.log("CLIENT", "dessin joueur");
+				this.playerPixelsDTOs.add(new PlayerPixelDTO(readRequest(bbd, req)));
+				break;
+			case FIRE_APPEARED:
+				Gdx.app.log("CLIENT", "une flamme apaprait");
+				FireAppareadDTO fd = new FireAppareadDTO(readRequest(bbd, req));
+				animations.add(new ClientAnimation(mbGame, fd.getFireEnum().getSpriteEnum(), fd.getGridIndex()));
+				break;
+			case MENU:
+//				Gdx.app.log("CLIENT", "affiche le menu");
+				menu = true;
+				break;
+			case PAUSE:
+//				Gdx.app.log("CLIENT", "en pause");
+				pause = true;
+				break;
+			case SCORE:
+				Gdx.app.log("CLIENT", "score reçu");
+				this.scoresDTO.add(new ScoreDTO(readRequest(bbd, req)));
+				break;
+			case TIME:
+				this.timeDTO = new TimeDTO(readRequest(bbd, req));
+//				Gdx.app.log("CLIENT", "temps : "+ this.timeDTO.getTime());
+				break;
+			default:
+				break;
+
+			}
+		}
+	}
+
+	/********************************************************
+	 * --- RECEIVE STRING AND DECODE : GAME PART ---
 	 *********************************************************/
 
 	private void drawGameScreen() {
 		mbGame.getBatch().begin();
 		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
 		mbGame.getBatch().end();
+		
+		
+		
+	}
+	
+	private void cleanUpGameElement() {
+		this.animations = this.animations.stream().filter(a -> !a.canBeRemove()).collect(Collectors.toList());
 	}
 
 }

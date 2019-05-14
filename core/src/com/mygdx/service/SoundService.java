@@ -121,7 +121,7 @@ public class SoundService {
 			musicMenu.stop();
 		}
 		if (this.server != null) {
-			createStopMusiqueCommand();
+			send(createStopMusiqueCommand());
 		}
 	}
 
@@ -141,7 +141,7 @@ public class SoundService {
 			break;
 		}
 		if (this.server != null) {
-			createPlayMusiqueCommand(musicEnum);
+			send(createPlayMusiqueCommand(musicEnum));
 		}
 	}
 
@@ -209,7 +209,7 @@ public class SoundService {
 			soundBip.play(VALIDE_BIP_VOLUME);
 		}
 		if (this.server != null) {
-			createPlaySoundCommand(soundEnum);
+			send(createPlaySoundCommand(soundEnum));
 		}
 	}
 
@@ -275,7 +275,7 @@ public class SoundService {
 			id = soundBip.loop();
 		}
 		if (this.server != null) {
-			createLoopSoundCommand(soundEnum, id);
+			send(createLoopSoundCommand(soundEnum, id));
 		}
 		return id;
 	}
@@ -341,48 +341,51 @@ public class SoundService {
 			soundBip.stop(id);
 		}
 		if (this.server != null) {
-			createStopSoundCommand(soundEnum, id);
+			send(createStopSoundCommand(soundEnum, id));
 		}
 	}
 
-	private void createPlayMusiqueCommand(MusicEnum music) {
+	public String createPlayMusiqueCommand(MusicEnum music) {
 		ByteBuffer b = ByteBuffer.allocate(2);
 		b.put((byte) SoundCommandEnum.PLAY_MUSIC.ordinal());
 		b.put((byte) music.ordinal());
-		concatAndSend(b);
+		return concat(b.array());
 	}
 
-	private void createStopMusiqueCommand() {
+	public String createStopMusiqueCommand() {
 		ByteBuffer b = ByteBuffer.allocate(1);
 		b.put((byte) SoundCommandEnum.STOP_MUSIC.ordinal());
-		concatAndSend(b);
+		return concat(b.array());
 	}
 
-	private void createPlaySoundCommand(SoundEnum sound) {
+	private String createPlaySoundCommand(SoundEnum sound) {
 		ByteBuffer b = ByteBuffer.allocate(2);
 		b.put((byte) SoundCommandEnum.PLAY_SOUND.ordinal());
 		b.put((byte) sound.ordinal());
-		concatAndSend(b);
+		return concat(b.array());
 	}
 
-	private void createLoopSoundCommand(SoundEnum sound, long id) {
+	private String createLoopSoundCommand(SoundEnum sound, long id) {
 		ByteBuffer b = ByteBuffer.allocate(10);
 		b.put((byte) SoundCommandEnum.LOOP_SOUND.ordinal());
 		b.put((byte) sound.ordinal());
 		b.putLong(id);
-		concatAndSend(b);
+		return concat(b.array());
 	}
 
-	private void createStopSoundCommand(SoundEnum sound, long id) {
+	private String createStopSoundCommand(SoundEnum sound, long id) {
 		ByteBuffer b = ByteBuffer.allocate(10);
 		b.put((byte) SoundCommandEnum.STOP_SOUND.ordinal());
 		b.put((byte) sound.ordinal());
 		b.putLong(id);
-		concatAndSend(b);
+		return concat(b.array());
 	}
 
-	private void concatAndSend(ByteBuffer buffer) {
-		String cmd = NetworkRequestEnum.SOUND.name() + ":" + Base64.getEncoder().encodeToString(buffer.array()) + "\n";
+	private String concat(byte[] buffer) {
+		return NetworkRequestEnum.SOUND.name() + ":" + Base64.getEncoder().encodeToString(buffer) + "\n";
+	}
+
+	private void send(String cmd) {
 		this.server.send(cmd.getBytes());
 	}
 

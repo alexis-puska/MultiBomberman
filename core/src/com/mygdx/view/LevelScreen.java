@@ -22,7 +22,7 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
-import com.mygdx.service.network.dto.LevelScreenDTO;
+import com.mygdx.service.network.dto.screen.LevelScreenDTO;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 import com.mygdx.service.network.server.ServerContext;
 

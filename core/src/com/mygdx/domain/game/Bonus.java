@@ -20,6 +20,7 @@ import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.LevelElement;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
@@ -27,13 +28,15 @@ public class Bonus extends BodyAble implements LevelElement {
 
 	protected int x;
 	protected int y;
+	private Game game;
 	private BonusTypeEnum type;
 	private BonusStateEnum state;
 	private float stateTime;
 	private Animation<TextureRegion> animation;
 
-	public Bonus(Level level, World world, MultiBombermanGame mbGame, int x, int y, BonusTypeEnum type,
+	public Bonus(Game game, Level level, World world, MultiBombermanGame mbGame, int x, int y, BonusTypeEnum type,
 			BonusStateEnum state) {
+		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
@@ -42,7 +45,7 @@ public class Bonus extends BodyAble implements LevelElement {
 		this.type = type;
 		this.state = state;
 		this.stateTime = 0f;
-		this.animation = new Animation<>((1f / (float) Constante.FPS) * 4f,
+		this.animation = new Animation<>(SpriteEnum.BONUS_BURN.getFrameAnimationTime(),
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.BONUS_BURN));
 		this.drawSprite = SpriteEnum.BONUS;
 		if (state == BonusStateEnum.REVEALED) {
@@ -61,8 +64,8 @@ public class Bonus extends BodyAble implements LevelElement {
 					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else if (this.state == BonusStateEnum.REVEALED) {
 			drawSprite = SpriteEnum.BONUS;
-			drawIndex = this.type.getIndex();
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, this.type.getIndex()),
+			drawIndex = this.type.ordinal();
+			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, this.type.ordinal()),
 					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
@@ -87,6 +90,7 @@ public class Bonus extends BodyAble implements LevelElement {
 	@Override
 	public void action() {
 		if (state == BonusStateEnum.REVEALED) {
+			this.game.bonusBurn(this.getGridIndex());
 			this.state = BonusStateEnum.BURN;
 		}
 	}
@@ -122,10 +126,12 @@ public class Bonus extends BodyAble implements LevelElement {
 		this.state = BonusStateEnum.REVEALED;
 		this.level.getOccupedWallBrickBonus()[x][y] = this;
 		this.createBody();
+		this.game.bonusAppeared(this.type, this.getGridIndex());
 	}
 
 	public BonusTypeEnum playerTakeBonus() {
 		if (this.state == BonusStateEnum.REVEALED) {
+			this.game.bonusTaked(this.getGridIndex());
 			this.state = BonusStateEnum.TAKED;
 			return this.type;
 		}
@@ -154,6 +160,7 @@ public class Bonus extends BodyAble implements LevelElement {
 
 	@Override
 	public void immediateAction() {
+		this.game.removeBonus(this.getGridIndex());
 		this.state = BonusStateEnum.BURNED;
 		this.level.getOccupedWallBrickBonus()[this.x][this.y] = null;
 		this.level.getNoWall().add(this.getGridIndex());

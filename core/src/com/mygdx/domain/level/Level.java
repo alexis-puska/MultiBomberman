@@ -70,6 +70,7 @@ public class Level {
 	private Map<Integer, Short> state;
 	private List<Body> badBomberWall;
 
+	private Game game;
 	private MultiBombermanGame mbGame;
 	private World world;
 
@@ -87,6 +88,7 @@ public class Level {
 	private List<SuddenDeathWall> suddenDeathWall;
 
 	public void init(Game game, World world) {
+		this.game = game;
 		this.mbGame = game.getMultiBombermanGame();
 		this.world = world;
 		boolean[][] reservedStartPlayer = new boolean[Constante.GRID_SIZE_X][Constante.GRID_SIZE_Y];
@@ -108,7 +110,7 @@ public class Level {
 		hole.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
-		mine.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
+		mine.stream().forEach(t -> t.init(game, world, game.getMultiBombermanGame(), this));
 		trolley.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		teleporter.stream().forEach(w -> w.init(world, game.getMultiBombermanGame(), this));
 		wall.stream().forEach(w -> {
@@ -130,12 +132,12 @@ public class Level {
 		if (fillWithBrick) {
 			initBricks(game, world, reservedStartPlayer);
 		}
-		initBonus(world);
+		initBonus(game, world);
 		initBadBomberWall(world);
 		initSuddenDeath();
 	}
 
-	private void initBonus(World world) {
+	private void initBonus(Game game, World world) {
 		if (isFillWithBrick()) {
 			for (int i = 0; i < bonus.length; i++) {
 				for (int j = 0; j < bonus[i]; j++) {
@@ -143,7 +145,8 @@ public class Level {
 					int chx = occupedByBrick.get(idx);
 					int x = chx % Constante.GRID_SIZE_X;
 					int y = (chx - x) / Constante.GRID_SIZE_X;
-					bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.values()[i], BonusStateEnum.CREATED));
+					bonuss.add(new Bonus(game, this, world, mbGame, x, y, BonusTypeEnum.values()[i],
+							BonusStateEnum.CREATED));
 					occupedByBrick.remove(idx);
 				}
 			}
@@ -238,7 +241,7 @@ public class Level {
 		this.suddenDeathWall = new ArrayList<>();
 	}
 
-	public void randomBonus() {
+	public void randomBonus(Game game) {
 		if (!isFillWithBrick()) {
 			for (int i = 0; i < bonus.length; i++) {
 				for (int j = 0; j < bonus[i]; j++) {
@@ -249,7 +252,7 @@ public class Level {
 						int chx = noWall.get(idx);
 						int x = chx % Constante.GRID_SIZE_X;
 						int y = (chx - x) / Constante.GRID_SIZE_X;
-						bonuss.add(new Bonus(this, world, mbGame, x, y, BonusTypeEnum.values()[i],
+						bonuss.add(new Bonus(game, this, world, mbGame, x, y, BonusTypeEnum.values()[i],
 								BonusStateEnum.REVEALED));
 						noWall.remove(idx);
 					}
@@ -263,7 +266,8 @@ public class Level {
 			for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
 				if (occupedWallBrickBonus[x][y] == null && !reservedStartPlayer[x][y]
 						&& ThreadLocalRandom.current().nextInt(0, 50) > 5) {
-					Brick b = new Brick(world, game.getMultiBombermanGame(), this, this.defaultBrickAnimation, x, y);
+					Brick b = new Brick(this.game, world, game.getMultiBombermanGame(), this,
+							this.defaultBrickAnimation, x, y);
 					bricks.add(b);
 					occupedWallBrickBonus[x][y] = b;
 					occupedByBrick.add(y * Constante.GRID_SIZE_X + x);
@@ -351,7 +355,7 @@ public class Level {
 			if (this.getOccupedWallBrickBonus()[suddenDeathX][suddenDeathY] == null
 					|| (this.getOccupedWallBrickBonus()[suddenDeathX][suddenDeathY] != null
 							&& !(this.getOccupedWallBrickBonus()[suddenDeathX][suddenDeathY] instanceof Wall))) {
-				suddenDeathWall.add(new SuddenDeathWall(world, mbGame, this, suddenDeathX, suddenDeathY,
+				suddenDeathWall.add(new SuddenDeathWall(game, world, mbGame, this, suddenDeathX, suddenDeathY,
 						this.getDefaultWall().getAnimation(), this.getDefaultWall().getIndex()));
 			}
 			switch (suddenDeathDirection) {

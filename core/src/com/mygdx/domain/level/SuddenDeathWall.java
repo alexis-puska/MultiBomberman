@@ -11,6 +11,7 @@ import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.BodyAble;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
@@ -27,6 +28,7 @@ public class SuddenDeathWall extends BodyAble {
 
 	private static final float ANIMATION_TIME = 1f;
 
+	private Game game;
 	protected int x;
 	protected int y;
 	private SpriteEnum animation;
@@ -68,8 +70,9 @@ public class SuddenDeathWall extends BodyAble {
 		fixture.setFilterData(filter);
 	}
 
-	public SuddenDeathWall(World world, MultiBombermanGame mbGame, Level level, int x, int y, SpriteEnum animation,
-			int defaultTexture) {
+	public SuddenDeathWall(Game game, World world, MultiBombermanGame mbGame, Level level, int x, int y,
+			SpriteEnum animation, int defaultTexture) {
+		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
@@ -94,6 +97,7 @@ public class SuddenDeathWall extends BodyAble {
 			}
 			if (this.body == null) {
 				this.createBody();
+				this.game.addWall(this.getGridIndex());
 			}
 		}
 	}

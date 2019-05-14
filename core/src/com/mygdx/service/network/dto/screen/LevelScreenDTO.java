@@ -1,4 +1,4 @@
-package com.mygdx.service.network.dto;
+package com.mygdx.service.network.dto.screen;
 
 import java.io.Serializable;
 

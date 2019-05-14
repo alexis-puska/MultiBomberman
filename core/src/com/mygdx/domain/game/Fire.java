@@ -17,10 +17,12 @@ import com.mygdx.domain.common.BodyAble;
 import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.level.Level;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
 public class Fire extends BodyAble {
+	private Game game;
 	protected int x;
 	protected int y;
 	private Player player;
@@ -29,7 +31,8 @@ public class Fire extends BodyAble {
 	private Animation<TextureRegion> animation;
 	private float time;
 
-	public Fire(World world, MultiBombermanGame mbGame, Level level, Player player, int x, int y, FireEnum fireEnum) {
+	public Fire(Game game, World world, MultiBombermanGame mbGame, Level level, Player player, int x, int y, FireEnum fireEnum) {
+		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
@@ -37,12 +40,13 @@ public class Fire extends BodyAble {
 		this.x = x;
 		this.y = y;
 		this.fireEnum = fireEnum;
-		this.animation = new Animation<>(1f / 10f,
+		this.animation = new Animation<>(fireEnum.getSpriteEnum().getFrameAnimationTime(),
 				SpriteService.getInstance().getSpriteForAnimation(fireEnum.getSpriteEnum()));
 		this.time = 0.0f;
 		this.drawSprite = fireEnum.getSpriteEnum();
 		this.drawIndex = 0;
 		this.createBody();
+		this.game.fireAppared(this.fireEnum, this.getGridIndex());
 	}
 
 	@Override

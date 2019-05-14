@@ -10,7 +10,7 @@ import com.badlogic.gdx.net.Socket;
 import com.mygdx.service.Context;
 import com.mygdx.service.network.NetworkService;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
-import com.mygdx.view.ClientViewScreen;
+import com.mygdx.view.client.ClientViewScreen;
 
 public class Client extends Thread {
 

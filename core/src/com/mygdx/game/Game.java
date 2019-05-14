@@ -28,6 +28,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
+import com.mygdx.domain.enumeration.BonusTypeEnum;
+import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.domain.enumeration.GameScreenEnum;
 import com.mygdx.domain.enumeration.GameStepEnum;
 import com.mygdx.domain.game.Bombe;
@@ -55,14 +57,19 @@ import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.collision.CustomContactListener;
 import com.mygdx.service.mapper.LevelMapper;
-import com.mygdx.service.network.dto.BrickPositionDTO;
-import com.mygdx.service.network.dto.MenuDTO;
-import com.mygdx.service.network.dto.PauseDTO;
-import com.mygdx.service.network.dto.PlayerPixelDTO;
-import com.mygdx.service.network.dto.ScoreDTO;
-import com.mygdx.service.network.dto.SpriteGridDTO;
-import com.mygdx.service.network.dto.SpritePixelDTO;
-import com.mygdx.service.network.dto.TimeDTO;
+import com.mygdx.service.network.dto.delta.BonusRevealedDTO;
+import com.mygdx.service.network.dto.delta.FireAppareadDTO;
+import com.mygdx.service.network.dto.delta.GenericDeltaDTO;
+import com.mygdx.service.network.dto.draw.BombePixelDTO;
+import com.mygdx.service.network.dto.draw.PlayerPixelDTO;
+import com.mygdx.service.network.dto.draw.SpriteGridDTO;
+import com.mygdx.service.network.dto.draw.SpritePixelDTO;
+import com.mygdx.service.network.dto.other.MenuDTO;
+import com.mygdx.service.network.dto.other.PauseDTO;
+import com.mygdx.service.network.dto.other.ScoreDTO;
+import com.mygdx.service.network.dto.other.TimeDTO;
+import com.mygdx.service.network.dto.sync.BonusPositionDTO;
+import com.mygdx.service.network.dto.sync.BrickPositionDTO;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 import com.mygdx.service.network.server.ServerContext;
 
@@ -123,6 +130,8 @@ public class Game {
 	 * --- SCORE / TIME ---
 	 **********************/
 	private float gameCountDown;
+	private float elapsedTime;
+	private int elapsedSecond;
 	private ShapeRenderer scoreShapeRenderer;
 
 	/********************
@@ -137,6 +146,11 @@ public class Game {
 	 * --- STATE ---
 	 ********************/
 	private GameStepEnum state;
+
+	/********************
+	 * --- NETWORK ---
+	 ********************/
+	private ByteBuffer byteBuffer;
 
 	public Game(final MultiBombermanGame mbGame) {
 		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
@@ -227,6 +241,8 @@ public class Game {
 		} else {
 			this.gameCountDown = -1;
 		}
+		this.elapsedTime = 0.0f;
+		this.elapsedSecond = -1;
 	}
 
 	public void restart() {
@@ -255,6 +271,8 @@ public class Game {
 		} else {
 			this.gameCountDown = -1;
 		}
+		this.elapsedTime = 0.0f;
+		this.elapsedSecond = -1;
 	}
 
 	/******************************
@@ -325,12 +343,15 @@ public class Game {
 	}
 
 	public void step() {
+		this.byteBuffer = ByteBuffer.allocate(512000);
 		this.level.update();
 		this.players.stream().forEach(Player::update);
 
 		if (this.state == GameStepEnum.GAME) {
 			if (Context.getTime() != TimeEnum.INF) {
-				this.gameCountDown -= Gdx.graphics.getDeltaTime();
+				float delta = Gdx.graphics.getDeltaTime();
+				this.gameCountDown -= delta;
+				this.elapsedTime += delta;
 				if (this.gameCountDown <= 0.0f) {
 					this.gameCountDown = 0.0f;
 				}
@@ -649,92 +670,89 @@ public class Game {
 	 * --- NETWORK PART ---
 	 *******************************************************************/
 	public void doNetworkStuff(GameScreenEnum state) {
-		ByteBuffer bb = ByteBuffer.allocate(512000);
 
 		// RAIL
 		this.level.getRail().stream().forEach(r -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, r.getDrawSprite(), r.getDrawIndex(), r.getGridIndex());
-			bb.put(sg.getBuffer());
+			byteBuffer.put(sg.getBuffer());
 		});
 		// INTERRUPTER
 		this.level.getInterrupter().forEach(i -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, i.getDrawSprite(), i.getDrawIndex(), i.getGridIndex());
-			bb.put(sg.getBuffer());
+			byteBuffer.put(sg.getBuffer());
 		});
 		// TELEPORTER
 		this.level.getTeleporter().forEach(t -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, t.getDrawSprite(), t.getDrawIndex(), t.getGridIndex());
-			bb.put(sg.getBuffer());
+			byteBuffer.put(sg.getBuffer());
 		});
 		// HOLE
 		this.level.getHole().forEach(h -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
-			bb.put(sg.getBuffer());
+			byteBuffer.put(sg.getBuffer());
 		});
 
-		// ENCODE BRICK DISPLAY
-		bb.put(new BrickPositionDTO(this.level).getBuffer());
-		// ENCODE BRICK BURN
-		this.level.getBricks().stream().filter(Brick::isBurningOrBurned).forEach(b -> {
-			SpriteGridDTO sg = new SpriteGridDTO(false, b.getDrawSprite(), b.getDrawIndex(), b.getGridIndex());
-			bb.put(sg.getBuffer());
-		});
+//		// ENCODE BRICK DISPLAY
+//		byteBuffer.put(new BrickPositionDTO(this.level).getBuffer());
+//		// ENCODE BRICK BURN
+//		this.level.getBricks().stream().filter(Brick::isBurningOrBurned).forEach(b -> {
+//			SpriteGridDTO sg = new SpriteGridDTO(false, b.getDrawSprite(), b.getDrawIndex(), b.getGridIndex());
+//			byteBuffer.put(sg.getBuffer());
+//		});
 
-		// SUDDENDEATHWALL BACK
-		this.level.getSuddenDeathWall().stream().filter(s -> s.isTransformedInStrandardWall()).forEach(h -> {
-			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
-			bb.put(sg.getBuffer());
-		});
+//		// SUDDENDEATHWALL BACK
+//		this.level.getSuddenDeathWall().stream().filter(s -> s.isTransformedInStrandardWall()).forEach(h -> {
+//			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
+//			byteBuffer.put(sg.getBuffer());
+//		});
 
-		// FIRE
-		this.level.getFires().forEach(h -> {
-			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
-			bb.put(sg.getBuffer());
-		});
+//		// FIRE
+//		this.level.getFires().forEach(h -> {
+//			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
+//			byteBuffer.put(sg.getBuffer());
+//		});
 		// MINE
 		this.level.getMine().forEach(h -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
-			bb.put(sg.getBuffer());
+			byteBuffer.put(sg.getBuffer());
 		});
 		// TROLLEY
 		this.level.getTrolley().stream().forEach(h -> {
 			SpritePixelDTO sg = new SpritePixelDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getBodyX(),
 					h.getBodyY());
-			bb.put(sg.getBuffer());
+			byteBuffer.put(sg.getBuffer());
 		});
 
 		// BOMBE
 		this.level.getBombes().stream().filter(b -> !b.isExploded()).forEach(h -> {
-			SpritePixelDTO sg = new SpritePixelDTO(false, h.getDrawSprite(), h.getDrawIndex(),
-					(float) ((h.getBodyX() - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
-					(float) ((h.getBodyY() - 0.5f) * Constante.GRID_PIXELS_SIZE_Y) + h.getReboundOffset());
-			bb.put(sg.getBuffer());
+			BombePixelDTO sg = new BombePixelDTO(h);
+			byteBuffer.put(sg.getBuffer());
 		});
 
-		// BONUS
-		this.level.getBonuss().forEach(h -> {
-			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
-			bb.put(sg.getBuffer());
-		});
+//		// BONUS
+//		this.level.getBonuss().forEach(h -> {
+//			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
+//			byteBuffer.put(sg.getBuffer());
+//		});
 		// PLAYER
 		players.stream().forEach(p -> {
 			PlayerPixelDTO ppd = new PlayerPixelDTO(p);
-			bb.put(ppd.getBuffer());
+			byteBuffer.put(ppd.getBuffer());
 		});
 		// SUDDENDEATHWALL FRONT
 		this.level.getSuddenDeathWall().stream().filter(s -> !s.isTransformedInStrandardWall()).forEach(h -> {
 			SpritePixelDTO sg = new SpritePixelDTO(true, h.getDrawSprite(), h.getDrawIndex(),
 					h.getX() * Constante.GRID_PIXELS_SIZE_X, h.getY() * Constante.GRID_PIXELS_SIZE_Y + h.getOffset());
-			bb.put(sg.getBuffer());
+			byteBuffer.put(sg.getBuffer());
 		});
 
 		// ENCODE STATE
 		switch (state) {
 		case MENU:
-			bb.put(new MenuDTO().getBuffer());
+			byteBuffer.put(new MenuDTO().getBuffer());
 			break;
 		case PAUSE:
-			bb.put(new PauseDTO().getBuffer());
+			byteBuffer.put(new PauseDTO().getBuffer());
 			break;
 		case GAME:
 		default:
@@ -743,21 +761,64 @@ public class Game {
 
 		// ENCODE SCORE
 		if (this.state == GameStepEnum.SCORE) {
-			this.score.entrySet().stream().forEach(k -> bb.put(new ScoreDTO(k.getKey(), k.getValue()).getBuffer()));
+			this.score.entrySet().stream()
+					.forEach(k -> byteBuffer.put(new ScoreDTO(k.getKey(), k.getValue()).getBuffer()));
+		}
+
+		if (elapsedSecond != (int) elapsedTime) {
+			byteBuffer.put(new BonusPositionDTO(level).getBuffer());
+			byteBuffer.put(new BrickPositionDTO(level).getBuffer());
+			elapsedSecond++;
 		}
 
 		// ENCODE TIME
-		bb.put(new TimeDTO(this.gameCountDown).getBuffer());
+		byteBuffer.put(new TimeDTO(this.gameCountDown).getBuffer());
 
 		// ENCODE STRING
-		byte[] e = new byte[bb.position()];
-		int lengthToCopy = bb.position();
-		bb.position(0);
-		bb.get(e, 0, lengthToCopy);
+		byte[] e = new byte[byteBuffer.position()];
+		int lengthToCopy = byteBuffer.position();
+		byteBuffer.position(0);
+		byteBuffer.get(e, 0, lengthToCopy);
 		String encoded = Base64.getEncoder().encodeToString(e);
 		Gdx.app.debug("GAME", encoded);
 		String cmd = NetworkRequestEnum.GAME_SCREEN.name() + ":" + encoded;
 		ServerContext.setGameScreenBuffer(cmd);
 		mbGame.getNetworkService().sendToClient(cmd);
 	}
+
+	public void bonusAppeared(BonusTypeEnum type, int gridIndex) {
+		BonusRevealedDTO br = new BonusRevealedDTO(gridIndex, type);
+		byteBuffer.put(br.getBuffer());
+	}
+
+	public void bonusBurn(int gridIndex) {
+		byteBuffer.put(GenericDeltaDTO.createBurnBonusRequest(gridIndex));
+	}
+
+	public void bonusTaked(int gridIndex) {
+		byteBuffer.put(GenericDeltaDTO.createBonusTakedRequest(gridIndex));
+	}
+
+	public void removeBonus(int gridIndex) {
+		// suddentDeath remove brick immediatly
+		byteBuffer.put(GenericDeltaDTO.createRemoveBonusRequest(gridIndex));
+	}
+
+	public void fireAppared(FireEnum type, int gridIndex) {
+		FireAppareadDTO br = new FireAppareadDTO(gridIndex, type);
+		byteBuffer.put(br.getBuffer());
+	}
+
+	public void brickBurn(int gridIndex) {
+		byteBuffer.put(GenericDeltaDTO.createBurnBrickRequest(gridIndex));
+	}
+
+	public void removeBrick(int gridIndex) {
+		byteBuffer.put(GenericDeltaDTO.createRemoveBrickRequest(gridIndex));
+	}
+
+	public void addWall(int gridIndex) {
+		byteBuffer.put(GenericDeltaDTO.createAddWallRequest(gridIndex));
+	}
+
 }

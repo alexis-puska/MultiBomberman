@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.exception.ServerPortAlreadyInUseException;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
-import com.mygdx.service.network.dto.WaitScreenDTO;
+import com.mygdx.service.network.dto.screen.WaitScreenDTO;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
 
 public class Server extends Thread {

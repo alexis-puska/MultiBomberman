@@ -16,6 +16,7 @@ import com.mygdx.domain.enumeration.BrickStateEnum;
 import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.LevelElement;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SpriteService;
 
@@ -29,7 +30,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Brick extends BodyAble implements LevelElement {
-	private static final float ANIMATION_TIME = 0.16f;
+	private Game game;
 	protected int x;
 	protected int y;
 	private SpriteEnum animation;
@@ -40,8 +41,9 @@ public class Brick extends BodyAble implements LevelElement {
 
 	private Animation<TextureRegion> burnAnimation;
 
-	public Brick(final World world, final MultiBombermanGame mbGame, final Level level, SpriteEnum animation, int x,
-			int y) {
+	public Brick(Game game, final World world, final MultiBombermanGame mbGame, final Level level, SpriteEnum animation,
+			int x, int y) {
+		this.game = game;
 		this.x = x;
 		this.y = y;
 		this.mbGame = mbGame;
@@ -54,7 +56,7 @@ public class Brick extends BodyAble implements LevelElement {
 		for (int i = 1; i < sprite.length; i++) {
 			spriteAnimation[i - 1] = sprite[i];
 		}
-		burnAnimation = new Animation<>(ANIMATION_TIME, spriteAnimation);
+		burnAnimation = new Animation<>(this.animation.getFrameAnimationTime(), spriteAnimation);
 
 		drawSprite = animation;
 		drawIndex = 0;
@@ -94,6 +96,7 @@ public class Brick extends BodyAble implements LevelElement {
 	@Override
 	public void action() {
 		if (state == BrickStateEnum.CREATED) {
+			this.game.brickBurn(this.getGridIndex());
 			this.state = BrickStateEnum.BURN;
 		}
 	}
@@ -116,6 +119,7 @@ public class Brick extends BodyAble implements LevelElement {
 	public void immediateAction() {
 		this.state = BrickStateEnum.BURNED;
 		this.level.getOccupedWallBrickBonus()[this.getX()][this.getY()] = null;
+		this.game.removeBrick(this.getGridIndex());
 		dispose();
 	}
 

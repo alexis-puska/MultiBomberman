@@ -22,7 +22,7 @@ import com.mygdx.service.network.client.Client;
 import com.mygdx.service.network.server.Server;
 import com.mygdx.service.network.server.ServerRegistrationService;
 import com.mygdx.service.network.server.UpnpService;
-import com.mygdx.view.ClientViewScreen;
+import com.mygdx.view.client.ClientViewScreen;
 
 public class NetworkService {
 

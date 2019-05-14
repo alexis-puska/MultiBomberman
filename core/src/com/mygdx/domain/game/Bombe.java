@@ -23,6 +23,7 @@ import com.mygdx.domain.level.Level;
 import com.mygdx.domain.level.Wall;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
@@ -32,6 +33,7 @@ import com.mygdx.utils.ReboundUtils;
 public class Bombe extends BodyAble {
 	private static final float BORDER_MAX = 0.45f;
 	private static final float BORDER_MIN = 0.3f;
+	private Game game;
 	private BombeStateEnum state;
 	private float animationTime;
 	private float reboundTime;
@@ -48,8 +50,9 @@ public class Bombe extends BodyAble {
 	private float count;
 	private Player lastPlayerTouched;
 
-	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
+	public Bombe(Game game, Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
 			Player player, float timeToExplode) {
+		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
@@ -65,7 +68,7 @@ public class Bombe extends BodyAble {
 		this.count = 0f;
 		this.state = BombeStateEnum.CREATED;
 		this.reboundTime = 0f;
-		this.animation = new Animation<>(0.16f,
+		this.animation = new Animation<>(type.getSpriteEnum().getFrameAnimationTime(),
 				SpriteService.getInstance().getSpriteForAnimation(type.getSpriteEnum()));
 		Filter filter = new Filter();
 		filter.categoryBits = CollisionConstante.CATEGORY_BOMBE;
@@ -73,8 +76,9 @@ public class Bombe extends BodyAble {
 		createBody(filter);
 	}
 
-	public Bombe(Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
+	public Bombe(Game game, Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
 			Player player, float timeToExplode, PovDirection direction) {
+		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
 		this.level = level;
@@ -265,7 +269,7 @@ public class Bombe extends BodyAble {
 		int posY = (int) body.getPosition().y;
 		if (this.level.getOccupedWallBrickBonus()[posX][posY] == null) {
 			this.level.getFires()
-					.add(new Fire(this.world, this.mbGame, this.level, this.player, posX, posY, FireEnum.FIRE_CENTER));
+					.add(new Fire(this.game, this.world, this.mbGame, this.level, this.player, posX, posY, FireEnum.FIRE_CENTER));
 		}
 		generateFireRight(posX, posY);
 		generateFireDown(posX, posY);
@@ -339,7 +343,7 @@ public class Bombe extends BodyAble {
 			}
 		} else {
 			this.level.getFires()
-					.add(new Fire(this.world, this.mbGame, this.level, this.player, calcX, calcY, fireEnum));
+					.add(new Fire(this.game, this.world, this.mbGame, this.level, this.player, calcX, calcY, fireEnum));
 		}
 		return false;
 	}

@@ -21,6 +21,7 @@ import com.mygdx.domain.enumeration.MineTypeEnum;
 import com.mygdx.domain.game.Fire;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.game.Game;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
@@ -38,9 +39,9 @@ import lombok.Setter;
 public class Mine extends BodyAble implements Initiable {
 
 	private static final float EXPIRATIONT_TIME = 6f;
-	private static final float FRAME_DURATION = 1f / 8f;
 	private static final int FIRE_LENGTH = Constante.GRID_SIZE_X;
 
+	private Game game;
 	protected int x;
 	protected int y;
 	private long id;
@@ -86,14 +87,19 @@ public class Mine extends BodyAble implements Initiable {
 		super.dispose();
 	}
 
+	public void init(Game game, World world, MultiBombermanGame mbGame, Level level) {
+		this.game = game;
+		this.init(world, mbGame, level);
+	}
+
 	@Override
 	public void init(World world, MultiBombermanGame mbGame, Level level) {
 		this.mbGame = mbGame;
 		this.world = world;
 		this.level = level;
-		this.straightAnimation = new Animation<>(FRAME_DURATION,
+		this.straightAnimation = new Animation<>(SpriteEnum.MINE_D.getFrameAnimationTime(),
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.MINE_D));
-		this.bendAnimation = new Animation<>(FRAME_DURATION,
+		this.bendAnimation = new Animation<>(SpriteEnum.MINE_C.getFrameAnimationTime(),
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.MINE_C));
 		this.time = 0f;
 		this.type = MineTypeEnum.random();
@@ -127,7 +133,7 @@ public class Mine extends BodyAble implements Initiable {
 	}
 
 	private void generateStraightFire() {
-		if ((time - EXPIRATIONT_TIME) <= FRAME_DURATION * 2) {
+		if ((time - EXPIRATIONT_TIME) <= SpriteEnum.MINE_D.getFrameAnimationTime() * 2) {
 			generateFireDown(x, y);
 			generateFireUp(x, y);
 		} else {
@@ -137,13 +143,13 @@ public class Mine extends BodyAble implements Initiable {
 	}
 
 	private void generateBendFire() {
-		if ((time - EXPIRATIONT_TIME) <= FRAME_DURATION * 2) {
+		if ((time - EXPIRATIONT_TIME) <= SpriteEnum.MINE_C.getFrameAnimationTime() * 2) {
 			generateFireRight(x, y);
 			generateFireUp(x, y);
-		} else if ((time - EXPIRATIONT_TIME) <= FRAME_DURATION * 4) {
+		} else if ((time - EXPIRATIONT_TIME) <= SpriteEnum.MINE_C.getFrameAnimationTime() * 4) {
 			generateFireRight(x, y);
 			generateFireDown(x, y);
-		} else if ((time - EXPIRATIONT_TIME) <= FRAME_DURATION * 6) {
+		} else if ((time - EXPIRATIONT_TIME) <= SpriteEnum.MINE_C.getFrameAnimationTime() * 6) {
 			generateFireDown(x, y);
 			generateFireLeft(x, y);
 		} else {
@@ -155,7 +161,8 @@ public class Mine extends BodyAble implements Initiable {
 	public void activate() {
 		if (!activate && this.level.getOccupedWallBrickBonus()[x][y] == null) {
 			this.type = MineTypeEnum.random();
-			int offset = ThreadLocalRandom.current().nextInt(0, (int) (FRAME_DURATION * 1000));
+			int offset = ThreadLocalRandom.current().nextInt(0,
+					(int) (SpriteEnum.MINE_C.getFrameAnimationTime() * 1000));
 			this.time = ((float) offset / 100f);
 			this.expiration = EXPIRATIONT_TIME + this.time;
 			this.activate = true;
@@ -244,7 +251,8 @@ public class Mine extends BodyAble implements Initiable {
 				return true;
 			}
 		} else {
-			this.level.getFires().add(new Fire(this.world, this.mbGame, this.level, null, calcX, calcY, fireEnum));
+			this.level.getFires()
+					.add(new Fire(this.game, this.world, this.mbGame, this.level, null, calcX, calcY, fireEnum));
 		}
 		return false;
 	}

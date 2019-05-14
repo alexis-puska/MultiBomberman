@@ -840,8 +840,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 						|| (this.spaceShipBody.getPosition().y >= 1.0f
 								&& this.spaceShipBody.getPosition().y <= (float) Constante.GRID_SIZE_Y - 1.0f))
 				&& this.nbBombeSpaceShip > 0) {
-			Bombe b = new Bombe(this.level, this.world, this.mbGame, 2, (int) this.getShipX(), (int) this.getShipY(),
-					BombeTypeEnum.BOMBE, this, Constante.DEFAULT_BOMBE, spaceShipDrawDirection);
+			Bombe b = new Bombe(this.game, this.level, this.world, this.mbGame, 2, (int) this.getShipX(),
+					(int) this.getShipY(), BombeTypeEnum.BOMBE, this, Constante.DEFAULT_BOMBE, spaceShipDrawDirection);
 			this.level.getBombes().add(b);
 			this.nbBombeSpaceShip--;
 			if (lastFireFrom != null) {
@@ -1035,8 +1035,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				}
 			}
 			if (deathBonus == null || deathBonus != DeathBonusEnum.CONSTIPATION) {
-				Bombe b = new Bombe(this.level, this.world, this.mbGame, this.bombeStrenght, x, y, this.bombeType, this,
-						bombeTime);
+				Bombe b = new Bombe(this.game, this.level, this.world, this.mbGame, this.bombeStrenght, x, y,
+						this.bombeType, this, bombeTime);
 				this.level.getBombes().add(b);
 				this.nbBombe--;
 			}
@@ -1292,7 +1292,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(animationTime, false), getPixelX() - 15f,
 				getPixelY() - 5f);
 		if (animations.get(drawSprite).isAnimationFinished(animationTime)) {
-			this.level.randomBonus();
+			this.level.randomBonus(game);
 			if (Context.isBadBomber() && !this.game.isSuddentDeathTime()) {
 				this.playerToBadBomber();
 			} else {

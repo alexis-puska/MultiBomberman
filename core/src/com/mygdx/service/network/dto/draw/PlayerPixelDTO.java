@@ -1,4 +1,4 @@
-package com.mygdx.service.network.dto;
+package com.mygdx.service.network.dto.draw;
 
 import java.nio.ByteBuffer;
 
@@ -30,7 +30,7 @@ public class PlayerPixelDTO {
 	private int louisSpriteIndex;
 
 	public PlayerPixelDTO(Player player) {
-		this.playerIndex = (short) player.getIndex();
+		this.playerIndex = player.getIndex();
 		this.score = player.getScore();
 		switch (player.getState()) {
 		case BURNING:
@@ -85,7 +85,7 @@ public class PlayerPixelDTO {
 			bb.put((byte) NetworkGameRequestEnum.DRAW_PLAYER_ON_LOUIS.ordinal());
 		}
 		bb.put((byte) this.playerIndex);
-		bb.putInt(this.score);
+		bb.putShort((short) this.score);
 		bb.putFloat(this.x);
 		bb.putFloat(this.y);
 		bb.put((byte) characterSpriteEnum.ordinal());
@@ -102,7 +102,7 @@ public class PlayerPixelDTO {
 	public PlayerPixelDTO(byte[] encoded) {
 		ByteBuffer bb = ByteBuffer.wrap(encoded);
 		this.playerIndex = (int) bb.get();
-		this.score = bb.getInt();
+		this.score = bb.getShort();
 		this.x = bb.getFloat();
 		this.y = bb.getFloat();
 		byte index = bb.get();

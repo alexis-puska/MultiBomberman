@@ -8,7 +8,7 @@ public class NetworkRequestUtils {
 		// unused constrctor
 	}
 
-	public static int calcGridSizeArray() {
+	public static int calcBufferSizeForBrick() {
 		int nb = Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y;
 		int nbCalc = nb;
 		if (nb % 8 != 0) {
@@ -16,6 +16,10 @@ public class NetworkRequestUtils {
 			nbCalc = (nbCalc + 1) * 8;
 		}
 		return nbCalc / 8;
+	}
+
+	public static int calcBufferSizeForBonus() {
+		return Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y;
 	}
 
 }
