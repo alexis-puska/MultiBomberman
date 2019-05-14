@@ -44,7 +44,14 @@ public class ClientAnimation {
 
 	public void drawIt() {
 		this.animationTime += Gdx.graphics.getDeltaTime();
-		mbGame.getBatch().draw(animation.getKeyFrame(animationTime, false), this.x * Constante.GRID_PIXELS_SIZE_X,
-				this.y * Constante.GRID_PIXELS_SIZE_Y);
+		TextureRegion t = animation.getKeyFrame(animationTime, false);
+		if (t.getRegionWidth() != Constante.GRID_PIXELS_SIZE_X) {
+			mbGame.getBatch().draw(t,
+					this.x * Constante.GRID_PIXELS_SIZE_X
+							- ((t.getRegionWidth() - Constante.GRID_PIXELS_SIZE_X) / 2.0F),
+					this.y * Constante.GRID_PIXELS_SIZE_Y);
+		} else {
+			mbGame.getBatch().draw(t, this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
+		}
 	}
 }
