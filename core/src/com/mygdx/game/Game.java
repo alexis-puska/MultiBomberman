@@ -345,7 +345,6 @@ public class Game {
 	}
 
 	public void step() {
-		
 		this.byteBuffer = ByteBuffer.allocate(512000);
 		this.level.update();
 		this.players.stream().forEach(Player::update);
@@ -678,6 +677,10 @@ public class Game {
 			byteBuffer.put(GenericCommandDTO.getResetAdditionalWall());
 		}
 
+		if (lightCountdown <= 0 && this.level.getShadow() > 0) {
+			byteBuffer.put(GenericCommandDTO.getTurnLightOn());
+		}
+
 		// RAIL
 		this.level.getRail().stream().forEach(r -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, r.getDrawSprite(), r.getDrawIndex(), r.getGridIndex());
@@ -694,7 +697,7 @@ public class Game {
 			byteBuffer.put(sg.getBuffer());
 		});
 		// HOLE
-		this.level.getHole().forEach(h -> {
+		this.level.getHole().stream().filter(h -> h.isDraw()).forEach(h -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
 			byteBuffer.put(sg.getBuffer());
 		});
@@ -725,8 +728,9 @@ public class Game {
 		});
 		// TROLLEY
 		this.level.getTrolley().stream().forEach(h -> {
-			SpritePixelDTO sg = new SpritePixelDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getBodyX(),
-					h.getBodyY());
+			SpritePixelDTO sg = new SpritePixelDTO(false, h.getDrawSprite(), h.getDrawIndex(),
+					h.getBodyX() * Constante.GRID_PIXELS_SIZE_X - 15f,
+					h.getBodyY() * Constante.GRID_PIXELS_SIZE_Y - 5f);
 			byteBuffer.put(sg.getBuffer());
 		});
 

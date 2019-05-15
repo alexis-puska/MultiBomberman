@@ -74,6 +74,7 @@ public class Level {
 	private MultiBombermanGame mbGame;
 	private World world;
 
+	private int randomBonus;
 	/**********************
 	 * --- SUDDEN DEATH ---
 	 **********************/
@@ -88,6 +89,7 @@ public class Level {
 	private List<SuddenDeathWall> suddenDeathWall;
 
 	public void init(Game game, World world) {
+		this.randomBonus = 0;
 		this.game = game;
 		this.mbGame = game.getMultiBombermanGame();
 		this.world = world;
@@ -241,23 +243,31 @@ public class Level {
 		this.suddenDeathWall = new ArrayList<>();
 	}
 
-	public void randomBonus(Game game) {
-		if (!isFillWithBrick()) {
-			for (int i = 0; i < bonus.length; i++) {
-				for (int j = 0; j < bonus[i]; j++) {
-					if (noWall.isEmpty()) {
-						break;
-					} else {
-						int idx = ThreadLocalRandom.current().nextInt(0, noWall.size());
-						int chx = noWall.get(idx);
-						int x = chx % Constante.GRID_SIZE_X;
-						int y = (chx - x) / Constante.GRID_SIZE_X;
-						bonuss.add(new Bonus(game, this, world, mbGame, x, y, BonusTypeEnum.values()[i],
-								BonusStateEnum.REVEALED));
-						noWall.remove(idx);
+	public void randomBonusNextUpdate() {
+		this.randomBonus++;
+	}
+
+	private void randomBonus() {
+		while (this.randomBonus > 0) {
+			if (!isFillWithBrick()) {
+				for (int i = 0; i < bonus.length; i++) {
+					for (int j = 0; j < bonus[i]; j++) {
+						if (noWall.isEmpty()) {
+							break;
+						} else {
+							int idx = ThreadLocalRandom.current().nextInt(0, noWall.size());
+							int chx = noWall.get(idx);
+							int x = chx % Constante.GRID_SIZE_X;
+							int y = (chx - x) / Constante.GRID_SIZE_X;
+							bonuss.add(new Bonus(game, this, world, mbGame, x, y, BonusTypeEnum.values()[i],
+									BonusStateEnum.REVEALED));
+							game.bonusAppeared(BonusTypeEnum.values()[i], chx);
+							noWall.remove(idx);
+						}
 					}
 				}
 			}
+			randomBonus--;
 		}
 	}
 
@@ -278,6 +288,7 @@ public class Level {
 	}
 
 	public void update() {
+		randomBonus();
 		bombes.stream().filter(b -> !b.isExploded()).forEach(Bombe::update);
 		bricks.stream().forEach(Brick::update);
 		fires.stream().forEach(Fire::update);

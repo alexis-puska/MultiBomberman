@@ -27,7 +27,8 @@ public enum NetworkGameRequestEnum {
 	ADD_WALL(3),
 	FIRE_APPEARED(4),
 	BONUS_REVEALED(4), 
-	DRAW_BOMBE(12);
+	DRAW_BOMBE(12),
+	TURN_LIGHT_ON(1);
 	//@formatter:on
 
 	private int requestLength;

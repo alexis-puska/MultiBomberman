@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PlayerPixelDTO {
+public class PlayerPixelDTO implements Comparable<PlayerPixelDTO> {
 
 	private int playerIndex;
 	private int score;
@@ -114,5 +114,15 @@ public class PlayerPixelDTO {
 			this.louisColorEnum = LouisColorEnum.values()[(int) bb.get()];
 			this.louisSpriteIndex = (int) bb.get();
 		}
+	}
+
+	@Override
+	public int compareTo(PlayerPixelDTO o) {
+		if (this.y < o.y) {
+			return 1;
+		} else if (this.y > o.y) {
+			return -1;
+		}
+		return 0;
 	}
 }

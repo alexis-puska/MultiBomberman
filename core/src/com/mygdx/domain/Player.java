@@ -170,7 +170,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 			this.animationsLouis.put(e, new Animation<TextureRegion>((1f / 5f),
 					SpriteService.getInstance().getSpriteForAnimation(e, this.louisColor)));
 		}
-		footInWaterAnimation = new Animation<>((1f / 12),
+		footInWaterAnimation = new Animation<>(SpriteEnum.UNDERWATER.getFrameAnimationTime(),
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.UNDERWATER));
 		this.createBody();
 		if (this.type == PlayerTypeEnum.CPU) {
@@ -1258,14 +1258,11 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		this.spriteIndex = 0;
 		this.drawSpriteLouis = LouisSpriteEnum.VICTORY;
 		this.spriteIndexLouis = animationsLouis.get(LouisSpriteEnum.VICTORY)
-				.getKeyFrameIndex(this.direction == PovDirection.center ? 0
-						: animationTime % animationsLouis.get(drawSpriteLouis).getAnimationDuration());
+				.getKeyFrameIndex(animationTime % animationsLouis.get(drawSpriteLouis).getAnimationDuration());
 		mbGame.getBatch().draw(animations.get(CharacterSpriteEnum.ON_LOUIS_DOWN).getKeyFrame(0, false),
 				getPixelX() - 15f, getPixelY() - 5f);
-		mbGame.getBatch()
-				.draw(animationsLouis.get(LouisSpriteEnum.VICTORY)
-						.getKeyFrame(this.direction == PovDirection.center ? 0 : animationTime, true), getPixelX() - 15,
-						getPixelY() - 5f);
+		mbGame.getBatch().draw(animationsLouis.get(LouisSpriteEnum.VICTORY).getKeyFrame(animationTime, true),
+				getPixelX() - 15, getPixelY() - 5f);
 	}
 
 	private void drawVictory() {
@@ -1297,7 +1294,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		mbGame.getBatch().draw(animations.get(drawSprite).getKeyFrame(animationTime, false), getPixelX() - 15f,
 				getPixelY() - 5f);
 		if (animations.get(drawSprite).isAnimationFinished(animationTime)) {
-			this.level.randomBonus(game);
+			this.level.randomBonusNextUpdate();
 			if (Context.isBadBomber() && !this.game.isSuddentDeathTime()) {
 				this.playerToBadBomber();
 			} else {

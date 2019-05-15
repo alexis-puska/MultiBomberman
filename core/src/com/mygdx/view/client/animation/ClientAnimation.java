@@ -54,4 +54,16 @@ public class ClientAnimation {
 			mbGame.getBatch().draw(t, this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}
 	}
+
+	public SpriteEnum getSpriteEnum() {
+		return spriteEnum;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
 }

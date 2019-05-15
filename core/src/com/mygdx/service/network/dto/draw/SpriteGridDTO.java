@@ -5,6 +5,9 @@ import java.nio.ByteBuffer;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 
+import lombok.Getter;
+
+@Getter
 public class SpriteGridDTO {
 
 	private boolean front;

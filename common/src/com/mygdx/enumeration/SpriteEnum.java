@@ -23,7 +23,7 @@ public enum SpriteEnum {
 	RAIL(0f),
 	BUTTON(0f),
 	HOLE(0f),
-	UNDERWATER(0f),
+	UNDERWATER(1f/12f),
 	TELEPORTER(1f / 10f),
 	FIRE_CENTER(1f / 10f),
 	FIRE_TOP_EXT(1f / 10f),
