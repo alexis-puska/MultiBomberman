@@ -90,7 +90,7 @@ public class Teleporter extends BodyAble implements Initiable {
 	@Override
 	public void drawIt() {
 		if (animate) {
-			this.drawIndex = animation.getKeyFrameIndex(time);
+			this.drawIndex = animation.getKeyFrameIndex(time % animation.getAnimationDuration());
 			mbGame.getBatch().draw(animation.getKeyFrame(time, false), this.x * Constante.GRID_PIXELS_SIZE_X,
 					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else {

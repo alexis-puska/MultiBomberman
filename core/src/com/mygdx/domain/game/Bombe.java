@@ -50,8 +50,8 @@ public class Bombe extends BodyAble {
 	private float count;
 	private Player lastPlayerTouched;
 
-	public Bombe(Game game, Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
-			Player player, float timeToExplode) {
+	public Bombe(Game game, Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y,
+			BombeTypeEnum type, Player player, float timeToExplode) {
 		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
@@ -76,8 +76,8 @@ public class Bombe extends BodyAble {
 		createBody(filter);
 	}
 
-	public Bombe(Game game, Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y, BombeTypeEnum type,
-			Player player, float timeToExplode, PovDirection direction) {
+	public Bombe(Game game, Level level, World world, MultiBombermanGame mbGame, int strenght, int x, int y,
+			BombeTypeEnum type, Player player, float timeToExplode, PovDirection direction) {
 		this.game = game;
 		this.world = world;
 		this.mbGame = mbGame;
@@ -141,7 +141,7 @@ public class Bombe extends BodyAble {
 
 	@Override
 	public void drawIt() {
-		drawIndex = animation.getKeyFrameIndex(animationTime);
+		drawIndex = animation.getKeyFrameIndex(animationTime % animation.getAnimationDuration());
 		mbGame.getBatch().draw(animation.getKeyFrame(animationTime, true),
 				(float) ((body.getPosition().x - 0.5f) * Constante.GRID_PIXELS_SIZE_X),
 				(float) ((body.getPosition().y - 0.5f) * Constante.GRID_PIXELS_SIZE_Y) + offsetZ);
@@ -261,6 +261,10 @@ public class Bombe extends BodyAble {
 		this.state = BombeStateEnum.EXPLODE;
 	}
 
+	public void exlopdeInNextUpdate() {
+		this.state = BombeStateEnum.EXPLODE;
+	}
+
 	public void explode() {
 		if (this.type == BombeTypeEnum.BOMBE_P && this.state == BombeStateEnum.FLY) {
 			return;
@@ -268,8 +272,8 @@ public class Bombe extends BodyAble {
 		int posX = (int) body.getPosition().x;
 		int posY = (int) body.getPosition().y;
 		if (this.level.getOccupedWallBrickBonus()[posX][posY] == null) {
-			this.level.getFires()
-					.add(new Fire(this.game, this.world, this.mbGame, this.level, this.player, posX, posY, FireEnum.FIRE_CENTER));
+			this.level.getFires().add(new Fire(this.game, this.world, this.mbGame, this.level, this.player, posX, posY,
+					FireEnum.FIRE_CENTER));
 		}
 		generateFireRight(posX, posY);
 		generateFireDown(posX, posY);

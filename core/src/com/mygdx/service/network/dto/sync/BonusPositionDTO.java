@@ -8,6 +8,7 @@ import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.domain.game.Bonus;
 import com.mygdx.domain.level.Level;
 import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
+import com.mygdx.service.network.utils.NetworkRequestUtils;
 
 /**
  * @author Alexis PUSKARCZYK Used for encode string to send position of all
@@ -21,17 +22,19 @@ public class BonusPositionDTO {
 
 	public BonusPositionDTO(Level level) {
 		reveleadBonusType = new HashMap<>();
-		level.getBonuss().stream().filter(Bonus::isRevealed)
-				.forEach(b -> reveleadBonusType.put(b.getGridIndex(), b.getType()));
+		level.getBonuss().stream().filter(Bonus::isRevealed).forEach(b -> {
+			reveleadBonusType.put(b.getGridIndex(), b.getType());
+		});
 	}
 
 	public BonusPositionDTO(byte[] encoded) {
 		ByteBuffer bb = ByteBuffer.wrap(encoded);
 		reveleadBonusType = new HashMap<>();
-		bb.get();
 		int index = 0;
 		while (bb.remaining() > 0) {
-			reveleadBonusType.put(index, BonusTypeEnum.values()[(int) bb.get()]);
+			BonusTypeEnum b = BonusTypeEnum.values()[(int) bb.get()];
+
+			reveleadBonusType.put(index, b);
 			index++;
 		}
 	}
@@ -40,10 +43,13 @@ public class BonusPositionDTO {
 		ByteBuffer bb;
 		bb = ByteBuffer.allocate(NetworkGameRequestEnum.BONUS_POSITION.getRequestLenght());
 		bb.put((byte) NetworkGameRequestEnum.BONUS_POSITION.ordinal());
-		for (int i = 0; i < NetworkGameRequestEnum.BONUS_POSITION.getRequestLenght() - 1; i++) {
-			bb.put((byte) BonusTypeEnum.NONE.ordinal());
+		for (int i = 0; i < NetworkRequestUtils.calcBufferSizeForBonus(); i++) {
+			if (reveleadBonusType.containsKey(i)) {
+				bb.put((byte) reveleadBonusType.get(i).ordinal());
+			} else {
+				bb.put((byte) BonusTypeEnum.NONE.ordinal());
+			}
 		}
-		reveleadBonusType.entrySet().stream().forEach(e -> bb.put(e.getKey() + 1, (byte) e.getValue().ordinal()));
 		return bb.array();
 	}
 

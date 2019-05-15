@@ -2,6 +2,7 @@ package com.mygdx.service.network.dto.draw;
 
 import java.nio.ByteBuffer;
 
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.enumeration.BombeTypeEnum;
 import com.mygdx.domain.game.Bombe;
 import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
@@ -20,8 +21,8 @@ public class BombePixelDTO {
 	private int spriteIndex;
 
 	public BombePixelDTO(Bombe bombe) {
-		this.x = bombe.getBodyX();
-		this.y = bombe.getBodyY() + bombe.getReboundOffset();
+		this.x = (bombe.getBodyX() - 0.5f) * Constante.GRID_PIXELS_SIZE_X;
+		this.y = ((bombe.getBodyY() - 0.5f) * Constante.GRID_PIXELS_SIZE_Y) + bombe.getReboundOffset();
 		this.bombeTypeEnum = bombe.getType();
 		this.spriteIndex = bombe.getDrawIndex();
 	}

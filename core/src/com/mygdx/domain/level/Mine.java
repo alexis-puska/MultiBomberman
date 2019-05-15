@@ -181,14 +181,15 @@ public class Mine extends BodyAble implements Initiable {
 			switch (type) {
 			case BEND:
 				this.drawSprite = SpriteEnum.MINE_C;
-				this.drawIndex = bendAnimation.getKeyFrameIndex(this.time);
+				this.drawIndex = bendAnimation.getKeyFrameIndex(this.time % bendAnimation.getAnimationDuration());
 				mbGame.getBatch().draw(bendAnimation.getKeyFrame(this.time, true),
 						(float) this.x * Constante.GRID_PIXELS_SIZE_X, (float) this.y * Constante.GRID_PIXELS_SIZE_Y);
 				break;
 			case STRAIGHT:
 			default:
 				this.drawSprite = SpriteEnum.MINE_D;
-				this.drawIndex = straightAnimation.getKeyFrameIndex(this.time);
+				this.drawIndex = straightAnimation
+						.getKeyFrameIndex(this.time % straightAnimation.getAnimationDuration());
 				mbGame.getBatch().draw(straightAnimation.getKeyFrame(this.time, true),
 						(float) this.x * Constante.GRID_PIXELS_SIZE_X, (float) this.y * Constante.GRID_PIXELS_SIZE_Y);
 				break;

@@ -345,6 +345,7 @@ public class Game {
 	}
 
 	public void step() {
+		
 		this.byteBuffer = ByteBuffer.allocate(512000);
 		this.level.update();
 		this.players.stream().forEach(Player::update);
@@ -755,10 +756,10 @@ public class Game {
 		// ENCODE STATE
 		switch (state) {
 		case MENU:
-			byteBuffer.put(GenericCommandDTO.getMenu());
+			byteBuffer.put(GenericCommandDTO.getMenuOverlay());
 			break;
 		case PAUSE:
-			byteBuffer.put(GenericCommandDTO.getPause());
+			byteBuffer.put(GenericCommandDTO.getPauseOverlay());
 			break;
 		case GAME:
 		default:

@@ -59,7 +59,7 @@ public class Bonus extends BodyAble implements LevelElement {
 		if (this.state == BonusStateEnum.BURN) {
 			this.stateTime += Gdx.graphics.getDeltaTime();
 			drawSprite = SpriteEnum.BONUS_BURN;
-			drawIndex = animation.getKeyFrameIndex(stateTime);
+			drawIndex = animation.getKeyFrameIndex(stateTime % animation.getAnimationDuration());
 			mbGame.getBatch().draw(animation.getKeyFrame(stateTime, false), this.x * Constante.GRID_PIXELS_SIZE_X - 6,
 					this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else if (this.state == BonusStateEnum.REVEALED) {

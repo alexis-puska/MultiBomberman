@@ -72,7 +72,7 @@ public class Brick extends BodyAble implements LevelElement {
 					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		} else if (this.state == BrickStateEnum.BURN) {
 			drawSprite = animation;
-			drawIndex = burnAnimation.getKeyFrameIndex(animationTime) + 1;
+			drawIndex = burnAnimation.getKeyFrameIndex(animationTime % burnAnimation.getAnimationDuration()) + 1;
 			mbGame.getBatch().draw(burnAnimation.getKeyFrame(animationTime, false),
 					this.x * Constante.GRID_PIXELS_SIZE_X, this.y * Constante.GRID_PIXELS_SIZE_Y);
 		}

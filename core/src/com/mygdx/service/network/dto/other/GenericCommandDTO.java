@@ -17,17 +17,31 @@ public class GenericCommandDTO {
 		return bb.array();
 	}
 
-	public static byte[] getMenu() {
+	public static byte[] getMenuOverlay() {
 		ByteBuffer bb;
-		bb = ByteBuffer.allocate(NetworkGameRequestEnum.MENU.getRequestLenght());
-		bb.put((byte) NetworkGameRequestEnum.MENU.ordinal());
+		bb = ByteBuffer.allocate(NetworkGameRequestEnum.MENU_OVERLAY.getRequestLenght());
+		bb.put((byte) NetworkGameRequestEnum.MENU_OVERLAY.ordinal());
 		return bb.array();
 	}
 
-	public static byte[] getPause() {
+	public static byte[] getPauseOverlay() {
 		ByteBuffer bb;
-		bb = ByteBuffer.allocate(NetworkGameRequestEnum.PAUSE.getRequestLenght());
-		bb.put((byte) NetworkGameRequestEnum.PAUSE.ordinal());
+		bb = ByteBuffer.allocate(NetworkGameRequestEnum.PAUSE_OVERLAY.getRequestLenght());
+		bb.put((byte) NetworkGameRequestEnum.PAUSE_OVERLAY.ordinal());
+		return bb.array();
+	}
+	
+	public static byte[] getDrawOverlay() {
+		ByteBuffer bb;
+		bb = ByteBuffer.allocate(NetworkGameRequestEnum.DRAW_GAME_OVERLAY.getRequestLenght());
+		bb.put((byte) NetworkGameRequestEnum.DRAW_GAME_OVERLAY.ordinal());
+		return bb.array();
+	}
+	
+	public static byte[] getScoreOverlay() {
+		ByteBuffer bb;
+		bb = ByteBuffer.allocate(NetworkGameRequestEnum.SCORE_OVERLAY.getRequestLenght());
+		bb.put((byte) NetworkGameRequestEnum.SCORE_OVERLAY.ordinal());
 		return bb.array();
 	}
 

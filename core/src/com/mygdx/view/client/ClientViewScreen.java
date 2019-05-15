@@ -13,15 +13,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
+import com.mygdx.domain.PlayerDefinition;
+import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.dto.level.LevelDTO;
 import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
@@ -108,6 +116,41 @@ public class ClientViewScreen implements Screen, MenuListener {
 	private BrickPositionDTO brickPosition;
 	private BonusPositionDTO bonusPosition;
 
+	/********************
+	 * --- DRAW ---
+	 ********************/
+	// layout
+	private FrameBuffer backgroundLayer;
+	private FrameBuffer blocsLayer;
+	private FrameBuffer bricksLayer;
+	private FrameBuffer playerLayer;
+	private FrameBuffer frontLayer;
+	private FrameBuffer shadowLayer;
+
+	private Texture backgroundLayerTexture;
+	private Texture blocsLayerTexture;
+	private Texture bricksLayerTexture;
+	private Texture playerLayerTexture;
+	private Texture frontLayerTexture;
+	private Texture shadowLayerTexture;
+
+	private TextureRegion backgroundLayerTextureRegion;
+	private TextureRegion blocsLayerTextureRegion;
+	private TextureRegion bricksLayerTextureRegion;
+	private TextureRegion playerLayerTextureRegion;
+	private TextureRegion frontLayerTextureRegion;
+	private TextureRegion shadowLayerTextureRegion;
+
+	private OrthographicCamera gameCamera;
+
+	/********************
+	 * --- SHADER ---
+	 *******************/
+	private String vertexShader;
+	private String fragmentShader;
+	private ShaderProgram shaderProgram;
+	private float deltaTime;
+
 	public ClientViewScreen(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
 		this.layout = new GlyphLayout();
@@ -115,6 +158,34 @@ public class ClientViewScreen implements Screen, MenuListener {
 		this.objectMapper = new ObjectMapper();
 		this.last = NetworkRequestEnum.WAIT_SCREEN;
 		this.initFont();
+		this.gameCamera = new OrthographicCamera(Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y);
+		this.gameCamera.position.set(Constante.GAME_SCREEN_SIZE_X / 2f, Constante.GAME_SCREEN_SIZE_Y / 2f, 0);
+		this.gameCamera.update();
+		this.backgroundLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y, false);
+		this.blocsLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
+				false);
+		this.bricksLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
+				false);
+		this.playerLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
+				false);
+		this.frontLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
+				false);
+		this.shadowLayer = new FrameBuffer(Format.RGBA8888, Constante.GAME_SCREEN_SIZE_X, Constante.GAME_SCREEN_SIZE_Y,
+				false);
+		this.backgroundLayerTexture = backgroundLayer.getColorBufferTexture();
+		this.blocsLayerTexture = blocsLayer.getColorBufferTexture();
+		this.bricksLayerTexture = bricksLayer.getColorBufferTexture();
+		this.playerLayerTexture = playerLayer.getColorBufferTexture();
+		this.frontLayerTexture = frontLayer.getColorBufferTexture();
+		this.shadowLayerTexture = shadowLayer.getColorBufferTexture();
+		this.backgroundLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.blocsLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.bricksLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.playerLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.frontLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		this.shadowLayerTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
 	}
 
 	public void initFont() {
@@ -597,10 +668,16 @@ public class ClientViewScreen implements Screen, MenuListener {
 				FireAppareadDTO fd = new FireAppareadDTO(readRequest(bbd, req));
 				animations.add(new ClientAnimation(mbGame, fd.getFireEnum().getSpriteEnum(), fd.getGridIndex()));
 				break;
-			case MENU:
+			case MENU_OVERLAY:
 				menuReceive = true;
 				break;
-			case PAUSE:
+			case PAUSE_OVERLAY:
+				pauseReceive = true;
+				break;
+			case DRAW_GAME_OVERLAY:
+				pauseReceive = true;
+				break;
+			case SCORE_OVERLAY:
 				pauseReceive = true;
 				break;
 			case SCORE:
@@ -632,11 +709,101 @@ public class ClientViewScreen implements Screen, MenuListener {
 	 *********************************************************/
 
 	private void drawGameScreen() {
+
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		this.gameCamera.update();
+		this.mbGame.getScreenCamera().update();
+		drawBackgroundLayer();
+		drawWallLayer();
+		drawBricksLayer();
+		drawPlayerLayer();
+		drawFrontLayer();
+		drawShadowLayer();
+		mergeLayer();
+		drawScore();
+
+		if (pause) {
+			drawPause();
+		} else if (menu) {
+			drawMenu();
+		}
+		cleanUpGameElement();
+	}
+
+	private void drawBackgroundLayer() {
+		backgroundLayer.begin();
 		mbGame.getBatch().begin();
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 2), 0, 0);
-		animations.stream().forEach(ClientAnimation::drawIt);
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		if (levelDTO != null) {
+			for (int x = 0; x < Constante.GRID_SIZE_X; x++) {
+				for (int y = 0; y < Constante.GRID_SIZE_Y; y++) {
+					mbGame.getBatch().draw(
+							SpriteService.getInstance().getSprite(this.levelDTO.getDefaultBackground().getAnimation(),
+									this.levelDTO.getDefaultBackground().getIndex()),
+							x * Constante.GRID_PIXELS_SIZE_X, y * Constante.GRID_PIXELS_SIZE_Y);
+				}
+			}
+			this.levelDTO.getCustomBackgroundTexture().stream()
+					.forEach(cbt -> mbGame.getBatch().draw(
+							SpriteService.getInstance().getSprite(cbt.getAnimation(), cbt.getIndex()),
+							cbt.getX() * Constante.GRID_PIXELS_SIZE_X, cbt.getY() * Constante.GRID_PIXELS_SIZE_Y));
+		}
+		mbGame.getBatch().end();
+		backgroundLayer.end();
+		backgroundLayerTextureRegion = new TextureRegion(backgroundLayerTexture);
+		backgroundLayerTextureRegion.flip(false, true);
+	}
+
+	private void drawWallLayer() {
+		blocsLayer.begin();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		if (levelDTO != null) {
+			levelDTO.getWall().stream().forEach(w -> {
+				if (w.isDraw()) {
+					if (w.getTexture() != null) {
+						mbGame.getBatch()
+								.draw(SpriteService.getInstance().getSprite(w.getTexture().getAnimation(),
+										w.getTexture().getIndex()), w.getX() * Constante.GRID_PIXELS_SIZE_X,
+										w.getY() * Constante.GRID_PIXELS_SIZE_Y);
+					} else {
+						mbGame.getBatch().draw(
+								SpriteService.getInstance().getSprite(this.levelDTO.getDefaultWall().getAnimation(),
+										this.levelDTO.getDefaultWall().getIndex()),
+								w.getX() * Constante.GRID_PIXELS_SIZE_X, w.getY() * Constante.GRID_PIXELS_SIZE_Y);
+					}
+				}
+			});
+			if (this.additionalWall != null) {
+				this.additionalWall.stream().forEach(w -> {
+					int x = w % Constante.GRID_SIZE_X;
+					int y = Math.floorDiv(w, Constante.GRID_SIZE_X);
+					mbGame.getBatch()
+							.draw(SpriteService.getInstance().getSprite(this.levelDTO.getDefaultWall().getAnimation(),
+									this.levelDTO.getDefaultWall().getIndex()), x * Constante.GRID_PIXELS_SIZE_X,
+									y * Constante.GRID_PIXELS_SIZE_Y);
+				});
+			}
+		}
+		mbGame.getBatch().end();
+		blocsLayerTextureRegion = new TextureRegion(blocsLayerTexture);
+		blocsLayerTextureRegion.flip(false, true);
+		blocsLayer.end();
+	}
+
+	private void drawBricksLayer() {
+		bricksLayer.begin();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		for (int i = 0; i < Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y; i++) {
-			if (this.brickPosition.hasBrick(i)) {
+			if (this.brickPosition != null && this.brickPosition.hasBrick(i)) {
 				int x = i % Constante.GRID_SIZE_X;
 				int y = Math.floorDiv(i, Constante.GRID_SIZE_X);
 				mbGame.getBatch().draw(
@@ -645,12 +812,168 @@ public class ClientViewScreen implements Screen, MenuListener {
 			}
 		}
 		mbGame.getBatch().end();
-		if (pause) {
-			drawPause();
-		} else if (menu) {
-			drawMenu();
+		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
+		bricksLayerTextureRegion.flip(false, true);
+		bricksLayer.end();
+	}
+
+	private void drawPlayerLayer() {
+		playerLayer.begin();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		animations.stream().forEach(ClientAnimation::drawIt);
+		drawBombe();
+		drawBonus();
+		drawPlayer();
+		mbGame.getBatch().end();
+		playerLayerTextureRegion = new TextureRegion(playerLayerTexture);
+		playerLayerTextureRegion.flip(false, true);
+		playerLayer.end();
+	}
+
+	private void drawBonus() {
+		if (this.bonusPosition != null) {
+			for (int i = 0; i < Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y; i++) {
+				BonusTypeEnum type = bonusPosition.get(i);
+				if (type != BonusTypeEnum.NONE) {
+					int x = i % Constante.GRID_SIZE_X;
+					int y = Math.floorDiv(i, Constante.GRID_SIZE_X);
+					mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BONUS, type.ordinal()),
+							x * Constante.GRID_PIXELS_SIZE_X, y * Constante.GRID_PIXELS_SIZE_Y);
+				}
+			}
 		}
-		cleanUpGameElement();
+	}
+
+	private void drawBombe() {
+		this.bombePixelBuf.stream().forEach(b -> {
+			mbGame.getBatch().draw(
+					SpriteService.getInstance().getSprite(b.getBombeTypeEnum().getSpriteEnum(), b.getSpriteIndex()),
+					b.getX(), b.getY());
+		});
+	}
+
+	private void drawPlayer() {
+		this.playerPixelBuf.stream().filter(p -> p.getNetworkPlayerStateEnum() != NetworkPlayerStateEnum.DEAD)
+				.forEach(p -> {
+					PlayerDefinition def = this.skinScreenDTO.getDefinitions().get(p.getPlayerIndex());
+
+					switch (p.getNetworkPlayerStateEnum()) {
+					case LOUIS:
+						if (p.getCharacterSpriteEnum() == CharacterSpriteEnum.ON_LOUIS_DOWN) {
+							mbGame.getBatch().draw(
+									SpriteService.getInstance().getSprite(p.getCharacterSpriteEnum(), def.getColor(),
+											def.getCharacter(), 0),
+									p.getX() * Constante.GRID_PIXELS_SIZE_X - 15f,
+									p.getY() * Constante.GRID_PIXELS_SIZE_Y - 5f);
+							mbGame.getBatch().draw(
+									SpriteService.getInstance().getSprite(p.getLouisSpriteEnum(), p.getLouisColorEnum(),
+											p.getLouisSpriteIndex()),
+									p.getX() * Constante.GRID_PIXELS_SIZE_X - 15f,
+									p.getY() * Constante.GRID_PIXELS_SIZE_Y - 5f);
+						} else {
+							mbGame.getBatch().draw(
+									SpriteService.getInstance().getSprite(p.getLouisSpriteEnum(), p.getLouisColorEnum(),
+											p.getLouisSpriteIndex()),
+									p.getX() * Constante.GRID_PIXELS_SIZE_X - 15f,
+									p.getY() * Constante.GRID_PIXELS_SIZE_Y - 5f);
+							mbGame.getBatch().draw(
+									SpriteService.getInstance().getSprite(p.getCharacterSpriteEnum(), def.getColor(),
+											def.getCharacter(), 0),
+									p.getX() * Constante.GRID_PIXELS_SIZE_X - 15f,
+									p.getY() * Constante.GRID_PIXELS_SIZE_Y - 5f);
+						}
+						break;
+					case BADBOMBER:
+						mbGame.getBatch()
+								.draw(SpriteService.getInstance().getSprite(p.getCharacterSpriteEnum(), def.getColor(),
+										def.getCharacter(), p.getCharacterSpriteIndex()),
+										p.getX() * Constante.GRID_PIXELS_SIZE_X - 15f,
+										p.getY() * Constante.GRID_PIXELS_SIZE_Y - 20f);
+						mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.SPACESHIP, 0),
+								p.getX() * Constante.GRID_PIXELS_SIZE_X - 15f,
+								p.getY() * Constante.GRID_PIXELS_SIZE_Y - 20f);
+						break;
+					case OTHER:
+					case TROLLEY:
+						mbGame.getBatch()
+								.draw(SpriteService.getInstance().getSprite(p.getCharacterSpriteEnum(), def.getColor(),
+										def.getCharacter(), p.getCharacterSpriteIndex()),
+										p.getX() * Constante.GRID_PIXELS_SIZE_X - 15f,
+										p.getY() * Constante.GRID_PIXELS_SIZE_Y - 5f);
+						break;
+					case DEAD:
+					default:
+						break;
+					}
+				});
+	}
+
+	private void drawFrontLayer() {
+		frontLayer.begin();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		// TODO
+
+		mbGame.getBatch().end();
+		frontLayerTextureRegion = new TextureRegion(frontLayerTexture);
+		frontLayerTextureRegion.flip(false, true);
+		frontLayer.end();
+	}
+
+	private void drawShadowLayer() {
+		shadowLayer.begin();
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
+		Gdx.gl.glClearColor(0f, 0f, 0f, this.levelDTO.getShadow());
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glColorMask(false, false, false, true);
+		shapeRenderer.setProjectionMatrix(gameCamera.combined);
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
+
+		// TODO
+
+		shapeRenderer.end();
+		Gdx.gl.glColorMask(true, true, true, true);
+		mbGame.getBatch().end();
+		shadowLayerTextureRegion = new TextureRegion(shadowLayerTexture);
+		shadowLayerTextureRegion.flip(false, true);
+		shadowLayer.end();
+	}
+
+	private void mergeLayer() {
+		mbGame.getBatch().begin();
+		mbGame.getBatch().setProjectionMatrix(mbGame.getScreenCamera().combined);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.BACKGROUND, 0), 0, 0);
+		if (this.levelDTO.isLevelUnderWater()) {
+			mbGame.getBatch().setShader(shaderProgram);
+			float delta = Gdx.graphics.getDeltaTime();
+			deltaTime += delta;
+			shaderProgram.setUniformf("time", deltaTime % 40f);
+		}
+		mbGame.getBatch().draw(backgroundLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(blocsLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(bricksLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(playerLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(frontLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().draw(shadowLayerTextureRegion, 5, 0, Constante.GAME_SCREEN_SIZE_X,
+				Constante.GAME_SCREEN_SIZE_Y);
+		mbGame.getBatch().setShader(null);
+		mbGame.getBatch().end();
+	}
+
+	private void drawScore() {
+
 	}
 
 	private void drawPause() {
@@ -662,6 +985,13 @@ public class ClientViewScreen implements Screen, MenuListener {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
+		drawPlayerNumber();
+		layout.setText(font, MessageService.getInstance().getMessage("game.pause.libelle"));
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
+		mbGame.getBatch().end();
+	}
+
+	public void drawPlayerNumber() {
 		if (!playerPixelBuf.isEmpty()) {
 			playerPixelBuf.stream().forEach(p -> {
 				layout.setText(font, Integer.toString(p.getPlayerIndex()));
@@ -671,9 +1001,6 @@ public class ClientViewScreen implements Screen, MenuListener {
 				}
 			});
 		}
-		layout.setText(font, MessageService.getInstance().getMessage("game.pause.libelle"));
-		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2f) - (layout.width / 2f), 210);
-		mbGame.getBatch().end();
 	}
 
 	private void drawMenu() {

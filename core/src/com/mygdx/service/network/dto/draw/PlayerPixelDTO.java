@@ -56,8 +56,8 @@ public class PlayerPixelDTO {
 			this.networkPlayerStateEnum = NetworkPlayerStateEnum.TROLLEY;
 			break;
 		case BAD_BOMBER:
-			this.x = player.getShipPixelX();
-			this.y = player.getShipPixelY();
+			this.x = player.getShipX();
+			this.y = player.getShipY();
 			this.networkPlayerStateEnum = NetworkPlayerStateEnum.BADBOMBER;
 			break;
 		case DEAD:
