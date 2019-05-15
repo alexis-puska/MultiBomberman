@@ -702,25 +702,6 @@ public class Game {
 			byteBuffer.put(sg.getBuffer());
 		});
 
-//		// ENCODE BRICK DISPLAY
-//		byteBuffer.put(new BrickPositionDTO(this.level).getBuffer());
-//		// ENCODE BRICK BURN
-//		this.level.getBricks().stream().filter(Brick::isBurningOrBurned).forEach(b -> {
-//			SpriteGridDTO sg = new SpriteGridDTO(false, b.getDrawSprite(), b.getDrawIndex(), b.getGridIndex());
-//			byteBuffer.put(sg.getBuffer());
-//		});
-
-//		// SUDDENDEATHWALL BACK
-//		this.level.getSuddenDeathWall().stream().filter(s -> s.isTransformedInStrandardWall()).forEach(h -> {
-//			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
-//			byteBuffer.put(sg.getBuffer());
-//		});
-
-//		// FIRE
-//		this.level.getFires().forEach(h -> {
-//			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
-//			byteBuffer.put(sg.getBuffer());
-//		});
 		// MINE
 		this.level.getMine().forEach(h -> {
 			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
@@ -740,11 +721,6 @@ public class Game {
 			byteBuffer.put(sg.getBuffer());
 		});
 
-//		// BONUS
-//		this.level.getBonuss().forEach(h -> {
-//			SpriteGridDTO sg = new SpriteGridDTO(false, h.getDrawSprite(), h.getDrawIndex(), h.getGridIndex());
-//			byteBuffer.put(sg.getBuffer());
-//		});
 		// PLAYER
 		players.stream().forEach(p -> {
 			PlayerPixelDTO ppd = new PlayerPixelDTO(p);

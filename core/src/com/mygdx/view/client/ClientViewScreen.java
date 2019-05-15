@@ -2,6 +2,7 @@ package com.mygdx.view.client;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -34,11 +35,15 @@ import com.mygdx.domain.PlayerDefinition;
 import com.mygdx.domain.enumeration.BonusTypeEnum;
 import com.mygdx.domain.game.BombeLight;
 import com.mygdx.dto.level.LevelDTO;
+import com.mygdx.enumeration.CharacterColorEnum;
+import com.mygdx.enumeration.CharacterEnum;
 import com.mygdx.enumeration.CharacterSpriteEnum;
 import com.mygdx.enumeration.PlayerTypeEnum;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
+import com.mygdx.enumeration.TimeEnum;
 import com.mygdx.main.MultiBombermanGame;
+import com.mygdx.service.Context;
 import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
@@ -172,6 +177,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		this.gameCamera.position.set(Constante.GAME_SCREEN_SIZE_X / 2f, Constante.GAME_SCREEN_SIZE_Y / 2f, 0);
 		this.gameCamera.update();
 		this.lightOn = false;
+		this.scores = new HashMap<>();
 		footInWaterAnimationTime = 0f;
 		footInWaterAnimation = new Animation<>(SpriteEnum.UNDERWATER.getFrameAnimationTime(),
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.UNDERWATER));
@@ -604,12 +610,6 @@ public class ClientViewScreen implements Screen, MenuListener {
 		this.last = NetworkRequestEnum.GAME_SCREEN;
 		boolean pauseReceive = false;
 		boolean menuReceive = false;
-		if (this.scores == null && !this.playerPixelBuf.isEmpty()) {
-			this.scores = new HashMap<>();
-			this.playerPixelBuf.stream().forEach(p -> {
-				this.scores.put(p.getPlayerIndex(), 0);
-			});
-		}
 		List<PlayerPixelDTO> playerPixel = new ArrayList<>();
 		List<SpriteGridDTO> spriteGrid = new ArrayList<>();
 		List<SpritePixelDTO> spritePixel = new ArrayList<>();
@@ -1062,8 +1062,69 @@ public class ClientViewScreen implements Screen, MenuListener {
 		mbGame.getBatch().end();
 	}
 
-	private void drawScore() {
+	public TextureRegion getMiniatureHappy(CharacterColorEnum color, CharacterEnum character) {
+		return SpriteService.getInstance().getSprite(CharacterSpriteEnum.SCORE_HAPPY, color, character, 0);
+	}
 
+	public TextureRegion getMiniatureCry(CharacterColorEnum color, CharacterEnum character) {
+		return SpriteService.getInstance().getSprite(CharacterSpriteEnum.SCORE_CRY, color, character, 0);
+	}
+
+	private void drawScore() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(mbGame.getBatch().getProjectionMatrix());
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(0, 0, 0, 0.6f);
+		Map<Integer, PlayerPixelDTO> pls = new HashMap<>();
+		this.playerPixelBuf.stream().forEach(p -> pls.put(p.getPlayerIndex(), p));
+
+		for (int i = 0; i < 8; i++) {
+			shapeRenderer.rect(3f + ((float) i * 36f), 339f, 33f, 18f);
+		}
+		for (int i = 0; i < 8; i++) {
+			shapeRenderer.rect(352f + ((float) i * 36f), 339f, 33f, 18f);
+		}
+		shapeRenderer.rect(291, 339, 58, 18);
+		shapeRenderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		mbGame.getBatch().begin();
+		pls.entrySet().stream().forEach(e -> {
+			PlayerDefinition def = this.skinScreenDTO.getDefinitions().get(e.getValue().getPlayerIndex());
+			float x = ((float) e.getKey() * 36f) + 3f;
+			if (e.getKey() >= 8) {
+				x += 58f;
+			}
+			if (e.getValue().getNetworkPlayerStateEnum() == NetworkPlayerStateEnum.DEAD) {
+				mbGame.getBatch().draw(getMiniatureCry(def.getColor(), def.getCharacter()), x, 340f, 18f, 16f);
+			} else {
+				mbGame.getBatch().draw(getMiniatureHappy(def.getColor(), def.getCharacter()), x, 340f, 18f, 16f);
+			}
+			if (scores.containsKey(e.getKey())) {
+				layout.setText(font, Integer.toString(this.scores.get(e.getKey())));
+			} else {
+				layout.setText(font, Integer.toString(0));
+			}
+			font.draw(mbGame.getBatch(), layout, x + 19f, 352);
+		});
+		layout.setText(font, "XXX");
+		for (int i = 0; i < 8; i++) {
+			if (!pls.containsKey(i)) {
+				font.draw(mbGame.getBatch(), layout, 8f + ((float) i * 36f), 352f);
+			}
+		}
+		for (int i = 0; i < 8; i++) {
+			if (!pls.containsKey(i + 8)) {
+				font.draw(mbGame.getBatch(), layout, 360f + ((float) i * 36f), 352f);
+			}
+		}
+		if (Context.getTime() != TimeEnum.INF) {
+			DecimalFormat df = new DecimalFormat("#.#");
+			layout.setText(font, "" + df.format(this.time));
+		} else {
+			layout.setText(font, "inf");
+		}
+		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2.0f) - (layout.width / 2.0f), 352);
+		mbGame.getBatch().end();
 	}
 
 	private void drawPause() {
