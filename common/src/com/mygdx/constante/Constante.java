@@ -5,7 +5,7 @@ import com.mygdx.enumeration.TimeEnum;
 
 public class Constante {
 
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	public static final int LIBGDX_LOG_LEVEL = Application.LOG_INFO;
 
 	public static final int FPS = 25;
