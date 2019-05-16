@@ -20,6 +20,7 @@ buildscript {
   		classpath "com.maxmind.db:maxmind-db:1.2.2"
   		classpath "org.springframework.boot:spring-boot-starter-web:2.1.1.RELEASE"
   		classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
+  	    classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE"
     }
 }
 
@@ -84,6 +85,17 @@ project(":editor") {
 
 project(":server") {
     apply plugin: "java"
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+	
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	
+	bootJar {
+    	baseName = 'MultiBombermanServer'
+	    version =  '1.0.0'
+	}
+	
     dependencies {
         compile project(":common")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -98,7 +110,7 @@ project(":server") {
   		compile "org.apache.logging.log4j:log4j-core:2.11.1"
   		compile "com.maxmind.geoip2:geoip2:2.12.0"
   		compile "com.maxmind.db:maxmind-db:1.2.2"
-  		compile "org.springframework.boot:spring-boot-starter-web:2.1.1.RELEASE"
+  		compile "org.springframework.boot:spring-boot-starter-web:2.1.4.RELEASE"
     }
 }
 

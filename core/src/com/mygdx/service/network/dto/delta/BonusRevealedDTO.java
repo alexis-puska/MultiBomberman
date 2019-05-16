@@ -3,7 +3,6 @@ package com.mygdx.service.network.dto.delta;
 import java.nio.ByteBuffer;
 
 import com.mygdx.domain.enumeration.BonusTypeEnum;
-import com.mygdx.domain.enumeration.FireEnum;
 import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 
 import lombok.Getter;

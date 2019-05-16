@@ -49,7 +49,8 @@ public class HeartBeat extends Thread {
 
 	public void hearthbeat() {
 		HttpRequest request = new HttpRequest(HttpMethods.GET);
-		request.setUrl("http://localhost:8080/api/hearthbeat/" + Context.getUuid());
+		request.setUrl("http://" + Constante.NETWORK_DISCOVERY_SERVER_INTERNET + ":"
+				+ Constante.NETWORK_DISCOVERY_SERVER_INTERNET_PORT + "/api/hearthbeat/" + Context.getUuid());
 		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {

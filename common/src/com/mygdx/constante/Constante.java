@@ -10,8 +10,13 @@ public class Constante {
 
 	public static final int FPS = 25;
 	// NETWORK DEFAULT VALUE
+	public static final String NETWORK_DISCOVERY_SERVER_INTERNET = "liveboxpupucesud.ddns.net";
+	public static final int NETWORK_DISCOVERY_SERVER_INTERNET_PORT = 8888;
 	public static final String NETWORK_APPLICATION_UPNP_NAME = "Multi Bomberman";
 	public static final boolean NETWORK_USE_UPNP = true;
+	public static final int NETWORK_DISCOVERY_PORT = 8888;
+	public static final String NETWORK_DISCOVERY_REQUEST = "MULTIBOMBERMAN_DISCOVERY_REQUEST";
+	public static final String NETWORK_DISCOVERY_REPLY = "MULTIBOMBERMAN_DISCOVERY_REPLY:";
 	public static final int NETWORK_PORT = 7777;
 	public static final int NETWORK_WAIT_TIME = 20;
 	public static final String NETWORK_IP_SERVICE = "http://checkip.amazonaws.com";

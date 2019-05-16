@@ -7,6 +7,7 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mygdx.constante.Constante;
 import com.mygdx.dto.server.ServerRegistration;
 import com.mygdx.service.Context;
 
@@ -25,7 +26,8 @@ public class ServerRegistrationService {
 
 	public void create() {
 		HttpRequest request = new HttpRequest(HttpMethods.GET);
-		request.setUrl("http://localhost:8080/api/servers");
+		request.setUrl("http://" + Constante.NETWORK_DISCOVERY_SERVER_INTERNET + ":"
+				+ Constante.NETWORK_DISCOVERY_SERVER_INTERNET_PORT + "/api/servers");
 		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
@@ -46,7 +48,8 @@ public class ServerRegistrationService {
 
 	public void register(String internetIp, String externalIp) {
 		HttpRequest request = new HttpRequest(HttpMethods.POST);
-		request.setUrl("http://localhost:8080/api/register");
+		request.setUrl("http://" + Constante.NETWORK_DISCOVERY_SERVER_INTERNET + ":"
+				+ Constante.NETWORK_DISCOVERY_SERVER_INTERNET_PORT + "/api/register");
 		ServerRegistration registration = new ServerRegistration();
 		registration.setCurrentNetPlayer(0);
 		registration.setMaxNetPlayer(0);
@@ -85,7 +88,8 @@ public class ServerRegistrationService {
 		hearthbeatService.stop();
 		if (registered) {
 			HttpRequest request = new HttpRequest(HttpMethods.GET);
-			request.setUrl("http://localhost:8080/api/unregister/" + Context.getUuid());
+			request.setUrl("http://" + Constante.NETWORK_DISCOVERY_SERVER_INTERNET + ":"
+					+ Constante.NETWORK_DISCOVERY_SERVER_INTERNET_PORT + "/api/unregister/" + Context.getUuid());
 			request.setHeader("content-type", "application/json");
 			Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
 				@Override

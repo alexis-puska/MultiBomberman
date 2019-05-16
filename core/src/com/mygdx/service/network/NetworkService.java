@@ -19,6 +19,7 @@ import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.network.client.Client;
+import com.mygdx.service.network.server.DiscoveryServer;
 import com.mygdx.service.network.server.Server;
 import com.mygdx.service.network.server.ServerRegistrationService;
 import com.mygdx.service.network.server.UpnpService;
@@ -34,6 +35,7 @@ public class NetworkService {
 	private Client client;
 	private UpnpService upnpService;
 	private ServerRegistrationService serverRegistrationService;
+	private DiscoveryServer discoveryServer;
 
 	private String externalIp;
 	private String hostName;
@@ -61,6 +63,8 @@ public class NetworkService {
 			if (Context.isUseUpnp()) {
 				upnpService.openPortWithUpnp();
 			}
+			discoveryServer = new DiscoveryServer();
+			discoveryServer.start();
 		} catch (ServerPortAlreadyInUseException ex) {
 			Gdx.app.error(CLASS_NAME, "Serveur KO");
 			return false;
@@ -74,6 +78,7 @@ public class NetworkService {
 			upnpService.closePortWithUpnp();
 		}
 		serverRegistrationService.unregister();
+		discoveryServer.kill();
 		server.kill();
 		SoundService.getInstance().clearServer();
 	}
