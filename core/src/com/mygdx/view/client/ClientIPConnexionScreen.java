@@ -1,4 +1,4 @@
-package com.mygdx.view;
+package com.mygdx.view.client;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -19,9 +19,8 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
-import com.mygdx.view.client.ClientViewScreen;
 
-public class ClientConnexionScreen implements Screen, MenuListener {
+public class ClientIPConnexionScreen implements Screen, MenuListener {
 
 	private final MultiBombermanGame mbGame;
 	private final Cursor cursor;
@@ -31,7 +30,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	private BitmapFont largeFont;
 	private int cursorPos;
 
-	public ClientConnexionScreen(final MultiBombermanGame mbGame) {
+	public ClientIPConnexionScreen(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
 		this.cursorPos = 0;
 		this.cursor = new Cursor(198, 90);
@@ -207,7 +206,7 @@ public class ClientConnexionScreen implements Screen, MenuListener {
 	public void pressSelect() {
 		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getScreen().dispose();
-		mbGame.setScreen(new MainScreen(mbGame));
+		mbGame.setScreen(new ClientChooseMethodConnexionScreen(mbGame));
 	}
 
 	@Override

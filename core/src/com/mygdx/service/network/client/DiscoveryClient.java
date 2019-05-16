@@ -11,7 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net.HttpMethods;
+import com.badlogic.gdx.Net.HttpRequest;
+import com.badlogic.gdx.Net.HttpResponse;
+import com.badlogic.gdx.Net.HttpResponseListener;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.Constante;
+import com.mygdx.dto.server.Server;
+import com.mygdx.dto.server.ServerList;
 import com.mygdx.service.network.dto.DiscoveryServerInfo;
 
 public class DiscoveryClient {
@@ -20,16 +27,22 @@ public class DiscoveryClient {
 	private static final int MAX_PACKET_SIZE = 2048;
 	private static final int TIMEOUT = 2000; // milliseonds
 
-	public static void main(String[] args) {
-		DiscoveryClient client = new DiscoveryClient();
+	private ObjectMapper mapper;
+	private List<Server> internetServer;
+	private List<DiscoveryServerInfo> localNetworkServer;
 
-		// run it here. This will hang until a response is received
-		List<DiscoveryServerInfo> infos = client.call();
-		if (!infos.isEmpty()) {
-			infos.stream().forEach(i -> System.out.println("Got server address: " + i.toString()));
-		} else {
-			System.out.println("no server found");
-		}
+	public DiscoveryClient() {
+		this.mapper = new ObjectMapper();
+		this.internetServer = null;
+		this.localNetworkServer = null;
+	}
+
+	public List<Server> getInternetServer() {
+		return internetServer;
+	}
+
+	public List<DiscoveryServerInfo> getLocalNetworkServer() {
+		return localNetworkServer;
 	}
 
 	/**
@@ -38,7 +51,7 @@ public class DiscoveryClient {
 	 * @return open DatagramSocket if successful
 	 * @throws RuntimeException if cannot create the socket
 	 */
-	public DatagramSocket createSocket() {
+	private DatagramSocket createSocket() {
 		DatagramSocket socket = null;
 		try {
 			socket = new DatagramSocket();
@@ -51,16 +64,8 @@ public class DiscoveryClient {
 		return socket;
 	}
 
-	/**
-	 * Send broadcast packets with service request string until a response is
-	 * received. Return the response as String (even though it should contain an
-	 * internet address).
-	 * 
-	 * @return String received from server. Should be server IP address. Returns
-	 *         empty string if failed to get valid reply.
-	 */
-	public List<DiscoveryServerInfo> call() {
-		List<DiscoveryServerInfo> infos = new ArrayList<>();
+	public void refreshLocalNetworkServerList() {
+		localNetworkServer = null;
 		byte[] receiveBuffer = new byte[MAX_PACKET_SIZE];
 		DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
 		DatagramSocket socket = createSocket();
@@ -98,22 +103,63 @@ public class DiscoveryClient {
 				if (result.contains(":")) {
 					String ip = result.substring(0, result.indexOf(':'));
 					int port = Integer.parseInt(result.substring(result.indexOf(':') + 1));
-					infos.add(new DiscoveryServerInfo(ip, port));
+					if (localNetworkServer == null) {
+						localNetworkServer = new ArrayList<>();
+					}
+					localNetworkServer.add(new DiscoveryServerInfo(ip, port));
+//					for (int i = 0; i < 20; i++) {
+//						localNetworkServer.add(new DiscoveryServerInfo(ip, port + i));
+//
+//					}
 //					break;
 				}
 			} catch (SocketTimeoutException ste) {
-
 				break;
-
 				// time-out while waiting for reply. Send the broadcast again.
 			} catch (IOException ioe) {
-//				
 				break;
 			}
 		}
 		// should close the socket before returning
-		if (socket != null)
+		if (socket != null) {
 			socket.close();
-		return infos;
+		}
+	}
+
+	public void refreshInternetServerList() {
+		internetServer = null;
+		HttpRequest request = new HttpRequest(HttpMethods.GET);
+		request.setUrl("http://" + Constante.NETWORK_DISCOVERY_SERVER_INTERNET + ":"
+				+ Constante.NETWORK_DISCOVERY_SERVER_INTERNET_PORT + "/api/servers");
+
+		Gdx.app.log(CLASS_NAME, "debut");
+		Gdx.net.sendHttpRequest(request, new HttpResponseListener() {
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				ServerList list = null;
+				try {
+					list = mapper.readValue(httpResponse.getResultAsString(), ServerList.class);
+				} catch (IOException e) {
+					Gdx.app.error(CLASS_NAME, "IOException");
+				}
+				Gdx.app.log(CLASS_NAME, "callback");
+				list.getServers().stream().forEach(s -> Gdx.app.log(CLASS_NAME, s.toString()));
+				if (localNetworkServer == null) {
+					localNetworkServer = new ArrayList<>();
+				}
+				internetServer = list.getServers();
+			}
+
+			@Override
+			public void failed(Throwable t) {
+				Gdx.app.error(CLASS_NAME, "error on hearthbeat - stop hearthbeat");
+			}
+
+			@Override
+			public void cancelled() {
+				Gdx.app.log(CLASS_NAME, "cancelled");
+			}
+		});
+		Gdx.app.log(CLASS_NAME, "fin");
 	}
 }

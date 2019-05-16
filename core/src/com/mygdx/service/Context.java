@@ -5,6 +5,7 @@ import com.mygdx.dto.level.LevelDTO;
 import com.mygdx.enumeration.GameModeEnum;
 import com.mygdx.enumeration.LocaleEnum;
 import com.mygdx.enumeration.TimeEnum;
+import com.mygdx.view.client.enumeration.ClientConnexionMethodEnum;
 
 public class Context {
 
@@ -15,6 +16,7 @@ public class Context {
 
 	// mode
 	private static GameModeEnum gameMode;
+	private static ClientConnexionMethodEnum clientConnexionMethod;
 
 	// network
 	private static boolean useUpnp = true;
@@ -39,6 +41,7 @@ public class Context {
 	public static void resetContext() {
 		locale = LocaleEnum.FRENCH;
 		gameMode = GameModeEnum.LOCAL;
+		clientConnexionMethod = ClientConnexionMethodEnum.LOCAL;
 		useUpnp = Constante.NETWORK_USE_UPNP;
 		port = Constante.NETWORK_PORT;
 		localPlayer = Constante.DEFAULT_LOCAL_PLAYER;
@@ -64,6 +67,10 @@ public class Context {
 
 	public static GameModeEnum getGameMode() {
 		return gameMode;
+	}
+
+	public static ClientConnexionMethodEnum getClientConnexionMethod() {
+		return clientConnexionMethod;
 	}
 
 	public static boolean isUseUpnp() {
@@ -158,6 +165,14 @@ public class Context {
 
 	public static void incGameMode() {
 		gameMode = GameModeEnum.next(gameMode);
+	}
+
+	public static void decConnexionMethode() {
+		clientConnexionMethod = ClientConnexionMethodEnum.previous(clientConnexionMethod);
+	}
+
+	public static void incConnexionMethod() {
+		clientConnexionMethod = ClientConnexionMethodEnum.next(clientConnexionMethod);
 	}
 
 	public static String getIp() {

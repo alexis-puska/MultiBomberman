@@ -10,8 +10,12 @@
 			"area": [
 				{"x": 0,   "y": 0,   "nx": 3, "ny": 1, "n": 3, "sx": 132, "sy": 124, "r": false, "animation": "NETWORK"}
 			]
-		},
-		{
+		},{
+			"files": ["sprite/other/sprite_network_client.png"],
+			"area": [
+				{"x": 0,   "y": 0,   "nx": 3, "ny": 1, "n": 3, "sx": 132, "sy": 124, "r": false, "animation": "NETWORK_CLIENT"}
+			]
+		},{
 			"files": ["sprite/img_empty_background.png"],
 			"area": [
 				{"x": 0,   "y": 0,   "nx": 1, "ny": 1, "n": 1, "sx": 640, "sy": 360, "r": false, "animation": "BACKGROUND"}

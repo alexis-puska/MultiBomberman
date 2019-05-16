@@ -22,6 +22,9 @@ import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
 import com.mygdx.service.network.server.ServerContext;
+import com.mygdx.view.client.ClientIPConnexionScreen;
+import com.mygdx.view.client.ClientInternetConnexionScreen;
+import com.mygdx.view.client.ClientLocalConnexionScreen;
 
 public class WaitConnexionScreen implements Screen, MenuListener {
 
@@ -135,7 +138,18 @@ public class WaitConnexionScreen implements Screen, MenuListener {
 			mbGame.getNetworkService().stopServer();
 			mbGame.setScreen(new ServerParamScreen(mbGame));
 		} else if (Context.getGameMode() == GameModeEnum.CLIENT) {
-			mbGame.setScreen(new ClientConnexionScreen(mbGame));
+			switch (Context.getClientConnexionMethod()) {
+			case INTERNET:
+				mbGame.setScreen(new ClientInternetConnexionScreen(mbGame));
+				break;
+			case LOCAL:
+				mbGame.setScreen(new ClientLocalConnexionScreen(mbGame));
+				break;
+			case IP:
+			default:
+				mbGame.setScreen(new ClientIPConnexionScreen(mbGame));
+				break;
+			}
 		}
 	}
 

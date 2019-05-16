@@ -6,6 +6,7 @@ public enum SpriteEnum {
 	//@formatter:off
 	BACKGROUND(0f),
 	NETWORK(0f),
+	NETWORK_CLIENT(0f),
 	FLAG(0f),
 	CURSOR(1f / 10f),
 	SPACESHIP(0f),

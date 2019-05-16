@@ -66,7 +66,6 @@ import com.mygdx.service.network.dto.sync.BrickPositionDTO;
 import com.mygdx.service.network.enumeration.NetworkGameRequestEnum;
 import com.mygdx.service.network.enumeration.NetworkPlayerStateEnum;
 import com.mygdx.service.network.enumeration.NetworkRequestEnum;
-import com.mygdx.view.ClientConnexionScreen;
 import com.mygdx.view.client.animation.ClientAnimation;
 
 public class ClientViewScreen implements Screen, MenuListener {
@@ -223,7 +222,18 @@ public class ClientViewScreen implements Screen, MenuListener {
 	public void render(float delta) {
 		if (!mbGame.getNetworkService().getClient().isStatus()) {
 			mbGame.getScreen().dispose();
-			mbGame.setScreen(new ClientConnexionScreen(mbGame));
+			switch (Context.getClientConnexionMethod()) {
+			case INTERNET:
+				mbGame.setScreen(new ClientInternetConnexionScreen(mbGame));
+				break;
+			case LOCAL:
+				mbGame.setScreen(new ClientLocalConnexionScreen(mbGame));
+				break;
+			case IP:
+			default:
+				mbGame.setScreen(new ClientIPConnexionScreen(mbGame));
+				break;
+			}
 		}
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -289,7 +299,18 @@ public class ClientViewScreen implements Screen, MenuListener {
 		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getNetworkService().disconnectFromServer();
 		mbGame.getScreen().dispose();
-		mbGame.setScreen(new ClientConnexionScreen(mbGame));
+		switch (Context.getClientConnexionMethod()) {
+		case INTERNET:
+			mbGame.setScreen(new ClientInternetConnexionScreen(mbGame));
+			break;
+		case LOCAL:
+			mbGame.setScreen(new ClientLocalConnexionScreen(mbGame));
+			break;
+		case IP:
+		default:
+			mbGame.setScreen(new ClientIPConnexionScreen(mbGame));
+			break;
+		}
 	}
 
 	@Override

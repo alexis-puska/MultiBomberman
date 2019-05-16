@@ -1,4 +1,4 @@
-package com.mygdx.view;
+package com.mygdx.view.client;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -19,9 +19,9 @@ import com.mygdx.service.MessageService;
 import com.mygdx.service.SoundService;
 import com.mygdx.service.SpriteService;
 import com.mygdx.service.input_processor.MenuListener;
-import com.mygdx.view.client.ClientChooseMethodConnexionScreen;
+import com.mygdx.view.MainScreen;
 
-public class MainScreen implements Screen, MenuListener {
+public class ClientChooseMethodConnexionScreen implements Screen, MenuListener {
 
 	private final MultiBombermanGame mbGame;
 	private final Cursor cursor;
@@ -29,7 +29,7 @@ public class MainScreen implements Screen, MenuListener {
 	private final ShapeRenderer shapeRenderer;
 	private BitmapFont font;
 
-	public MainScreen(final MultiBombermanGame mbGame) {
+	public ClientChooseMethodConnexionScreen(final MultiBombermanGame mbGame) {
 		this.mbGame = mbGame;
 		this.cursor = new Cursor(198, 90);
 		this.layout = new GlyphLayout();
@@ -54,25 +54,25 @@ public class MainScreen implements Screen, MenuListener {
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		mbGame.getBatch().begin();
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 0), 110, 70);
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 1), 252, 70);
-		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK, 2), 394, 70);
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network"));
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK_CLIENT, 0), 110, 70);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK_CLIENT, 1), 252, 70);
+		mbGame.getBatch().draw(SpriteService.getInstance().getSprite(SpriteEnum.NETWORK_CLIENT, 2), 394, 70);
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.connexion"));
 		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 210);
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.local"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.connexion.local"));
 		font.draw(mbGame.getBatch(), layout, 176 - (layout.width / 2), 62);
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.server"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.connexion.internet"));
 		font.draw(mbGame.getBatch(), layout, (Constante.SCREEN_SIZE_X / 2) - (layout.width / 2), 62);
-		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.client"));
+		layout.setText(font, MessageService.getInstance().getMessage("game.menu.network.connexion.ip"));
 		font.draw(mbGame.getBatch(), layout, 460 - (layout.width / 2), 62);
-		switch (Context.getGameMode()) {
+		switch (Context.getClientConnexionMethod()) {
 		case LOCAL:
 			cursor.updateCursorPosition(166, 20);
 			break;
-		case SERVER:
+		case INTERNET:
 			cursor.updateCursorPosition(310, 20);
 			break;
-		case CLIENT:
+		case IP:
 			cursor.updateCursorPosition(450, 20);
 			break;
 		default:
@@ -129,18 +129,16 @@ public class MainScreen implements Screen, MenuListener {
 	public void pressStart() {
 		SoundService.getInstance().playSound(SoundEnum.VALIDE);
 		mbGame.getScreen().dispose();
-		switch (Context.getGameMode()) {
+		switch (Context.getClientConnexionMethod()) {
+		case IP:
+			mbGame.setScreen(new ClientIPConnexionScreen(mbGame));
+			break;
+		case INTERNET:
+			mbGame.setScreen(new ClientInternetConnexionScreen(mbGame));
+			break;
 		case LOCAL:
-			mbGame.setScreen(new PlayerTypeScreen(mbGame));
-			break;
-		case SERVER:
-			mbGame.setScreen(new PlayerTypeScreen(mbGame));
-			break;
-		case CLIENT:
-			mbGame.setScreen(new ClientChooseMethodConnexionScreen(mbGame));
-			break;
 		default:
-			mbGame.setScreen(new PlayerTypeScreen(mbGame));
+			mbGame.setScreen(new ClientLocalConnexionScreen(mbGame));
 			break;
 		}
 	}
@@ -149,7 +147,7 @@ public class MainScreen implements Screen, MenuListener {
 	public void pressSelect() {
 		SoundService.getInstance().playSound(SoundEnum.CANCEL);
 		mbGame.getScreen().dispose();
-		mbGame.setScreen(new LangueScreen(mbGame));
+		mbGame.setScreen(new MainScreen(mbGame));
 	}
 
 	@Override
@@ -173,13 +171,13 @@ public class MainScreen implements Screen, MenuListener {
 	@Override
 	public void pressLeft() {
 		SoundService.getInstance().playSound(SoundEnum.BIP);
-		Context.decGameMode();
+		Context.decConnexionMethode();
 	}
 
 	@Override
 	public void pressRight() {
 		SoundService.getInstance().playSound(SoundEnum.BIP);
-		Context.incGameMode();
+		Context.incConnexionMethod();
 	}
 
 	@Override
