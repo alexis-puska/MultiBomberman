@@ -8,5 +8,5 @@ addons:
       secure: 89b5352a550961e43b7633c060178ddbed5af637
 
 script: 
-    - gradle assemble
+    - ./gradlew assemble
     - sonar-scanner
