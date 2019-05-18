@@ -36,8 +36,10 @@ import javax.swing.filechooser.FileSystemView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mygdx.constante.EditorConstante;
 import com.mygdx.enumeration.LocaleEnum;
+import com.mygdx.game.editor.dto.LastOpenFilePathDTO;
 import com.mygdx.game.editor.enumeration.ActionEnum;
 import com.mygdx.game.editor.enumeration.BrickBurnEnum;
 import com.mygdx.game.editor.renderer.BrickComboboxRenderer;
@@ -55,6 +57,8 @@ public class EditorLauncher extends JFrame {
 	private static final Logger LOG = LogManager.getLogger(EditorLauncher.class);
 	private static final long serialVersionUID = -8256444946608935363L;
 
+	private ObjectMapper objectMapper;
+
 	// services
 	private final SpriteService spriteService;
 	private final LevelService2 levelService2;
@@ -64,11 +68,13 @@ public class EditorLauncher extends JFrame {
 	private final transient ResourceBundle message;
 
 	private String absolutePathFile;
+	private String absolutePathFolder;
 	private ActionEnum action;
 
 	// utils
 	private int posX;
 	private int posY;
+	private boolean foregroundClicked;
 	private int lastBackgroundIndexClicked;
 	private int lastForegroundIndexClicked;
 
@@ -131,6 +137,8 @@ public class EditorLauncher extends JFrame {
 	private JCheckBox footInWaterCheckbox;
 	private JLabel levelUnderWaterLabel;
 	private JCheckBox levelUnderWaterCheckbox;
+	private JLabel startWithKickPowerLabel;
+	private JCheckBox startWithKickPowerCheckbox;
 	private JLabel defaultBackgroundLabel;
 	private JButton defaultBackGround;
 	private JLabel defaultWallLabel;
@@ -269,6 +277,7 @@ public class EditorLauncher extends JFrame {
 
 	private void launch() {
 		this.getContentPane().setLayout(new BorderLayout());
+		initLastFileOpenPath();
 		initComponent();
 		buildParameterPanelButton();
 		buildBonusPanel();
@@ -283,6 +292,19 @@ public class EditorLauncher extends JFrame {
 		this.setSize(EditorConstante.APP_SIZE_X, EditorConstante.APP_SIZE_Y);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+	}
+
+	private void initLastFileOpenPath() {
+		objectMapper = new ObjectMapper();
+		File file = new File("lastOpenLevelJsonPath.json");
+		if (file.exists()) {
+			try {
+				LastOpenFilePathDTO last = objectMapper.readValue(new FileInputStream(file), LastOpenFilePathDTO.class);
+				this.absolutePathFolder = last.getPath();
+			} catch (IOException e) {
+				LOG.error("erreur lecture last file");
+			}
+		}
 	}
 
 	/**************************
@@ -403,6 +425,7 @@ public class EditorLauncher extends JFrame {
 		fillWithBrickLabel.setLabelFor(fillWithBrickCheckbox);
 		footInWaterLabel.setLabelFor(footInWaterCheckbox);
 		levelUnderWaterLabel.setLabelFor(levelUnderWaterCheckbox);
+		startWithKickPowerLabel.setLabelFor(startWithKickPowerCheckbox);
 		defaultBackgroundLabel.setLabelFor(defaultBackGround);
 		defaultWallLabel.setLabelFor(defaultWall);
 		defaultBrickAnimationLabel.setLabelFor(defaultBrickAnimationComboBox);
@@ -431,7 +454,10 @@ public class EditorLauncher extends JFrame {
 		levelGroupPropertiesPanel.add(footInWaterCheckbox);
 		levelGroupPropertiesPanel.add(levelUnderWaterLabel);
 		levelGroupPropertiesPanel.add(levelUnderWaterCheckbox);
-		
+
+		levelGroupPropertiesPanel.add(startWithKickPowerLabel);
+		levelGroupPropertiesPanel.add(startWithKickPowerCheckbox);
+
 		levelGroupPropertiesPanel.add(defaultBackgroundLabel);
 		levelGroupPropertiesPanel.add(defaultBackGround);
 		levelGroupPropertiesPanel.add(defaultWallLabel);
@@ -440,7 +466,7 @@ public class EditorLauncher extends JFrame {
 		levelGroupPropertiesPanel.add(defaultBrickAnimationComboBox);
 		levelGroupPropertiesPanel.add(previewIndexLabel);
 		levelGroupPropertiesPanel.add(previewIndexComboBox);
-		SpringUtilities.makeGrid(levelGroupPropertiesPanel, 16, 2, 2, 2, 2, 2);
+		SpringUtilities.makeGrid(levelGroupPropertiesPanel, 17, 2, 2, 2, 2, 2);
 	}
 
 	private void buildBonusPanel() {
@@ -544,6 +570,12 @@ public class EditorLauncher extends JFrame {
 		openSaveFileChooser = new JButton(message.getString("editor.file.save"));
 		loadFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
+		if (this.absolutePathFolder != null && !this.absolutePathFolder.isEmpty()) {
+			File file = new File(this.absolutePathFolder);
+			if (file.exists() && file.isDirectory()) {
+				loadFileChooser.setCurrentDirectory(file);
+			}
+		}
 		FileNameExtensionFilter loadFileChooserFilter = new FileNameExtensionFilter(
 				message.getString("editor.file.description"), "json");
 		loadFileChooser.setFileFilter(loadFileChooserFilter);
@@ -643,6 +675,8 @@ public class EditorLauncher extends JFrame {
 		footInWaterCheckbox = new JCheckBox();
 		levelUnderWaterLabel = new JLabel(this.message.getString("editor.label.level.levelUnderWater"));
 		levelUnderWaterCheckbox = new JCheckBox();
+		startWithKickPowerLabel = new JLabel(this.message.getString("editor.label.level.startWithKickPower"));
+		startWithKickPowerCheckbox = new JCheckBox();
 		defaultBackgroundLabel = new JLabel(this.message.getString("editor.label.level.defaultBackgroundTexture"));
 		defaultBackGround = new JButton();
 		defaultWallLabel = new JLabel(this.message.getString("editor.label.level.defaultWallTexture"));
@@ -717,13 +751,17 @@ public class EditorLauncher extends JFrame {
 			int returnVal = loadFileChooser.showOpenDialog(panelNavigation);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				absolutePathFile = loadFileChooser.getSelectedFile().getAbsolutePath();
+				this.absolutePathFolder = loadFileChooser.getSelectedFile().getParentFile().getAbsolutePath();
 				try {
 					saveFileChooser.setCurrentDirectory(loadFileChooser.getSelectedFile().getCanonicalFile());
-
 					levelService2.load(new FileInputStream(new File(absolutePathFile)));
 					centerPanel.updateUI();
 					loadPropertiesLevelGroup();
 					repaint();
+					File file = new File("lastOpenLevelJsonPath.json");
+					LastOpenFilePathDTO dto = new LastOpenFilePathDTO();
+					dto.setPath(absolutePathFolder);
+					objectMapper.writeValue(file, dto);
 				} catch (FileNotFoundException e) {
 					LOG.error("", e.getMessage());
 				} catch (IOException e1) {
@@ -839,6 +877,7 @@ public class EditorLauncher extends JFrame {
 				int caseX = e.getX() / EditorConstante.LARGE_GRID_SIZE_X;
 				int caseY = e.getY() / EditorConstante.LARGE_GRID_SIZE_Y;
 				lastForegroundIndexClicked = (caseY * EditorConstante.NB_COLUMN_DRAW_FOREGROUND) + caseX;
+				foregroundClicked = true;
 			}
 
 			@Override
@@ -868,6 +907,7 @@ public class EditorLauncher extends JFrame {
 				int caseX = e.getX() / EditorConstante.GRID_SIZE_X;
 				int caseY = e.getY() / EditorConstante.GRID_SIZE_Y;
 				lastBackgroundIndexClicked = (caseY * EditorConstante.NB_COLUMN_DRAW_BACKGROUND) + caseX;
+				foregroundClicked = false;
 				if (action == ActionEnum.SELECT_DEFAULT_WALL_TEXTURE) {
 					levelService2.setDefaultWallTexture((caseY * EditorConstante.NB_COLUMN_DRAW_BACKGROUND) + caseX);
 					repaint();
@@ -1085,7 +1125,7 @@ public class EditorLauncher extends JFrame {
 			JSpinner text = (JSpinner) e.getSource();
 			if (text.getValue() != null) {
 				Float f = (Float) text.getValue();
-				levelService2.setShadow(f.floatValue());
+				levelService2.setShadow(f);
 				loadPropertiesLevelGroup();
 				drawPanel.repaint();
 			}
@@ -1109,11 +1149,12 @@ public class EditorLauncher extends JFrame {
 			}
 		});
 		fillWithBrickCheckbox
-		.addItemListener(item -> levelService2.setFillWithBrick(fillWithBrickCheckbox.isSelected()));
-		footInWaterCheckbox
-		.addItemListener(item -> levelService2.setFootInWater(footInWaterCheckbox.isSelected()));
+				.addItemListener(item -> levelService2.setFillWithBrick(fillWithBrickCheckbox.isSelected()));
+		footInWaterCheckbox.addItemListener(item -> levelService2.setFootInWater(footInWaterCheckbox.isSelected()));
 		levelUnderWaterCheckbox
-		.addItemListener(item -> levelService2.setLevelUnderWater(levelUnderWaterCheckbox.isSelected()));
+				.addItemListener(item -> levelService2.setLevelUnderWater(levelUnderWaterCheckbox.isSelected()));
+		startWithKickPowerCheckbox.addItemListener(
+				item -> levelService2.setLevelStartWithKickPower(startWithKickPowerCheckbox.isSelected()));
 		defaultBackGround.addActionListener(e -> action = ActionEnum.SELECT_DEFAULT_BACKGROUND_TEXTURE);
 		defaultWall.addActionListener(e -> action = ActionEnum.SELECT_DEFAULT_WALL_TEXTURE);
 		defaultBrickAnimationComboBox.addItemListener(event -> {
@@ -1305,6 +1346,7 @@ public class EditorLauncher extends JFrame {
 			this.levelService2.addCustomBackgroundTexture(posX, posY, lastBackgroundIndexClicked);
 			break;
 		case ADD_CUSTOM_FOREGROUND:
+
 			this.levelService2.addCustomForegroundTexture(posX, posY, lastForegroundIndexClicked);
 			break;
 		case ADD_HOLE:
@@ -1332,7 +1374,8 @@ public class EditorLauncher extends JFrame {
 			this.levelService2.addWall(posX, posY);
 			break;
 		case CUSTOMIZE_WALL:
-			this.levelService2.customizeWall(posX, posY, lastBackgroundIndexClicked);
+			this.levelService2.customizeWall(posX, posY,
+					foregroundClicked ? lastForegroundIndexClicked : lastBackgroundIndexClicked, foregroundClicked);
 			break;
 		case REMOVE_CUSTOM_BACKGROUND:
 			this.levelService2.removeCustomBackgroundTexture(posX, posY);
@@ -1414,6 +1457,8 @@ public class EditorLauncher extends JFrame {
 		fillWithBrickCheckbox.setSelected(levelService2.isFillWithBrick());
 		footInWaterCheckbox.setSelected(levelService2.isFootInWater());
 		levelUnderWaterCheckbox.setSelected(levelService2.isLevelUnderWater());
+		startWithKickPowerCheckbox.setSelected(levelService2.islevelStartWithKickPower());
+
 		levelGroupPropertiesPanelBorder.setTitle("LevelGroup : " + levelService2.getLevelGroupPosition() + ", level : "
 				+ levelService2.getLevelPosition());
 		levelGroupPropertiesPanel.repaint();

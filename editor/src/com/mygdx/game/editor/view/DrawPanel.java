@@ -16,6 +16,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import com.mygdx.constante.Constante;
 import com.mygdx.constante.EditorConstante;
 import com.mygdx.dto.level.CustomTextureDTO;
 import com.mygdx.dto.level.WallDTO;
@@ -220,7 +221,9 @@ public class DrawPanel extends Canvas {
 						BufferedImage bf1 = spriteService.getSprite(w.getTexture().getAnimation(),
 								w.getTexture().getIndex());
 						g2.drawImage(bf1, null, w.getX() * bf.getWidth(),
-								CoordinateUtils.invGridY(w.getY()) * bf.getHeight());
+								(CoordinateUtils.invGridY(w.getY()) * bf.getHeight())
+										- (int) (((bf1.getHeight() / Constante.GRID_PIXELS_SIZE_Y) - 1)
+												* Constante.GRID_PIXELS_SIZE_Y));
 					} else {
 						g2.drawImage(bf, null, w.getX() * bf.getWidth(),
 								CoordinateUtils.invGridY(w.getY()) * bf.getHeight());
@@ -248,7 +251,7 @@ public class DrawPanel extends Canvas {
 			Rectangle2D r = new Rectangle2D.Double(0, 0, 630, 360);
 			Area areaRect = new Area(r);
 			levelService.getCurrentLevel().getStartPlayer().stream().forEach(d -> {
-				Ellipse2D e = new Ellipse2D.Double(d.getX() * EditorConstante.GRID_SIZE_X -18,
+				Ellipse2D e = new Ellipse2D.Double(d.getX() * EditorConstante.GRID_SIZE_X - 18,
 						CoordinateUtils.invGridY(d.getY()) * EditorConstante.GRID_SIZE_Y - 16, 54, 48);
 				Area area = new Area(e);
 				areaRect.subtract(area);

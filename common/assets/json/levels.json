@@ -2,25 +2,25 @@
   "levelGroups" : [ {
     "name" : [ {
       "lang" : "ENGLISH",
-      "value" : "CLASSIQUE"
+      "value" : "Blockbuster"
     }, {
       "lang" : "FRENCH",
-      "value" : "CLASSIQUE"
+      "value" : "Blockbuster"
     } ],
     "level" : [ {
       "name" : [ {
         "lang" : "ENGLISH",
-        "value" : "xxx"
+        "value" : "1-1"
       }, {
         "lang" : "FRENCH",
-        "value" : "xxx"
+        "value" : "1-1"
       } ],
       "description" : [ {
         "lang" : "ENGLISH",
-        "value" : "xxx"
+        "value" : "Classical level"
       }, {
         "lang" : "FRENCH",
-        "value" : "xxx"
+        "value" : "Grand classique"
       } ],
       "indexPreview" : 0,
       "bombe" : 3,
@@ -30,6 +30,7 @@
       "fillWithBrick" : true,
       "footInWater" : false,
       "levelUnderWater" : false,
+      "startWithKickPower" : true,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 2
@@ -2595,6 +2596,7 @@
       "fillWithBrick" : true,
       "footInWater" : false,
       "levelUnderWater" : false,
+      "startWithKickPower" : false,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 2
@@ -5520,6 +5522,7 @@
       "fillWithBrick" : false,
       "footInWater" : true,
       "levelUnderWater" : false,
+      "startWithKickPower" : false,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 107
@@ -8589,11 +8592,11 @@
     } ]
   }, {
     "name" : [ {
-      "lang" : "ENGLISH",
-      "value" : "CHANGE !!!"
-    }, {
       "lang" : "FRENCH",
-      "value" : "CHANGE !!!"
+      "value" : ""
+    }, {
+      "lang" : "ENGLISH",
+      "value" : ""
     } ],
     "level" : [ {
       "name" : [ {
@@ -8618,6 +8621,7 @@
       "fillWithBrick" : true,
       "footInWater" : false,
       "levelUnderWater" : false,
+      "startWithKickPower" : false,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 8
@@ -10309,14 +10313,15 @@
         "lang" : "FRENCH",
         "value" : "levelUnderWater !!!"
       } ],
-      "indexPreview" : 8,
+      "indexPreview" : 2,
       "bombe" : 2,
       "strenght" : 1,
       "shadow" : 0.0,
       "bonus" : [ 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
       "fillWithBrick" : true,
-      "footInWater" : true,
+      "footInWater" : false,
       "levelUnderWater" : true,
+      "startWithKickPower" : false,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 20
@@ -10336,882 +10341,1410 @@
         "x" : 0,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 0,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 1,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 1,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 2,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 2,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 3,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 3,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 4,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 4,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 5,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 5,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 6,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 6,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 7,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 7,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 8,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 8,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 9,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 9,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 10,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 10,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 11,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 11,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 12,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 12,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 13,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 13,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 14,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 14,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 15,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 15,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 16,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 16,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 17,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 17,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 18,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 18,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 19,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 19,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 20,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 20,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 21,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 21,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 22,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 22,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 23,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 23,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 24,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 24,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 25,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 25,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 26,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 26,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 27,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 27,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 28,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 28,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 29,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 29,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 30,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 30,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 31,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 31,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 32,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 32,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 33,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 33,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 34,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 18
+        }
       }, {
         "x" : 34,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 22
+        }
       }, {
         "x" : 0,
         "y" : 1,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 1,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 2,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 2,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 3,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 3,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 4,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 4,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 5,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 5,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 6,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 6,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 7,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 7,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 8,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 8,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 9,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 9,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 10,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 10,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 11,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 11,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 12,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 12,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 13,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 13,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 14,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 14,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 15,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 15,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 16,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 16,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 17,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 17,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 18,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 18,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 19,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 34,
         "y" : 19,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 27
+        }
       }, {
         "x" : 0,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 0,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 26
+        }
       }, {
         "x" : 1,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 1,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 2,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 2,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 3,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 3,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 4,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 4,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 5,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 5,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 6,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 6,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 7,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 7,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 8,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 8,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 9,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 9,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 10,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 10,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 11,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 11,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 12,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 12,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 13,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 13,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 14,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 14,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 15,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 15,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 16,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 16,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 17,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 17,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 18,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 18,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 19,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 19,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 20,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 20,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 21,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 21,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 22,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 22,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 23,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 23,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 24,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 24,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 25,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 25,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 26,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 26,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 27,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 27,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 28,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 28,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 29,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 29,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 30,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 30,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 31,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 31,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 32,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 32,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 33,
         "y" : 0,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 19
+        }
       }, {
         "x" : 33,
         "y" : 20,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "LEVEL",
+          "index" : 23
+        }
       }, {
         "x" : 2,
         "y" : 2,
@@ -11281,18 +11814,21 @@
         "x" : 28,
         "y" : 2,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "SKY",
+          "index" : 0
+        }
       }, {
         "x" : 30,
+        "y" : 2,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 32,
         "y" : 2,
         "draw" : true,
         "texture" : null
       }, {
-        "x" : 32,
-        "y" : 2,
-        "draw" : true,
-        "texture" : null
-      }, {
         "x" : 2,
         "y" : 4,
         "draw" : true,
@@ -11316,11 +11852,14 @@
         "x" : 10,
         "y" : 4,
         "draw" : true,
-        "texture" : null
+        "texture" : {
+          "animation" : "SKY",
+          "index" : 0
+        }
       }, {
         "x" : 12,
         "y" : 4,
-        "draw" : true,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 14,
@@ -11360,12 +11899,12 @@
       }, {
         "x" : 28,
         "y" : 4,
-        "draw" : true,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 30,
         "y" : 4,
-        "draw" : true,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 32,
@@ -11395,12 +11934,12 @@
       }, {
         "x" : 10,
         "y" : 6,
-        "draw" : true,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 12,
         "y" : 6,
-        "draw" : true,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 14,
@@ -11613,8 +12152,329 @@
         "draw" : true,
         "texture" : null
       }, {
-        "x" : 2,
+        "x" : 6,
         "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 12,
+        "draw" : true,
+        "texture" : {
+          "animation" : "SKY",
+          "index" : 0
+        }
+      }, {
+        "x" : 18,
+        "y" : 12,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 12,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 14,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 14,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 14,
+        "draw" : true,
+        "texture" : {
+          "animation" : "SKY",
+          "index" : 0
+        }
+      }, {
+        "x" : 28,
+        "y" : 14,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 14,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 16,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 16,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 16,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 6,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 8,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 10,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 12,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 14,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 18,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 20,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 22,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 24,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 28,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 30,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 32,
+        "y" : 18,
+        "draw" : true,
+        "texture" : null
+      }, {
+        "x" : 2,
+        "y" : 14,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 3,
+        "y" : 14,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 14,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 4,
+        "y" : 13,
         "draw" : false,
         "texture" : null
       }, {
@@ -11623,324 +12483,215 @@
         "draw" : false,
         "texture" : null
       }, {
-        "x" : 6,
+        "x" : 3,
         "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 8,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 10,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 12,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 14,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 16,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 18,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 20,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 22,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 24,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 26,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 28,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 30,
-        "y" : 12,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 32,
-        "y" : 12,
-        "draw" : true,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 2,
+        "y" : 12,
+        "draw" : true,
+        "texture" : {
+          "animation" : "SKY",
+          "index" : 0
+        }
+      }, {
+        "x" : 2,
+        "y" : 13,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 3,
+        "y" : 13,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 17,
         "y" : 14,
         "draw" : false,
         "texture" : null
       }, {
-        "x" : 4,
+        "x" : 18,
+        "y" : 13,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 17,
+        "y" : 12,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 16,
+        "y" : 13,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 17,
+        "y" : 13,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 27,
+        "y" : 16,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 26,
+        "y" : 15,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 27,
         "y" : 14,
         "draw" : false,
         "texture" : null
       }, {
-        "x" : 6,
-        "y" : 14,
-        "draw" : true,
+        "x" : 27,
+        "y" : 15,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 8,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 10,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 12,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 14,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 16,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 18,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 20,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 22,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 24,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 26,
-        "y" : 14,
-        "draw" : true,
+        "x" : 29,
+        "y" : 4,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 28,
-        "y" : 14,
-        "draw" : true,
+        "y" : 3,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 29,
+        "y" : 2,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 30,
-        "y" : 14,
-        "draw" : true,
+        "y" : 3,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 32,
-        "y" : 14,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 2,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 4,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 6,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 8,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 10,
-        "y" : 16,
-        "draw" : true,
+        "x" : 29,
+        "y" : 3,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 12,
-        "y" : 16,
-        "draw" : true,
+        "y" : 5,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 14,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 16,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 18,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 20,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 22,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 24,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 26,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 28,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 30,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 32,
-        "y" : 16,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 2,
-        "y" : 18,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 4,
-        "y" : 18,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 6,
-        "y" : 18,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 8,
-        "y" : 18,
-        "draw" : true,
+        "x" : 11,
+        "y" : 6,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 10,
-        "y" : 18,
-        "draw" : true,
+        "y" : 5,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 12,
-        "y" : 18,
-        "draw" : true,
+        "x" : 11,
+        "y" : 4,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 14,
-        "y" : 18,
-        "draw" : true,
+        "x" : 11,
+        "y" : 5,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 16,
-        "y" : 18,
-        "draw" : true,
+        "y" : 13,
+        "draw" : false,
+        "texture" : null
+      }, {
+        "x" : 17,
+        "y" : 12,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 18,
-        "y" : 18,
-        "draw" : true,
+        "y" : 13,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 20,
-        "y" : 18,
-        "draw" : true,
+        "x" : 17,
+        "y" : 14,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 22,
-        "y" : 18,
-        "draw" : true,
+        "x" : 17,
+        "y" : 13,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 24,
-        "y" : 18,
-        "draw" : true,
+        "x" : 11,
+        "y" : 5,
+        "draw" : false,
         "texture" : null
       }, {
-        "x" : 26,
-        "y" : 18,
-        "draw" : true,
+        "x" : 29,
+        "y" : 3,
+        "draw" : false,
         "texture" : null
       }, {
         "x" : 28,
-        "y" : 18,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 30,
-        "y" : 18,
-        "draw" : true,
-        "texture" : null
-      }, {
-        "x" : 32,
-        "y" : 18,
-        "draw" : true,
+        "y" : 15,
+        "draw" : false,
         "texture" : null
       } ],
       "customBackgroundTexture" : [ ],
-      "customForegroundTexture" : [ {
-        "x" : 3,
-        "y" : 13,
-        "animation" : "SKY",
-        "index" : 0
-      } ],
-      "startPlayer" : [ ]
+      "customForegroundTexture" : [ ],
+      "startPlayer" : [ {
+        "x" : 1,
+        "y" : 19
+      }, {
+        "x" : 11,
+        "y" : 19
+      }, {
+        "x" : 23,
+        "y" : 19
+      }, {
+        "x" : 33,
+        "y" : 19
+      }, {
+        "x" : 33,
+        "y" : 1
+      }, {
+        "x" : 23,
+        "y" : 1
+      }, {
+        "x" : 11,
+        "y" : 1
+      }, {
+        "x" : 1,
+        "y" : 1
+      }, {
+        "x" : 1,
+        "y" : 10
+      }, {
+        "x" : 33,
+        "y" : 10
+      }, {
+        "x" : 27,
+        "y" : 13
+      }, {
+        "x" : 17,
+        "y" : 15
+      }, {
+        "x" : 7,
+        "y" : 13
+      }, {
+        "x" : 7,
+        "y" : 7
+      }, {
+        "x" : 17,
+        "y" : 7
+      }, {
+        "x" : 27,
+        "y" : 7
+      } ]
     } ]
   }, {
     "name" : [ {
@@ -11973,6 +12724,7 @@
       "fillWithBrick" : false,
       "footInWater" : false,
       "levelUnderWater" : false,
+      "startWithKickPower" : false,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 2
@@ -14886,6 +15638,7 @@
       "fillWithBrick" : true,
       "footInWater" : false,
       "levelUnderWater" : false,
+      "startWithKickPower" : false,
       "defaultBackground" : {
         "animation" : "LEVEL",
         "index" : 2

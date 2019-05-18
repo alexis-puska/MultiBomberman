@@ -45,8 +45,7 @@ public class LevelService2 {
 	/**
 	 * Load JSON LevelGroup file and init map with all levelGroup and level
 	 * 
-	 * @param in
-	 *            inputStream of file
+	 * @param in inputStream of file
 	 * @return LevelGroup to Edit
 	 */
 	public void load(InputStream in) {
@@ -550,12 +549,16 @@ public class LevelService2 {
 		}
 	}
 
-	public void customizeWall(int x, int y, int textureIndex) {
+	public void customizeWall(int x, int y, int textureIndex, boolean foregroundClicked) {
 		if (currentLevel != null) {
 			currentLevel.getWall().stream().forEach(obj -> {
 				if (obj.getX() == x && obj.getY() == y) {
 					obj.setDraw(true);
-					obj.setTexture(new TextureDTO(SpriteEnum.LEVEL, textureIndex));
+					if (foregroundClicked) {
+						obj.setTexture(new TextureDTO(SpriteEnum.SKY, textureIndex));
+					} else {
+						obj.setTexture(new TextureDTO(SpriteEnum.LEVEL, textureIndex));
+					}
 				}
 			});
 		}
@@ -683,7 +686,7 @@ public class LevelService2 {
 		}
 		return false;
 	}
-	
+
 	public void setFootInWater(boolean selected) {
 		if (currentLevel != null) {
 			currentLevel.setFootInWater(selected);
@@ -696,7 +699,7 @@ public class LevelService2 {
 		}
 		return false;
 	}
-	
+
 	public void setLevelUnderWater(boolean selected) {
 		if (currentLevel != null) {
 			currentLevel.setLevelUnderWater(selected);
@@ -708,6 +711,19 @@ public class LevelService2 {
 			return currentLevel.isLevelUnderWater();
 		}
 		return false;
+	}
+	
+	public boolean islevelStartWithKickPower() {
+		if (currentLevel != null) {
+			return currentLevel.isStartWithKickPower();
+		}
+		return false;
+	}
+
+	public void setLevelStartWithKickPower(boolean selected) {
+		if (currentLevel != null) {
+			currentLevel.setStartWithKickPower(selected);
+		}
 	}
 
 	public void setDefaultBackgroungTexture(int index) {

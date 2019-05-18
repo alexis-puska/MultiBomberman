@@ -47,6 +47,7 @@ public class LevelMapper {
 		level.setFillWithBrick(dto.isFillWithBrick());
 		level.setFootInWater(dto.isFootInWater());
 		level.setLevelUnderWater(dto.isLevelUnderWater());
+		level.setStartWithKickPower(dto.isStartWithKickPower());
 		level.setHole(holeMapper.toEntitys(dto.getHole()));
 		level.setInterrupter(interrupterMapper.toEntitys(dto.getInterrupter()));
 		level.setMine(mineMapper.toEntitys(dto.getMine()));

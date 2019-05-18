@@ -46,6 +46,7 @@ public class Level {
 	private boolean fillWithBrick;
 	private boolean footInWater;
 	private boolean levelUnderWater;
+	private boolean startWithKickPower;
 	private DefaultTexture defaultBackground;
 	private DefaultTexture defaultWall;
 	private SpriteEnum defaultBrickAnimation;
