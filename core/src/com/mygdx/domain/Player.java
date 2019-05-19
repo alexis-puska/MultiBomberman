@@ -832,7 +832,8 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	@Override
 	public void pressA() {
 		if (this.state != PlayerStateEnum.BURNING && this.state != PlayerStateEnum.DEAD
-				&& this.state != PlayerStateEnum.BAD_BOMBER && this.nbBombe > 0 && !insideBombe) {
+				&& this.state != PlayerStateEnum.BAD_BOMBER && this.state != PlayerStateEnum.INSIDE_TROLLEY
+				&& this.nbBombe > 0 && !insideBombe) {
 			putBombe((int) (body.getPosition().x), (int) (body.getPosition().y));
 		} else if (this.state == PlayerStateEnum.BAD_BOMBER
 				&& ((this.spaceShipBody.getPosition().x >= 1.0f

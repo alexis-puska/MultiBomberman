@@ -44,7 +44,6 @@ public class CustomContactListener implements ContactListener {
 		beginContactBombeBrick(contact);
 		beginContactBombeTrolley(contact);
 		beginContactPlayerTrolley(contact);
-		beginContactBrickTrolleyHitBox(contact);
 	}
 
 	private void beginContactPlayerInterrupter(Contact contact) {
@@ -322,28 +321,6 @@ public class CustomContactListener implements ContactListener {
 		}
 	}
 
-	private void beginContactBrickTrolleyHitBox(Contact contact) {
-		if ((contact.getFixtureA().getUserData().getClass() == Brick.class
-				&& contact.getFixtureB().getUserData().getClass() == Trolley.class)
-				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_BRICKS
-				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY) {
-			Brick b = (Brick) contact.getFixtureA().getUserData();
-			Trolley t = (Trolley) contact.getFixtureB().getUserData();
-			if (t.isMove()) {
-				b.action();
-			}
-		} else if ((contact.getFixtureA().getUserData().getClass() == Trolley.class
-				&& contact.getFixtureB().getUserData().getClass() == Brick.class
-				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY
-				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_BRICKS)) {
-			Brick b = (Brick) contact.getFixtureB().getUserData();
-			Trolley t = (Trolley) contact.getFixtureA().getUserData();
-			if (t.isMove()) {
-				b.action();
-			}
-		}
-	}
-
 	/************************************************
 	 * --- END CONTACT ---
 	 ************************************************/
@@ -455,6 +432,7 @@ public class CustomContactListener implements ContactListener {
 	public void preSolve(Contact contact, Manifold oldManifold) {
 		preSolvePlayerBombe(contact);
 		preSolvePlayerFire(contact);
+		preSolveBrickTrolleyHitBox(contact);
 	}
 
 	private void preSolvePlayerBombe(Contact contact) {
@@ -488,6 +466,28 @@ public class CustomContactListener implements ContactListener {
 				|| (contact.getFixtureB().getUserData().getClass() == Fire.class
 						&& contact.getFixtureA().getUserData().getClass() == Player.class)) {
 			contact.setEnabled(false);
+		}
+	}
+
+	private void preSolveBrickTrolleyHitBox(Contact contact) {
+		if ((contact.getFixtureA().getUserData().getClass() == Brick.class
+				&& contact.getFixtureB().getUserData().getClass() == Trolley.class)
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_BRICKS
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY) {
+			Brick b = (Brick) contact.getFixtureA().getUserData();
+			Trolley t = (Trolley) contact.getFixtureB().getUserData();
+			if (t.isMove()) {
+				contact.setEnabled(false);
+			}
+		} else if ((contact.getFixtureA().getUserData().getClass() == Trolley.class
+				&& contact.getFixtureB().getUserData().getClass() == Brick.class
+				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY
+				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_BRICKS)) {
+			Brick b = (Brick) contact.getFixtureB().getUserData();
+			Trolley t = (Trolley) contact.getFixtureA().getUserData();
+			if (t.isMove()) {
+				contact.setEnabled(false);
+			}
 		}
 	}
 

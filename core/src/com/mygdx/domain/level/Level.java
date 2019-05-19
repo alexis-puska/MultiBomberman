@@ -114,7 +114,10 @@ public class Level {
 		rail.stream().forEach(t -> t.init(game.getMultiBombermanGame(), this));
 		interrupter.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
 		mine.stream().forEach(t -> t.init(game, world, game.getMultiBombermanGame(), this));
-		trolley.stream().forEach(t -> t.init(world, game.getMultiBombermanGame(), this));
+		trolley.stream().forEach(t -> {
+			reservedStartPlayer[t.getX()][t.getY()] = true;
+			t.init(world, game.getMultiBombermanGame(), this);
+		});
 		teleporter.stream().forEach(w -> w.init(world, game.getMultiBombermanGame(), this));
 		wall.stream().forEach(w -> {
 			w.init(world, game.getMultiBombermanGame(), this);

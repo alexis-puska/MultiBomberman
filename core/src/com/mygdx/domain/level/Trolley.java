@@ -16,6 +16,7 @@ import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.domain.common.BodyAble;
+import com.mygdx.domain.game.Brick;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.main.MultiBombermanGame;
@@ -157,10 +158,15 @@ public class Trolley extends BodyAble implements Initiable {
 				}
 				this.currentRail = rail;
 			}
+			if (this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()] != null
+					&& this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()].getClass()
+							.equals(Brick.class)) {
+				Brick b = (Brick) this.level.getOccupedWallBrickBonus()[(int) this.getBodyX()][(int) this.getBodyY()];
+				b.hurtByTrolley();
+			}
 		} else {
 			this.body.setLinearVelocity(0f, 0f);
 		}
-
 	}
 
 	@Override

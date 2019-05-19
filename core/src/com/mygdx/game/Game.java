@@ -672,7 +672,7 @@ public class Game {
 	 * --- NETWORK PART ---
 	 *******************************************************************/
 	public void doNetworkStuff(GameScreenEnum state) {
-		if (restart) {
+		if (restart && byteBuffer != null) {
 			restart = false;
 			byteBuffer.put(GenericCommandDTO.getResetAdditionalWall());
 		}

@@ -112,6 +112,19 @@ public class Brick extends BodyAble implements LevelElement {
 				this.level.getBonuss().stream().filter(b -> b.x == this.x && b.y == this.y).forEach(Bonus::revealBonus);
 				dispose();
 			}
+		} else if (this.state == BrickStateEnum.HURT_BY_TROLLEY) {
+			this.level.getOccupedWallBrickBonus()[this.getX()][this.getY()] = null;
+			this.level.getNoWall().add(y * Constante.GRID_SIZE_X + x);
+			this.level.getBonuss().stream().filter(b -> b.x == this.x && b.y == this.y).forEach(Bonus::revealBonus);
+			dispose();
+			this.state = BrickStateEnum.BURNED;
+		}
+	}
+
+	public void hurtByTrolley() {
+		if (state == BrickStateEnum.CREATED) {
+			this.game.brickBurn(this.getGridIndex());
+			this.state = BrickStateEnum.HURT_BY_TROLLEY;
 		}
 	}
 
