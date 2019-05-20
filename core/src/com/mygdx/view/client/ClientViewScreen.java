@@ -841,6 +841,8 @@ public class ClientViewScreen implements Screen, MenuListener {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		drawBackSpriteGrid();
+		drawBackSpritePixels();
 		for (int i = 0; i < Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y; i++) {
 			if (this.brickPosition != null && this.brickPosition.hasBrick(i)) {
 				int x = i % Constante.GRID_SIZE_X;
@@ -863,8 +865,7 @@ public class ClientViewScreen implements Screen, MenuListener {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		animations.stream().forEach(ClientAnimation::drawIt);
-		drawBackSpriteGrid();
-		drawBackSpritePixels();
+
 		drawBombe();
 		drawBonus();
 		drawPlayer();
