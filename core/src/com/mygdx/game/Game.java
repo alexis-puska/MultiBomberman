@@ -543,6 +543,7 @@ public class Game {
 		level.getTrolley().forEach(Trolley::drawIt);
 		level.getBombes().stream().filter(b -> !b.isExploded()).forEach(Bombe::drawIt);
 		level.getBonuss().stream().filter(b -> b.isRevealed() || b.isBurning()).forEach(Bonus::drawIt);
+		Collections.sort(players);
 		players.stream().forEach(Player::drawIt);
 		level.getSuddenDeathWall().stream().filter(sdw -> !sdw.hasBody()).forEach(SuddenDeathWall::drawIt);
 		mbGame.getBatch().end();
@@ -722,6 +723,7 @@ public class Game {
 		});
 
 		// PLAYER
+		Collections.sort(players);
 		players.stream().forEach(p -> {
 			PlayerPixelDTO ppd = new PlayerPixelDTO(p);
 			byteBuffer.put(ppd.getBuffer());
