@@ -83,8 +83,7 @@ public class DiscoveryClient {
 		try {
 			socket.send(packet);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Gdx.app.error(CLASS_NAME, "IOException : " + e.getMessage());
 		}
 		System.out.println(
 				CLASS_NAME + "Sent discovery packet to : " + broadcastAddress.getHostAddress() + " " + servicePort);

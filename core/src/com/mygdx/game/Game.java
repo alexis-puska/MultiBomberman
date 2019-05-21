@@ -153,6 +153,8 @@ public class Game {
 	private boolean restart;
 
 	public Game(final MultiBombermanGame mbGame) {
+
+		this.byteBuffer = ByteBuffer.allocate(512000);
 		this.vertexShader = Gdx.files.internal("shader/vertex.glsl").readString();
 		this.fragmentShader = Gdx.files.internal("shader/fragment.glsl").readString();
 		this.shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
@@ -673,7 +675,7 @@ public class Game {
 	 * --- NETWORK PART ---
 	 *******************************************************************/
 	public void doNetworkStuff(GameScreenEnum state) {
-		if (restart && byteBuffer != null) {
+		if (restart) {
 			restart = false;
 			byteBuffer.put(GenericCommandDTO.getResetAdditionalWall());
 		}
