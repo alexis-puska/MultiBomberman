@@ -34,7 +34,7 @@ public class DiscoveryServer extends Thread {
 			return;
 		}
 		Gdx.app.log(CLASS_NAME, "Server listening on port : " + Constante.NETWORK_DISCOVERY_PORT);
-		while (status) {
+		while (true) {
 			// Receive a packet
 			byte[] recvBuf = new byte[MAX_PACKET_SIZE];
 			DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
@@ -62,6 +62,9 @@ public class DiscoveryServer extends Thread {
 				}
 			} else {
 				Gdx.app.debug(CLASS_NAME, "Not a bomberman discovery request");
+			}
+			if (!status) {
+				break;
 			}
 		}
 	}

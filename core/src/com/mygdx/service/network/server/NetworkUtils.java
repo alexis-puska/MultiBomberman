@@ -38,7 +38,7 @@ public class NetworkUtils {
 	 * Return all active addresses of this server, except loopback address.
 	 */
 	public static List<InetAddress> getAllAddresses() {
-		List<InetAddress> addrlist = new ArrayList<InetAddress>();
+		List<InetAddress> addrlist = new ArrayList<>();
 		try {
 			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 			while (interfaces.hasMoreElements()) {
