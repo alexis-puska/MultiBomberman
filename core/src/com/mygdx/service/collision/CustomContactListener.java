@@ -474,7 +474,6 @@ public class CustomContactListener implements ContactListener {
 				&& contact.getFixtureB().getUserData().getClass() == Trolley.class)
 				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_BRICKS
 				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY) {
-			Brick b = (Brick) contact.getFixtureA().getUserData();
 			Trolley t = (Trolley) contact.getFixtureB().getUserData();
 			if (t.isMove()) {
 				contact.setEnabled(false);
@@ -483,7 +482,6 @@ public class CustomContactListener implements ContactListener {
 				&& contact.getFixtureB().getUserData().getClass() == Brick.class
 				&& contact.getFixtureA().getFilterData().categoryBits == CollisionConstante.CATEGORY_TROLLEY
 				&& contact.getFixtureB().getFilterData().categoryBits == CollisionConstante.CATEGORY_BRICKS)) {
-			Brick b = (Brick) contact.getFixtureB().getUserData();
 			Trolley t = (Trolley) contact.getFixtureA().getUserData();
 			if (t.isMove()) {
 				contact.setEnabled(false);

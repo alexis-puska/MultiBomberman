@@ -196,13 +196,18 @@ public class NetworkConnexion extends Thread {
 
 	private void welcomBackSendRequest() throws IOException {
 		out.write("welcome_back\n".getBytes());
-		// TODO
 		Gdx.app.log("NETWORK_CONNEXION", "WELCOM_BACK");
 		String welcomBackBuffer = "";
 		switch (ServerContext.getCurrentServerScreen()) {
 		case GAME_SCREEN:
 			welcomBackBuffer += SoundService.getInstance().createStopMusiqueCommand();
 			welcomBackBuffer += SoundService.getInstance().createPlayMusiqueCommand(MusicEnum.BATTLE);
+			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getSkinScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getRuleScreenRequestBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getLevelDefinitionBuffer() + "\n";
+			welcomBackBuffer += ServerContext.getLevelScreenRequestBuffer() + "\n";
+			break;
 		case LEVEL_SCREEN:
 			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
 			welcomBackBuffer += ServerContext.getSkinScreenRequestBuffer() + "\n";
@@ -220,8 +225,8 @@ public class NetworkConnexion extends Thread {
 			welcomBackBuffer += ServerContext.getSkinScreenRequestBuffer() + "\n";
 			break;
 		case WAIT_SCREEN:
-			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
 		default:
+			welcomBackBuffer += ServerContext.getWaitScreenRequestBuffer() + "\n";
 			break;
 		}
 		out.write(welcomBackBuffer.getBytes());

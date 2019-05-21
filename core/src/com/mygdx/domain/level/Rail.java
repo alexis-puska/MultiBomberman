@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.Constante;
 import com.mygdx.domain.common.Drawable;
@@ -161,7 +160,7 @@ public class Rail extends Drawable {
 			break;
 		}
 	}
-	
+
 	public int getIndex() {
 		return this.x + (this.y * Constante.GRID_SIZE_X);
 	}

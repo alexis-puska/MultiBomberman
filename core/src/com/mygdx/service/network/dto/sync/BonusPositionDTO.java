@@ -22,9 +22,8 @@ public class BonusPositionDTO {
 
 	public BonusPositionDTO(Level level) {
 		reveleadBonusType = new HashMap<>();
-		level.getBonuss().stream().filter(Bonus::isRevealed).forEach(b -> {
-			reveleadBonusType.put(b.getGridIndex(), b.getType());
-		});
+		level.getBonuss().stream().filter(Bonus::isRevealed)
+				.forEach(b -> reveleadBonusType.put(b.getGridIndex(), b.getType()));
 	}
 
 	public BonusPositionDTO(byte[] encoded) {

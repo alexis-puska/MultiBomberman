@@ -7,8 +7,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+
 public class NetworkUtils {
-	static final String IPv4_PATTERN = "\\d+(\\.\\d+){3}";
+	private static final String CLASS_NAME = "NetworkUtils.class";
+	static final String IP_V4_PATTERN = "\\d+(\\.\\d+){3}";
+
+	private NetworkUtils() {
+		throw new IllegalStateException("NetworkUtils class");
+	}
 
 	/**
 	 * Return this server's InetAddress
@@ -22,14 +29,14 @@ public class NetworkUtils {
 		for (InetAddress addr : addrs) {
 			if (addr.isLoopbackAddress() || addr.isLinkLocalAddress())
 				continue;
-			if (addr.getHostAddress().matches(IPv4_PATTERN))
+			if (addr.getHostAddress().matches(IP_V4_PATTERN))
 				return addr;
 		}
 		// didn't find a match. Try LocalHost address.
 		try {
 			inetAddr = InetAddress.getLocalHost();
 		} catch (Exception e) {
-			System.out.println("NetworkUtil.getMyAddress: " + e.getMessage());
+			Gdx.app.log(CLASS_NAME,"NetworkUtil.getMyAddress: " + e.getMessage());
 		}
 		return inetAddr;
 	}
@@ -51,7 +58,6 @@ public class NetworkUtils {
 				while (addresses.hasMoreElements()) {
 					InetAddress ipaddr = addresses.nextElement();
 					addrlist.add(ipaddr);
-//					System.out.println(iface.getDisplayName() + " " + ipaddr);
 				}
 			}
 		} catch (SocketException e) {

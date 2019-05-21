@@ -59,8 +59,8 @@ public class DiscoveryClient {
 			int servicePort = Constante.NETWORK_DISCOVERY_PORT;
 			DatagramPacket packet = new DatagramPacket(packetData, packetData.length, broadcastAddress, servicePort);
 			socket.send(packet);
-			System.out.println(
-					CLASS_NAME + "Sent discovery packet to : " + broadcastAddress.getHostAddress() + " " + servicePort);
+			Gdx.app.log(CLASS_NAME,
+					"Sent discovery packet to : " + broadcastAddress.getHostAddress() + " " + servicePort);
 			while (true) {
 				try {
 

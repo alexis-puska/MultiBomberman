@@ -101,7 +101,7 @@ public class Fire extends BodyAble {
 	@Override
 	public void drawIt() {
 		time += Gdx.graphics.getDeltaTime();
-		this.drawIndex = animation.getKeyFrameIndex(time%animation.getAnimationDuration());
+		this.drawIndex = animation.getKeyFrameIndex(time % animation.getAnimationDuration());
 		mbGame.getBatch().draw(animation.getKeyFrame(time, false), (float) this.x * Constante.GRID_PIXELS_SIZE_X,
 				(float) this.y * Constante.GRID_PIXELS_SIZE_Y);
 	}
@@ -129,7 +129,6 @@ public class Fire extends BodyAble {
 
 	@Override
 	public int getDrawIndex() {
-		// TODO Auto-generated method stub
 		return drawIndex;
 	}
 }

@@ -887,10 +887,8 @@ public class ClientViewScreen implements Screen, MenuListener {
 	}
 
 	private void drawBackSpritePixels() {
-		this.spritePixelBuf.stream().forEach(e -> {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(e.getSprite(), e.getIndex()), e.getX(),
-					e.getY());
-		});
+		this.spritePixelBuf.stream().forEach(e -> mbGame.getBatch()
+				.draw(SpriteService.getInstance().getSprite(e.getSprite(), e.getIndex()), e.getX(), e.getY()));
 	}
 
 	private void drawFrontSpriteGrid() {
@@ -903,10 +901,8 @@ public class ClientViewScreen implements Screen, MenuListener {
 	}
 
 	private void drawFrontSpritePixels() {
-		this.frontSpritePixelBuf.stream().forEach(e -> {
-			mbGame.getBatch().draw(SpriteService.getInstance().getSprite(e.getSprite(), e.getIndex()), e.getX(),
-					e.getY());
-		});
+		this.frontSpritePixelBuf.stream().forEach(e -> mbGame.getBatch()
+				.draw(SpriteService.getInstance().getSprite(e.getSprite(), e.getIndex()), e.getX(), e.getY()));
 	}
 
 	private void drawBonus() {
@@ -924,11 +920,10 @@ public class ClientViewScreen implements Screen, MenuListener {
 	}
 
 	private void drawBombe() {
-		this.bombePixelBuf.stream().forEach(b -> {
-			mbGame.getBatch().draw(
-					SpriteService.getInstance().getSprite(b.getBombeTypeEnum().getSpriteEnum(), b.getSpriteIndex()),
-					b.getX(), b.getY());
-		});
+		this.bombePixelBuf.stream()
+				.forEach(b -> mbGame.getBatch().draw(
+						SpriteService.getInstance().getSprite(b.getBombeTypeEnum().getSpriteEnum(), b.getSpriteIndex()),
+						b.getX(), b.getY()));
 	}
 
 	private void drawPlayer() {
@@ -1039,10 +1034,8 @@ public class ClientViewScreen implements Screen, MenuListener {
 							&& a.getSpriteEnum() != SpriteEnum.LEVEL5 && a.getSpriteEnum() != SpriteEnum.LEVEL6
 							&& a.getSpriteEnum() != SpriteEnum.LEVEL7 && a.getSpriteEnum() != SpriteEnum.LEVEL8
 							&& a.getSpriteEnum() != SpriteEnum.LEVEL9 && a.getSpriteEnum() != SpriteEnum.LEVEL10)
-					.forEach(a -> {
-						shapeRenderer.circle(a.getX() * Constante.GRID_PIXELS_SIZE_X,
-								a.getY() * Constante.GRID_PIXELS_SIZE_Y, 24);
-					});
+					.forEach(a -> shapeRenderer.circle(a.getX() * Constante.GRID_PIXELS_SIZE_X,
+							a.getY() * Constante.GRID_PIXELS_SIZE_Y, 24));
 			this.bombePixelBuf.stream().forEach(b -> {
 				shapeRenderer.setColor(new Color(0f, 0f, 0f, 0f));
 				BombeLight light = b.getBombeTypeEnum().getOffsetLight().get(b.getSpriteIndex());

@@ -103,12 +103,10 @@ public class Bonus extends BodyAble implements LevelElement {
 			if (this.type == BonusTypeEnum.DEATH && !this.level.getNoWall().isEmpty()) {
 				int idx = ThreadLocalRandom.current().nextInt(0, this.level.getNoWall().size());
 				int chx = this.level.getNoWall().get(idx);
-				int x = chx % Constante.GRID_SIZE_X;
-				int y = (chx - x) / Constante.GRID_SIZE_X;
-				this.x = x;
-				this.y = y;
+				this.x = chx % Constante.GRID_SIZE_X;
+				this.y = (chx - this.x) / Constante.GRID_SIZE_X;
 				this.body.setTransform((float) this.x + 0.5f, (float) this.y + 0.5f, 0f);
-				this.level.getNoWall().remove(new Integer(idx));
+				this.level.getNoWall().remove(Integer.valueOf(idx));
 				this.state = BonusStateEnum.REVEALED;
 			} else {
 				this.state = BonusStateEnum.DISPOSED;

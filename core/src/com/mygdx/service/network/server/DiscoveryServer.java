@@ -66,7 +66,6 @@ public class DiscoveryServer extends Thread {
 	public void init() {
 		status = true;
 		Gdx.app.debug(CLASS_NAME, "start discovery serveur");
-
 		try {
 			InetAddress addr = InetAddress.getByName("0.0.0.0");
 			// InetAddress addr = NetworkUtils.getMyAddress();
@@ -74,7 +73,6 @@ public class DiscoveryServer extends Thread {
 			socket.setBroadcast(true);
 		} catch (Exception ex) {
 			Gdx.app.error(CLASS_NAME, "Erreur lancement server discovery : " + Constante.NETWORK_DISCOVERY_PORT);
-			return;
 		}
 	}
 }
