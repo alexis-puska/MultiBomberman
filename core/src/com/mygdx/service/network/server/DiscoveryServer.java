@@ -18,21 +18,10 @@ public class DiscoveryServer extends Thread {
 
 	@Override
 	public void run() {
-		Gdx.app.debug(CLASS_NAME, "start discovery serveur");
-		this.status = true;
 		final int max_errors = 5;
 		int errorCount = 0;
 		final String MY_IP = NetworkUtils.getMyAddress().getHostAddress();
 
-		try {
-			InetAddress addr = InetAddress.getByName("0.0.0.0");
-			// InetAddress addr = NetworkUtils.getMyAddress();
-			socket = new DatagramSocket(Constante.NETWORK_DISCOVERY_PORT, addr);
-			socket.setBroadcast(true);
-		} catch (Exception ex) {
-			Gdx.app.error(CLASS_NAME, "Erreur lancement server discovery : " + Constante.NETWORK_DISCOVERY_PORT);
-			return;
-		}
 		Gdx.app.log(CLASS_NAME, "Server listening on port : " + Constante.NETWORK_DISCOVERY_PORT);
 		while (status) {
 			// Receive a packet
@@ -72,5 +61,20 @@ public class DiscoveryServer extends Thread {
 			this.socket.close();
 		}
 		Gdx.app.log(CLASS_NAME, "discovery server killed");
+	}
+
+	public void init() {
+		status = true;
+		Gdx.app.debug(CLASS_NAME, "start discovery serveur");
+
+		try {
+			InetAddress addr = InetAddress.getByName("0.0.0.0");
+			// InetAddress addr = NetworkUtils.getMyAddress();
+			socket = new DatagramSocket(Constante.NETWORK_DISCOVERY_PORT, addr);
+			socket.setBroadcast(true);
+		} catch (Exception ex) {
+			Gdx.app.error(CLASS_NAME, "Erreur lancement server discovery : " + Constante.NETWORK_DISCOVERY_PORT);
+			return;
+		}
 	}
 }

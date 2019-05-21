@@ -64,6 +64,7 @@ public class NetworkService {
 				upnpService.openPortWithUpnp();
 			}
 			discoveryServer = new DiscoveryServer();
+			discoveryServer.init();
 			discoveryServer.start();
 		} catch (ServerPortAlreadyInUseException ex) {
 			Gdx.app.error(CLASS_NAME, "Serveur KO");
