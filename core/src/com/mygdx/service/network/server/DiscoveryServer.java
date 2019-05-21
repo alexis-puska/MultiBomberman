@@ -67,11 +67,10 @@ public class DiscoveryServer extends Thread {
 	}
 
 	public void kill() {
-		if (status) {
-			status = false;
+		status = false;
+		if (this.socket != null) {
 			this.socket.close();
-			Gdx.app.log(CLASS_NAME, "discovery server killed");
 		}
+		Gdx.app.log(CLASS_NAME, "discovery server killed");
 	}
-
 }
