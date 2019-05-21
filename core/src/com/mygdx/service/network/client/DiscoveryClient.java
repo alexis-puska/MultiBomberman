@@ -50,22 +50,15 @@ public class DiscoveryClient {
 		byte[] receiveBuffer = new byte[MAX_PACKET_SIZE];
 		DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
 		String result = "";
-
 		try (DatagramSocket socket = new DatagramSocket()) {
 			socket.setBroadcast(true);
 			socket.setSoTimeout(TIMEOUT);
-
 			byte[] packetData = Constante.NETWORK_DISCOVERY_REQUEST.getBytes();
 			InetAddress broadcastAddress = null;
-
 			broadcastAddress = InetAddress.getByName("255.255.255.255");
-
 			int servicePort = Constante.NETWORK_DISCOVERY_PORT;
 			DatagramPacket packet = new DatagramPacket(packetData, packetData.length, broadcastAddress, servicePort);
-			// use a loop so we can resend broadcast after timeout
-
 			socket.send(packet);
-
 			System.out.println(
 					CLASS_NAME + "Sent discovery packet to : " + broadcastAddress.getHostAddress() + " " + servicePort);
 			while (true) {
@@ -75,7 +68,6 @@ public class DiscoveryClient {
 					String reply = new String(receivePacket.getData());
 					int k = reply.indexOf(Constante.NETWORK_DISCOVERY_REPLY);
 					if (k < 0) {
-//					logger.warning("Reply does not contain prefix "+DISCOVERY_REPLY);
 						break;
 					}
 					k += Constante.NETWORK_DISCOVERY_REPLY.length(); // skip prefix
@@ -87,20 +79,13 @@ public class DiscoveryClient {
 							localNetworkServer = new ArrayList<>();
 						}
 						localNetworkServer.add(new DiscoveryServerInfo(ip, port));
-//					for (int i = 0; i < 20; i++) {
-//						localNetworkServer.add(new DiscoveryServerInfo(ip, port + i));
-//
-//					}
-//					break;
 					}
 				} catch (SocketTimeoutException ste) {
 					break;
-					// time-out while waiting for reply. Send the broadcast again.
 				} catch (IOException ioe) {
 					break;
 				}
 			}
-
 		} catch (UnknownHostException e) {
 			Gdx.app.error(CLASS_NAME, "unknow broadcast adress");
 		} catch (SocketException sex) {
