@@ -1,9 +1,6 @@
 language: java
 sudo: false
 
-jdk:
-  - oraclejdk8
-
 addons:
   sonarcloud:
     organization: alexis-puska-github
@@ -11,5 +8,6 @@ addons:
       secure: 89b5352a550961e43b7633c060178ddbed5af637
 
 script: 
+	- jdk_switcher use oraclejdk8
     - ./gradlew assemble
     - sonar-scanner
