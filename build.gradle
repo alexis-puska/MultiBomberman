@@ -33,7 +33,7 @@ allprojects {
     ext {
         appName = "multi-bomberman"
         gdxVersion = '1.9.9'
-        raspberryGdxVersion = '1.9.9.rpi-SNAPSHOT'
+        raspberryGdxVersion = '1.9.8.rpi-SNAPSHOT'
         roboVMVersion = '2.3.6'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
