@@ -23,7 +23,7 @@
         "value" : "Grand classique"
       } ],
       "indexPreview" : 0,
-      "bombe" : 3,
+      "bombe" : 4,
       "strenght" : 2,
       "shadow" : 0.0,
       "bonus" : [ 10, 10, 10, 10, 5, 10, 10, 10, 10, 10, 10, 0, 10, 10, 10 ],
@@ -11344,7 +11344,25 @@
         "index" : 50
       },
       "defaultBrickAnimation" : "LEVEL1",
-      "hole" : [ ],
+      "hole" : [ {
+        "x" : 10,
+        "y" : 15
+      }, {
+        "x" : 27,
+        "y" : 11
+      }, {
+        "x" : 18,
+        "y" : 5
+      }, {
+        "x" : 4,
+        "y" : 5
+      }, {
+        "x" : 4,
+        "y" : 17
+      }, {
+        "x" : 9,
+        "y" : 9
+      } ],
       "rail" : [ ],
       "interrupter" : [ ],
       "mine" : [ ],
@@ -18974,7 +18992,7 @@
       } ],
       "indexPreview" : 0,
       "bombe" : 2,
-      "strenght" : 0,
+      "strenght" : 1,
       "shadow" : 0.0,
       "bonus" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
       "fillWithBrick" : false,
@@ -29772,10 +29790,10 @@
     } ]
   }, {
     "name" : [ {
-      "lang" : "FRENCH",
+      "lang" : "ENGLISH",
       "value" : "Happy Happy"
     }, {
-      "lang" : "ENGLISH",
+      "lang" : "FRENCH",
       "value" : "Happy Happy"
     } ],
     "level" : [ {

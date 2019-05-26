@@ -468,6 +468,7 @@ public class Game {
 		mbGame.getBatch().setProjectionMatrix(gameCamera.combined);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		level.getMine().forEach(Mine::drawIt);
 		this.level.getBricks().stream().forEach(Brick::drawIt);
 		mbGame.getBatch().end();
 		bricksLayerTextureRegion = new TextureRegion(bricksLayerTexture);
@@ -541,7 +542,6 @@ public class Game {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		level.getFires().stream().filter(f -> !f.isOff()).forEach(Fire::drawIt);
-		level.getMine().forEach(Mine::drawIt);
 		level.getTrolley().forEach(Trolley::drawIt);
 		level.getBombes().stream().filter(b -> !b.isExploded()).forEach(Bombe::drawIt);
 		level.getBonuss().stream().filter(b -> b.isRevealed() || b.isBurning()).forEach(Bonus::drawIt);
