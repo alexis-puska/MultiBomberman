@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-        classpath "org.projectlombok:lombok:1.16.20"
+        classpath "org.projectlombok:lombok:1.18.8"
 		classpath "com.fasterxml.jackson.core:jackson-core:2.9.5"
 		classpath "com.fasterxml.jackson.core:jackson-databind:2.9.5"
 		classpath "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
@@ -32,9 +32,9 @@ allprojects {
     version = '1.0'
     ext {
         appName = "multi-bomberman"
-        gdxVersion = '1.9.8'
-        raspberryGdxVersion = '1.9.8.rpi-SNAPSHOT'
-        roboVMVersion = '2.3.3'
+        gdxVersion = '1.9.9'
+        raspberryGdxVersion = '1.9.9.rpi-SNAPSHOT'
+        roboVMVersion = '2.3.6'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
@@ -69,6 +69,8 @@ project(":editor") {
     apply plugin: "java"
     dependencies {
         compile project(":common")
+		compileOnly 'org.projectlombok:lombok:1.18.8'
+		annotationProcessor 'org.projectlombok:lombok:1.18.8'
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
@@ -88,8 +90,8 @@ project(":server") {
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
 	
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+	sourceCompatibility = 11
+	targetCompatibility = 11
 	
 	bootJar {
     	baseName = 'MultiBombermanServer'
@@ -149,7 +151,8 @@ project(":core") {
 	        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 	        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
 		}
-		compile "org.projectlombok:lombok:1.16.20"
+		compileOnly 'org.projectlombok:lombok:1.18.8'
+		annotationProcessor 'org.projectlombok:lombok:1.18.8'
 		compile "com.fasterxml.jackson.core:jackson-core:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-annotations:2.9.5"
@@ -175,7 +178,8 @@ project(":common") {
 	        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 	        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
 		}
-		compile "org.projectlombok:lombok:1.16.20"
+		compileOnly 'org.projectlombok:lombok:1.18.8'
+		annotationProcessor 'org.projectlombok:lombok:1.18.8'
 		compile "com.fasterxml.jackson.core:jackson-core:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
 		compile "com.fasterxml.jackson.core:jackson-annotations:2.9.5"

@@ -1,21 +1,12 @@
 language: java
 sudo: false
 
-install: gradle wrapper --gradle-version 4.2
-
-jdk:
-  - oraclejdk8
-
 addons:
-  apt:
-    packages:
-      - oracle-java8-installer
   sonarcloud:
     organization: alexis-puska-github
     token:
       secure: 89b5352a550961e43b7633c060178ddbed5af637
 
 script: 
-    - jdk_switcher use oraclejdk8
     - ./gradlew assemble
     - sonar-scanner
