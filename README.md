@@ -76,10 +76,10 @@ After this step "In The Well" is installed, compile, and integrated in emulation
 |Count down end game|||X
 |Restart Game after time|||X
 |Sudden death|||X
-|Network protocol |X||
-|Client viewer |X||
-|IA LVL1 |X||
-|IA LVL2 |X||
-|IA LVL3 |X||
-|IA LVL4 |X||
-|IA LVL5 |X||
+|Network protocol |||X
+|Client viewer |||X
+|IA LVL1 ||X|
+|IA LVL2 ||X|
+|IA LVL3 ||X|
+|IA LVL4 ||X|
+|IA LVL5 ||X|
