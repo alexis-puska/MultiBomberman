@@ -3,6 +3,7 @@ package com.mygdx.game.ia;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.Player;
+import com.mygdx.service.Context;
 
 public class Brain {
 
@@ -30,20 +31,104 @@ public class Brain {
 			bfs.solve();
 			astar.solve();
 			scr.solve();
-
-			if (prev == PovDirection.east) {
-				player.move(PovDirection.north);
-				prev = PovDirection.north;
-			} else if (prev == PovDirection.north) {
-				player.move(PovDirection.west);
-				prev = PovDirection.west;
-			} else if (prev == PovDirection.west) {
-				player.move(PovDirection.south);
-				prev = PovDirection.south;
-			} else {
-				player.move(PovDirection.east);
-				prev = PovDirection.east;
+			switch (Context.getIaLevel()) {
+			case 1:
+				thinkLevel1();
+				break;
+			case 2:
+				thinkLevel2();
+				break;
+			case 3:
+				thinkLevel3();
+				break;
+			case 4:
+				thinkLevel4();
+				break;
+			case 5:
+				thinkLevel5();
+			default:
+				break;
 			}
+		}
+	}
+
+	private void thinkLevel1() {
+		if (prev == PovDirection.east) {
+			player.move(PovDirection.north);
+			prev = PovDirection.north;
+		} else if (prev == PovDirection.north) {
+			player.move(PovDirection.west);
+			prev = PovDirection.west;
+		} else if (prev == PovDirection.west) {
+			player.move(PovDirection.south);
+			prev = PovDirection.south;
+		} else {
+			player.move(PovDirection.east);
+			prev = PovDirection.east;
+		}
+	}
+
+	private void thinkLevel2() {
+		if (prev == PovDirection.east) {
+			player.move(PovDirection.north);
+			prev = PovDirection.north;
+		} else if (prev == PovDirection.north) {
+			player.move(PovDirection.west);
+			prev = PovDirection.west;
+		} else if (prev == PovDirection.west) {
+			player.move(PovDirection.south);
+			prev = PovDirection.south;
+		} else {
+			player.move(PovDirection.east);
+			prev = PovDirection.east;
+		}
+	}
+
+	private void thinkLevel3() {
+		if (prev == PovDirection.east) {
+			player.move(PovDirection.north);
+			prev = PovDirection.north;
+		} else if (prev == PovDirection.north) {
+			player.move(PovDirection.west);
+			prev = PovDirection.west;
+		} else if (prev == PovDirection.west) {
+			player.move(PovDirection.south);
+			prev = PovDirection.south;
+		} else {
+			player.move(PovDirection.east);
+			prev = PovDirection.east;
+		}
+	}
+
+	private void thinkLevel4() {
+		if (prev == PovDirection.east) {
+			player.move(PovDirection.north);
+			prev = PovDirection.north;
+		} else if (prev == PovDirection.north) {
+			player.move(PovDirection.west);
+			prev = PovDirection.west;
+		} else if (prev == PovDirection.west) {
+			player.move(PovDirection.south);
+			prev = PovDirection.south;
+		} else {
+			player.move(PovDirection.east);
+			prev = PovDirection.east;
+		}
+	}
+
+	private void thinkLevel5() {
+		if (prev == PovDirection.east) {
+			player.move(PovDirection.north);
+			prev = PovDirection.north;
+		} else if (prev == PovDirection.north) {
+			player.move(PovDirection.west);
+			prev = PovDirection.west;
+		} else if (prev == PovDirection.west) {
+			player.move(PovDirection.south);
+			prev = PovDirection.south;
+		} else {
+			player.move(PovDirection.east);
+			prev = PovDirection.east;
 		}
 	}
 }
