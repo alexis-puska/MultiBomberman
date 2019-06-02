@@ -60,21 +60,21 @@ public class Brain {
 
 	private void thinkLevel1() {
 
-		this.move(700, 0);
+		//this.move(700, 0);
 
-//		if (prev == PovDirection.east) {
-//			player.move(PovDirection.north);
-//			prev = PovDirection.north;
-//		} else if (prev == PovDirection.north) {
-//			player.move(PovDirection.west);
-//			prev = PovDirection.west;
-//		} else if (prev == PovDirection.west) {
-//			player.move(PovDirection.south);
-//			prev = PovDirection.south;
-//		} else {
-//			player.move(PovDirection.east);
-//			prev = PovDirection.east;
-//		}
+		if (prev == PovDirection.east) {
+			player.move(PovDirection.north);
+			prev = PovDirection.north;
+		} else if (prev == PovDirection.north) {
+			player.move(PovDirection.west);
+			prev = PovDirection.west;
+		} else if (prev == PovDirection.west) {
+			player.move(PovDirection.south);
+			prev = PovDirection.south;
+		} else {
+			player.move(PovDirection.east);
+			prev = PovDirection.east;
+		}
 	}
 
 	private void thinkLevel2() {
