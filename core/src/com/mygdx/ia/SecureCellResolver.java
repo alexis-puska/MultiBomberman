@@ -1,4 +1,4 @@
-package com.mygdx.game.ia;
+package com.mygdx.ia;
 
 import java.util.HashSet;
 import java.util.LinkedList;

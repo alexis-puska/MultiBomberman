@@ -42,7 +42,7 @@ import com.mygdx.enumeration.PlayerTypeEnum;
 import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
-import com.mygdx.game.ia.Brain;
+import com.mygdx.ia.Brain;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.SoundService;

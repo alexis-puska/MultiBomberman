@@ -1,7 +1,9 @@
-package com.mygdx.game.ia;
+package com.mygdx.ia;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.CollisionConstante;
+import com.mygdx.constante.Constante;
 import com.mygdx.domain.Player;
 import com.mygdx.service.Context;
 
@@ -24,11 +26,15 @@ public class Brain {
 
 	public void think() {
 		if (!player.isDead()) {
-			bfs.init(player.getGridIndex(), CollisionConstante.CATEGORY_BUTTONS, player.getLevelDefinition());
-			astar.init(0, 400, CollisionConstante.CATEGORY_WALL, player.getLevelDefinition());
+			bfs.init(player.getGridIndex(), CollisionConstante.CATEGORY_BRICKS, player.getLevelDefinition());
+
 			scr.init(0, player.getLevelDefinition(), CollisionConstante.CATEGORY_BOMBE,
 					CollisionConstante.CATEGORY_WALL);
 			bfs.solve();
+			if (bfs.isSolved()) {
+				Gdx.app.log("BRAIN", "bfs solution : " + bfs.getSolution());
+			}
+			astar.init(0, 400, CollisionConstante.CATEGORY_WALL, player.getLevelDefinition());
 			astar.solve();
 			scr.solve();
 			switch (Context.getIaLevel()) {
@@ -53,19 +59,22 @@ public class Brain {
 	}
 
 	private void thinkLevel1() {
-		if (prev == PovDirection.east) {
-			player.move(PovDirection.north);
-			prev = PovDirection.north;
-		} else if (prev == PovDirection.north) {
-			player.move(PovDirection.west);
-			prev = PovDirection.west;
-		} else if (prev == PovDirection.west) {
-			player.move(PovDirection.south);
-			prev = PovDirection.south;
-		} else {
-			player.move(PovDirection.east);
-			prev = PovDirection.east;
-		}
+
+		this.move(700, 0);
+
+//		if (prev == PovDirection.east) {
+//			player.move(PovDirection.north);
+//			prev = PovDirection.north;
+//		} else if (prev == PovDirection.north) {
+//			player.move(PovDirection.west);
+//			prev = PovDirection.west;
+//		} else if (prev == PovDirection.west) {
+//			player.move(PovDirection.south);
+//			prev = PovDirection.south;
+//		} else {
+//			player.move(PovDirection.east);
+//			prev = PovDirection.east;
+//		}
 	}
 
 	private void thinkLevel2() {
@@ -131,4 +140,18 @@ public class Brain {
 			prev = PovDirection.east;
 		}
 	}
+
+	private void move(int current, int next) {
+		int test = next - current;
+		if (test == -1 || test == (Constante.GRID_SIZE_X - 1)) {
+			player.move(PovDirection.west);
+		} else if (test == 1 || test == -(Constante.GRID_SIZE_X - 1)) {
+			player.move(PovDirection.east);
+		} else if (test == -Constante.GRID_SIZE_X || test >= (Constante.GRID_SIZE_X * (Constante.GRID_SIZE_Y - 1))) {
+			player.move(PovDirection.south);
+		} else if (test == Constante.GRID_SIZE_X || test <= (Constante.GRID_SIZE_X - 1)) {
+			player.move(PovDirection.north);
+		}
+	}
+
 }
