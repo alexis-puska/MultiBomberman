@@ -106,8 +106,8 @@ public class AStar {
 	public boolean isSolved() {
 		return solve;
 	}
-
-	public AStarCell getEnd() {
-		return endOfPath;
+	
+	public LinkedList<AStarCell> getPath(){
+		return this.path;
 	}
 }

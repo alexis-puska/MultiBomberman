@@ -43,6 +43,7 @@ import com.mygdx.enumeration.SoundEnum;
 import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.game.Game;
 import com.mygdx.ia.Brain;
+import com.mygdx.ia.BrainLevel1;
 import com.mygdx.main.MultiBombermanGame;
 import com.mygdx.service.Context;
 import com.mygdx.service.SoundService;
@@ -174,7 +175,7 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 				SpriteService.getInstance().getSpriteForAnimation(SpriteEnum.UNDERWATER));
 		this.createBody();
 		if (this.type == PlayerTypeEnum.CPU) {
-			this.brain = new Brain(this);
+			this.brain = new BrainLevel1(this);
 		}
 	}
 
