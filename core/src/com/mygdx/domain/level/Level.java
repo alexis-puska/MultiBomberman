@@ -319,8 +319,24 @@ public class Level {
 		bricks.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_BRICKS));
 	}
 
+	// for IA
 	public Map<Integer, Short> getState() {
 		return this.state;
+	}
+
+	// for IA
+	public boolean hasBrickToDestroy() {
+		return !this.bricks.isEmpty();
+	}
+
+	// for IA
+	public boolean hasBombeToTake() {
+		return !this.bombes.isEmpty();
+	}
+
+	// for IA
+	public boolean hasBonusToTake() {
+		return !this.bonuss.isEmpty();
 	}
 
 	private void updateValueInState(int index, short val) {

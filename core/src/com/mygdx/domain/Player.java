@@ -706,8 +706,24 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
+	//for IA
 	public Map<Integer, Short> getLevelDefinition() {
 		return this.level.getState();
+	}
+	
+	//for IA
+	public boolean levelHasBrickToDestroy() {
+		return this.level.hasBrickToDestroy();
+	}
+
+	// for IA
+	public boolean levelHasBombeToTake() {
+		return this.level.hasBombeToTake();
+	}
+
+	// for IA
+	public boolean levelHasBonusToTake() {
+		return this.level.hasBonusToTake();
 	}
 
 	public boolean isCanKickBombe() {

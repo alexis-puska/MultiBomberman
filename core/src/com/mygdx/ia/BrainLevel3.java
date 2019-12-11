@@ -8,7 +8,7 @@ import com.mygdx.domain.Player;
 public class BrainLevel3 extends Brain {
 
 	public BrainLevel3(Player player) {
-		super(player);
+		super(player, (short) 0, CollisionConstante.CATEGORY_WALL);
 	}
 
 	public void think() {
