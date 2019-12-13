@@ -77,7 +77,7 @@ public class AStar {
 		AStarCell cell = endOfPath.getParent();
 		while (true) {
 			if (cell != null) {
-				path.add(cell);
+				path.push(cell);
 			} else {
 				return;
 			}

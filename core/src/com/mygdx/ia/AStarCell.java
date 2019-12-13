@@ -78,4 +78,10 @@ public class AStarCell implements Comparable<AStarCell> {
 		}
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "AStarCell [pos=" + pos + ", finalCost=" + finalCost + ", heuristicCost=" + heuristicCost + ", origin="
+				+ origin + ", parent=" + parent + "]";
+	}
 }

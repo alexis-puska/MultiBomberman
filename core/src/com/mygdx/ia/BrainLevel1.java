@@ -1,64 +1,79 @@
 package com.mygdx.ia;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.Player;
+import com.mygdx.ia.enumeration.BrainStateEnum;
 
 public class BrainLevel1 extends Brain {
 
 	public BrainLevel1(Player player) {
-		super(player, (short) 0, CollisionConstante.CATEGORY_WALL);
+		super(player, (short) 0, (short) (CollisionConstante.CATEGORY_WALL));
+		this.state = BrainStateEnum.FIND_BRICK;
 	}
 
 	public void think() {
 		if (!player.isDead()) {
-			//bfs.init(player.getGridIndex(), CollisionConstante.CATEGORY_BRICKS, player.getLevelDefinition());
-			//scr.init(player.getGridIndex(), player.getLevelDefinition(), this.unSecure, this.excluseSearchPath);
-			//bfs.solve();
-			// if (bfs.isSolved()) {
-			// Gdx.app.log("BRAIN LVL 1", "bfs solution : " + bfs.getSolution());
-			// }
-			//astar.init(player.getGridIndex(), bfs.getSolution(), CollisionConstante.CATEGORY_WALL,
-			//		player.getLevelDefinition());
-			//astar.solve();
-			//scr.solve();
-			thinkLevel1();
-		}
-	}
-
-	private void thinkLevel1() {
-
-		Gdx.app.log("BRAIN LVL 1", (this.searchBrickToDetroy(true) ? "true" : "false") + " "+this.objectifIndex);
-
-		// if (astar.isSolved()) {
-		// AStarCell current = astar.getPath().pollLast();
-		// AStarCell next = astar.getPath().peekLast();
-		// if (player.getGridIndex() == current.getIndex()) {
-		// Gdx.app.log("BRAIN LVL 1", "current : " + current.getIndex() + ", next : " +
-		// next != null ? Integer.toString(next.getIndex()) : "-1");
-		// }else {
-		// Gdx.app.log("BRAIN LVL 1", "player : " +
-		// Integer.toString(player.getGridIndex()) + ", current : " + (current != null ?
-		// Integer.toString(current.getIndex()) : "-1"));
-		// }
-		// }else {
-		// Gdx.app.log("BRAIN LVL 1", "Astar not solved");
-		// }
-
-		// this.move(700, 0);
-		if (prev == PovDirection.east) {
-			player.move(PovDirection.north);
-			prev = PovDirection.north;
-		} else if (prev == PovDirection.north) {
-			player.move(PovDirection.west);
-			prev = PovDirection.west;
-		} else if (prev == PovDirection.west) {
-			player.move(PovDirection.south);
-			prev = PovDirection.south;
-		} else {
-			player.move(PovDirection.east);
-			prev = PovDirection.east;
+			switch (state) {
+			case DROP_BOMBE:
+				this.player.pressA();
+				//this.state = BrainStateEnum.FIND_SECURE;
+				break;
+			case FIND_BOMBE:
+				break;
+			case FIND_BONUS:
+				break;
+			case FIND_BRICK:
+				if (this.searchBrickToDetroy(true)) {
+					this.state = BrainStateEnum.GO_TO_DROP_BOMBE;
+				}
+				break;
+			case FIND_PLAYER:
+				break;
+			case FIND_SECURE:
+				if (this.findSecurePlace(true)) {
+					this.state = BrainStateEnum.GO_TO_SECURE;
+				}
+				break;
+			case GO_TO_BOMBE:
+				break;
+			case GO_TO_DROP_BOMBE:
+				if (this.moveToObjectif()) {
+					this.state = BrainStateEnum.DROP_BOMBE;
+				}
+				break;
+			case GO_TO_NEAR_PLAYER:
+				break;
+			case GO_TO_SECURE:
+				if (this.moveToObjectif()) {
+					this.state = BrainStateEnum.WAIT_FOR_EXPLODE;
+				}
+				break;
+			case GO_TO_TAKE_BONUS:
+				break;
+			case WAIT:
+				break;
+			case WAIT_AND_CHECK_SECURE:
+				break;
+			case WAIT_FOR_EXPLODE:
+				switch (player.getBombeType()) {
+				case BOMBE_P:
+					this.player.pressB();
+					break;
+				case BOMBE:
+				case BOMBE_MAX:
+				case BOMBE_RUBBER:
+				default:
+					break;
+				}
+				if (this.bombeExploded) {
+					this.state = BrainStateEnum.FIND_BRICK;
+				}
+				break;
+			case WAIT_TO_DEAD:
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

@@ -1,7 +1,9 @@
 package com.mygdx.ia;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +18,8 @@ public class SecureCellResolver {
 	private Short unsecured;
 	private Short unTestCell;
 
+	private List<Integer> cellToAvoid;
+
 	public void init(int start, Map<Integer, Short> level, Short unSecured, Short unTestCell) {
 		tested = new HashSet<>();
 		open = new LinkedList<>();
@@ -24,10 +28,15 @@ public class SecureCellResolver {
 		this.securedCellIndex = -1;
 		this.unsecured = unSecured;
 		this.unTestCell = unTestCell;
+		this.cellToAvoid = new ArrayList<>();
 	}
 
 	public int getSecuredCell() {
 		return securedCellIndex;
+	}
+
+	public boolean isSolved() {
+		return securedCellIndex != -1;
 	}
 
 	public void solve() {
@@ -51,13 +60,14 @@ public class SecureCellResolver {
 	}
 
 	private void loadNextCell(int val) {
-		if (!tested.contains(val)) {
+		if (!tested.contains(val) && !cellToAvoid.contains(val)) {
 			tested.add(val);
 			open.add(val);
 		}
 	}
 
 	public boolean cellIsSecured(int index) {
+
 		if (level.containsKey(index) && ((level.get(index) & unsecured) > 0 || (level.get(index) & unTestCell) > 0)) {
 			return false;
 		}
@@ -88,6 +98,7 @@ public class SecureCellResolver {
 				break;
 		}
 		return true;
+
 	}
 
 	private boolean isUnSecured(int x) {
@@ -96,5 +107,17 @@ public class SecureCellResolver {
 
 	private boolean isWall(int x) {
 		return level.containsKey(x) && (level.get(x) & unTestCell) > 0;
+	}
+
+	public void addCellToAvoid(int cellIndex) {
+		this.cellToAvoid.add(cellIndex);
+	}
+
+	public void resetCellToAvoid() {
+		this.cellToAvoid.clear();
+	}
+
+	public boolean hasCellToTest() {
+		return (this.tested.size() + this.cellToAvoid.size()) < (Constante.GRID_SIZE_X * Constante.GRID_SIZE_Y);
 	}
 }

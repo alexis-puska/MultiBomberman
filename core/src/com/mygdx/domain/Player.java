@@ -624,6 +624,9 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 	}
 
 	public void bombeExploded() {
+		if (this.brain != null) {
+			this.brain.hourBombeExplode();
+		}
 		if (this.state != PlayerStateEnum.BAD_BOMBER) {
 			this.nbBombe++;
 		} else {
@@ -706,26 +709,6 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 		}
 	}
 
-	//for IA
-	public Map<Integer, Short> getLevelDefinition() {
-		return this.level.getState();
-	}
-	
-	//for IA
-	public boolean levelHasBrickToDestroy() {
-		return this.level.hasBrickToDestroy();
-	}
-
-	// for IA
-	public boolean levelHasBombeToTake() {
-		return this.level.hasBombeToTake();
-	}
-
-	// for IA
-	public boolean levelHasBonusToTake() {
-		return this.level.hasBonusToTake();
-	}
-
 	public boolean isCanKickBombe() {
 		return canKickBombe;
 	}
@@ -740,6 +723,33 @@ public class Player extends BodyAble implements ControlEventListener, Comparable
 
 	public boolean isBadBomber() {
 		return this.state == PlayerStateEnum.BAD_BOMBER;
+	}
+
+	/********************************
+	 * --- FOR I.A. ---
+	 *******************************/
+	public Map<Integer, Short> getLevelDefinition() {
+		return this.level.getState();
+	}
+
+	public boolean levelHasBrickToDestroy() {
+		return this.level.hasBrickToDestroy();
+	}
+
+	public boolean levelHasBombeToTake() {
+		return this.level.hasBombeToTake();
+	}
+
+	public boolean levelHasBonusToTake() {
+		return this.level.hasBonusToTake();
+	}
+
+	public BombeTypeEnum getBombeType() {
+		return this.bombeType;
+	}
+
+	public int getNbBombe() {
+		return this.nbBombe;
 	}
 
 	/************************************************************

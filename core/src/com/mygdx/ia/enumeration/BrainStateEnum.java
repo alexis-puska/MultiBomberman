@@ -6,6 +6,7 @@ public enum BrainStateEnum {
 	
 	FIND_PLAYER,
 	FIND_BONUS,
+	FIND_BRICK,
 	FIND_SECURE,
 	FIND_BOMBE,
 	
