@@ -1,5 +1,6 @@
 package com.mygdx.ia;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.Player;
 import com.mygdx.ia.enumeration.BrainStateEnum;
@@ -7,16 +8,20 @@ import com.mygdx.ia.enumeration.BrainStateEnum;
 public class BrainLevel1 extends Brain {
 
 	public BrainLevel1(Player player) {
-		super(player, (short) 0, (short) (CollisionConstante.CATEGORY_WALL));
+		super(player, (short) CollisionConstante.CATEGORY_BOMBE,
+				(short) (CollisionConstante.CATEGORY_WALL | CollisionConstante.CATEGORY_BRICKS));
 		this.state = BrainStateEnum.FIND_BRICK;
 	}
 
 	public void think() {
+
+		System.out.println("player " + this.player.getIndex() + " : " + this.state.name());
+
 		if (!player.isDead()) {
 			switch (state) {
 			case DROP_BOMBE:
 				this.player.pressA();
-				//this.state = BrainStateEnum.FIND_SECURE;
+				this.state = BrainStateEnum.FIND_SECURE;
 				break;
 			case FIND_BOMBE:
 				break;
@@ -31,7 +36,12 @@ public class BrainLevel1 extends Brain {
 				break;
 			case FIND_SECURE:
 				if (this.findSecurePlace(true)) {
+					
+					Gdx.app.log("BRAIN LEVEL 1 secure place found : ", "player "+player.getIndex()+" : "+this.player.getGridIndex() + " "+ this.scr.getSecuredCell());
+					
 					this.state = BrainStateEnum.GO_TO_SECURE;
+				} else {
+					this.state = BrainStateEnum.WAIT_TO_DEAD;
 				}
 				break;
 			case GO_TO_BOMBE:

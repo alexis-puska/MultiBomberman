@@ -2,7 +2,6 @@ package com.mygdx.ia;
 
 import java.util.LinkedList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
@@ -31,8 +30,8 @@ public abstract class Brain {
 	 ******************/
 	protected BrainObjectifEnum objectifType;
 	protected int objectifIndex;
-	private LinkedList<AStarCell> pathToObjectif;
-	private AStarCell currentCell;
+	private LinkedList<Integer> pathToObjectif;
+	private Integer cellToReach;
 	protected boolean bombeExploded;
 
 	/******************
@@ -54,34 +53,35 @@ public abstract class Brain {
 	public abstract void think();
 
 	protected boolean moveToObjectif() {
-		Gdx.app.log("BRAIN ", "pos cell : " + currentCell.getIndex() + ", player pos : " + this.player.getGridIndex());
-		if (currentCell.getIndex() != this.player.getGridIndex()) {
-			Gdx.app.log("BRAIN", "Cell diff of player, poll first cell");
-			this.currentCell = this.pathToObjectif.pollFirst();
+		// Gdx.app.log("BRAIN ", "pos cell : " + cellToReach + ", player pos : " +
+		// this.player.getGridIndex());
+		if (cellToReach == this.player.getGridIndex()) {
+			// Gdx.app.log("BRAIN", "Cell diff of player, poll first cell");
+			this.cellToReach = this.pathToObjectif.pollLast();
 		}
 		if (this.pathToObjectif.isEmpty()) {
-			Gdx.app.log("BRAIN", "Objectif reached");
+			// Gdx.app.log("BRAIN", "Objectif reached");
 			this.player.move(PovDirection.center);
 			return true;
 		}
-		this.moveImpl(this.currentCell.getIndex(), this.pathToObjectif.peekFirst().getIndex());
+		this.moveImpl(this.player.getGridIndex(), this.cellToReach);
 		return false;
 	}
 
 	private void moveImpl(int current, int next) {
-		Gdx.app.log("BRAIN", "current : " + current + " next : " + next);
+		// Gdx.app.log("BRAIN", "current : " + current + " next : " + next);
 		int test = next - current;
 		if (test == -1 || test == (Constante.GRID_SIZE_X - 1)) {
-			Gdx.app.log("BRAIN", "WEST");
+			// Gdx.app.log("BRAIN", "WEST");
 			player.move(PovDirection.west);
 		} else if (test == 1 || test == -(Constante.GRID_SIZE_X - 1)) {
-			Gdx.app.log("BRAIN", "EAST");
+			// Gdx.app.log("BRAIN", "EAST");
 			player.move(PovDirection.east);
 		} else if (test == -Constante.GRID_SIZE_X || test >= (Constante.GRID_SIZE_X * (Constante.GRID_SIZE_Y - 1))) {
-			Gdx.app.log("BRAIN", "SOUTH");
+			// Gdx.app.log("BRAIN", "SOUTH");
 			player.move(PovDirection.south);
 		} else if (test == Constante.GRID_SIZE_X || test <= (Constante.GRID_SIZE_X - 1)) {
-			Gdx.app.log("BRAIN", "NORTH");
+			// Gdx.app.log("BRAIN", "NORTH");
 			player.move(PovDirection.north);
 		}
 	}
@@ -95,16 +95,20 @@ public abstract class Brain {
 			this.bfs.solve();
 			if (this.bfs.isSolved()) {
 				this.objectifIndex = this.bfs.getSolution();
-				
+
 				if (this.initPathToObjectif()) {
 					// path found to objectif
 					this.bfs.resetCellToAvoid();
 					this.pathToObjectif = this.astar.getPath();
+					// System.out.print("player "+ player.getIndex() + " : ");
+					// this.pathToObjectif.stream().forEach(cell -> System.out.print(cell + " ->
+					// "));
+					// System.out.println();
 					switch (objectifType) {
 					case BRICK:
 					case PLAYER:
 						// enleve le dernier maillon de la chaine
-						//this.pathToObjectif.pollLast();
+						this.pathToObjectif.pollLast();
 						break;
 					case BOMBE:
 					case BONUS:
@@ -112,7 +116,7 @@ public abstract class Brain {
 					default:
 						break;
 					}
-					this.currentCell = this.pathToObjectif.pollFirst();
+					this.cellToReach = this.pathToObjectif.pollLast();
 					return true;
 				} else {
 					// no path to objectifs -> mark cell to avoid
@@ -122,7 +126,7 @@ public abstract class Brain {
 						return this.searchBrickToDetroy(false);
 					} else {
 						// no more cell to test, objectifs unreachable
-						Gdx.app.log("BRAIN", "no more cell to test");
+						// Gdx.app.log("BRAIN", "no more cell to test");
 						this.objectifIndex = -1;
 						return false;
 					}
@@ -161,7 +165,10 @@ public abstract class Brain {
 				// path found to objectif
 				this.scr.resetCellToAvoid();
 				this.pathToObjectif = this.astar.getPath();
-				this.currentCell = this.pathToObjectif.pollFirst();
+				System.out.print("player " + player.getIndex() + " : ");
+				this.pathToObjectif.stream().forEach(cell -> System.out.print(cell + " -> "));
+				System.out.println();
+				this.cellToReach = this.pathToObjectif.pollLast();
 				return true;
 			} else {
 				// no path to objectifs -> mark cell to avoid
@@ -171,7 +178,7 @@ public abstract class Brain {
 					return this.findSecurePlace(false);
 				} else {
 					// no more cell to test, objectifs unreachable
-					Gdx.app.log("BRAIN", "no more cell to test");
+					// Gdx.app.log("BRAIN", "no more cell to test");
 					this.objectifIndex = -1;
 					return false;
 				}

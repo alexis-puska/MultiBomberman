@@ -18,15 +18,19 @@ public class AStar {
 	// result
 	private AStarCell endOfPath;
 	private boolean solve;
-	private LinkedList<AStarCell> path;
+	private LinkedList<Integer> path;
 
 	/**
 	 * Initialization of AStart algorithm.
 	 * 
-	 * @param start   index of start cell
-	 * @param end     index to destination cell
-	 * @param evicted mask of element to be evicted when path is search
-	 * @param level   desciption of the level
+	 * @param start
+	 *            index of start cell
+	 * @param end
+	 *            index to destination cell
+	 * @param evicted
+	 *            mask of element to be evicted when path is search
+	 * @param level
+	 *            desciption of the level
 	 */
 	public void init(int start, int end, Short evicted, Map<Integer, Short> level) {
 		tested = new HashSet<>();
@@ -74,10 +78,11 @@ public class AStar {
 
 	private void buildPath() {
 		path = new LinkedList<>();
+		path.add(endOfPath.getIndex());
 		AStarCell cell = endOfPath.getParent();
 		while (true) {
 			if (cell != null) {
-				path.push(cell);
+				path.add(cell.getIndex());
 			} else {
 				return;
 			}
@@ -90,12 +95,14 @@ public class AStar {
 	 * mask, create and add the cell to the sortedList for the next iteration of
 	 * Astar
 	 * 
-	 * @param current the current Cell (parent of the cell created on the index)
-	 * @param index   cell index to test
+	 * @param current
+	 *            the current Cell (parent of the cell created on the index)
+	 * @param index
+	 *            cell index to test
 	 */
 	private void verifCell(AStarCell current, int index) {
 		if (!tested.contains(index)) {
-			if (level.containsKey(index) && (level.get(index) & evicted) > 0) {
+			if (index != end && level.containsKey(index) && (level.get(index) & evicted) > 0) {
 				tested.add(index);
 			} else {
 				open.add(new AStarCell(index, end, false, current));
@@ -106,8 +113,8 @@ public class AStar {
 	public boolean isSolved() {
 		return solve;
 	}
-	
-	public LinkedList<AStarCell> getPath(){
+
+	public LinkedList<Integer> getPath() {
 		return this.path;
 	}
 }
