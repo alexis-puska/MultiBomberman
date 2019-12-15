@@ -310,6 +310,11 @@ public class Level {
 
 	private void buildState() {
 		this.state = new HashMap<>();
+		bombes.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_BOMBE));
+		bonuss.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_BONUS));
+		
+		
+		
 		hole.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_HOLE));
 		interrupter.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_BUTTONS));
 		mine.stream().forEach(h -> updateValueInState(h.getGridIndex(), CollisionConstante.CATEGORY_MINE));

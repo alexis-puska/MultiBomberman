@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.constante.Constante;
 
 public class SecureCellResolver {
@@ -67,46 +68,54 @@ public class SecureCellResolver {
 	}
 
 	public boolean cellIsSecured(int index) {
-
-		if (level.containsKey(index) && ((level.get(index) & unsecured) > 0 || (level.get(index) & unTestCell) > 0)) {
+		int tmp = 0;
+		if (isUnSecured(index) || isWall(index)) {
 			return false;
 		}
+		Gdx.app.log("SCR", "cell not secured : "+ index);
 		int calcX = index % Constante.GRID_SIZE_X;
 		int calcY = Math.floorDiv(index, Constante.GRID_SIZE_X);
 		for (int val = calcX - 1; val > 0; val--) {
-			if (isUnSecured(val))
+			tmp = calcY * Constante.GRID_SIZE_X + val;
+			if (isUnSecured(tmp)) {
 				return false;
-			if (isWall(val))
+			} else if (isWall(tmp)) {
 				break;
+			}
 		}
 		for (int val = calcX + 1; val < Constante.GRID_SIZE_X - 1; val++) {
-			if (isUnSecured(val))
+			tmp = calcY * Constante.GRID_SIZE_X + val;
+			if (isUnSecured(tmp)) {
 				return false;
-			if (isWall(val))
+			} else if (isWall(tmp)) {
 				break;
+			}
 		}
 		for (int val = calcY - 1; val > 0; val--) {
-			if (isUnSecured(val))
+			tmp = val * Constante.GRID_SIZE_X + calcX;
+			if (isUnSecured(tmp)) {
 				return false;
-			if (isWall(val))
+			} else if (isWall(tmp)) {
 				break;
+			}
 		}
 		for (int val = calcY - 1; val < Constante.GRID_SIZE_Y - 1; val++) {
-			if (isUnSecured(val))
+			tmp = val * Constante.GRID_SIZE_X + calcX;
+			if (isUnSecured(tmp)) {
 				return false;
-			if (isWall(val))
+			} else if (isWall(tmp)) {
 				break;
+			}
 		}
 		return true;
-
 	}
 
 	private boolean isUnSecured(int x) {
-		return level.containsKey(x) && (level.get(x) & unsecured) > 0;
+		return level.containsKey(x) && !cellToAvoid.contains(x) && (level.get(x) & unsecured) > 0;
 	}
 
 	private boolean isWall(int x) {
-		return level.containsKey(x) && (level.get(x) & unTestCell) > 0;
+		return level.containsKey(x) && !cellToAvoid.contains(x) && (level.get(x) & unTestCell) > 0;
 	}
 
 	public void addCellToAvoid(int cellIndex) {

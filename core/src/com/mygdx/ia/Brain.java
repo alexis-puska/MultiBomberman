@@ -2,6 +2,7 @@ package com.mygdx.ia;
 
 import java.util.LinkedList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.constante.Constante;
@@ -62,6 +63,7 @@ public abstract class Brain {
 		if (this.pathToObjectif.isEmpty()) {
 			// Gdx.app.log("BRAIN", "Objectif reached");
 			this.player.move(PovDirection.center);
+			this.objectifIndex = -1;
 			return true;
 		}
 		this.moveImpl(this.player.getGridIndex(), this.cellToReach);
@@ -104,18 +106,18 @@ public abstract class Brain {
 					// this.pathToObjectif.stream().forEach(cell -> System.out.print(cell + " ->
 					// "));
 					// System.out.println();
-					switch (objectifType) {
-					case BRICK:
-					case PLAYER:
-						// enleve le dernier maillon de la chaine
-						this.pathToObjectif.pollLast();
-						break;
-					case BOMBE:
-					case BONUS:
-					case SAFE_PLACE:
-					default:
-						break;
-					}
+//					switch (objectifType) {
+//					case BRICK:
+//					case PLAYER:
+//						// enleve le dernier maillon de la chaine
+//						this.pathToObjectif.pollLast();
+//						break;
+//					case BOMBE:
+//					case BONUS:
+//					case SAFE_PLACE:
+//					default:
+//						break;
+//					}
 					this.cellToReach = this.pathToObjectif.pollLast();
 					return true;
 				} else {
@@ -160,6 +162,7 @@ public abstract class Brain {
 		}
 		this.scr.solve();
 		if (this.scr.isSolved()) {
+			//Gdx.app.log("BRAIN", "player : " + player.getIndex());
 			this.objectifIndex = this.scr.getSecuredCell();
 			if (this.initPathToObjectif()) {
 				// path found to objectif
