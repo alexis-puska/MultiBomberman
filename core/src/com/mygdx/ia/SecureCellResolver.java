@@ -99,7 +99,7 @@ public class SecureCellResolver {
 				break;
 			}
 		}
-		for (int val = calcY - 1; val < Constante.GRID_SIZE_Y - 1; val++) {
+		for (int val = calcY + 1; val < Constante.GRID_SIZE_Y - 1; val++) {
 			tmp = val * Constante.GRID_SIZE_X + calcX;
 			if (isUnSecured(tmp)) {
 				return false;

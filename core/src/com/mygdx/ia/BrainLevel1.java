@@ -3,19 +3,22 @@ package com.mygdx.ia;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.constante.CollisionConstante;
 import com.mygdx.domain.Player;
+import com.mygdx.enumeration.SpriteEnum;
 import com.mygdx.ia.enumeration.BrainStateEnum;
+import com.mygdx.service.SpriteService;
 
 public class BrainLevel1 extends Brain {
 
 	public BrainLevel1(Player player) {
 		super(player, (short) CollisionConstante.CATEGORY_BOMBE,
 				(short) (CollisionConstante.CATEGORY_WALL | CollisionConstante.CATEGORY_BRICKS));
-		this.state = BrainStateEnum.WAIT_TO_DEAD;
+		this.state = BrainStateEnum.FIND_BRICK;
 	}
 
 	public void think() {
 
-		//System.out.println("player " + this.player.getIndex() + " : " + this.state.name());
+		// System.out.println("player " + this.player.getIndex() + " : " +
+		// this.state.name());
 
 		if (!player.isDead()) {
 			switch (state) {
@@ -36,7 +39,8 @@ public class BrainLevel1 extends Brain {
 				break;
 			case FIND_SECURE:
 				if (this.findSecurePlace(true)) {
-					Gdx.app.log("BRAIN LEVEL 1 secure place found : ", "player "+player.getIndex()+" , grid pos : "+this.player.getGridIndex() + ", objectif : "+ this.scr.getSecuredCell());
+					Gdx.app.log("BRAIN LEVEL 1 secure place found : ", "player " + player.getIndex() + " , grid pos : "
+							+ this.player.getGridIndex() + ", objectif : " + this.scr.getSecuredCell());
 					this.state = BrainStateEnum.GO_TO_SECURE;
 				} else {
 					this.state = BrainStateEnum.WAIT_TO_DEAD;
@@ -67,6 +71,10 @@ public class BrainLevel1 extends Brain {
 				switch (player.getBombeType()) {
 				case BOMBE_P:
 					this.player.pressB();
+					this.countDown = new CountDown(
+							SpriteService.getInstance().getAnimationTime(SpriteEnum.FIRE_CENTER));
+					this.bombeExploded = false;
+					this.state = BrainStateEnum.WAIT_FOR_END_OF_FIRE;
 					break;
 				case BOMBE:
 				case BOMBE_MAX:
@@ -75,7 +83,19 @@ public class BrainLevel1 extends Brain {
 					break;
 				}
 				if (this.bombeExploded) {
-					this.state = BrainStateEnum.FIND_BRICK;
+					this.countDown = new CountDown(
+							SpriteService.getInstance().getAnimationTime(SpriteEnum.FIRE_CENTER));
+					this.bombeExploded = false;
+					this.state = BrainStateEnum.WAIT_FOR_END_OF_FIRE;
+				}
+				
+				break;
+			case WAIT_FOR_END_OF_FIRE:
+				if (this.countDown != null) {
+					if (this.countDown.update()) {
+						this.state = BrainStateEnum.FIND_BRICK;
+						this.countDown = null;
+					}
 				}
 				break;
 			case WAIT_TO_DEAD:

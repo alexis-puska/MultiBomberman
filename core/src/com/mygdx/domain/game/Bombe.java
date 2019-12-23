@@ -353,7 +353,7 @@ public class Bombe extends BodyAble {
 	}
 
 	public boolean isExploded() {
-		return this.state == BombeStateEnum.EXPLODED;
+		return this.body == null || this.state == BombeStateEnum.EXPLODED;
 	}
 
 	/*****************************************

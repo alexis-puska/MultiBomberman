@@ -383,4 +383,12 @@ public class SpriteService {
 		Gdx.app.debug(CLASS_NAME, "values : ");
 		values.stream().forEach(v -> Gdx.app.debug(CLASS_NAME, String.format("0x%08X", v)));
 	}
+	
+	
+	/**
+	 * Get animation time
+	 */
+	public float getAnimationTime(SpriteEnum spriteEnum) {
+		return spriteEnum.getFrameAnimationTime() * sprites.get(spriteEnum).length;
+	}
 }

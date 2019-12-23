@@ -34,6 +34,11 @@ public abstract class Brain {
 	private LinkedList<Integer> pathToObjectif;
 	private Integer cellToReach;
 	protected boolean bombeExploded;
+	
+	/*******************
+	 * --- WAIT TIME ---
+	 *******************/
+	protected CountDown countDown;
 
 	/******************
 	 * --- OBJECTIF ---
@@ -49,6 +54,7 @@ public abstract class Brain {
 		this.bfs = new BFS();
 		this.prev = PovDirection.east;
 		this.bombeExploded = true;
+		this.countDown = null;
 	}
 
 	public abstract void think();
@@ -61,10 +67,27 @@ public abstract class Brain {
 			this.cellToReach = this.pathToObjectif.pollLast();
 		}
 		if (this.pathToObjectif.isEmpty()) {
-			// Gdx.app.log("BRAIN", "Objectif reached");
-			this.player.move(PovDirection.center);
-			this.objectifIndex = -1;
-			return true;
+			switch (objectifType) {
+			case BOMBE:
+			case BONUS:
+			case SAFE_PLACE:
+				if(cellToReach != null && cellToReach != this.player.getGridIndex()) {
+					this.moveImpl(this.player.getGridIndex(), this.cellToReach);
+					break;
+				}else {
+					Gdx.app.log("BRAIN", "Objectif reached");
+					this.player.move(PovDirection.center);
+					this.objectifIndex = -1;
+					return true;
+				}
+			case PLAYER:
+			case BRICK:
+			default:
+				Gdx.app.log("BRAIN", "Objectif reached");
+				this.player.move(PovDirection.center);
+				this.objectifIndex = -1;
+				return true;
+			}
 		}
 		this.moveImpl(this.player.getGridIndex(), this.cellToReach);
 		return false;
@@ -106,18 +129,18 @@ public abstract class Brain {
 					// this.pathToObjectif.stream().forEach(cell -> System.out.print(cell + " ->
 					// "));
 					// System.out.println();
-//					switch (objectifType) {
-//					case BRICK:
-//					case PLAYER:
-//						// enleve le dernier maillon de la chaine
-//						this.pathToObjectif.pollLast();
-//						break;
-//					case BOMBE:
-//					case BONUS:
-//					case SAFE_PLACE:
-//					default:
-//						break;
-//					}
+					// switch (objectifType) {
+					// case BRICK:
+					// case PLAYER:
+					// // enleve le dernier maillon de la chaine
+					// this.pathToObjectif.pollLast();
+					// break;
+					// case BOMBE:
+					// case BONUS:
+					// case SAFE_PLACE:
+					// default:
+					// break;
+					// }
 					this.cellToReach = this.pathToObjectif.pollLast();
 					return true;
 				} else {
@@ -158,11 +181,12 @@ public abstract class Brain {
 
 	protected boolean findSecurePlace(boolean initSCR) {
 		if (initSCR) {
+			this.objectifType = BrainObjectifEnum.SAFE_PLACE;
 			this.scr.init(player.getGridIndex(), player.getLevelDefinition(), this.unSecure, this.excluseSearchPath);
 		}
 		this.scr.solve();
 		if (this.scr.isSolved()) {
-			//Gdx.app.log("BRAIN", "player : " + player.getIndex());
+			// Gdx.app.log("BRAIN", "player : " + player.getIndex());
 			this.objectifIndex = this.scr.getSecuredCell();
 			if (this.initPathToObjectif()) {
 				// path found to objectif

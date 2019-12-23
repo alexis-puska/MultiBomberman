@@ -19,6 +19,7 @@ public enum BrainStateEnum {
 	WAIT,
 	WAIT_FOR_EXPLODE,
 	WAIT_AND_CHECK_SECURE,
-	WAIT_TO_DEAD;
+	WAIT_TO_DEAD, 
+	WAIT_FOR_END_OF_FIRE;
 	
 }
